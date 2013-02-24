@@ -1,0 +1,91 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Interfaces", "src\Interfaces\Interfaces.csproj", "{2AE2966B-6F2B-4254-85C6-588C8690898F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "src\Core\Core.csproj", "{F44FB8F4-CF8C-4C49-8E07-FA4AF3359696}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "src\Common\Common.csproj", "{CAB6CB7C-5661-4D64-BC65-0259A12E38CF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1. Core Projects", "1. Core Projects", "{18261B8D-08B4-4E6E-8C44-8A5EE861CB06}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2. Implementation Projects", "2. Implementation Projects", "{B1AB9FBE-4A66-477C-8A9C-269E90A2E527}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Context", "src\Context\Context.csproj", "{BB6191FE-21EF-4600-ABE3-E1F7269EAFD3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3. Tools", "3. Tools", "{59002A1F-DEC6-4B3D-8807-5FE115D24F37}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeyGen", "src\KeyGen\KeyGen.csproj", "{B92E87C4-68AC-4ACC-ACBF-85DC5778E2C8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4. Testing", "4. Testing", "{9327FC23-B54C-45C1-80FA-30CABBD81DA7}"
+	ProjectSection(SolutionItems) = preProject
+		Dragon.vsmdi = Dragon.vsmdi
+		Local.testsettings = Local.testsettings
+		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "src\Tests\Tests.csproj", "{BE85098A-5220-4ABF-B2D1-5584FF21C17C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5. Solution Items", "5. Solution Items", "{59015E6A-4F55-476F-A43A-F9807EC8D5E2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{56063684-B218-4CD7-AAD4-729D2B5A9286}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+		.nuget\packages.config = .nuget\packages.config
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo", "src\Demo\Demo.csproj", "{213CE3DC-B771-4B6D-AD06-449DDFB2970C}"
+EndProject
+Global
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = Dragon.vsmdi
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2AE2966B-6F2B-4254-85C6-588C8690898F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2AE2966B-6F2B-4254-85C6-588C8690898F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2AE2966B-6F2B-4254-85C6-588C8690898F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2AE2966B-6F2B-4254-85C6-588C8690898F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F44FB8F4-CF8C-4C49-8E07-FA4AF3359696}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F44FB8F4-CF8C-4C49-8E07-FA4AF3359696}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F44FB8F4-CF8C-4C49-8E07-FA4AF3359696}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F44FB8F4-CF8C-4C49-8E07-FA4AF3359696}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CAB6CB7C-5661-4D64-BC65-0259A12E38CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CAB6CB7C-5661-4D64-BC65-0259A12E38CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CAB6CB7C-5661-4D64-BC65-0259A12E38CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CAB6CB7C-5661-4D64-BC65-0259A12E38CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB6191FE-21EF-4600-ABE3-E1F7269EAFD3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB6191FE-21EF-4600-ABE3-E1F7269EAFD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB6191FE-21EF-4600-ABE3-E1F7269EAFD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB6191FE-21EF-4600-ABE3-E1F7269EAFD3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B92E87C4-68AC-4ACC-ACBF-85DC5778E2C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B92E87C4-68AC-4ACC-ACBF-85DC5778E2C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B92E87C4-68AC-4ACC-ACBF-85DC5778E2C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B92E87C4-68AC-4ACC-ACBF-85DC5778E2C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE85098A-5220-4ABF-B2D1-5584FF21C17C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE85098A-5220-4ABF-B2D1-5584FF21C17C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE85098A-5220-4ABF-B2D1-5584FF21C17C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE85098A-5220-4ABF-B2D1-5584FF21C17C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{213CE3DC-B771-4B6D-AD06-449DDFB2970C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{213CE3DC-B771-4B6D-AD06-449DDFB2970C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{213CE3DC-B771-4B6D-AD06-449DDFB2970C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{213CE3DC-B771-4B6D-AD06-449DDFB2970C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F44FB8F4-CF8C-4C49-8E07-FA4AF3359696} = {18261B8D-08B4-4E6E-8C44-8A5EE861CB06}
+		{CAB6CB7C-5661-4D64-BC65-0259A12E38CF} = {18261B8D-08B4-4E6E-8C44-8A5EE861CB06}
+		{2AE2966B-6F2B-4254-85C6-588C8690898F} = {18261B8D-08B4-4E6E-8C44-8A5EE861CB06}
+		{BB6191FE-21EF-4600-ABE3-E1F7269EAFD3} = {B1AB9FBE-4A66-477C-8A9C-269E90A2E527}
+		{B92E87C4-68AC-4ACC-ACBF-85DC5778E2C8} = {59002A1F-DEC6-4B3D-8807-5FE115D24F37}
+		{BE85098A-5220-4ABF-B2D1-5584FF21C17C} = {9327FC23-B54C-45C1-80FA-30CABBD81DA7}
+		{213CE3DC-B771-4B6D-AD06-449DDFB2970C} = {9327FC23-B54C-45C1-80FA-30CABBD81DA7}
+	EndGlobalSection
+EndGlobal

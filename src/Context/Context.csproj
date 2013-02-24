@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{BB6191FE-21EF-4600-ABE3-E1F7269EAFD3}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Dragon.Context</RootNamespace>
+    <AssemblyName>Dragon.Context</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\release\debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Dapper">
+      <HintPath>..\..\packages\Dapper.1.12.1\lib\net40\Dapper.dll</HintPath>
+    </Reference>
+    <Reference Include="Facebook">
+      <HintPath>..\..\packages\Facebook.6.2.1-beta\lib\net40-client\Facebook.dll</HintPath>
+    </Reference>
+    <Reference Include="StructureMap">
+      <HintPath>..\..\packages\structuremap.2.6.4.1\lib\net40\StructureMap.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Attributes\RequiresSystemRight.cs" />
+    <Compile Include="Attributes\RequiresAuthentication.cs" />
+    <Compile Include="DragonContextExtensions.cs" />
+    <Compile Include="Embedded\Files.cs" />
+    <Compile Include="Exceptions\NodeDoesNotExistException.cs" />
+    <Compile Include="Exceptions\RightDoesNotExistException.cs" />
+    <Compile Include="Exceptions\ServiceAlreadyConnectedToUserException.cs" />
+    <Compile Include="Exceptions\UserKeyAlreadyExistsForThisServiceException.cs" />
+    <Compile Include="Extensions\Groups\GroupPermissionExtension.cs" />
+    <Compile Include="Permissions\PermissionStoreBase.cs" />
+    <Compile Include="Permissions\SqlPermissionNode.cs" />
+    <Compile Include="Permissions\SqlPermissionRight.cs" />
+    <Compile Include="Permissions\SqlPermissionStore.cs" />
+    <Compile Include="Sessions\InMemorySessionStore.cs" />
+    <Compile Include="Sessions\SessionStoreBase.cs" />
+    <Compile Include="DragonContext.cs" />
+    <Compile Include="Extensions\Login\FacebookAuthExtension.cs" />
+    <Compile Include="Extensions\Login\UsernamePasswordAuthExtension.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sessions\ReverseIPLookup\HostIPReverseLookupService.cs" />
+    <Compile Include="IReverseIPLookupService.cs" />
+    <Compile Include="Sessions\CookieSession.cs" />
+    <Compile Include="Sessions\SqlSessionStore.cs" />
+    <Compile Include="SQL.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SQL.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Users\SqlUserStore.cs" />
+    <Compile Include="Users\User.cs" />
+    <Compile Include="Users\UserStoreBase.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{CAB6CB7C-5661-4D64-BC65-0259A12E38CF}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Interfaces\Interfaces.csproj">
+      <Project>{2AE2966B-6F2B-4254-85C6-588C8690898F}</Project>
+      <Name>Interfaces</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="SQL.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>SQL.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Embedded\facebook.js" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

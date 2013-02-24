@@ -1,0 +1,19 @@
+build/
+release/
+App_Data/
+_gen/
+packages/
+TestResults/
+bin/
+obj/
+
+db.config
+*.user
+*.suo
+*resharper*
+
+# OS generated files #
+######################
+.DS_Store?
+ehthumbs.db
+Thumbs.db
