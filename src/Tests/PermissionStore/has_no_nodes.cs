@@ -2,27 +2,23 @@
 using System.Text;
 using System.Collections.Generic;
 using System.Linq;
-using Dragon.Tests.PermissionStore.Mocks;
+using Dragon.Context.Exceptions;
+using Dragon.Tests.PermissionStore.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using FluentAssertions;
 
 namespace Dragon.Tests.PermissionStore
 {
     [TestClass]
-    public class SingleRightPermissionStoreTest
+    public class has_no_nodes
     {
         protected InMemoryPermissionStore store = new InMemoryPermissionStore();
 
         [TestMethod]
-        public void SingleRight_ReturnsTrue()
+        [ExpectedException(typeof(NodeDoesNotExistException))]
+        public void and_getnodes_throw_exception()
         {
-            var g = Guid.NewGuid();
-            var s = Guid.NewGuid();
-            
-            store.AddRight(g, s, "test", false);
-
-            store.HasRight(g, s, "test").Should().BeTrue();
-
+            store.GetRightsOnNodeWithInherited(Guid.NewGuid());
         }
     }
 }

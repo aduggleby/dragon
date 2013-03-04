@@ -18,7 +18,7 @@ namespace Dragon.Common.Util
         {
             get
             {
-                return new SHA512Managed();
+                return new SHA512Managed(); // TODO: SHA512 is still too fast, offer bcrypt as alternative - http://stackoverflow.com/questions/5643187/net-implementation-of-bcrypt-which-implements-hashalgorithm
             }
         }
 

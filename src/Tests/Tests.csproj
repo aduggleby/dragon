@@ -62,12 +62,15 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PermissionStore\EmptyPermissionStoreTest.cs" />
-    <Compile Include="PermissionStore\Mocks\InMemoryPermissionStore.cs" />
-    <Compile Include="PermissionStore\PermissionStoreGroupExtensionsTest.cs" />
-    <Compile Include="PermissionStore\PermissionStoreTestsBase.cs" />
-    <Compile Include="PermissionStore\PermissionStoreTest.cs" />
-    <Compile Include="PermissionStore\SingleRightPermissionStoreTest.cs" />
+    <Compile Include="PermissionStore\has_nodes.cs" />
+    <Compile Include="PermissionStore\has_no_nodes.cs" />
+    <Compile Include="PermissionStore\has_removed_rights.cs" />
+    <Compile Include="PermissionStore\has_no_rights.cs" />
+    <Compile Include="PermissionStore\Helpers\InMemoryPermissionStore.cs" />
+    <Compile Include="PermissionStore\has_groups.cs" />
+    <Compile Include="PermissionStore\Helpers\Base.cs" />
+    <Compile Include="PermissionStore\has_rights.cs" />
+    <Compile Include="PermissionStore\has_one_right.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TreeBuilder\TreeBuilderTest.cs" />
   </ItemGroup>

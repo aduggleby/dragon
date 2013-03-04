@@ -10,6 +10,7 @@ namespace Dragon.Interfaces
         void AddNode(Guid parentID, Guid childID);
         void RemoveNode(Guid parentID, Guid childID);
         bool IsChildNodeOf(Guid parentID, Guid childID);
+        bool IsDirectChildNodeOf(Guid parentID, Guid childID);
         
         void AddRight(Guid nodeID, Guid subjectID, string spec, bool inherit);
         void RemoveRight(Guid nodeID, Guid subjectID, string spec);

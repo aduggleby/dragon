@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Dragon.Tests.PermissionStore.Mocks;
 
-namespace Dragon.Tests.PermissionStore
+namespace Dragon.Tests.PermissionStore.Helpers
 {
-    public class PermissionStoreTestsBase
+    public class Base
     {
         protected Guid n1 = Guid.NewGuid();
         protected Guid n1_1 = Guid.NewGuid();
@@ -29,7 +25,16 @@ namespace Dragon.Tests.PermissionStore
 
         public void Setup()
         {
-
+            // n1
+            // |--> n1_1
+            // |    '--> n1_1_1
+            // |    '--> special
+            // '--> n1_2
+            //      |--> n1_2_1
+            //      |--> n1_2_2
+            //      |    '--> special
+            //      '--> n1_2_3
+           
             store.AddNode(n1, n1_1);
             store.AddNode(n1, n1_2);
             store.AddNode(n1_1, n1_1_1);

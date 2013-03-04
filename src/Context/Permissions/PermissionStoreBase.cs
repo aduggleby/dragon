@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Dragon.Common.Objects.Tree;
+using Dragon.Context.Exceptions;
 using Dragon.Interfaces;
 
 namespace Dragon.Context.Permissions
@@ -103,16 +104,17 @@ namespace Dragon.Context.Permissions
 
         private void PushRights(ITreeNode<Guid, List<IPermissionRight>> node)
         {
-            if (node.Data == null) return;
-
-            foreach (var permission in node.Data.Where(x => x.Inherit))
+            if (node.Data != null)
             {
-                PushRight(permission, node.Children);
-            }
+                foreach (var permission in node.Data.Where(x => x.Inherit))
+                {
+                    PushRight(permission, node.Children);
+                }
 
-            foreach (var child in node.Children)
-            {
-                PushRights(child);
+                foreach (var child in node.Children)
+                {
+                    PushRights(child);
+                }
             }
         }
 
@@ -120,7 +122,7 @@ namespace Dragon.Context.Permissions
         {
             foreach (var child in nodes)
             {
-                if (child.Data == null) child.Data = new List<IPermissionRight>();
+
                 if (!child.Data.Any(x => x.LID.Equals(right.LID)))
                 {
                     child.Data.Add(right);
@@ -164,11 +166,18 @@ namespace Dragon.Context.Permissions
             AddNodeInternal(parentID, childID);
             m_treeDirty = true;
         }
-        
+
         public void RemoveNode(Guid parentID, Guid childID)
         {
+            if (!IsChildNodeOf(parentID, childID)) 
+                throw new NodeDoesNotExistException();
 
-            AddNodeInternal(parentID, childID);
+            EnumerateAllRightsInternal()
+                .Where(x => x.NodeID.Equals(childID))
+                .ToList()
+                .ForEach(x => RemoveRight(x.NodeID, x.SubjectID, x.Spec));
+
+            RemoveNodeInternal(parentID, childID);
             m_treeDirty = true;
         }
 
@@ -178,9 +187,17 @@ namespace Dragon.Context.Permissions
         protected abstract IEnumerable<Guid> EnumerateParentNodesInternal(Guid childID);
         protected abstract IEnumerable<Guid> EnumerateChildrenNodesInternal(Guid parentID);
 
+        public virtual bool IsDirectChildNodeOf(Guid parentID, Guid childID)
+        {
+            var parent = GetNode(parentID);
+            if (parent == null) return false;
+            return parent.Children.Any(x=>x.Node.Equals(childID));
+        }
+
         public virtual bool IsChildNodeOf(Guid parentID, Guid childID)
         {
             var parent = GetNode(parentID);
+            if (parent==null) return false;
             return parent.HasChildInTree(childID);
         }
 
@@ -196,6 +213,7 @@ namespace Dragon.Context.Permissions
         
         public void RemoveRight(Guid nodeID, Guid subjectID, string spec)
         {
+            if (!HasRight(nodeID, subjectID, spec)) throw new RightDoesNotExistException();
             RemoveRightInternal(nodeID, subjectID, spec);
             m_treeDirty = true;
         }
@@ -234,7 +252,7 @@ namespace Dragon.Context.Permissions
         public IEnumerable<IPermissionRight> GetRightsOnNodeWithInherited(Guid nodeID)
         {
             var candidate = AllNodes().FirstOrDefault(x => x.Node.Equals(nodeID));
-            if (candidate == null) throw new Exception("Node not found.");
+            if (candidate == null) throw new NodeDoesNotExistException();
             return candidate.Data;
         }
 

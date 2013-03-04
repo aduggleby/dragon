@@ -2,14 +2,14 @@
 using System.Text;
 using System.Collections.Generic;
 using System.Linq;
-using Dragon.Tests.PermissionStore.Mocks;
+using Dragon.Tests.PermissionStore.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using FluentAssertions;
 
 namespace Dragon.Tests.PermissionStore
 {
     [TestClass]
-    public class PermissionStoreTest : PermissionStoreTestsBase
+    public class has_rights : Base
     {
         [TestInitialize]
         public void LocalSetup()
@@ -20,7 +20,7 @@ namespace Dragon.Tests.PermissionStore
         }
 
         [TestMethod]
-        public void ReadRights_were_properly_inherited()
+        public void and_read_rights_are_inherited()
         {
             foreach (var node in store.NodeListWithInheritedRights())
             {
@@ -34,18 +34,13 @@ namespace Dragon.Tests.PermissionStore
                     store.HasRight(node.Node, s2, READ).Should().BeFalse();
                 }
             }
-        }
 
-
-
-        [TestMethod]
-        public void Special_has_unique_right_only_once()
-        {
             store.GetRightsOnNodeWithInherited(special).Count().Should().Be(2);
+
         }
 
         [TestMethod]
-        public void GetNodes_returns_correct_nodes()
+        public void and_getnodes_returns_correct_items()
         {
             store.GetNodesWithRight(s2, MANAGE).Should().BeEmpty();
             var nodes = store.GetNodesWithRight(s3, MANAGE);

@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Dragon.Context.Permissions;
 using Dragon.Interfaces;
 
-namespace Dragon.Tests.PermissionStore.Mocks
+namespace Dragon.Tests.PermissionStore.Helpers
 {
     public class InMemoryPermissionStore : PermissionStoreBase
     {
@@ -34,7 +33,7 @@ namespace Dragon.Tests.PermissionStore.Mocks
 
         protected override void RemoveNodeInternal(Guid parentID, Guid childID)
         {
-            if (!EnumerateParentNodesInternal(childID).Contains(parentID))
+            if (EnumerateParentNodesInternal(childID).Contains(parentID))
             {
                 m_nodes.Remove(m_nodes.FirstOrDefault(x => x.ParentID.Equals(parentID) && x.ChildID.Equals(childID)));
             }
@@ -125,11 +124,6 @@ namespace Dragon.Tests.PermissionStore.Mocks
                 Spec = x.Spec,
                 Inherit = x.Inherit
             }).ToArray();
-        }
-
-        public override bool IsChildNodeOf(Guid parentID, Guid childID)
-        {
-            return EnumerateParentNodesInternal(childID).Contains(parentID);
         }
 
         private class Right : IPermissionRight
