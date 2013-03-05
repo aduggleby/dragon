@@ -11,5 +11,10 @@ namespace Dragon.Context
         {
             return !ctx.CurrentUserID.Equals(Guid.Empty);
         }
+
+        public static IEnumerable<Guid> GetNodesCurrentUserHasRightsOn(this DragonContext ctx, string spec)
+        {
+            return DragonContext.PermissionStore.GetNodesWithRight(ctx.CurrentUserID, spec);
+        }
     }
 }
