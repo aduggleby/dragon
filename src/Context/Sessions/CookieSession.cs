@@ -28,7 +28,7 @@ namespace Dragon.Context.Sessions
 
         internal CookieSession()
         {
-            CookieName = m_configuration.EnsureValue<string>(CONFIG_COOKIENAME);
+            CookieName = m_configuration.GetValue<string>(CONFIG_COOKIENAME, "DRAGON.COOKIE");
 
             CheckAndSetHttpContext();
             SetVariablesFromHttpContext();

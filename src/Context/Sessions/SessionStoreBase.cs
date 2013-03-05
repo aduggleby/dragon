@@ -15,7 +15,7 @@ namespace Dragon.Context.Sessions
         protected const string CONFIG_SLIDINGWINDOWSMINUTES = CONFIG_PREFIX + "SlidingWindowMinutes";
 
         protected readonly IReverseIPLookupService m_reverseLookupService;
-        protected readonly CookieSession m_session;
+        protected readonly ISession m_session;
         
         private static IConfiguration m_configuration;
 
@@ -24,9 +24,9 @@ namespace Dragon.Context.Sessions
             m_configuration = ObjectFactory.GetInstance<IConfiguration>();
         }
 
-        public SessionStoreBase(IReverseIPLookupService reverseLookupService)
+        public SessionStoreBase(ISession session, IReverseIPLookupService reverseLookupService)
         {
-            m_session = new CookieSession();
+            m_session = session;
             m_reverseLookupService = reverseLookupService;   
         }
 

@@ -8,6 +8,7 @@ using Dapper;
 using Dragon.Common;
 using Dragon.Context.Permissions;
 using Dragon.Context.ReverseIPLookup;
+using Dragon.Interfaces;
 
 namespace Dragon.Context.Sessions
 {
@@ -15,8 +16,8 @@ namespace Dragon.Context.Sessions
     {
         private string m_connStr;
 
-        public SqlSessionStore(IReverseIPLookupService reverseLookupService)
-            : base(reverseLookupService)
+        public SqlSessionStore(ISession session, IReverseIPLookupService reverseLookupService)
+            : base(session, reverseLookupService)
         {
             var connStrEntry = ConfigurationManager.ConnectionStrings[Constants.DEFAULT_CONNECTIONSTRING_KEY];
 

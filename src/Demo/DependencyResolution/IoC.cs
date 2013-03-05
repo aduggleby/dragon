@@ -37,6 +37,7 @@ namespace Demo.DependencyResolution {
             //                x.For<IExample>().Use<Example>();
                             x.For<IPermissionStore>().Use<SqlPermissionStore>();
                             x.For<ISessionStore>().Use<SqlSessionStore>();
+                            x.For<ISession>().Use<CookieSession>();
                             x.For<IUserStore>().Use<SqlUserStore>();
                             x.For<IReverseIPLookupService>().Use<HostIpReverseLookupService>();
                             

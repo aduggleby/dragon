@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using Dragon.Common.Util;
 using Dragon.Context.ReverseIPLookup;
+using Dragon.Interfaces;
 
 namespace Dragon.Context.Sessions
 {
@@ -17,8 +18,8 @@ namespace Dragon.Context.Sessions
             s_sessions = new ConcurrentDictionary<Guid, SessionRecord>();
         }
 
-        public InMemorySessionStore(IReverseIPLookupService reverseLookupService)
-            : base(reverseLookupService)
+        public InMemorySessionStore(ISession session, IReverseIPLookupService reverseLookupService)
+            : base(session, reverseLookupService)
         {
         }
 
@@ -28,14 +29,14 @@ namespace Dragon.Context.Sessions
             while (sessionRecord == null)
             {
                 // try to get record from memory
-                sessionRecord = new SessionRecord() { SessionID = m_session.ID };
+                sessionRecord = null;
 
-                TryGetSessionRecord(sessionRecord.SessionID, out sessionRecord);
+                TryGetSessionRecord(m_session.ID, out sessionRecord);
                 
                 // if expired remove record
                 if (sessionRecord.Expires <= DateTime.UtcNow)
                 {
-                    RemoveSessionRecord(sessionRecord.SessionID);
+                    RemoveSessionRecord(m_session.ID);
                 }
             }
 
@@ -44,7 +45,7 @@ namespace Dragon.Context.Sessions
 
         protected virtual bool TryGetSessionRecord(Guid sessionID, out SessionRecord sessionRecord)
         {
-            sessionRecord = null;
+            sessionRecord = new SessionRecord() { SessionID = m_session.ID };
 
             while (s_sessions.ContainsKey(sessionID))
             {

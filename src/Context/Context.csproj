@@ -68,6 +68,7 @@
     <Compile Include="Permissions\SqlPermissionNode.cs" />
     <Compile Include="Permissions\SqlPermissionRight.cs" />
     <Compile Include="Permissions\SqlPermissionStore.cs" />
+    <Compile Include="Sessions\InMemorySession.cs" />
     <Compile Include="Sessions\InMemorySessionStore.cs" />
     <Compile Include="Sessions\SessionStoreBase.cs" />
     <Compile Include="DragonContext.cs" />
@@ -92,6 +93,10 @@
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{CAB6CB7C-5661-4D64-BC65-0259A12E38CF}</Project>
       <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Core\Core.csproj">
+      <Project>{F44FB8F4-CF8C-4C49-8E07-FA4AF3359696}</Project>
+      <Name>Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\Interfaces\Interfaces.csproj">
       <Project>{2AE2966B-6F2B-4254-85C6-588C8690898F}</Project>
