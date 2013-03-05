@@ -40,7 +40,7 @@ namespace Dragon.Context.Sessions
             // perform ip -> location lookup if configured
             if (!sessionRecord.Hash.Equals(m_session.GetHashCode()))
             {
-                if (ConfigUtil.IsTrue(CONFIG_DOREVERSEIPLOOKUP))
+                if (ConfigUtil.IsTrue(CONFIG_DOREVERSEIPLOOKUP) && m_reverseLookupService!=null)
                 {
                     // if forwarded for avaiable try that first, otherwise just ip
                     sessionRecord.Location = !string.IsNullOrWhiteSpace(m_session.ForwardedForAddress)
