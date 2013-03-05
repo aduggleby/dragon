@@ -6,7 +6,7 @@ using System.IO.IsolatedStorage;
 using System.Reflection;
 using System.IO;
 
-namespace BootstrapCQRS.Extensions
+namespace Dragon.Common.Extensions
 {
     public static class IsolatedStorageFileExtensions
     {

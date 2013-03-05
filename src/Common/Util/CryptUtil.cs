@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Text;
 using System.Security.Cryptography;
+using Dragon.Interfaces;
+using StructureMap;
 
 namespace Dragon.Common.Util
 {
@@ -10,9 +12,16 @@ namespace Dragon.Common.Util
         private const string CONFIG_KEY = "Dragon.Context.Encryption.Key";
         private const string CONFIG_IV = "Dragon.Context.Encryption.IV";
 
-        public CryptUtil()
-        {
+        private static IConfiguration m_configuration;
 
+        static CryptUtil()
+        {
+            m_configuration = ObjectFactory.GetInstance<IConfiguration>();
+        }
+
+        public CryptUtil(IConfiguration configuration)
+        {
+            m_configuration = configuration;
         }
 
         public static string GenerateKey()
@@ -31,12 +40,12 @@ namespace Dragon.Common.Util
 
         public static string GetAndEnsureKeyFromWebConfig()
         {
-            return ConfigUtil.GetAndEnsureValueFromWebConfig(CONFIG_KEY);
+            return m_configuration.EnsureValue<string>(CONFIG_KEY);
         }
 
         public static string GetAndEnsureIVFromWebConfig()
         {
-            return ConfigUtil.GetAndEnsureValueFromWebConfig(CONFIG_IV);
+            return m_configuration.EnsureValue<string>(CONFIG_IV);
         }
 
         public static string Encrypt(string unencrypted)

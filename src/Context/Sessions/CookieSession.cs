@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Web;
+using Dragon.Common.Extensions;
 using Dragon.Common.Util;
 using Dragon.Interfaces;
+using StructureMap;
 
 namespace Dragon.Context.Sessions
 {
@@ -17,10 +19,16 @@ namespace Dragon.Context.Sessions
         private string CookieName { get; set; }
 
         private HttpContext m_httpCtx;
-        
+        private static IConfiguration m_configuration;
+
+        static CookieSession()
+        {
+            m_configuration = ObjectFactory.GetInstance<IConfiguration>();
+        }
+
         internal CookieSession()
         {
-            CookieName = ConfigUtil.GetAndEnsureValueFromWebConfig(CONFIG_COOKIENAME);
+            CookieName = m_configuration.EnsureValue<string>(CONFIG_COOKIENAME);
 
             CheckAndSetHttpContext();
             SetVariablesFromHttpContext();
@@ -55,7 +63,7 @@ namespace Dragon.Context.Sessions
 
         private bool SSLOnly
         {
-            get { return ConfigUtil.IsTrue(CONFIG_SSLONLY); }
+            get { return m_configuration.IsTrue(CONFIG_SSLONLY); }
         }
 
         private void CheckAndSetHttpContext()

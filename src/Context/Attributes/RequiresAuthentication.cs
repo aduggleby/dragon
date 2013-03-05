@@ -3,6 +3,8 @@
 using System;
 using System.Diagnostics;
 using System.Web.Mvc;
+using Dragon.Common.Extensions;
+using Dragon.Interfaces;
 using StructureMap;
 using Dragon.Common.Util;
 
@@ -44,7 +46,7 @@ namespace Dragon.Context.Attributes
         {
             get
             {
-                var url = ConfigUtil.GetAndEnsureValueFromWebConfig(CONFIG_LOGINURL);
+                var url = ObjectFactory.GetInstance<IConfiguration>().EnsureString(CONFIG_LOGINURL);
                 return url;
             }
         }

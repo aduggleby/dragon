@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using Dragon.Common.Extensions;
 using Dragon.Common.Util;
 using Dragon.Context.ReverseIPLookup;
 using Dragon.Interfaces;
+using StructureMap;
 
 namespace Dragon.Context.Sessions
 {
@@ -14,6 +16,13 @@ namespace Dragon.Context.Sessions
 
         protected readonly IReverseIPLookupService m_reverseLookupService;
         protected readonly CookieSession m_session;
+        
+        private static IConfiguration m_configuration;
+
+        static SessionStoreBase()
+        {
+            m_configuration = ObjectFactory.GetInstance<IConfiguration>();
+        }
 
         public SessionStoreBase(IReverseIPLookupService reverseLookupService)
         {
@@ -40,7 +49,7 @@ namespace Dragon.Context.Sessions
             // perform ip -> location lookup if configured
             if (!sessionRecord.Hash.Equals(m_session.GetHashCode()))
             {
-                if (ConfigUtil.IsTrue(CONFIG_DOREVERSEIPLOOKUP) && m_reverseLookupService!=null)
+                if (m_configuration.IsTrue(CONFIG_DOREVERSEIPLOOKUP) && m_reverseLookupService != null)
                 {
                     // if forwarded for avaiable try that first, otherwise just ip
                     sessionRecord.Location = !string.IsNullOrWhiteSpace(m_session.ForwardedForAddress)
@@ -55,7 +64,7 @@ namespace Dragon.Context.Sessions
         
         public int SlidingWindowMinutes
         {
-            get { return ConfigUtil.GetValueFromWebConfig(CONFIG_SLIDINGWINDOWSMINUTES, 10); }
+            get { return m_configuration.GetInt(CONFIG_SLIDINGWINDOWSMINUTES, 10); }
         }
 
         public ISession Session
