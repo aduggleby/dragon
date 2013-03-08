@@ -19,21 +19,25 @@ namespace Dragon.Context.Sessions
         private string CookieName { get; set; }
 
         private HttpContext m_httpCtx;
-        private static IConfiguration m_configuration;
+        private IConfiguration m_configuration;
 
-        static CookieSession()
+        public CookieSession()
         {
-            m_configuration = ObjectFactory.GetInstance<IConfiguration>();
-        }
+            try
+            {
+                m_configuration = ObjectFactory.GetInstance<IConfiguration>();
 
-        internal CookieSession()
-        {
-            CookieName = m_configuration.GetValue<string>(CONFIG_COOKIENAME, "DRAGON.COOKIE");
+                CookieName = m_configuration.GetValue<string>(CONFIG_COOKIENAME, "DRAGON.COOKIE");
 
-            CheckAndSetHttpContext();
-            SetVariablesFromHttpContext();
-            LoadFromCookie();
-            SaveToCookie();
+                CheckAndSetHttpContext();
+                SetVariablesFromHttpContext();
+                LoadFromCookie();
+                SaveToCookie();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Ctor in CookieSession caught exception.", ex);
+            }
         }
 
         ///////////////////////////////////////////////////////////////////////
@@ -83,6 +87,7 @@ namespace Dragon.Context.Sessions
             cookie.Expires = DateTime.UtcNow.AddYears(1);
             cookie.Secure = SSLOnly;
             cookie.Value = CryptUtil.Encrypt(ID.ToString());
+            Debug.WriteLine(string.Format("Adding cookie '{0}' with value '{1}'", CookieName, cookie.Value));
             m_httpCtx.Response.Cookies.Add(cookie);
         }
 
