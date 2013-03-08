@@ -27,5 +27,18 @@ namespace Dragon.Context.Extensions.Login
                 ctx.UserStore.Register(SERVICE_ID, username, hashedSaltedSecret);
             }
         }
+        
+        public static void ChangePassword(this DragonContext ctx, string username, string password)
+        {
+            if (!ctx.UserStore.HasUserByKey(SERVICE_ID, username))
+            {
+                throw new UserKeyDoesNotExistException();
+            }
+            else
+            {
+                var hashedSaltedSecret = HashUtil.ComputeHash(password);
+                ctx.UserStore.UpdateSecret(SERVICE_ID, username, hashedSaltedSecret);
+            }
+        }
     }
 }

@@ -8,5 +8,6 @@ namespace Dragon.Interfaces
     public interface IProfileStore
     {
         T GetProperty<T>(Guid userID, string key);
+        void SetProperty(Guid userID, string key, object value);
     }
 }

@@ -164,6 +164,33 @@ namespace Dragon.Context {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to SELECT * FROM [Profile] WHERE UserID = @UserID AND Key = @Key.
+        /// </summary>
+        internal static string SqlProfileStore_Get {
+            get {
+                return ResourceManager.GetString("SqlProfileStore_Get", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to INSERT INTO [Profile] ([UserID], [Key], [Value]) VALUES (@UserID, @Key, @Value).
+        /// </summary>
+        internal static string SqlProfileStore_Insert {
+            get {
+                return ResourceManager.GetString("SqlProfileStore_Insert", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to UPDATE [Profile] SET [Value] = @Value WHERE UserID = @UserID AND [Key] = @Key.
+        /// </summary>
+        internal static string SqlProfileStore_Update {
+            get {
+                return ResourceManager.GetString("SqlProfileStore_Update", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to DELETE FROM [Session] WHERE [SessionID] =@SessionID.
         /// </summary>
         internal static string SqlSessionStore_Delete {

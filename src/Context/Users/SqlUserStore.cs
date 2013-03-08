@@ -16,22 +16,12 @@ namespace Dragon.Context.Users
 
         public SqlUserStore(ISessionStore sessionStore):base(sessionStore)
         {
-            var connStrEntry = ConfigurationManager.ConnectionStrings[Constants.DEFAULT_CONNECTIONSTRING_KEY];
-            
-            if (connStrEntry == null || string.IsNullOrWhiteSpace(connStrEntry.ConnectionString))
-            {
-                throw Ex.For(SQL.SqlStores_Exception_ConnectionStringNotSet,
-                             Constants.DEFAULT_CONNECTIONSTRING_KEY);
-            }
-
-            m_connStr = connStrEntry.ConnectionString;
-
-            Init();
+           Init();
         }
 
         protected override IEnumerable<IRegistration> LoadUser(Guid userID)
         {
-            using (var conn = new SqlConnection(m_connStr))
+            using (var conn = new SqlConnection(StandardSqlStore.ConnectionString))
             {
                 conn.Open();
                 var param = new { UserID = userID };
@@ -41,7 +31,7 @@ namespace Dragon.Context.Users
 
         protected override IRegistration LoadRegistration(string service, string key)
         {
-            using (var conn = new SqlConnection(m_connStr))
+            using (var conn = new SqlConnection(StandardSqlStore.ConnectionString))
             {
                 conn.Open();
                 var param = new { Service = service, Key = key };
@@ -51,7 +41,7 @@ namespace Dragon.Context.Users
 
         protected override void Save(Guid userID, string service, string key, string hashedSaltedSecret)
         {
-            using (var conn = new SqlConnection(m_connStr))
+            using (var conn = new SqlConnection(StandardSqlStore.ConnectionString))
             {
                 var existing = LoadRegistration(service, key);
                 conn.Open();

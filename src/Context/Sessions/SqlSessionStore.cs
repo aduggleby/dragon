@@ -14,20 +14,11 @@ namespace Dragon.Context.Sessions
 {
     public class SqlSessionStore : InMemorySessionStore
     {
-        private string m_connStr;
 
         public SqlSessionStore(ISession session, IReverseIPLookupService reverseLookupService)
             : base(session, reverseLookupService)
         {
-            var connStrEntry = ConfigurationManager.ConnectionStrings[Constants.DEFAULT_CONNECTIONSTRING_KEY];
-
-            if (connStrEntry == null || string.IsNullOrWhiteSpace(connStrEntry.ConnectionString))
-            {
-                throw Ex.For(SQL.SqlStores_Exception_ConnectionStringNotSet,
-                             Constants.DEFAULT_CONNECTIONSTRING_KEY);
-            }
-
-            m_connStr = connStrEntry.ConnectionString;
+      
         }
 
         protected override SessionRecord GetSessionRecord()
@@ -51,7 +42,7 @@ namespace Dragon.Context.Sessions
 
         protected virtual SessionRecord GetSessionRecord(Guid sessionID)
         {
-            using (var conn = new SqlConnection(m_connStr))
+            using (var conn = new SqlConnection(StandardSqlStore.ConnectionString))
             {
                 conn.Open();
                 return conn.Query<SessionRecord>(SQL.SqlSessionStore_Get, new {SessionID = sessionID}).FirstOrDefault();
@@ -60,7 +51,7 @@ namespace Dragon.Context.Sessions
 
         protected override void SaveSessionRecord(SessionRecord sessionRecord)
         {
-            using (var conn = new SqlConnection(m_connStr))
+            using (var conn = new SqlConnection(StandardSqlStore.ConnectionString))
             {
                 conn.Open();
 
@@ -84,7 +75,7 @@ namespace Dragon.Context.Sessions
 
         protected override void RemoveSessionRecord(Guid sessionID)
         {
-            using (var conn = new SqlConnection(m_connStr))
+            using (var conn = new SqlConnection(StandardSqlStore.ConnectionString))
             {
                 conn.Open();
                 conn.Execute(SQL.SqlSessionStore_Delete, new { SessionID = sessionID });

@@ -228,4 +228,13 @@ VALUES			   (@SessionID,@Hash,@Location,@UserID, @Expires)</value>
 [UserID]	= @UserID
 WHERE [SessionID] = @SessionID</value>
   </data>
+  <data name="SqlProfileStore_Get" xml:space="preserve">
+    <value>SELECT * FROM [Profile] WHERE UserID = @UserID AND Key = @Key</value>
+  </data>
+  <data name="SqlProfileStore_Insert" xml:space="preserve">
+    <value>INSERT INTO [Profile] ([UserID], [Key], [Value]) VALUES (@UserID, @Key, @Value)</value>
+  </data>
+  <data name="SqlProfileStore_Update" xml:space="preserve">
+    <value>UPDATE [Profile] SET [Value] = @Value WHERE UserID = @UserID AND [Key] = @Key</value>
+  </data>
 </root>

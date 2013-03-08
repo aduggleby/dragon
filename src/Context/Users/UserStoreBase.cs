@@ -77,10 +77,11 @@ namespace Dragon.Context.Users
 
             if (user != null && !user.Secret.Equals(secret))
             {
-                if (!user.UserID.Equals(m_sessionStore.ConnectedUserID))
-                {
-                    throw new InvalidOperationException("Cannot update another users secret");
-                }
+                // Reset token is not logged-in
+                //if (!user.UserID.Equals(m_sessionStore.ConnectedUserID))
+                //{
+                //    throw new InvalidOperationException("Cannot update another users secret");
+                //}
 
                 Save(user.UserID, service, key, secret);
             }

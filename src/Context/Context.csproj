@@ -63,11 +63,14 @@
     <Compile Include="Exceptions\RightDoesNotExistException.cs" />
     <Compile Include="Exceptions\ServiceAlreadyConnectedToUserException.cs" />
     <Compile Include="Exceptions\UserKeyAlreadyExistsForThisServiceException.cs" />
+    <Compile Include="Exceptions\UserKeyDoesNotExistException.cs" />
     <Compile Include="Extensions\Groups\GroupPermissionExtension.cs" />
     <Compile Include="Permissions\PermissionStoreBase.cs" />
     <Compile Include="Permissions\SqlPermissionNode.cs" />
     <Compile Include="Permissions\SqlPermissionRight.cs" />
     <Compile Include="Permissions\SqlPermissionStore.cs" />
+    <Compile Include="Profile\ProfileStoreBase.cs" />
+    <Compile Include="Profile\SqlProfileStore.cs" />
     <Compile Include="Sessions\InMemorySession.cs" />
     <Compile Include="Sessions\InMemorySessionStore.cs" />
     <Compile Include="Sessions\SessionStoreBase.cs" />
@@ -84,6 +87,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>SQL.resx</DependentUpon>
     </Compile>
+    <Compile Include="StandardSqlStore.cs" />
     <Compile Include="Users\InMemoryUserStore.cs" />
     <Compile Include="Users\SqlUserStore.cs" />
     <Compile Include="Users\User.cs" />

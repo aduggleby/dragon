@@ -13,20 +13,9 @@ namespace Dragon.Context.Permissions
 {
     public class SqlPermissionStore : PermissionStoreBase
     {
-        private string m_connStr;
-
         public SqlPermissionStore()
             : base()
         {
-            var connStrEntry = ConfigurationManager.ConnectionStrings[Constants.DEFAULT_CONNECTIONSTRING_KEY];
-            
-            if (connStrEntry == null || string.IsNullOrWhiteSpace(connStrEntry.ConnectionString))
-            {
-                throw Ex.For(SQL.SqlStores_Exception_ConnectionStringNotSet,
-                             Constants.DEFAULT_CONNECTIONSTRING_KEY);
-            }
-
-            m_connStr = connStrEntry.ConnectionString;
 
             RebuildTree();
         }
@@ -39,7 +28,7 @@ namespace Dragon.Context.Permissions
 
             if (!parents.Contains(parentID))
             {
-                using (var conn = new SqlConnection(m_connStr))
+                using (var conn = new SqlConnection(StandardSqlStore.ConnectionString))
                 {
                     conn.Open();
                     var param = new SqlPermissionNode() {ParentID = parentID, ChildID = childID};
@@ -54,7 +43,7 @@ namespace Dragon.Context.Permissions
         {
             // no parenthood test here because delete will ignore anyway
 
-            using (var conn = new SqlConnection(m_connStr))
+            using (var conn = new SqlConnection(StandardSqlStore.ConnectionString))
             {
                 conn.Open();
                 var param = new { ParentID = parentID, ChildID = childID };
@@ -66,7 +55,7 @@ namespace Dragon.Context.Permissions
 
         protected override IEnumerable<Guid> EnumerateParentNodesInternal(Guid childID)
         {
-            using (var conn = new SqlConnection(m_connStr))
+            using (var conn = new SqlConnection(StandardSqlStore.ConnectionString))
             {
                 conn.Open();
                 var param = new { ChildID = childID };
@@ -79,7 +68,7 @@ namespace Dragon.Context.Permissions
 
         protected override IEnumerable<Guid> EnumerateChildrenNodesInternal(Guid parentID)
         {
-            using (var conn = new SqlConnection(m_connStr))
+            using (var conn = new SqlConnection(StandardSqlStore.ConnectionString))
             {
                 conn.Open();
                 var param = new { ParentID = parentID };
@@ -90,7 +79,7 @@ namespace Dragon.Context.Permissions
 
         protected override IEnumerable<IPermissionNode> EnumerateAllNodesInternal()
         {
-            using (var conn = new SqlConnection(m_connStr))
+            using (var conn = new SqlConnection(StandardSqlStore.ConnectionString))
             {
                 conn.Open();
                 var param = new {};
@@ -115,7 +104,7 @@ namespace Dragon.Context.Permissions
                 RemoveRightInternal(nodeID, subjectID, spec);
             }
         
-            using (var conn = new SqlConnection(m_connStr))
+            using (var conn = new SqlConnection(StandardSqlStore.ConnectionString))
             {
                 conn.Open();
                 var param = new SqlPermissionRight()
@@ -139,7 +128,7 @@ namespace Dragon.Context.Permissions
             if (candidate == null) 
                 throw new RightDoesNotExistException();
 
-            using (var conn = new SqlConnection(m_connStr))
+            using (var conn = new SqlConnection(StandardSqlStore.ConnectionString))
             {
                 conn.Open();
                 var param = new
@@ -154,7 +143,7 @@ namespace Dragon.Context.Permissions
 
         protected override IEnumerable<IPermissionRight> EnumerateRightsInternal(Guid nodeID)
         {
-            using (var conn = new SqlConnection(m_connStr))
+            using (var conn = new SqlConnection(StandardSqlStore.ConnectionString))
             {
                 conn.Open();
                 var param = new { NodeID = nodeID };
@@ -164,7 +153,7 @@ namespace Dragon.Context.Permissions
 
         protected override IEnumerable<IPermissionRight> EnumerateAllRightsInternal()
         {
-            using (var conn = new SqlConnection(m_connStr))
+            using (var conn = new SqlConnection(StandardSqlStore.ConnectionString))
             {
                 conn.Open();
                 var param = new {  };
