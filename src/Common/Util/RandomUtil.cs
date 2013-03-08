@@ -36,9 +36,16 @@ namespace Dragon.Common.Util
             return new string(buffer);
         }
 
+        
+
         public static int Int(int length, bool mustHaveLength = true)
         {
-            var max = Convert.ToInt32(Math.Pow(10, length) - 1);
+            if (length <= 0) throw new ArgumentException("Cannot create integers with length 0 or less", "length");
+
+            // 2147483647 = max, only allow lenght <= 10
+            if (length >= 11) throw new ArgumentException("Cannot create integers with length 10", "length");
+
+            var max = Convert.ToInt32(Math.Min(Int32.MaxValue, Math.Pow(10, length) - 1));
             var min = Convert.ToInt32(Math.Pow(10, length - 1));
             var rnd = rng.Next(max);
             if (!mustHaveLength)
