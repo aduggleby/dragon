@@ -58,6 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IConfiguration.cs" />
+    <Compile Include="Notifications\INotification.cs" />
     <Compile Include="Notifications\IEmailService.cs" />
     <Compile Include="Notifications\IEmailNotifiable.cs" />
     <Compile Include="Notifications\INotifiable.cs" />
