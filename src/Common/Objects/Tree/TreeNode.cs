@@ -23,5 +23,19 @@ namespace Dragon.Common.Objects.Tree
         {
             return Node.Equals(key) || Children.Any(x=>x.HasChildInTree(key));
         }
+
+        public ITreeNode<T, TData> GetChildInTree(T key)
+        {
+            if (Node.Equals(key)) return this;
+
+            foreach (var child in Children)
+            {
+                var n = child.GetChildInTree(key);
+
+                if (n!=null) return n;
+            }
+
+            return null;
+        }
     }
 }

@@ -33,12 +33,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="PGK.Extensions">
-      <HintPath>..\..\packages\PGK.Extensions.2011.6\lib\PGK.Extensions.dll</HintPath>
-    </Reference>
-    <Reference Include="StructureMap">
-      <HintPath>..\..\packages\structuremap.2.6.4.1\lib\net40\StructureMap.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
@@ -91,9 +85,6 @@
     <Compile Include="Util\HashUtil.cs" />
     <Compile Include="Util\RandomUtil.cs" />
     <Compile Include="Util\ResourceUtil.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Strings.de-de.resx">

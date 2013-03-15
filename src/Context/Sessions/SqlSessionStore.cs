@@ -23,8 +23,8 @@ namespace Dragon.Context.Sessions
 
         protected override SessionRecord GetSessionRecord()
         {
-            SessionRecord sessionRecord;
-            if (!base.TryGetSessionRecord(m_session.ID, out sessionRecord))
+            SessionRecord sessionRecord = null;
+            if (true /* disabling in memory for a test todo */ || !base.TryGetSessionRecord(m_session.ID, out sessionRecord))
             {
                 sessionRecord = GetSessionRecord(m_session.ID);
                 if (sessionRecord == null)
@@ -75,6 +75,8 @@ namespace Dragon.Context.Sessions
 
         protected override void RemoveSessionRecord(Guid sessionID)
         {
+            base.RemoveSessionRecord(sessionID);
+
             using (var conn = new SqlConnection(StandardSqlStore.ConnectionString))
             {
                 conn.Open();
