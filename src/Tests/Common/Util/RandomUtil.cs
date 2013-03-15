@@ -42,7 +42,7 @@ namespace Dragon.Tests.Common.Util
         {
             for (int i = 1; i < 11; i++)
             {
-                RandomUtil.Int(i, false).Should().BeGreaterThan(0);
+                RandomUtil.Int(i, false).Should().BeGreaterOrEqualTo(0);
                 RandomUtil.Int(i, false).ToString().Length.Should().BeLessOrEqualTo(i);
                 RandomUtil.Int(i, true).ToString().Length.Should().Be(i);
             }

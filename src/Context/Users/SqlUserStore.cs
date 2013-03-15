@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using Dapper;
 using Dragon.Common;
+using Dragon.Core.Sql;
 using Dragon.Interfaces;
 
 namespace Dragon.Context.Users

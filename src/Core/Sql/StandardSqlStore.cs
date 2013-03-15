@@ -1,7 +1,7 @@
 using System.Configuration;
 using Dragon.Common;
 
-namespace Dragon.Context
+namespace Dragon.Core.Sql
 {
     public static class StandardSqlStore
     {
@@ -26,7 +26,7 @@ namespace Dragon.Context
 
                 if (connStrEntry == null || string.IsNullOrWhiteSpace(connStrEntry.ConnectionString))
                 {
-                    throw Ex.For(SQL.SqlStores_Exception_ConnectionStringNotSet,
+                    throw Ex.For(Strings.SqlStores_Exception_ConnectionStringNotSet,
                                  Constants.DEFAULT_CONNECTIONSTRING_KEY);
                 }
 

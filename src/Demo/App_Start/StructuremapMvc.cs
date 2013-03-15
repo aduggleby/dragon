@@ -20,7 +20,7 @@ using System.Web.Mvc;
 using StructureMap;
 using Demo.DependencyResolution;
 
-[assembly: WebActivator.PreApplicationStartMethod(typeof(Demo.App_Start.StructuremapMvc), "Start")]
+[assembly: WebActivatorEx.PreApplicationStartMethod(typeof(Demo.App_Start.StructuremapMvc), "Start")]
 
 namespace Demo.App_Start {
     public static class StructuremapMvc {

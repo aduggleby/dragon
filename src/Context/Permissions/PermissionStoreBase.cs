@@ -41,8 +41,9 @@ namespace Dragon.Context.Permissions
             // add rights that are not in a tree structure
             foreach (var right in rights)
             {
-                if (!(m_treeInternal.Any(x => x.Node.Equals(right.NodeID)) ||
-                      m_treeInternal.Any(x => x.HasChildInTree(right.NodeID))))
+                var exNode = m_treeInternal.Select(x => x.GetChildInTree(right.NodeID)).FirstOrDefault();
+
+                if (exNode == null)
                 {
                     var node = new TreeNode<Guid, List<IPermissionRight>>()
                         {
@@ -51,6 +52,14 @@ namespace Dragon.Context.Permissions
                         };
                     node.Data.Add(right);
                     m_treeInternal.Add(node);
+                }
+
+                else
+                {
+                    if (!exNode.Data.Any(x => x.Spec.Equals(right.Spec)))
+                    {
+                        exNode.Data.Add(right);
+                    }
                 }
             }
 
@@ -68,7 +77,7 @@ namespace Dragon.Context.Permissions
             int level = 0)
         {
             if (sb == null) sb = new StringBuilder();
-            if (nodes==null) nodes = Tree;
+            if (nodes == null) nodes = Tree;
 
             foreach (var node in nodes)
             {
@@ -91,12 +100,12 @@ namespace Dragon.Context.Permissions
                 }
                 sb.AppendLine();
 
-                DebugOutputTree(sb, node.Children, level+1);
+                DebugOutputTree(sb, node.Children, level + 1);
             }
 
             return sb;
         }
-        
+
         private string Guid4(Guid g)
         {
             return g.ToString().Substring(0, 4);
