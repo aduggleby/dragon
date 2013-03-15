@@ -58,6 +58,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IConfiguration.cs" />
+    <Compile Include="Notifications\INotifiable.cs" />
+    <Compile Include="Notifications\INotificationDispatcher.cs" />
+    <Compile Include="Notifications\INotificationStore.cs" />
     <Compile Include="IPermissionNode.cs" />
     <Compile Include="IPermissionStore.cs" />
     <Compile Include="IProfileStore.cs" />
