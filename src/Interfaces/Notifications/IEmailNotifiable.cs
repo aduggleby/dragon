@@ -5,7 +5,9 @@ using System.Text;
 
 namespace Dragon.Interfaces.Notifications
 {
-    public interface INotifiable
+    public interface IEmailNotifiable : INotifiable
     {
+        string PrimaryEmailAddress { get; }
+        bool UseHTMLEmail { get; }
     }
 }
