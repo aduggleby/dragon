@@ -234,15 +234,6 @@ namespace Dragon.Context {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Could not find connection string with key &apos;{0}&apos;..
-        /// </summary>
-        internal static string SqlStores_Exception_ConnectionStringNotSet {
-            get {
-                return ResourceManager.GetString("SqlStores_Exception_ConnectionStringNotSet", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to SELECT [RegistrationID]
         ///      ,[UserID]
         ///      ,[Service]

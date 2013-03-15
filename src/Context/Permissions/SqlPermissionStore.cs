@@ -7,6 +7,7 @@ using System.Text;
 using Dapper;
 using Dragon.Common;
 using Dragon.Context.Exceptions;
+using Dragon.Core.Sql;
 using Dragon.Interfaces;
 
 namespace Dragon.Context.Permissions
