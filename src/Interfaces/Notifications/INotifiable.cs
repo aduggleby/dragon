@@ -9,7 +9,7 @@ namespace Dragon.Interfaces.Notifications
     public interface INotifiable
     {
         Guid UserID { get; }
-        string PrimaryEmailAddress { get; }
-        bool UseHTMLEmail { get; }
+        string PrimaryEmailAddress { get; }
+        bool UseHTMLEmail { get; }
     }
 }

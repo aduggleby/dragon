@@ -11,6 +11,6 @@ namespace Dragon.Interfaces.Notifications
     {
         // TODO: refactor paramters to object?
         void AddNotification(Guid notificationId, string notificationTypeKey, StringDictionary parameters);
-        IEnumerable<IDictionary<Guid, StringDictionary>> List { get; }
+        IEnumerable<IDictionary<Guid, StringDictionary>> List { get; }
     }
 }
