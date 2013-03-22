@@ -74,6 +74,7 @@
     <Compile Include="IRegistration.cs" />
     <Compile Include="IUser.cs" />
     <Compile Include="IUserStore.cs" />
+    <Compile Include="Notifications\ITemplateService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -4,7 +4,7 @@ namespace Dragon.Interfaces.Notifications
 {
     public interface INotificationStore
     {
-        void AddNotification(INotification notification);
+        void AddNotification(out INotification notification);
         IEnumerable<INotification> List { get; }
     }
 }

@@ -1,7 +1,7 @@
 ﻿namespace Dragon.Interfaces.Notifications
 {
-    public interface INotificationDispatcher
+    public interface INotificationDispatcher<in T> where T: INotifiable
     {
-        void Dispatch(INotifiable notifiable, INotification notification);
+        void Dispatch(T notifiable, INotification notification);
     }
 }
