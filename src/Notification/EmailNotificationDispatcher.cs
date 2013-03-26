@@ -2,7 +2,7 @@
 
 namespace Dragon.Notification
 {
-    class EmailNotificationDispatcher : INotificationDispatcher<IEmailNotifiable>
+    public class EmailNotificationDispatcher : INotificationDispatcher<IEmailNotifiable>
     {
         private readonly IEmailService _emailService;
         private readonly ITemplateService _templateService;
@@ -15,7 +15,7 @@ namespace Dragon.Notification
 
         public void Dispatch(IEmailNotifiable notifiable, INotification notification)
         {
-            throw new System.NotImplementedException();
+            _emailService.Send(notifiable.PrimaryEmailAddress, "TODO: subject", "TODO: body", notifiable.UseHTMLEmail);
         }
     }
 }

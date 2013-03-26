@@ -6,7 +6,7 @@ namespace Dragon.Interfaces.Notifications
     public interface INotification
     {
         Guid ID { get;  }
-        string TypeKey { set; }
-        StringDictionary Parameter { set; }
+        string TypeKey { get; set; }
+        StringDictionary Parameter { get; set; }
     }
 }
