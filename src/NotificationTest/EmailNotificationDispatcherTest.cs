@@ -1,4 +1,6 @@
-﻿using System.Collections.Specialized;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
 using Dragon.Interfaces.Notifications;
 using Dragon.Notification;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -22,7 +24,7 @@ namespace NotificationTest
             notifiable.Setup(_ => _.UseHTMLEmail).Returns(useHtmlEmail);
             var notification = new Mock<INotification>();
             notification.Setup(_ => _.TypeKey).Returns("type");
-            notification.Setup(_ => _.Parameter).Returns(new StringDictionary());
+            notification.Setup(_ => _.Parameter).Returns(new Dictionary<string, string>());
             emailNotificationDispatcher.Dispatch(notifiable.Object, notification.Object);
             emailService.Verify(_ => _.Send(emailAddress, It.IsAny<string>(), It.IsAny<string>(), useHtmlEmail));
         }

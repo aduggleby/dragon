@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Specialized;
+using System.Collections.Generic;
 
 namespace Dragon.Interfaces.Notifications
 {
@@ -7,6 +7,6 @@ namespace Dragon.Interfaces.Notifications
     {
         Guid ID { get;  }
         string TypeKey { get; set; }
-        StringDictionary Parameter { get; set; }
+        Dictionary<string, string> Parameter { get; set; }
     }
 }
