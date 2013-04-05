@@ -1,15 +1,35 @@
-﻿using System.Net.Mail;
+﻿using System;
+using System.Net;
+using System.Net.Mail;
+using System.Runtime.InteropServices;
+using Dragon.Core.Configuration;
 using Dragon.Interfaces.Notifications;
 
 namespace Dragon.Notification
 {
     public class NetEmailService : IEmailService
     {
+        public ConfigurationBase Configuration { get; set; }
+        private SmtpClient _client;
+
         public void Send(string email, string subject, string body, bool useHtmlEmail)
         {
-            //var client = new SmtpClient {Host = "mail.myisp.net"};
-            //client.Send("from@adomain.com", "to@adomain.com", "subject", "body");
-            throw new System.NotImplementedException();
+            var client = GetSmtpClient();
+            client.Send(Configuration.GetValue("Dragon.Mail.DefaultEmailFrom", ""), email, subject, body); // TODO: where to get defaults?
+        }
+
+        protected SmtpClient GetSmtpClient()
+        {
+            return _client ??
+                (_client = new SmtpClient // TODO: where to get the defaults? should not be hardcoded, right?
+                {
+                    Host = Configuration.GetValue("Dragon.Mail.SmtpServer", ""),
+                    Port = Convert.ToInt32(Configuration.GetValue("Dragon.Mail.SmtpPort", "")),
+                    Credentials = new NetworkCredential(
+                        Configuration.GetValue("Dragon.Mail.SmtpUser", ""),
+                        Configuration.GetValue("Dragon.Mail.SmtpPassword", "")
+                        )
+                });
         }
     }
 }
