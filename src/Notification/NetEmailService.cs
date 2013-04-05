@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Net;
 using System.Net.Mail;
-using System.Runtime.InteropServices;
-using Dragon.Core.Configuration;
+using Dragon.Interfaces;
 using Dragon.Interfaces.Notifications;
 
 namespace Dragon.Notification
 {
     public class NetEmailService : IEmailService
     {
-        public ConfigurationBase Configuration { get; set; }
+        public IConfiguration Configuration { get; set; }
         private SmtpClient _client;
 
         public void Send(string email, string subject, string body, bool useHtmlEmail)
