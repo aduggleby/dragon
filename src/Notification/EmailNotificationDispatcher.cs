@@ -1,4 +1,5 @@
-﻿using Dragon.Interfaces.Notifications;
+﻿using System;
+using Dragon.Interfaces.Notifications;
 
 namespace Dragon.Notification
 {
@@ -6,16 +7,20 @@ namespace Dragon.Notification
     {
         private readonly IEmailService _emailService;
         private readonly ITemplateService _templateService;
+        private readonly ILocalizedDataSource _dataSource;
 
-        public EmailNotificationDispatcher(IEmailService emailService, ITemplateService templateService)
+        public EmailNotificationDispatcher(IEmailService emailService, ITemplateService templateService, ILocalizedDataSource dataSource)
         {
             _emailService = emailService;
             _templateService = templateService;
+            _dataSource = dataSource;
         }
 
         public void Dispatch(IEmailNotifiable notifiable, INotification notification)
         {
-            _emailService.Send(notifiable.PrimaryEmailAddress, "TODO: subject", "TODO: body", notifiable.UseHTMLEmail);
+            var bodyTemplate = _dataSource.GetContent(notification.TypeKey, notification.LanguageCode);
+            var body = _templateService.Parse(bodyTemplate, notification.Parameter);
+            _emailService.Send(notifiable.PrimaryEmailAddress, notification.Subject, body, notifiable.UseHTMLEmail);
         }
     }
 }
