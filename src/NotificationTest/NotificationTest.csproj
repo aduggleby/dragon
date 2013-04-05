@@ -48,6 +48,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FileSystemLocalizedDataSourceTest.cs" />
     <Compile Include="StringTemplateTemplateServiceTest.cs" />
     <Compile Include="NetEmailServiceTest.cs" />
     <Compile Include="EmailNotificationDispatcherTest.cs" />

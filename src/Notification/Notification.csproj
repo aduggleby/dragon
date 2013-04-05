@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FileSystemLocalizedDataSource.cs" />
     <Compile Include="NetEmailService.cs" />
     <Compile Include="EmailNotifiable.cs" />
     <Compile Include="Notification.cs" />
@@ -54,6 +55,10 @@
     <Compile Include="StringTemplateTemplateService.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Core\Core.csproj">
+      <Project>{F44FB8F4-CF8C-4C49-8E07-FA4AF3359696}</Project>
+      <Name>Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Interfaces\Interfaces.csproj">
       <Project>{2ae2966b-6f2b-4254-85c6-588c8690898f}</Project>
       <Name>Interfaces</Name>
