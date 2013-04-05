@@ -48,6 +48,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="StringTemplateTemplateServiceTest.cs" />
+    <Compile Include="NetEmailServiceTest.cs" />
     <Compile Include="EmailNotificationDispatcherTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
