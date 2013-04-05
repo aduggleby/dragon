@@ -40,6 +40,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EmailNotifiable.cs" />
+    <Compile Include="Notification.cs" />
     <Compile Include="EmailNotificationDispatcher.cs" />
     <Compile Include="SqlNotificationStore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

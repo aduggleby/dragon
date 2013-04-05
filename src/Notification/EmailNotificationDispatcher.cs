@@ -1,5 +1,4 @@
-﻿using System;
-using Dragon.Interfaces.Notifications;
+﻿using Dragon.Interfaces.Notifications;
 
 namespace Dragon.Notification
 {
