@@ -4,7 +4,7 @@ using Dragon.Interfaces.Notifications;
 
 namespace Dragon.Notification
 {
-    class FileSystemLocalizedDataSource : ILocalizedDataSource
+    public class FileSystemLocalizedDataSource : ILocalizedDataSource
     {
         private readonly string _baseDirectory;
         private readonly string _fileExtension;

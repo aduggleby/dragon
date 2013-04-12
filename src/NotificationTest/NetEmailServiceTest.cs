@@ -1,44 +1,72 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
+using System.Net;
 using System.Net.Mail;
-using Dragon.Interfaces.Notifications;
+using Dragon.Interfaces;
 using Dragon.Notification;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using Moq.Protected;
 
 namespace NotificationTest
 {
     [TestClass]
     public class NetEmailServiceTest
     {
+        private const string USERNAME = "user";
         private const string SMTP_SERVER = "localhost";
         private const int SMTP_PORT = 25;
         private const string SUBJECT = "ohai";
         private const string BODY = "test abc content";
         private const string EMAIL_ADDRESS = "test@test.com";
         private const bool USE_HTML_EMAIL = false;
+        private const string PASSWORD = "password";
+        private const string MAIL_FROM = "user@test.com";
+
+        public class NetEmailServiceWrapper : NetEmailService
+        {
+            public virtual new SmtpClient GetSmtpClient()
+            {
+                return base.GetSmtpClient();
+            }
+        }
 
         [TestMethod]
         public void SendShouldInvokeSmtpClientsSend()
         {
             /*
-            var netEmailService = new Mock<NetEmailService> { CallBase = true };
+            var netEmailService = new Mock<NetEmailServiceWrapper>() {CallBase = true};
             var smtpClient = new Mock<SmtpClient>();
-            netEmailService.Protected().Setup<SmtpClient>("GetSmtpClient").Returns(smtpClient.Object);
+            netEmailService.Setup(_ => _.GetSmtpClient()).Returns(smtpClient.Object);
 
             netEmailService.Object.Send(EMAIL_ADDRESS, SUBJECT, BODY, USE_HTML_EMAIL);
             
             smtpClient.Verify(_ => _.Send(It.IsAny<String>(), EMAIL_ADDRESS, SUBJECT, BODY));
             */
-            Assert.Fail(); // TODO
+            Assert.Fail(); //TODO
         }
 
         [TestMethod]
         public void GetSmtpClientShouldRetrieveConfigFromConfigurationBase()
         {
-            Assert.Fail(); // TODO
+            var netEmailService = new NetEmailServiceWrapper {Configuration = CreateConfigurationMock().Object};
+
+            var actual = netEmailService.GetSmtpClient();
+            
+            Assert.AreEqual(SMTP_SERVER, actual.Host);
+            Assert.AreEqual(SMTP_PORT, actual.Port);
+            Assert.AreEqual(USERNAME,  actual.Credentials.GetCredential(SMTP_SERVER, SMTP_PORT, "basic").UserName);
+            Assert.AreEqual(PASSWORD,  actual.Credentials.GetCredential(SMTP_SERVER, SMTP_PORT, "basic").Password);
+        }
+
+        private static Mock<IConfiguration> CreateConfigurationMock()
+        {
+            var configuration = new Mock<IConfiguration>();
+            configuration.Setup(_ => _.GetValue(NetEmailService.DragonMailSmtpServerKey, String.Empty)).Returns(SMTP_SERVER);
+            configuration.Setup(_ => _.GetValue(NetEmailService.DragonMailSmtpPortKey, String.Empty))
+                .Returns(SMTP_PORT.ToString);
+            configuration.Setup(_ => _.GetValue(NetEmailService.DragonMailSmtpUserKey, String.Empty)).Returns(USERNAME);
+            configuration.Setup(_ => _.GetValue(NetEmailService.DragonMailSmtpPasswordKey, String.Empty)).Returns(PASSWORD);
+            configuration.Setup(_ => _.GetValue(NetEmailService.DragonMailEmailFrom, String.Empty)).Returns(MAIL_FROM);
+            return configuration;
         }
     }
 }
