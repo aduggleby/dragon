@@ -48,7 +48,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FileSystemLocalizedDataSourceTest.cs" />
+    <Compile Include="WebNotificationDispatcherTest.cs" />
+    <Compile Include="FileSystemLocalizedDataSourceIntegrationTest.cs" />
     <Compile Include="StringTemplateTemplateServiceTest.cs" />
     <Compile Include="NetEmailServiceTest.cs" />
     <Compile Include="EmailNotificationDispatcherTest.cs" />
