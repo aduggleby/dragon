@@ -11,11 +11,11 @@ namespace Dragon.Context.Sessions
 {
     public class InMemorySessionStore : SessionStoreBase
     {
-        private static readonly ConcurrentDictionary<Guid, SessionRecord> s_sessions;
+        private static readonly ConcurrentDictionary<Guid, DragonSession> s_sessions;
 
         static InMemorySessionStore()
         {
-            s_sessions = new ConcurrentDictionary<Guid, SessionRecord>();
+            s_sessions = new ConcurrentDictionary<Guid, DragonSession>();
         }
 
         public InMemorySessionStore(ISession session, IReverseIPLookupService reverseLookupService)
@@ -23,9 +23,9 @@ namespace Dragon.Context.Sessions
         {
         }
 
-        protected override SessionRecord GetSessionRecord()
+        protected override DragonSession GetSessionRecord()
         {
-            SessionRecord sessionRecord = null;
+            DragonSession sessionRecord = null;
             while (sessionRecord == null)
             {
                 // try to get record from memory
@@ -43,9 +43,9 @@ namespace Dragon.Context.Sessions
             return sessionRecord;
         }
 
-        protected virtual bool TryGetSessionRecord(Guid sessionID, out SessionRecord sessionRecord)
+        protected virtual bool TryGetSessionRecord(Guid sessionID, out DragonSession sessionRecord)
         {
-            sessionRecord = new SessionRecord() { SessionID = m_session.ID };
+            sessionRecord = new DragonSession() { SessionID = m_session.ID };
 
             while (s_sessions.ContainsKey(sessionID))
             {
@@ -61,7 +61,7 @@ namespace Dragon.Context.Sessions
 
         protected virtual void RemoveSessionRecord(Guid sessionID)
         {
-            SessionRecord dummy;
+            DragonSession dummy;
             while (s_sessions.ContainsKey(sessionID))
             {
                 if (s_sessions.TryRemove(sessionID, out dummy))
@@ -72,12 +72,11 @@ namespace Dragon.Context.Sessions
             }
         }
 
-        protected override void SaveSessionRecord(SessionRecord sessionRecord)
+        protected override void SaveSessionRecord(DragonSession sessionRecord)
         {
-
             while (s_sessions.ContainsKey(sessionRecord.SessionID))
             {
-                SessionRecord oldSessionRecord;
+                DragonSession oldSessionRecord;
                 s_sessions.TryRemove(sessionRecord.SessionID, out oldSessionRecord);
             }
             while (!s_sessions.ContainsKey(sessionRecord.SessionID))

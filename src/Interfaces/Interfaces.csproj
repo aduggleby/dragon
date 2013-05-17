@@ -58,6 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IConfiguration.cs" />
+    <Compile Include="IDragonTable.cs" />
     <Compile Include="IPermissionNode.cs" />
     <Compile Include="IPermissionStore.cs" />
     <Compile Include="IProfileStore.cs" />

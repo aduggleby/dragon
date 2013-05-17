@@ -15,9 +15,10 @@ namespace Dragon.Context.Users
     {
         private string m_connStr;
 
-        public SqlUserStore(ISessionStore sessionStore):base(sessionStore)
+        public SqlUserStore(ISessionStore sessionStore)
+            : base(sessionStore)
         {
-           Init();
+            Init();
         }
 
         protected override IEnumerable<IRegistration> LoadUser(Guid userID)
@@ -26,7 +27,7 @@ namespace Dragon.Context.Users
             {
                 conn.Open();
                 var param = new { UserID = userID };
-                return conn.Query<SQLUser>(SQL.SqlUserStore_GetByUserID, param);
+                return conn.QueryFor<DragonRegistration>(SQL.SqlUserStore_GetByUserID, param);
             }
         }
 
@@ -36,7 +37,7 @@ namespace Dragon.Context.Users
             {
                 conn.Open();
                 var param = new { Service = service, Key = key };
-                return conn.Query<SQLUser>(SQL.SqlUserStore_GetByServiceAndKey, param).FirstOrDefault();
+                return conn.QueryFor<DragonRegistration>(SQL.SqlUserStore_GetByServiceAndKey, param).FirstOrDefault();
             }
         }
 
@@ -46,7 +47,7 @@ namespace Dragon.Context.Users
             {
                 var existing = LoadRegistration(service, key);
                 conn.Open();
-                var sqlUser = new SQLUser()
+                var sqlUser = new DragonRegistration()
                 {
                     RegistrationID = Guid.NewGuid(),
                     UserID = userID,
@@ -62,23 +63,16 @@ namespace Dragon.Context.Users
                     if (!existing.Key.Equals(key))
                         throw new InvalidOperationException(
                             "Trying to attach another account from the already connected service");
-                    conn.Execute(SQL.SqlUserStore_Update, sqlUser);
+                    conn.ExecuteFor<DragonRegistration>(SQL.SqlUserStore_Update, sqlUser);
 
                 }
                 else
                 {
-                    conn.Execute(SQL.SqlUserStore_Insert, sqlUser);
+                    conn.ExecuteFor<DragonRegistration>(SQL.SqlUserStore_Insert, sqlUser);
                 }
             }
         }
 
-        private class SQLUser : IRegistration 
-        {
-            public Guid RegistrationID { get; set; }
-            public Guid UserID { get; set; }
-            public string Service { get; set; }
-            public string Key { get; set; }
-            public string Secret { get; set; }
-        }
+        
     }
 }

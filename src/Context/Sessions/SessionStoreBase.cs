@@ -8,7 +8,7 @@ using StructureMap;
 
 namespace Dragon.Context.Sessions
 {
-    public abstract class SessionStoreBase : ISessionStore
+    public abstract class SessionStoreBase : StoreBase, ISessionStore
     {
         protected const string CONFIG_PREFIX = "Dragon.Context.Session.";
         protected const string CONFIG_DOREVERSEIPLOOKUP = CONFIG_PREFIX + "ReverseIPLookup";
@@ -30,11 +30,11 @@ namespace Dragon.Context.Sessions
             m_reverseLookupService = reverseLookupService;   
         }
 
-        protected abstract SessionRecord GetSessionRecord();
+        protected abstract DragonSession GetSessionRecord();
 
-        protected abstract void SaveSessionRecord(SessionRecord sessionRecord);
+        protected abstract void SaveSessionRecord(DragonSession sessionRecord);
 
-        protected void SetSessionData(SessionRecord sessionRecord)
+        protected void SetSessionData(DragonSession sessionRecord)
         {
             sessionRecord.Hash = m_session.GetHashCode();
 
@@ -44,7 +44,7 @@ namespace Dragon.Context.Sessions
             SetLocationIfRequired(sessionRecord);
         }
 
-        protected void SetLocationIfRequired(SessionRecord sessionRecord)
+        protected void SetLocationIfRequired(DragonSession sessionRecord)
         {
             // perform ip -> location lookup if configured
             if (!sessionRecord.Hash.Equals(m_session.GetHashCode()))
@@ -88,12 +88,4 @@ namespace Dragon.Context.Sessions
        
     }
 
-    public class SessionRecord
-    {
-        public Guid SessionID;
-        public DateTime Expires;
-        public int Hash;
-        public string Location;
-        public Guid UserID;
-    }
 }

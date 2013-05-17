@@ -6,7 +6,7 @@ using Dragon.Interfaces;
 
 namespace Dragon.Context.Profile
 {
-    public abstract class ProfileStoreBase : IProfileStore
+    public abstract class ProfileStoreBase : StoreBase, IProfileStore
     {
         public ProfileStoreBase()
         {

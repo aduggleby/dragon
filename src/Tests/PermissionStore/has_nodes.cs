@@ -78,5 +78,6 @@ namespace Dragon.Tests.PermissionStore
             nodes.Should().Contain(n1_2_2);
             nodes.Should().Contain(special);
         }
+
     }
 }

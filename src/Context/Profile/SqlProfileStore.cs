@@ -26,7 +26,7 @@ namespace Dragon.Context.Profile
             {
                 conn.Open();
                 var param = new { UserID = userID, Key = key };
-                var candidate = conn.Query(SQL.SqlProfileStore_Get, param).FirstOrDefault();
+                var candidate = conn.QueryFor<DragonProfile>(SQL.SqlProfileStore_Get, param).FirstOrDefault();
                 return candidate == null ? null : candidate.Value;
             }
         }
@@ -36,10 +36,10 @@ namespace Dragon.Context.Profile
             using (var conn = new SqlConnection(StandardSqlStore.ConnectionString))
             {
                 conn.Open();
-                var param = new { UserID = userID, Key = key, Value = val };
-                if (conn.Execute(SQL.SqlProfileStore_Update, param) == 0)
+                var param = new { LID = Guid.NewGuid(), UserID = userID, Key = key, Value = val };
+                if (conn.ExecuteFor<DragonProfile>(SQL.SqlProfileStore_Update, param) == 0)
                 {
-                    conn.Execute(SQL.SqlProfileStore_Insert, param);
+                    conn.ExecuteFor<DragonProfile>(SQL.SqlProfileStore_Insert, param);
                 }
             } 
         }

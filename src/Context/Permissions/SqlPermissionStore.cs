@@ -32,8 +32,8 @@ namespace Dragon.Context.Permissions
                 using (var conn = new SqlConnection(StandardSqlStore.ConnectionString))
                 {
                     conn.Open();
-                    var param = new SqlPermissionNode() {ParentID = parentID, ChildID = childID};
-                    conn.Execute(SQL.SqlPermissionStore_InsertPermissionNode, param);
+                    var param = new DragonPermissionNode() {ParentID = parentID, ChildID = childID};
+                    conn.ExecuteFor<DragonPermissionNode>(SQL.SqlPermissionStore_InsertPermissionNode, param);
                 }
             }
 
@@ -48,7 +48,7 @@ namespace Dragon.Context.Permissions
             {
                 conn.Open();
                 var param = new { ParentID = parentID, ChildID = childID };
-                conn.Execute(SQL.SqlPermissionStore_DeletePermissionNode, param);
+                conn.ExecuteFor<DragonPermissionNode>(SQL.SqlPermissionStore_DeletePermissionNode, param);
             }
 
             RebuildTree();
@@ -61,7 +61,7 @@ namespace Dragon.Context.Permissions
                 conn.Open();
                 var param = new { ChildID = childID };
                 return
-                    conn.Query<SqlPermissionNode>(SQL.SqlPermissionStore_GetPermissionParentNodes, param)
+                    conn.QueryFor<DragonPermissionNode>(SQL.SqlPermissionStore_GetPermissionParentNodes, param)
                         .Select(x => x.ParentID);
             }
 
@@ -73,7 +73,7 @@ namespace Dragon.Context.Permissions
             {
                 conn.Open();
                 var param = new { ParentID = parentID };
-                return conn.Query<SqlPermissionNode>(SQL.SqlPermissionStore_GetPermissionNodesByParentID, param)
+                return conn.QueryFor<DragonPermissionNode>(SQL.SqlPermissionStore_GetPermissionNodesByParentID, param)
                     .Select(x=>x.ParentID);
             }
         }
@@ -84,7 +84,7 @@ namespace Dragon.Context.Permissions
             {
                 conn.Open();
                 var param = new {};
-                return conn.Query<SqlPermissionNode>(SQL.SqlPermissionStore_GetAllPermissionNodes, param);
+                return conn.QueryFor<DragonPermissionNode>(SQL.SqlPermissionStore_GetAllPermissionNodes, param);
             }
         }
 
@@ -100,7 +100,8 @@ namespace Dragon.Context.Permissions
 
         protected override void AddRightInternal(Guid nodeID, Guid subjectID, string spec, bool inherit)
         {
-            if (EnumerateRightsInternal(nodeID).Any(x => x.Spec == spec))
+            if (EnumerateRightsInternal(nodeID).Any(x => 
+                x.SubjectID.Equals(subjectID) && x.Spec.Equals(spec)))
             {
                 RemoveRightInternal(nodeID, subjectID, spec);
             }
@@ -108,7 +109,7 @@ namespace Dragon.Context.Permissions
             using (var conn = new SqlConnection(StandardSqlStore.ConnectionString))
             {
                 conn.Open();
-                var param = new SqlPermissionRight()
+                var param = new DragonPermissionRight()
                     {
                         LID = Guid.NewGuid(),
                         NodeID = nodeID,
@@ -116,7 +117,7 @@ namespace Dragon.Context.Permissions
                         Spec = spec,
                         Inherit = inherit
                     };
-                conn.Execute(SQL.SqlPermissionStore_InsertPermissionRight, param);
+                conn.ExecuteFor<DragonPermissionRight>(SQL.SqlPermissionStore_InsertPermissionRight, param);
             }
 
             RebuildTree();
@@ -124,7 +125,8 @@ namespace Dragon.Context.Permissions
 
         protected override void RemoveRightInternal(Guid nodeID, Guid subjectID, string spec)
         {
-            var candidate = EnumerateRightsInternal(nodeID).FirstOrDefault(x => x.Spec == spec);
+            var candidate = EnumerateRightsInternal(nodeID).FirstOrDefault(x => 
+                x.SubjectID.Equals(subjectID) && x.Spec.Equals(spec));
 
             if (candidate == null) 
                 throw new RightDoesNotExistException();
@@ -136,7 +138,7 @@ namespace Dragon.Context.Permissions
                 {
                     LID = candidate.LID
                 };
-                conn.Execute(SQL.SqlPermissionStore_DeletePermissionRight, param);
+                conn.ExecuteFor<DragonPermissionRight>(SQL.SqlPermissionStore_DeletePermissionRight, param);
             }
 
             RebuildTree();
@@ -148,7 +150,7 @@ namespace Dragon.Context.Permissions
             {
                 conn.Open();
                 var param = new { NodeID = nodeID };
-                return conn.Query<SqlPermissionRight>(SQL.SqlPermissionStore_GetPermissionRightsByNode, param);
+                return conn.QueryFor<DragonPermissionRight>(SQL.SqlPermissionStore_GetPermissionRightsByNode, param);
             }
         }
 
@@ -158,7 +160,7 @@ namespace Dragon.Context.Permissions
             {
                 conn.Open();
                 var param = new {  };
-                return conn.Query<SqlPermissionRight>(SQL.SqlPermissionStore_GetAllPermissionRights, param);
+                return conn.QueryFor<DragonPermissionRight>(SQL.SqlPermissionStore_GetAllPermissionRights, param);
             }
         }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using Dragon.Common.Objects.Tree;
@@ -8,7 +9,7 @@ using Dragon.Interfaces;
 
 namespace Dragon.Context.Permissions
 {
-    public abstract class PermissionStoreBase : IPermissionStore
+    public abstract class PermissionStoreBase : StoreBase, IPermissionStore
     {
         private List<ITreeNode<Guid, List<IPermissionRight>>> m_treeInternal;
         private bool m_treeDirty = true;
@@ -23,7 +24,17 @@ namespace Dragon.Context.Permissions
             {
                 if (m_treeDirty)
                 {
+                    DebugPrint("Rebuilding tree...");
+                    DebugPrint(DebugOutputTree(null, m_treeInternal).ToString());
+                    DebugPrint("... now ...");
                     RebuildTree();
+                    DebugPrint(DebugOutputTree(null, m_treeInternal).ToString());
+                    DebugPrint("...done");
+
+                }
+                else
+                {
+                    DebugPrint("Tree is not dirty.");
                 }
                 return m_treeInternal;
             }
@@ -38,10 +49,16 @@ namespace Dragon.Context.Permissions
                 (x) => x.ChildID,
                 (x) => rights.Where(r => r.NodeID == x).ToList()).ToList();
 
+            DebugPrint("Tree built internally...");
+            DebugPrint(DebugOutputTree(null, m_treeInternal).ToString());
+            DebugPrint("...now adding loose rights");
+
             // add rights that are not in a tree structure
             foreach (var right in rights)
             {
-                var exNode = m_treeInternal.Select(x => x.GetChildInTree(right.NodeID)).FirstOrDefault();
+                var exNode = m_treeInternal
+                    .Select(x => x.GetChildInTree(right.NodeID))
+                    .FirstOrDefault(x => x != null); 
 
                 if (exNode == null)
                 {
@@ -50,15 +67,22 @@ namespace Dragon.Context.Permissions
                             Node = right.NodeID,
                             Data = new List<IPermissionRight>()
                         };
+                    DebugPrint("Node '{0}' not found, so adding with right: {1}", right.NodeID, Dump(right));
                     node.Data.Add(right);
                     m_treeInternal.Add(node);
                 }
 
                 else
                 {
-                    if (!exNode.Data.Any(x => x.Spec.Equals(right.Spec)))
+
+                    if (!exNode.Data.Any(x => x.SubjectID.Equals(right.SubjectID) && x.Spec.Equals(right.Spec)))
                     {
+                        DebugPrint("Node '{0}' found, so adding a right: {1}", right.NodeID, Dump(right));
                         exNode.Data.Add(right);
+                    }
+                    else
+                    {
+                        DebugPrint("Node '{0}' found, but right already exists: {1}", right.NodeID, Dump(right));                        
                     }
                 }
             }
@@ -109,6 +133,16 @@ namespace Dragon.Context.Permissions
         private string Guid4(Guid g)
         {
             return g.ToString().Substring(0, 4);
+        }
+
+        private void DebugPrint(string msg, params object[] p)
+        {
+            Debug.WriteLine(string.Format(msg, p));
+        }
+
+        private string Dump(IPermissionRight r)
+        {
+            return string.Format("N:{0},S:{1},R:{2},I:{3}", r.NodeID, r.SubjectID, r.Spec, r.Inherit);
         }
 
         private void PushRights(ITreeNode<Guid, List<IPermissionRight>> node)
@@ -172,12 +206,16 @@ namespace Dragon.Context.Permissions
 
         public void AddNode(Guid parentID, Guid childID)
         {
+            DebugPrint("AddNode P: {0} C: {1}", parentID, childID);
+
             AddNodeInternal(parentID, childID);
             m_treeDirty = true;
         }
 
         public void RemoveNode(Guid parentID, Guid childID)
         {
+            DebugPrint("RemoveNode P: {0} C: {1}", parentID, childID);
+
             if (!IsChildNodeOf(parentID, childID)) 
                 throw new NodeDoesNotExistException();
 
@@ -216,6 +254,8 @@ namespace Dragon.Context.Permissions
 
         public void AddRight(Guid nodeID, Guid subjectID, string spec, bool inherit)
         {
+            DebugPrint("AddRight N: {0} S: {1} R: {2} I: {3}", nodeID, subjectID, spec, inherit);
+
             AddRightInternal(nodeID, subjectID, spec, inherit);
             m_treeDirty = true;
         }
@@ -223,6 +263,9 @@ namespace Dragon.Context.Permissions
         public void RemoveRight(Guid nodeID, Guid subjectID, string spec)
         {
             if (!HasRight(nodeID, subjectID, spec)) throw new RightDoesNotExistException();
+
+            DebugPrint("RemoveRight N: {0} S: {1} R: {2}", nodeID, subjectID, spec);
+            
             RemoveRightInternal(nodeID, subjectID, spec);
             m_treeDirty = true;
         }
@@ -235,11 +278,20 @@ namespace Dragon.Context.Permissions
 
         public bool HasRight(Guid nodeID, Guid subjectID, string spec)
         {
+
             var node = GetNode(nodeID);
 
-            if (node == null) return false;
+            if (node == null)
+            {
+                DebugPrint("HasRight - Node not found. - N: {0} S: {1} R: {2}", nodeID, subjectID, spec);
+                return false;
+            }
 
             var right = node.Data.FirstOrDefault(x => x.SubjectID.Equals(subjectID) && x.Spec.Equals(spec));
+            if (right == null)
+            {
+                DebugPrint("HasRight - Right not found. - N: {0} S: {1} R: {2}", nodeID, subjectID, spec);
+            }
 
             return (right != null);
         }

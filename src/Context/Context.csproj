@@ -75,11 +75,13 @@
     <Compile Include="Exceptions\UserKeyDoesNotExistException.cs" />
     <Compile Include="Extensions\Groups\GroupPermissionExtension.cs" />
     <Compile Include="Permissions\PermissionStoreBase.cs" />
-    <Compile Include="Permissions\SqlPermissionNode.cs" />
-    <Compile Include="Permissions\SqlPermissionRight.cs" />
+    <Compile Include="Permissions\DragonPermissionNode.cs" />
+    <Compile Include="Permissions\DragonPermissionRight.cs" />
     <Compile Include="Permissions\SqlPermissionStore.cs" />
+    <Compile Include="Profile\DragonProfile.cs" />
     <Compile Include="Profile\ProfileStoreBase.cs" />
     <Compile Include="Profile\SqlProfileStore.cs" />
+    <Compile Include="Sessions\DragonSession.cs" />
     <Compile Include="Sessions\InMemorySession.cs" />
     <Compile Include="Sessions\InMemorySessionStore.cs" />
     <Compile Include="Sessions\SessionStoreBase.cs" />
@@ -96,6 +98,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>SQL.resx</DependentUpon>
     </Compile>
+    <Compile Include="StoreBase.cs" />
+    <Compile Include="Users\DragonRegistration.cs" />
     <Compile Include="Users\InMemoryUserStore.cs" />
     <Compile Include="Users\SqlUserStore.cs" />
     <Compile Include="Users\User.cs" />
@@ -113,6 +117,10 @@
     <ProjectReference Include="..\Interfaces\Interfaces.csproj">
       <Project>{2AE2966B-6F2B-4254-85C6-588C8690898F}</Project>
       <Name>Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SQL\SQL.csproj">
+      <Project>{580953F4-15B3-4239-BA2D-162B8BF8943B}</Project>
+      <Name>SQL</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

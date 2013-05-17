@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 
 namespace System 
@@ -59,6 +60,19 @@ namespace System
 
         public static string ToEmailLink(this string s) {
             return string.Concat("mailto:", s);
+        }
+
+        public static bool StartsWith(this string value, IEnumerable<string> possibleStarts)
+        {
+            foreach (string candidate in possibleStarts)
+            {
+                if (value.StartsWith(candidate))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
         
     }

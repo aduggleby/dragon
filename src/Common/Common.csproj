@@ -67,6 +67,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\Data\IndexAttribute.cs" />
+    <Compile Include="Attributes\Data\KeyAttribute.cs" />
+    <Compile Include="Attributes\Data\LengthAttribute.cs" />
+    <Compile Include="Attributes\Data\TableAttribute.cs" />
     <Compile Include="Attributes\StringValue.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Exception.cs" />

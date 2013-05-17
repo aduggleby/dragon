@@ -123,7 +123,7 @@
       ,[Service]
       ,[Key]
       ,[Secret]
-FROM [Registration]
+FROM {TABLE}
 WHERE [Service] = @Service AND [Key] = @Key</value>
   </data>
   <data name="SqlUserStore_GetByUserID" xml:space="preserve">
@@ -132,11 +132,11 @@ WHERE [Service] = @Service AND [Key] = @Key</value>
       ,[Service]
       ,[Key]
       ,[Secret]
-FROM [Registration]
+FROM {TABLE}
 WHERE [UserID] = @UserID</value>
   </data>
   <data name="SqlUserStore_Insert" xml:space="preserve">
-    <value>INSERT INTO [Registration]
+    <value>INSERT INTO {TABLE}
            ([RegistrationID]
            ,[UserID]
            ,[Service]
@@ -150,7 +150,7 @@ WHERE [UserID] = @UserID</value>
            ,@Secret)</value>
   </data>
   <data name="SqlUserStore_Update" xml:space="preserve">
-    <value>UPDATE [Registration]
+    <value>UPDATE {TABLE}
 SET [UserID]  = @UserID
    ,[Service] = @Service
    ,[Key]     = @Key
@@ -158,21 +158,21 @@ SET [UserID]  = @UserID
 WHERE RegistrationID = @RegistrationID</value>
   </data>
   <data name="SqlPermissionStore_GetAllPermissionNodes" xml:space="preserve">
-    <value>SELECT * FROM [PermissionNode]</value>
+    <value>SELECT * FROM  {TABLE}</value>
   </data>
   <data name="SqlPermissionStore_GetAllPermissionRights" xml:space="preserve">
-    <value>SELECT * FROM [PermissionRight]</value>
+    <value>SELECT * FROM  {TABLE}</value>
   </data>
   <data name="SqlPermissionStore_GetPermissionParentNodes" xml:space="preserve">
-    <value>SELECT * FROM [PermissionNode]
+    <value>SELECT * FROM  {TABLE}
 WHERE [ChildID] = @ChildID</value>
   </data>
   <data name="SqlPermissionStore_GetPermissionNodesByParentID" xml:space="preserve">
-    <value>SELECT * FROM [PermissionNode]
+    <value>SELECT * FROM  {TABLE}
 WHERE [ParentID] = @ParentID</value>
   </data>
   <data name="SqlPermissionStore_InsertPermissionNode" xml:space="preserve">
-    <value>INSERT INTO [PermissionNode]
+    <value>INSERT INTO  {TABLE}
            ([LID]
            ,[ParentID]
            ,[ChildID])
@@ -182,7 +182,7 @@ WHERE [ParentID] = @ParentID</value>
            ,@ChildID)</value>
   </data>
   <data name="SqlPermissionStore_InsertPermissionRight" xml:space="preserve">
-    <value>INSERT INTO [PermissionRight]
+    <value>INSERT INTO  {TABLE}
            ([LID]
            ,[NodeID] 
            ,[SubjectID]
@@ -196,29 +196,29 @@ WHERE [ParentID] = @ParentID</value>
            ,@Inherit)</value>
   </data>
   <data name="SqlPermissionStore_DeletePermissionNode" xml:space="preserve">
-    <value>DELETE FROM [PermissionNode]
+    <value>DELETE FROM {TABLE}
            WHERE [ParentID] = @ParentID AND [ChildID = @ChildID]</value>
   </data>
   <data name="SqlPermissionStore_DeletePermissionRight" xml:space="preserve">
-    <value>DELETE FROM [PermissionRight]
+    <value>DELETE FROM {TABLE}
            WHERE [LID] = @LID</value>
   </data>
   <data name="SqlPermissionStore_GetPermissionRightsByNode" xml:space="preserve">
-    <value>SELECT * FROM [PermissionRight] WHERE NodeID=@NodeID</value>
+    <value>SELECT * FROM  {TABLE} WHERE NodeID=@NodeID</value>
   </data>
   <data name="SqlSessionStore_Delete" xml:space="preserve">
-    <value>DELETE FROM [Session] WHERE [SessionID] =@SessionID</value>
+    <value>DELETE FROM  {TABLE} WHERE [SessionID] =@SessionID</value>
   </data>
   <data name="SqlSessionStore_Get" xml:space="preserve">
-    <value>SELECT * FROM [Session]
+    <value>SELECT * FROM  {TABLE}
 WHERE [SessionID] =@SessionID</value>
   </data>
   <data name="SqlSessionStore_Insert" xml:space="preserve">
-    <value>INSERT INTO [Session] ([SessionID],[Hash],[Location],[UserID],[Expires])
+    <value>INSERT INTO  {TABLE} ([SessionID],[Hash],[Location],[UserID],[Expires])
 VALUES			   (@SessionID,@Hash,@Location,@UserID, @Expires)</value>
   </data>
   <data name="SqlSessionStore_Update" xml:space="preserve">
-    <value>UPDATE [Session] SET 
+    <value>UPDATE  {TABLE} SET 
 [Hash]= @Hash,
 [Expires]	= @Expires,
 [Location]	= @Location,
@@ -226,12 +226,12 @@ VALUES			   (@SessionID,@Hash,@Location,@UserID, @Expires)</value>
 WHERE [SessionID] = @SessionID</value>
   </data>
   <data name="SqlProfileStore_Get" xml:space="preserve">
-    <value>SELECT * FROM [Profile] WHERE UserID = @UserID AND Key = @Key</value>
+    <value>SELECT * FROM  {TABLE} WHERE UserID = @UserID AND [Key] = @Key</value>
   </data>
   <data name="SqlProfileStore_Insert" xml:space="preserve">
-    <value>INSERT INTO [Profile] ([UserID], [Key], [Value]) VALUES (@UserID, @Key, @Value)</value>
+    <value>INSERT INTO  {TABLE} ([LID],[UserID], [Key], [Value]) VALUES (@LID, @UserID, @Key, @Value)</value>
   </data>
   <data name="SqlProfileStore_Update" xml:space="preserve">
-    <value>UPDATE [Profile] SET [Value] = @Value WHERE UserID = @UserID AND [Key] = @Key</value>
+    <value>UPDATE {TABLE} SET [Value] = @Value WHERE UserID = @UserID AND [Key] = @Key</value>
   </data>
 </root>

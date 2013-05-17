@@ -61,7 +61,7 @@ namespace Dragon.Context {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to DELETE FROM [PermissionNode]
+        ///   Looks up a localized string similar to DELETE FROM {TABLE}
         ///           WHERE [ParentID] = @ParentID AND [ChildID = @ChildID].
         /// </summary>
         internal static string SqlPermissionStore_DeletePermissionNode {
@@ -71,7 +71,7 @@ namespace Dragon.Context {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to DELETE FROM [PermissionRight]
+        ///   Looks up a localized string similar to DELETE FROM {TABLE}
         ///           WHERE [LID] = @LID.
         /// </summary>
         internal static string SqlPermissionStore_DeletePermissionRight {
@@ -81,7 +81,7 @@ namespace Dragon.Context {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SELECT * FROM [PermissionNode].
+        ///   Looks up a localized string similar to SELECT * FROM  {TABLE}.
         /// </summary>
         internal static string SqlPermissionStore_GetAllPermissionNodes {
             get {
@@ -90,7 +90,7 @@ namespace Dragon.Context {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SELECT * FROM [PermissionRight].
+        ///   Looks up a localized string similar to SELECT * FROM  {TABLE}.
         /// </summary>
         internal static string SqlPermissionStore_GetAllPermissionRights {
             get {
@@ -99,7 +99,7 @@ namespace Dragon.Context {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SELECT * FROM [PermissionNode]
+        ///   Looks up a localized string similar to SELECT * FROM  {TABLE}
         ///WHERE [ParentID] = @ParentID.
         /// </summary>
         internal static string SqlPermissionStore_GetPermissionNodesByParentID {
@@ -109,7 +109,7 @@ namespace Dragon.Context {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SELECT * FROM [PermissionNode]
+        ///   Looks up a localized string similar to SELECT * FROM  {TABLE}
         ///WHERE [ChildID] = @ChildID.
         /// </summary>
         internal static string SqlPermissionStore_GetPermissionParentNodes {
@@ -119,7 +119,7 @@ namespace Dragon.Context {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SELECT * FROM [PermissionRight] WHERE NodeID=@NodeID.
+        ///   Looks up a localized string similar to SELECT * FROM  {TABLE} WHERE NodeID=@NodeID.
         /// </summary>
         internal static string SqlPermissionStore_GetPermissionRightsByNode {
             get {
@@ -128,7 +128,7 @@ namespace Dragon.Context {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to INSERT INTO [PermissionNode]
+        ///   Looks up a localized string similar to INSERT INTO  {TABLE}
         ///           ([LID]
         ///           ,[ParentID]
         ///           ,[ChildID])
@@ -144,7 +144,7 @@ namespace Dragon.Context {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to INSERT INTO [PermissionRight]
+        ///   Looks up a localized string similar to INSERT INTO  {TABLE}
         ///           ([LID]
         ///           ,[NodeID] 
         ///           ,[SubjectID]
@@ -164,7 +164,7 @@ namespace Dragon.Context {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SELECT * FROM [Profile] WHERE UserID = @UserID AND Key = @Key.
+        ///   Looks up a localized string similar to SELECT * FROM  {TABLE} WHERE UserID = @UserID AND [Key] = @Key.
         /// </summary>
         internal static string SqlProfileStore_Get {
             get {
@@ -173,7 +173,7 @@ namespace Dragon.Context {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to INSERT INTO [Profile] ([UserID], [Key], [Value]) VALUES (@UserID, @Key, @Value).
+        ///   Looks up a localized string similar to INSERT INTO  {TABLE} ([LID],[UserID], [Key], [Value]) VALUES (@LID, @UserID, @Key, @Value).
         /// </summary>
         internal static string SqlProfileStore_Insert {
             get {
@@ -182,7 +182,7 @@ namespace Dragon.Context {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to UPDATE [Profile] SET [Value] = @Value WHERE UserID = @UserID AND [Key] = @Key.
+        ///   Looks up a localized string similar to UPDATE {TABLE} SET [Value] = @Value WHERE UserID = @UserID AND [Key] = @Key.
         /// </summary>
         internal static string SqlProfileStore_Update {
             get {
@@ -191,7 +191,7 @@ namespace Dragon.Context {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to DELETE FROM [Session] WHERE [SessionID] =@SessionID.
+        ///   Looks up a localized string similar to DELETE FROM  {TABLE} WHERE [SessionID] =@SessionID.
         /// </summary>
         internal static string SqlSessionStore_Delete {
             get {
@@ -200,7 +200,7 @@ namespace Dragon.Context {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SELECT * FROM [Session]
+        ///   Looks up a localized string similar to SELECT * FROM  {TABLE}
         ///WHERE [SessionID] =@SessionID.
         /// </summary>
         internal static string SqlSessionStore_Get {
@@ -210,7 +210,7 @@ namespace Dragon.Context {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to INSERT INTO [Session] ([SessionID],[Hash],[Location],[UserID],[Expires])
+        ///   Looks up a localized string similar to INSERT INTO  {TABLE} ([SessionID],[Hash],[Location],[UserID],[Expires])
         ///VALUES			   (@SessionID,@Hash,@Location,@UserID, @Expires).
         /// </summary>
         internal static string SqlSessionStore_Insert {
@@ -220,7 +220,7 @@ namespace Dragon.Context {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to UPDATE [Session] SET 
+        ///   Looks up a localized string similar to UPDATE  {TABLE} SET 
         ///[Hash]= @Hash,
         ///[Expires]	= @Expires,
         ///[Location]	= @Location,
@@ -239,7 +239,7 @@ namespace Dragon.Context {
         ///      ,[Service]
         ///      ,[Key]
         ///      ,[Secret]
-        ///FROM [Registration]
+        ///FROM {TABLE}
         ///WHERE [Service] = @Service AND [Key] = @Key.
         /// </summary>
         internal static string SqlUserStore_GetByServiceAndKey {
@@ -254,7 +254,7 @@ namespace Dragon.Context {
         ///      ,[Service]
         ///      ,[Key]
         ///      ,[Secret]
-        ///FROM [Registration]
+        ///FROM {TABLE}
         ///WHERE [UserID] = @UserID.
         /// </summary>
         internal static string SqlUserStore_GetByUserID {
@@ -264,7 +264,7 @@ namespace Dragon.Context {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to INSERT INTO [Registration]
+        ///   Looks up a localized string similar to INSERT INTO {TABLE}
         ///           ([RegistrationID]
         ///           ,[UserID]
         ///           ,[Service]
@@ -284,7 +284,7 @@ namespace Dragon.Context {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to UPDATE [Registration]
+        ///   Looks up a localized string similar to UPDATE {TABLE}
         ///SET [UserID]  = @UserID
         ///   ,[Service] = @Service
         ///   ,[Key]     = @Key
