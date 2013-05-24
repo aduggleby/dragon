@@ -1,0 +1,13 @@
+﻿<h2>Notification Test</h2>
+ 
+<b>@TempData["Error"]</b>   
+
+@using (Html.BeginForm("EMailTest", null, FormMethod.Post, null))
+{
+    <div class="email_test">
+        <div class="email"><label for="email">Email:</label>@Html.TextBox("email")</div>
+        <div class="subject"><label for="subject">Subject:</label>@Html.TextBox("subject")</div>    
+        <div class="key"><label for="key">Key:</label>@Html.TextBox("key")</div>       
+        <div class="submit"><input type="submit" value="Send"/></div>
+    </div>
+}

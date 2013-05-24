@@ -4,7 +4,7 @@ using Dragon.Interfaces.Notifications;
 
 namespace Dragon.Notification
 {
-    class Notification : INotification
+    public class Notification : INotification
     {
         public Guid ID { get; private set; }
         public string TypeKey { get; set; }

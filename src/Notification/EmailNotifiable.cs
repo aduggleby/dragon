@@ -2,9 +2,9 @@
 
 namespace Dragon.Notification
 {
-    class EmailNotifiable : IEmailNotifiable
+    public class EmailNotifiable : IEmailNotifiable
     {
-        public string PrimaryEmailAddress { get; private set; }
-        public bool UseHTMLEmail { get; private set; }
+        public string PrimaryEmailAddress { get; set; }
+        public bool UseHTMLEmail { get; set; }
     }
 }
