@@ -16,14 +16,17 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
+using Demo.Controllers;
 using Dragon.Context;
 using Dragon.Context.ReverseIPLookup;
 using Dragon.Context.Sessions;
 using Dragon.Context.Sessions.ReverseIPLookup;
 using Dragon.Context.Users;
+using Dragon.Core.Configuration;
 using Dragon.Interfaces;
 using StructureMap;
 using Dragon.Context.Permissions;
+
 namespace Demo.DependencyResolution {
     public static class IoC {
         public static IContainer Initialize() {
@@ -40,8 +43,10 @@ namespace Demo.DependencyResolution {
                             x.For<ISession>().Use<CookieSession>();
                             x.For<IUserStore>().Use<SqlUserStore>();
                             x.For<IReverseIPLookupService>().Use<HostIpReverseLookupService>();
+                            x.For<IConfiguration>().Use<ConfigurationManagerConfiguration>();
                             
                             x.FillAllPropertiesOfType<DragonContext>();
+                            x.FillAllPropertiesOfType<ContextController>();
                         });
             return ObjectFactory.Container;
         }

@@ -43,7 +43,7 @@ namespace Dragon.Common.Extensions
         public static bool IsTrue(this IConfiguration cfg, string configKey)
         {
             var value = GetString(cfg, configKey);
-            return TRUE_VALUES.Select(x=>x.ToLower()).Contains(value.ToLower());
+            return TRUE_VALUES.Select(x=>x.ToLower()).Contains((value??string.Empty).ToLower());
         }
 
         public static bool IsFalse(this IConfiguration cfg, string configKey)
