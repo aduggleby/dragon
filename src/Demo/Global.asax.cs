@@ -3,6 +3,7 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using Demo.DependencyResolution;
+using Dragon.Notification;
 
 namespace Demo
 {
@@ -13,6 +14,8 @@ namespace Demo
     {
         protected void Application_Start()
         {
+            WebNotificationDispatcher.Init();
+
             AreaRegistration.RegisterAllAreas();
 
             WebApiConfig.Register(GlobalConfiguration.Configuration);

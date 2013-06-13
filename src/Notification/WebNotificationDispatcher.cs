@@ -1,4 +1,5 @@
-﻿using Dragon.Interfaces.Notifications;
+﻿using System.Web.Routing;
+using Dragon.Interfaces.Notifications;
 using Microsoft.AspNet.SignalR;
 
 namespace Dragon.Notification
@@ -9,7 +10,6 @@ namespace Dragon.Notification
     {
         private readonly ITemplateService _templateService;
         private readonly ILocalizedDataSource _dataSource;
-        private readonly Chat _chat = new Chat();
 
         public class Chat : Hub
         {
@@ -29,7 +29,13 @@ namespace Dragon.Notification
         {
             var bodyTemplate = _dataSource.GetContent(notification.TypeKey, notification.LanguageCode);
             var body = _templateService.Parse(bodyTemplate, notification.Parameter);
-            _chat.Send(body);
+            var context = GlobalHost.ConnectionManager.GetHubContext<Chat>();
+            context.Clients.All.addMessage(body);
+        }
+
+        public static void Init()
+        {
+            RouteTable.Routes.MapHubs();
         }
     }
 

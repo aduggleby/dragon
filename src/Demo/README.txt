@@ -40,3 +40,14 @@ CREATE TABLE [dbo].[Registration](
 	[Key] [nvarchar](50) NULL,
 	[Secret] [nvarchar](550) NULL
 ) ON [PRIMARY]
+
+* for WebNotification, add to Global.asx:
+  WebNotificationDispatcher.Init();  
+
+
+Usage
+=====
+
+Following tools help in testing the app:
+
+* SMTP: local server, e.g. https://papercut.codeplex.com/
