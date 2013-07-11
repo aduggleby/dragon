@@ -33,13 +33,23 @@ CREATE TABLE [dbo].[Registration](
 	[Secret] [nvarchar](550) NULL
 ) ON [PRIMARY]
 
-CREATE TABLE [dbo].[Registration](
-	[RegistrationID] [uniqueidentifier] ROWGUIDCOL  NULL,
+CREATE TABLE [dbo].[Session](
+	[SessionID] [uniqueidentifier] ROWGUIDCOL  NULL,
 	[UserID] [uniqueidentifier] NULL,
-	[Service] [nvarchar](50) NULL,
-	[Key] [nvarchar](50) NULL,
-	[Secret] [nvarchar](550) NULL
+	[Location] [nvarchar](50) NULL,
+	[Hash] [integer] NULL,
+	[Expires] [datetime] NULL
 ) ON [PRIMARY]
+
+CREATE TABLE [dbo].[Notification](
+	[NotificationID] [uniqueidentifier] ROWGUIDCOL  NULL,
+	[UserID] [uniqueidentifier] NULL,
+	[TypeKey] [nvarchar](50) NULL,
+	[Subject] [nvarchar](100) NULL,
+	[LanguageCode] [nvarchar](10) NULL,
+	[Parameter] [nvarchar](500) NULL,
+) ON [PRIMARY]
+
 
 * for WebNotification, add to Global.asx:
   WebNotificationDispatcher.Init();  
