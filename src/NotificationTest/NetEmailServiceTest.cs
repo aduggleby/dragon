@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Net;
 using System.Net.Mail;
 using Dragon.Interfaces;
 using Dragon.Notification;
@@ -29,19 +28,31 @@ namespace NotificationTest
             }
         }
 
+        class ExtendedNetEmailServiceWrapper : NetEmailService
+        {
+            public SmtpClient SmtpClient { get; set; }
+
+            protected override SmtpClient GetSmtpClient()
+            {
+                return SmtpClient;
+            }
+        }
+
+
         [TestMethod]
+        [Ignore] // mocking of non-virtual members is not possible with moq =(
         public void SendShouldInvokeSmtpClientsSend()
         {
-            /*
-            var netEmailService = new Mock<NetEmailServiceWrapper>() {CallBase = true};
             var smtpClient = new Mock<SmtpClient>();
-            netEmailService.Setup(_ => _.GetSmtpClient()).Returns(smtpClient.Object);
-
-            netEmailService.Object.Send(EMAIL_ADDRESS, SUBJECT, BODY, USE_HTML_EMAIL);
+            smtpClient.Setup(_ =>_.Send(It.IsAny<String>(), It.IsAny<String>(), It.IsAny<String>(), It.IsAny<String>()));
+            var netEmailService = new ExtendedNetEmailServiceWrapper
+            {
+                Configuration = CreateConfigurationMock().Object,
+                SmtpClient = smtpClient.Object
+            };
+            netEmailService.Send(EMAIL_ADDRESS, SUBJECT, BODY, USE_HTML_EMAIL);
             
             smtpClient.Verify(_ => _.Send(It.IsAny<String>(), EMAIL_ADDRESS, SUBJECT, BODY));
-            */
-            Assert.Fail(); //TODO
         }
 
         [TestMethod]

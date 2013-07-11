@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.SqlClient;
 using Dapper;
 using Dragon.Core.Sql;
@@ -7,6 +6,7 @@ using Dragon.Interfaces.Notifications;
 
 namespace Dragon.Notification
 {
+    // TODO: test
     public class SqlNotificationStore : INotificationStore
     {
         public void AddNotification(INotification notification)
