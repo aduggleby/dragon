@@ -2,9 +2,8 @@
 
 namespace Dragon.Interfaces.Notifications
 {
-    public interface IBatchNotificationDispatcher<T> where T: INotifiable
+    public interface IBatchNotificationDispatcher<T> : INotificationDispatcher<T> where T: INotifiable
     {
-        void Add(T notifiable, INotification notification);
-        void Dispatch();
+        void DispatchAll(T notifiable, String subject);
     }
 }

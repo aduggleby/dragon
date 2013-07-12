@@ -48,6 +48,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EmailBatchNotificationDispatcherTest.cs" />
+    <Compile Include="EmailEqComparerTest.cs" />
+    <Compile Include="EmailNotificationBase.cs" />
     <Compile Include="WebNotificationDispatcherTest.cs" />
     <Compile Include="FileSystemLocalizedDataSourceIntegrationTest.cs" />
     <Compile Include="StringTemplateTemplateServiceTest.cs" />
