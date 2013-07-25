@@ -37,7 +37,7 @@ namespace Demo.Controllers
             var notifiable = CreateNotifiable(email);
             var dispatcher = CreateOrGetBatchEmailNotificationDispatcher();
             dispatcher.DispatchAll(notifiable, subject);
-            return Json(""); // TODO: return PartialView("NotificationResultPartial");
+            return Json("Batch sent.");
         }
 
         private ActionResult EnqueueMail(string email, string subject, string key)
@@ -46,7 +46,7 @@ namespace Demo.Controllers
             var notification = CreateNotification(email, subject, key);
             var dispatcher = CreateOrGetBatchEmailNotificationDispatcher();
             dispatcher.Dispatch(notifiable, notification);
-            return Json(""); // TODO: return PartialView("NotificationResultPartial");
+            return Json("Enqueued.");
          }
 
         private IBatchNotificationDispatcher<IEmailNotifiable> CreateOrGetBatchEmailNotificationDispatcher()
@@ -75,7 +75,7 @@ namespace Demo.Controllers
                 new FileSystemLocalizedDataSource(HttpContext.Server.MapPath("~/Resources/templates"), "txt"));
             webDispatcher.Dispatch(webNotifiable, notification);
 
-            return Json(""); // TODO: return PartialView("NotificationResultPartial");
+            return Json("Sent.");
         }
 
         private static EmailNotifiable CreateNotifiable(string email)

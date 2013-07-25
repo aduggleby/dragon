@@ -4,38 +4,43 @@
     <script src="@Url.Content("~/signalr/hubs")" type="text/javascript"></script>
 
     <script type="text/javascript">
-        var chat;
+        var messaging;
         $(function () {
-            chat = $.connection.chat;
-            chat.client.addMessage = function (message) {
+            messaging = $.connection.chat;
+            messaging.client.addMessage = function (message) {
                 $('#messages').append('<li>' + message + '</li>');
             };
             $.connection.hub.start().done(function () {
                 $("#broadcast").click(function () {
-                    chat.server.send($('#key').val())
+                    messaging.server.send($('#key').val())
                 });
             });
 
             $("#bt_send").click(function (e) {
-                $('#action').val('SendMail');
-                $("form#form0").trigger("submit");
+                sendRequest('SendMail');
             });
 
             $("#bt_enqueue").click(function (e) {
-                $('#action').val('EnqueueMail');
-                $("form#form0").trigger("submit");
+                sendRequest('EnqueueMail');
             });
 
             $("#bt_batchsend").click(function (e) {
-                $('#action').val('BatchSendMails');
-                $("form#form0").trigger("submit");
+                sendRequest('BatchSendMails');
             });
         });
 
-        // used by the Ajax-Form
-        var onSuccess = function (result)
-        {
-            //if (result.url) { window.location.href = result.url; }
+        function sendRequest(action) {
+            $('#action').val(action);
+            $.ajax({
+                type: 'POST',
+                data: $("#form0").serialize(),
+                url: $("NotificationTest").attr("action"),
+                success: function (data) {
+                    {
+                        $('#messages').append('<li>' + data + '</li>');
+                    }
+                }
+            });
         }
 
     </script>
@@ -45,7 +50,7 @@
  
 <b>@TempData["Error"]</b>   
 
-@using (Ajax.BeginForm("Index",  new AjaxOptions { UpdateTargetId = "messages" /*, OnSuccess = "onSuccess" */})) //  ,FormMethod.Post, null
+@using (Html.BeginForm("Index", null, FormMethod.Post, new { id = "form0" }))                           // htmlAttributes))
 {
     <div class="email_test">
         <div class="email"><label for="email">Email:</label>@Html.TextBox("email")</div>
@@ -60,7 +65,4 @@
 
 <input type="button" id="broadcast" value="SendWeb" />
 
-
-<div id="messages" >
-    @Html.Partial("NotificationResultPartial")
-</div>
+<div id="messages" />
