@@ -59,6 +59,14 @@
   <ItemGroup>
     <Compile Include="IConfiguration.cs" />
     <Compile Include="IDragonTable.cs" />
+    <Compile Include="Notifications\IBatchNotificationDispatcher.cs" />
+    <Compile Include="Notifications\ILocalizedDataSource.cs" />
+    <Compile Include="Notifications\INotification.cs" />
+    <Compile Include="Notifications\IEmailService.cs" />
+    <Compile Include="Notifications\IEmailNotifiable.cs" />
+    <Compile Include="Notifications\INotifiable.cs" />
+    <Compile Include="Notifications\INotificationDispatcher.cs" />
+    <Compile Include="Notifications\INotificationStore.cs" />
     <Compile Include="IPermissionNode.cs" />
     <Compile Include="IPermissionStore.cs" />
     <Compile Include="IProfileStore.cs" />
@@ -69,6 +77,8 @@
     <Compile Include="IRegistration.cs" />
     <Compile Include="IUser.cs" />
     <Compile Include="IUserStore.cs" />
+    <Compile Include="Notifications\ITemplateService.cs" />
+    <Compile Include="Notifications\IWebNotifiable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 using System.Web;
 using System.Web.Mvc;
 using Demo.Models;
@@ -9,6 +10,7 @@ using Dragon.Context;
 using Dragon.Context.Exceptions;
 using Dragon.Context.Extensions.Login;
 using Dragon.Interfaces;
+using StructureMap;
 
 namespace Demo.Controllers
 {

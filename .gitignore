@@ -12,8 +12,12 @@ db.config
 *.suo
 *resharper*
 
+UpgradeLog.*
+_UpgradeReport_Files/
+
 # OS generated files #
 ######################
 .DS_Store?
 ehthumbs.db
 Thumbs.db
+*~
