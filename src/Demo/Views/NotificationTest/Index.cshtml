@@ -12,27 +12,55 @@
             };
             $.connection.hub.start().done(function () {
                 $("#broadcast").click(function () {
-                    chat.server.send($('#msg').val());
+                    chat.server.send($('#key').val())
                 });
             });
+
+            $("#bt_send").click(function (e) {
+                $('#action').val('SendMail');
+                $("form#form0").trigger("submit");
+            });
+
+            $("#bt_enqueue").click(function (e) {
+                $('#action').val('EnqueueMail');
+                $("form#form0").trigger("submit");
+            });
+
+            $("#bt_batchsend").click(function (e) {
+                $('#action').val('BatchSendMails');
+                $("form#form0").trigger("submit");
+            });
         });
-</script>
+
+        // used by the Ajax-Form
+        var onSuccess = function (result)
+        {
+            //if (result.url) { window.location.href = result.url; }
+        }
+
+    </script>
 }
 
 <h2>Notification Test</h2>
  
 <b>@TempData["Error"]</b>   
 
-@using (Html.BeginForm("EMailTest", null, FormMethod.Post, null))
+@using (Ajax.BeginForm("Index",  new AjaxOptions { UpdateTargetId = "messages" /*, OnSuccess = "onSuccess" */})) //  ,FormMethod.Post, null
 {
     <div class="email_test">
         <div class="email"><label for="email">Email:</label>@Html.TextBox("email")</div>
         <div class="subject"><label for="subject">Subject:</label>@Html.TextBox("subject")</div>    
-        <div class="key"><label for="key">Key:</label>@Html.TextBox("key")</div>       
-        <div class="submit"><input type="submit" value="SendMail"/></div>
+        <div class="key"><label for="key">Key:</label>@Html.TextBox("key")</div> 
+        <input type="hidden" id="action" name="action" />
+        <div class="submit"><input id="bt_send" type="button" value="SendMail"/></div>
+        <div class="submit"><input id="bt_enqueue" type="button" value="EnqueueMail"/></div>
+        <div class="submit"><input id="bt_batchsend" type="button" value="BatchSendMails"/></div>
     </div>
 }
 
-<input type="button" value="SendWeb" onclick="chat.server.send($('#key').val())" />
+<input type="button" id="broadcast" value="SendWeb" />
 
-<div id="messages" ></div>
+
+<div id="messages" >
+    @Html.Partial("NotificationResultPartial")
+</div>

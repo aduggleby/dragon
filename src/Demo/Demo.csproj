@@ -285,7 +285,7 @@
     <Content Include="Views\NotificationTest\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\NotificationTest\EMailTest.cshtml" />
+    <Content Include="Views\NotificationTest\NotificationResultPartial.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
