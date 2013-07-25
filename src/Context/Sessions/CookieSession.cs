@@ -13,10 +13,12 @@ namespace Dragon.Context.Sessions
     {
         private const string CONFIG_PREFIX = "Dragon.Context.Session.";
         private const string CONFIG_COOKIENAME = CONFIG_PREFIX + "Cookie";
+
         private const string CONFIG_SSLONLY = CONFIG_PREFIX + "SSLOnly";
         private const string VAR_XFORWARDEDFOR = "HTTP_X_FORWARDED_FOR";
 
         private string CookieName { get; set; }
+        private bool WithHttpContext { get; set; }
 
         private HttpContext m_httpCtx;
         private IConfiguration m_configuration;
@@ -39,6 +41,8 @@ namespace Dragon.Context.Sessions
                 throw new Exception("Ctor in CookieSession caught exception.", ex);
             }
         }
+
+     
 
         ///////////////////////////////////////////////////////////////////////
 

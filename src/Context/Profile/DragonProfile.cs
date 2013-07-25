@@ -19,6 +19,8 @@ namespace Dragon.Context.Profile
 
         public Guid UserID { get; set; }
         public string Key { get; set; }
+
+        [Length(400)]
         public string Value { get; set; }
 
     }

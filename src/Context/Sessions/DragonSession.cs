@@ -21,6 +21,9 @@ namespace Dragon.Context.Sessions
         public Guid UserID { get; set; }
 
         public DateTime Expires { get; set; }
+
+        public string Provider { get; set; }
+
         
     }
 }

@@ -74,6 +74,7 @@
     <Compile Include="Exceptions\UserKeyAlreadyExistsForThisServiceException.cs" />
     <Compile Include="Exceptions\UserKeyDoesNotExistException.cs" />
     <Compile Include="Extensions\Groups\GroupPermissionExtension.cs" />
+    <Compile Include="Extensions\Login\ExternallyValidatedAuthExtension.cs" />
     <Compile Include="Permissions\PermissionStoreBase.cs" />
     <Compile Include="Permissions\DragonPermissionNode.cs" />
     <Compile Include="Permissions\DragonPermissionRight.cs" />
@@ -81,6 +82,9 @@
     <Compile Include="Profile\DragonProfile.cs" />
     <Compile Include="Profile\ProfileStoreBase.cs" />
     <Compile Include="Profile\SqlProfileStore.cs" />
+    <Compile Include="Sessions\DragonIdentity.cs" />
+    <Compile Include="Sessions\DragonIdentityInjector.cs" />
+    <Compile Include="Sessions\DragonPrincipal.cs" />
     <Compile Include="Sessions\DragonSession.cs" />
     <Compile Include="Sessions\InMemorySession.cs" />
     <Compile Include="Sessions\InMemorySessionStore.cs" />

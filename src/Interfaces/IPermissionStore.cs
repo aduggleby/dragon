@@ -16,6 +16,8 @@ namespace Dragon.Interfaces
         void RemoveRight(Guid nodeID, Guid subjectID, string spec);
         bool HasRight(Guid nodeID, Guid subjectID, string spec);
 
+        bool HasNode(Guid nodeID);
+
         IEnumerable<Guid> GetNodesWithRight(Guid subjectID, string spec);
         IEnumerable<IPermissionRight> GetRightsOnNodeWithInherited(Guid nodeID);
 

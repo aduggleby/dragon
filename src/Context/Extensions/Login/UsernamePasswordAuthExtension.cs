@@ -12,7 +12,14 @@ namespace Dragon.Context.Extensions.Login
             string username, 
             string password)
         {
-            return ctx.UserStore.TryLogin(SERVICE_ID, username, (s)=>HashUtil.VerifyHash(password, s));
+            var success= ctx.UserStore.TryLogin(SERVICE_ID, username, (s)=>HashUtil.VerifyHash(password, s));
+            if (success)
+            {
+                DragonContext.ProfileStore.SetProperty(ctx.CurrentUserID,
+                                                               DragonContext.PROFILEKEY_SERVICE,
+                                                               SERVICE_ID);
+            }
+            return success;
         }
 
         public static void RegisterUsernamePassword(this DragonContext ctx, string username, string password)
@@ -40,5 +47,11 @@ namespace Dragon.Context.Extensions.Login
                 ctx.UserStore.UpdateSecret(SERVICE_ID, username, hashedSaltedSecret);
             }
         }
+
+        public static bool IsLocalAccountUser(this DragonContext ctx)
+        {
+            return DragonContext.ProfileStore.GetProperty<string>(ctx.CurrentUserID, DragonContext.PROFILEKEY_SERVICE) == SERVICE_ID;
+        }
+
     }
 }

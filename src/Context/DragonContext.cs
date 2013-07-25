@@ -12,6 +12,8 @@ namespace Dragon.Context
         private ISessionStore m_sessionStore;
         private IUserStore m_userStore;
 
+        public const string PROFILEKEY_SERVICE = "dragon.context.service";
+
         public DragonContext(
             ISessionStore sessionStore,
             IUserStore userStore)

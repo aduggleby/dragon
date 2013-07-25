@@ -137,7 +137,7 @@ namespace Dragon.Context.Permissions
 
         private void DebugPrint(string msg, params object[] p)
         {
-            Debug.WriteLine(string.Format(msg, p));
+            // Debug.WriteLine(string.Format(msg, p));
         }
 
         private string Dump(IPermissionRight r)
@@ -309,6 +309,14 @@ namespace Dragon.Context.Permissions
 
             return guids.Distinct();
         }
+
+
+        public bool HasNode(Guid nodeID)
+        {
+            var candidate = AllNodes().FirstOrDefault(x => x.Node.Equals(nodeID));
+            return (candidate != null);
+        }
+
 
         public IEnumerable<IPermissionRight> GetRightsOnNodeWithInherited(Guid nodeID)
         {

@@ -226,7 +226,7 @@ namespace Dapper
             for (var i = 0; i < columnSet.Count(); i++)
             {
                 var property = columnSet.ElementAt(i);
-                sb.Append(property.Name);
+                sb.Append(string.Format("[{0}]", property.Name));
                 if (i < columnSet.Count() - 1)
                     sb.Append(", ");
             }
@@ -240,6 +240,7 @@ namespace Dapper
                     sb.Append(", ");
             }
             sb.Append(") ");
+            
             connection.Execute(sb.ToString(), entityToInsert, transaction: transaction, commandTimeout: commandTimeout);
 
             if (letDbGenerateKey)
