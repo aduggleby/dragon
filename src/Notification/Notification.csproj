@@ -111,6 +111,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StringTemplateTemplateService.cs" />
     <Compile Include="WebNotificationDispatcher.cs" />
+    <Compile Include="WebNotificationException.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj">

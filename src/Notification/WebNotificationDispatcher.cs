@@ -6,28 +6,39 @@ using Microsoft.AspNet.SignalR;
 
 namespace Dragon.Notification
 {
-    // TODO: test and select proper data source
-    // TODO: verify that route has been set, else throw exception
+    // TODO: test
     public class WebNotificationDispatcher : INotificationDispatcher<IWebNotifiable>
     {
         private readonly ITemplateService _templateService;
         private readonly ILocalizedDataSource _dataSource;
+        private static Boolean _isInitialized;
 
         public class NotificationHub : Hub
         {
             public void Send(string message)
             {
-                // TODO: add listener?
+                // TODO: allow client to communicate to the server?
             }
 
-            public Task Login(String userId)
+            /// <summary>
+            /// This method needs to be called in order to be able to target user specific notifications.
+            /// </summary>
+            /// <param name="userID">The userID is passed from the client to avoid dependency to DragonContext.</param>
+            /// <returns></returns>
+            public Task Login(String userID)
             {
-                return Groups.Add(Context.ConnectionId, userId);
+                return Groups.Add(Context.ConnectionId, userID);
             }
 
-            public Task Logout(String userId)
+            /// <summary>
+            /// This method can be called to unsubscribe a client of an user.
+            /// Other connections of the same user will stay active.
+            /// </summary>
+            /// <param name="userID">The user which is unsubscribed</param>
+            /// <returns></returns>
+            public Task Logout(String userID)
             {
-                return Groups.Remove(Context.ConnectionId, userId);
+                return Groups.Remove(Context.ConnectionId, userID);
             }
         }
 
@@ -39,15 +50,24 @@ namespace Dragon.Notification
 
         public void Dispatch(IWebNotifiable notifiable, INotification notification)
         {
+            if (!_isInitialized)
+            {
+                throw new WebNotificationException(
+                    "Init() needs to be called in Application_Start() of Global.asax before dispatching notifications!");
+            }
             var bodyTemplate = _dataSource.GetContent(notification.TypeKey, notification.LanguageCode);
             var body = _templateService.Parse(bodyTemplate, notification.Parameter);
             var context = GlobalHost.ConnectionManager.GetHubContext<NotificationHub>();
             context.Clients.Group(notifiable.UserID.ToString()).addMessage(body);
         }
 
+        /// <summary>
+        /// Needs to be called in Application_Start() of Global.asax, see http://www.asp.net/signalr/overview/.
+        /// </summary>
         public static void Init()
         {
             RouteTable.Routes.MapHubs();
+            _isInitialized = true;
         }
     }
 
