@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Web;
 using System.Web.Mvc;
+using Dragon.Context;
 using Dragon.Interfaces;
 using Dragon.Interfaces.Notifications;
 using Dragon.Notification;
@@ -19,8 +19,7 @@ namespace Demo.Controllers
         [HttpPost]
         public ActionResult Index(string email, string subject, string key)
         {
-            var action = Request.Form["action"];
-            switch (action)
+            switch (Request.Form["action"])
             {
                 case "EnqueueMail":
                     return EnqueueMail(email, subject, key);
@@ -47,18 +46,6 @@ namespace Demo.Controllers
             var dispatcher = CreateOrGetBatchEmailNotificationDispatcher();
             dispatcher.Dispatch(notifiable, notification);
             return Json("Enqueued.");
-         }
-
-        private IBatchNotificationDispatcher<IEmailNotifiable> CreateOrGetBatchEmailNotificationDispatcher()
-        {
-            if (Session["EmailBatchNotificationDispatcher"] == null)
-            {
-                Session["EmailBatchNotificationDispatcher"] = new EmailBatchNotificationDispatcher(
-                    new NetEmailService {Configuration = ObjectFactory.GetInstance<IConfiguration>()},
-                    new StringTemplateTemplateService(),
-                    new FileSystemLocalizedDataSource(HttpContext.Server.MapPath("~/Resources/templates"), "txt"));
-            }
-           return (IBatchNotificationDispatcher<IEmailNotifiable>) Session["EmailBatchNotificationDispatcher"];
         }
 
         private ActionResult SendMail(string email, string subject, string key)
@@ -68,23 +55,45 @@ namespace Demo.Controllers
             var dispatcher = CreateEmailNotificationDispatcher();
             dispatcher.Dispatch(notifiable, notification);
 
-            var webNotifiable = new WebNotifiable();
+            var webNotifiable = new WebNotifiable
+            {
+                UserID = DragonContext.Current.CurrentUserID
+            };
 
-            var webDispatcher = new WebNotificationDispatcher(
-                new StringTemplateTemplateService(),
-                new FileSystemLocalizedDataSource(HttpContext.Server.MapPath("~/Resources/templates"), "txt"));
+            var webDispatcher = new WebNotificationDispatcher(CreateTemplateService(), CreateDataSource());
             webDispatcher.Dispatch(webNotifiable, notification);
 
             return Json("Sent.");
         }
 
-        private static EmailNotifiable CreateNotifiable(string email)
+        private IBatchNotificationDispatcher<IEmailNotifiable> CreateOrGetBatchEmailNotificationDispatcher()
+        {
+            if (Session["EmailBatchNotificationDispatcher"] == null)
+            {
+                Session["EmailBatchNotificationDispatcher"] = new EmailBatchNotificationDispatcher(
+                    new NetEmailService {Configuration = ObjectFactory.GetInstance<IConfiguration>()},
+                    CreateTemplateService(), CreateDataSource());
+            }
+            return (IBatchNotificationDispatcher<IEmailNotifiable>) Session["EmailBatchNotificationDispatcher"];
+        }
+
+        private StringTemplateTemplateService CreateTemplateService()
+        {
+            return new StringTemplateTemplateService();
+        }
+
+        private FileSystemLocalizedDataSource CreateDataSource()
+        {
+            return new FileSystemLocalizedDataSource(HttpContext.Server.MapPath("~/Resources/templates"), "txt");
+        }
+
+        private EmailNotifiable CreateNotifiable(string email)
         {
             var notifiable = new EmailNotifiable {PrimaryEmailAddress = email, UseHTMLEmail = false};
             return notifiable;
         }
 
-        private static Notification CreateNotification(string email, string subject, string key)
+        private Notification CreateNotification(string email, string subject, string key)
         {
             var notification = new Notification
             {
@@ -100,8 +109,7 @@ namespace Demo.Controllers
         {
             var dispatcher = new EmailNotificationDispatcher(
                 new NetEmailService {Configuration = ObjectFactory.GetInstance<IConfiguration>()},
-                new StringTemplateTemplateService(),
-                new FileSystemLocalizedDataSource(HttpContext.Server.MapPath("~/Resources/templates"), "txt"));
+                CreateTemplateService(), CreateDataSource());
             // TODO: move to config
             return dispatcher;
         }

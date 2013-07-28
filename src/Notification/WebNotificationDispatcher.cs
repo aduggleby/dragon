@@ -1,4 +1,6 @@
-﻿using System.Web.Routing;
+﻿using System;
+using System.Threading.Tasks;
+using System.Web.Routing;
 using Dragon.Interfaces.Notifications;
 using Microsoft.AspNet.SignalR;
 
@@ -11,11 +13,21 @@ namespace Dragon.Notification
         private readonly ITemplateService _templateService;
         private readonly ILocalizedDataSource _dataSource;
 
-        public class Chat : Hub
+        public class NotificationHub : Hub
         {
             public void Send(string message)
             {
-                Clients.All.addMessage(message);
+                // TODO: add listener?
+            }
+
+            public Task Login(String userId)
+            {
+                return Groups.Add(Context.ConnectionId, userId);
+            }
+
+            public Task Logout(String userId)
+            {
+                return Groups.Remove(Context.ConnectionId, userId);
             }
         }
 
@@ -29,8 +41,8 @@ namespace Dragon.Notification
         {
             var bodyTemplate = _dataSource.GetContent(notification.TypeKey, notification.LanguageCode);
             var body = _templateService.Parse(bodyTemplate, notification.Parameter);
-            var context = GlobalHost.ConnectionManager.GetHubContext<Chat>();
-            context.Clients.All.addMessage(body);
+            var context = GlobalHost.ConnectionManager.GetHubContext<NotificationHub>();
+            context.Clients.Group(notifiable.UserID.ToString()).addMessage(body);
         }
 
         public static void Init()
