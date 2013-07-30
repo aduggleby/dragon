@@ -12,6 +12,7 @@ namespace Dragon.Common.Attributes.Data
         {
             Name = tableName;
         }
+
         public string Name { get; private set; }
     }
 

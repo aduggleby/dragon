@@ -45,9 +45,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SqlMapperExtensions_TableCreatorDropper.cs" />
+    <Compile Include="MetadataHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SqlMapperExtensions.cs" />
-    <Compile Include="SqlMapperExtensions2.cs" />
+    <Compile Include="PropertyMetadata.cs" />
+    <Compile Include="SqlBuilderHelper.cs" />
+    <Compile Include="SqlMapperExtensions_CRUD.cs" />
+    <Compile Include="SqlMapperExtensions_Queries.cs" />
+    <Compile Include="TableMetadata.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
