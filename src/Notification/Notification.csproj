@@ -96,6 +96,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EmailBatchNotificationDispatcher.cs" />
+    <Compile Include="Notifiable.cs" />
     <Compile Include="SQL.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
