@@ -45,7 +45,7 @@ namespace NotificationTest
         public void SendShouldInvokeSmtpClientsSend()
         {
             var smtpClient = new Mock<SmtpClient>();
-            smtpClient.Setup(_ =>_.Send(It.IsAny<String>(), It.IsAny<String>(), It.IsAny<String>(), It.IsAny<String>()));
+            smtpClient.Setup(x =>x.Send(It.IsAny<String>(), It.IsAny<String>(), It.IsAny<String>(), It.IsAny<String>()));
             var netEmailService = new ExtendedNetEmailServiceWrapper
             {
                 Configuration = CreateConfigurationMock().Object,
@@ -53,7 +53,7 @@ namespace NotificationTest
             };
             netEmailService.Send(EMAIL_ADDRESS, Subject, Body, USE_HTML_EMAIL);
             
-            smtpClient.Verify(_ => _.Send(It.IsAny<String>(), EMAIL_ADDRESS, Subject, Body));
+            smtpClient.Verify(x => x.Send(It.IsAny<String>(), EMAIL_ADDRESS, Subject, Body));
         }
         */
 
@@ -73,12 +73,12 @@ namespace NotificationTest
         private static Mock<IConfiguration> CreateConfigurationMock()
         {
             var configuration = new Mock<IConfiguration>();
-            configuration.Setup(_ => _.GetValue(NetEmailService.DragonMailSmtpServerKey, String.Empty)).Returns(SMTP_SERVER);
-            configuration.Setup(_ => _.GetValue(NetEmailService.DragonMailSmtpPortKey, String.Empty))
+            configuration.Setup(x => x.GetValue(NetEmailService.DragonMailSmtpServerKey, String.Empty)).Returns(SMTP_SERVER);
+            configuration.Setup(x => x.GetValue(NetEmailService.DragonMailSmtpPortKey, String.Empty))
                 .Returns(SMTP_PORT.ToString);
-            configuration.Setup(_ => _.GetValue(NetEmailService.DragonMailSmtpUserKey, String.Empty)).Returns(USERNAME);
-            configuration.Setup(_ => _.GetValue(NetEmailService.DragonMailSmtpPasswordKey, String.Empty)).Returns(PASSWORD);
-            configuration.Setup(_ => _.GetValue(NetEmailService.DragonMailEmailFrom, String.Empty)).Returns(MAIL_FROM);
+            configuration.Setup(x => x.GetValue(NetEmailService.DragonMailSmtpUserKey, String.Empty)).Returns(USERNAME);
+            configuration.Setup(x => x.GetValue(NetEmailService.DragonMailSmtpPasswordKey, String.Empty)).Returns(PASSWORD);
+            configuration.Setup(x => x.GetValue(NetEmailService.DragonMailEmailFrom, String.Empty)).Returns(MAIL_FROM);
             return configuration;
         }
     }
