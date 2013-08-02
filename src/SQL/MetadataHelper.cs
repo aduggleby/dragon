@@ -17,6 +17,9 @@ namespace Dragon.SQL
             metadata.TableName = IfAttributeElse<TableAttribute, string>(
                 t, typeof(TableAttribute), a => a.Name, () => t.Name);
 
+            metadata.Schema = IfAttributeElse<SchemaAttribute, string>(
+                t, typeof(SchemaAttribute), a => a.Name, () => null);
+
             MetadataForProperties(t, ref metadata);
         }
 
@@ -25,8 +28,13 @@ namespace Dragon.SQL
             foreach (var property in t.GetProperties().Where(x => x.CanWrite && x.CanRead))
             {
                 var propmetadata = new PropertyMetadata();
-                metadata.Properties.Add(propmetadata);
-                MetadataForProperty(property, ref propmetadata);
+                var hasNoColumnAtt = (null != property.GetCustomAttributes(true).SingleOrDefault(x => x.GetType() == typeof(NoColumnAttribute)));
+
+                if (!hasNoColumnAtt)
+                {
+                    metadata.Properties.Add(propmetadata);
+                    MetadataForProperty(property, ref propmetadata);
+                }
             }
         }
 
@@ -125,7 +133,7 @@ namespace Dragon.SQL
                 }
                 else
                 {
-                    throw new Exception("This only support one Guid or Int as key.");
+                    metadata.SqlKeyTypeString = sqlType;
                 }
             }
         }

@@ -52,7 +52,8 @@ namespace Dragon.Notification
             {
                 var bodyTemplate = _localizedDataSource.GetContent(notification.TypeKey, notification.LanguageCode);
                 body.Append(_templateService.Parse(bodyTemplate, notification.Parameter));
-            }
+            }
+
             _emailService.Send(notifiable.PrimaryEmailAddress, subject, body.ToString(), notifiable.UseHTMLEmail);
 
             _dispatchQueue[notifiable].Clear();

@@ -65,6 +65,8 @@ namespace Dapper
             if (keys.Count() > 1)
                 throw new Exception("This only support entites with a single key property at the moment.");
 
+            values.Add(keys.First().PropertyName, (object)id);
+
             string sql;
             if (!s_selectQueries.TryGetValue(type.TypeHandle, out sql))
             {

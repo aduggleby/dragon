@@ -81,7 +81,7 @@ namespace Dragon.SQL
             var schema = GetSchema(metadata);
 
             return string.Format("SELECT {0} FROM {1}[{2}]",
-                BuildColumnList(metadata),
+                BuildMappedColumnList(metadata),
                 schema,
                 metadata.TableName);
         }
@@ -98,7 +98,7 @@ namespace Dragon.SQL
             }
 
             return string.Format("SELECT {0} FROM {1}[{2}] WHERE {3}",
-                BuildColumnList(metadata),
+                BuildMappedColumnList(metadata),
                 schema,
                 metadata.TableName,
                 BuildWhereClause(metadata, values, ref parameters));
@@ -154,6 +154,18 @@ namespace Dragon.SQL
                 .OrderBy(x => x.ColumnName)
                 .Select(x => string.Format("[{0}]", x.ColumnName)).ToArray());
         }
+
+        public static string BuildMappedColumnList(
+          TableMetadata metadata,
+          bool withoutKeys = false)
+        {
+            return string.Join(",", metadata
+                .Properties
+                .Where(x => !withoutKeys || !x.IsPK)
+                .OrderBy(x => x.ColumnName)
+                .Select(x => string.Format("[{0}] AS '{1}'", x.ColumnName, x.PropertyName)).ToArray());
+        }
+
 
         public static string BuildParameterList(
             TableMetadata metadata,

@@ -66,7 +66,7 @@ namespace Dragon.Tests.SQL
 
             var sql = SqlBuilderHelper.BuildSelect(tableMD, values, ref parameters);
 
-            Assert.AreEqual("SELECT [a],[b],[c] FROM [testtable] WHERE [a]=@aa AND [c]=@cc", sql);
+            Assert.AreEqual("SELECT [a] AS 'aa',[b] AS 'bb',[c] AS 'cc' FROM [testtable] WHERE [a]=@aa AND [c]=@cc", sql);
             Assert.AreEqual(2, parameters.Count);
         }
 
@@ -84,7 +84,7 @@ namespace Dragon.Tests.SQL
 
             var sql = SqlBuilderHelper.BuildSelect(tableMD, values, ref parameters);
 
-            Assert.AreEqual("SELECT [a],[b],[c] FROM [testschema].[testtable] WHERE [a]=@aa AND [c]=@cc", sql);
+            Assert.AreEqual("SELECT [a] AS 'aa',[b] AS 'bb',[c] AS 'cc' FROM [testschema].[testtable] WHERE [a]=@aa AND [c]=@cc", sql);
             Assert.AreEqual(2, parameters.Count);
         }
 
@@ -94,7 +94,7 @@ namespace Dragon.Tests.SQL
             var tableMD = GetTestMetadata();
             Assert.IsNull(tableMD.Schema);
 
-            var sql = SqlBuilderHelper.BuildInsert(tableMD);
+            var sql = SqlBuilderHelper.BuildInsert(tableMD, withoutKeys: false);
 
             Assert.AreEqual("INSERT INTO [testtable] ([a],[b],[c]) VALUES (@aa,@bb,@cc)", sql);
         }
@@ -105,7 +105,7 @@ namespace Dragon.Tests.SQL
             var tableMD = GetTestMetadata();
             tableMD.Schema = "testschema";
 
-            var sql = SqlBuilderHelper.BuildInsert(tableMD);
+            var sql = SqlBuilderHelper.BuildInsert(tableMD, withoutKeys: false);
 
             Assert.AreEqual("INSERT INTO [testschema].[testtable] ([a],[b],[c]) VALUES (@aa,@bb,@cc)", sql);
         }

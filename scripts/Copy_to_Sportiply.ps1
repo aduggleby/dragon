@@ -1,0 +1,1 @@
+Copy-Item ..\release\debug\* ..\..\Other\130724_Sportiply\lib\dragon-debug -Force
