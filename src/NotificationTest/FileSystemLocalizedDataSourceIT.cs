@@ -4,9 +4,10 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace NotificationTest
 {
     [TestClass]
-    public class FileSystemLocalizedDataSourceIntegrationTest
+    public class FileSystemLocalizedDataSourceIT
     {
         [TestMethod]
+        [TestCategory("IntegrationTest")]
         public void GetContentShouldReturnContent()
         {
             var fileSystemLocalizedDataSource = new FileSystemLocalizedDataSource("../../res", "txt");

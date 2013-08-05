@@ -15,6 +15,8 @@ namespace Dragon.Notification
 
         public class NotificationHub : Hub
         {
+            private readonly INotificationStore _notificationStore;
+
             public void Send(string message)
             {
                 // TODO: allow client to communicate to the server?
@@ -40,12 +42,30 @@ namespace Dragon.Notification
             {
                 return Groups.Remove(Context.ConnectionId, userID);
             }
+
+            public Task GetUnreadMessages(String userID)
+            {
+                return new Task(() => _notificationStore.GetAllUndispatched(new Guid(userID)));
+            }
+
+            public Task SetMessageRead(String messageID)
+            {
+                // TODO: notify all other connected clients of the user
+                return new Task(() => _notificationStore.SetDispatched(new Guid(messageID)));
+            }
+
+            public Task SetMessagesRead(String userID)
+            {
+                // TODO: notify all other connected clients of the user
+                return new Task(() => _notificationStore.SetAllDispatched(new Guid(userID)));
+            }
         }
 
-        public WebNotificationDispatcher(ITemplateService templateService, ILocalizedDataSource dataSource)
+        public WebNotificationDispatcher(ITemplateService templateService, ILocalizedDataSource dataSource, INotificationStore notificationStore)
         {
             _templateService = templateService;
             _dataSource = dataSource;
+            // TODO: pass to hub: _notificationStore = notificationStore;
         }
 
         public void Dispatch(IWebNotifiable notifiable, INotification notification)

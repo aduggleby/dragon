@@ -1,10 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Dragon.Interfaces.Notifications
 {
     public interface INotificationStore
     {
-        void AddNotification(INotification notification);
-        IEnumerable<INotification> GetAllNotifications();
+        void Add(Guid userID, INotification notification);
+        IEnumerable<INotification> GetAll(Guid userID);
+        void SetDispatched(Guid notificationID);
+        IEnumerable<INotification> GetAllUndispatched(Guid userID);
+        void SetAllDispatched(Guid userID);
     }
 }

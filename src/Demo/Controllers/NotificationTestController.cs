@@ -60,10 +60,16 @@ namespace Demo.Controllers
                 UserID = DragonContext.Current.CurrentUserID
             };
 
-            var webDispatcher = new WebNotificationDispatcher(CreateTemplateService(), CreateDataSource());
+            var webDispatcher = new WebNotificationDispatcher(CreateTemplateService(), CreateDataSource(), CreateNotificationStore());
             webDispatcher.Dispatch(webNotifiable, notification);
 
             return Json("Sent.");
+        }
+
+        private INotificationStore CreateNotificationStore()
+        {
+            // TODO: implement
+            throw new System.NotImplementedException();
         }
 
         private IBatchNotificationDispatcher<IEmailNotifiable> CreateOrGetBatchEmailNotificationDispatcher()
