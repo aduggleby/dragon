@@ -10,5 +10,6 @@ namespace Dragon.Interfaces.Notifications
         void SetDispatched(Guid notificationID);
         IEnumerable<INotification> GetAllUndispatched(Guid userID);
         void SetAllDispatched(Guid userID);
+        INotification Get(Guid notificationId);
     }
 }

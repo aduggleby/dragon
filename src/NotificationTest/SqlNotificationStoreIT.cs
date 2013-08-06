@@ -158,6 +158,18 @@ namespace NotificationTest
             }
         }
 
+        [TestMethod]
+        [TestCategory("IntegrationTest")]
+        public void GetShouldReturnCorrectNotification()
+        {
+            _store.Add(_userID, _notification);
+            _store.Add(_userID, _notification2);
+            _store.Add(_userID, _notification3);
+
+            var actual = _store.Get(_notification2.ID);
+            Assert.AreEqual(_notification2, actual);
+        }
+
         # region helpers
 
         private string GetConnectionString()

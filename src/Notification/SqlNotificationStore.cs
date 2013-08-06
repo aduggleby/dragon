@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Web.Script.Serialization;
 using Dapper;
 using Dragon.Interfaces.Notifications;
@@ -52,6 +53,14 @@ namespace Dragon.Notification
         public void SetAllDispatched(Guid userID)
         {
             SqlExecute(SQL.SQLNotificationStore_UpdateAllDispatched, new {UserID = userID, Dispatched = true});
+        }
+
+        public INotification Get(Guid notificationID)
+        {
+            return SqlQuery(SQL.SQLNotificationStore_Get, new[]
+            {
+                new SqlParameter("@NotificationID", notificationID)
+            }).First();
         }
 
         # region helpers

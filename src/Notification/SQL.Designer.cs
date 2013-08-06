@@ -70,6 +70,15 @@ namespace Dragon.Notification {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to SELECT * FROM [Notification] where NotificationID=@NotificationID.
+        /// </summary>
+        internal static string SQLNotificationStore_Get {
+            get {
+                return ResourceManager.GetString("SQLNotificationStore_Get", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to SELECT * FROM [Notification] where UserID=@UserID.
         /// </summary>
         internal static string SQLNotificationStore_GetAll {

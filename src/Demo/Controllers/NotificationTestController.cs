@@ -2,6 +2,7 @@
 using System.Web;
 using System.Web.Mvc;
 using Dragon.Context;
+using Dragon.Core.Sql;
 using Dragon.Interfaces;
 using Dragon.Interfaces.Notifications;
 using Dragon.Notification;
@@ -68,8 +69,7 @@ namespace Demo.Controllers
 
         private INotificationStore CreateNotificationStore()
         {
-            // TODO: implement
-            throw new System.NotImplementedException();
+            return new SqlNotificationStore(StandardSqlStore.ConnectionString);
         }
 
         private IBatchNotificationDispatcher<IEmailNotifiable> CreateOrGetBatchEmailNotificationDispatcher()

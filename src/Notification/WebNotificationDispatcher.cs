@@ -15,7 +15,7 @@ namespace Dragon.Notification
 
         public class NotificationHub : Hub
         {
-            private readonly INotificationStore _notificationStore;
+            public static INotificationStore NotificationStore { get; set; }
 
             public void Send(string message)
             {
@@ -26,7 +26,6 @@ namespace Dragon.Notification
             /// This method needs to be called in order to be able to target user specific notifications.
             /// </summary>
             /// <param name="userID">The userID is passed from the client to avoid dependency to DragonContext.</param>
-            /// <returns></returns>
             public Task Login(String userID)
             {
                 return Groups.Add(Context.ConnectionId, userID);
@@ -37,27 +36,45 @@ namespace Dragon.Notification
             /// Other connections of the same user will stay active.
             /// </summary>
             /// <param name="userID">The user which is unsubscribed</param>
-            /// <returns></returns>
             public Task Logout(String userID)
             {
                 return Groups.Remove(Context.ConnectionId, userID);
             }
 
-            public Task GetUnreadMessages(String userID)
+            /// <summary>
+            /// Returns all notifications that a user has not yet acknowledged.
+            /// </summary>
+            /// <param name="userID">The user to whom the undispatched notification belongs</param>
+            public Task GetUndispatchedNotifications(String userID)
             {
-                return new Task(() => _notificationStore.GetAllUndispatched(new Guid(userID)));
+                return new Task(() => NotificationStore.GetAllUndispatched(new Guid(userID)));
             }
 
-            public Task SetMessageRead(String messageID)
+            /// <summary>
+            /// Needs to be called by the client to acknowledge the reception of a notification.
+            /// </summary>
+            /// <param name="userID">The user</param>
+            /// <param name="notificationID">The notification to acknowledge</param>
+            public Task SetMessageRead(String userID, String notificationID)
             {
-                // TODO: notify all other connected clients of the user
-                return new Task(() => _notificationStore.SetDispatched(new Guid(messageID)));
+                return new Task(() =>
+                {
+                    NotificationStore.SetDispatched(new Guid(notificationID));
+                    Clients.Group(userID).notifyNotificationRead(notificationID);
+                });
             }
 
+            /// <summary>
+            /// Can be called by the client to acknowledge the reception of all notifications of a specific user.
+            /// </summary>
+            /// <param name="userID">The user</param>
             public Task SetMessagesRead(String userID)
             {
-                // TODO: notify all other connected clients of the user
-                return new Task(() => _notificationStore.SetAllDispatched(new Guid(userID)));
+                return new Task(() =>
+                {
+                    NotificationStore.SetAllDispatched(new Guid(userID));
+                    Clients.Group(userID).notifyAllNotificationsRead();
+                });
             }
         }
 
@@ -65,7 +82,7 @@ namespace Dragon.Notification
         {
             _templateService = templateService;
             _dataSource = dataSource;
-            // TODO: pass to hub: _notificationStore = notificationStore;
+            NotificationHub.NotificationStore = notificationStore;
         }
 
         public void Dispatch(IWebNotifiable notifiable, INotification notification)

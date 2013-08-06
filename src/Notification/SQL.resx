@@ -132,4 +132,7 @@
   <data name="SQLNotificationStore_UpdateDispatched" xml:space="preserve">
     <value>UPDATE [Notification] SET Dispatched = @Dispatched WHERE NotificationID = @NotificationID</value>
   </data>
+  <data name="SQLNotificationStore_Get" xml:space="preserve">
+    <value>SELECT * FROM [Notification] where NotificationID=@NotificationID</value>
+  </data>
 </root>
