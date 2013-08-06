@@ -52,9 +52,9 @@
 @using (Html.BeginForm("Index", null, FormMethod.Post, new { id = "form0" }))                           // htmlAttributes))
 {
     <div class="email_test">
-        <div class="email"><label for="email">Email:</label>@Html.TextBox("email")</div>
-        <div class="subject"><label for="subject">Subject:</label>@Html.TextBox("subject")</div>    
-        <div class="key"><label for="key">Key:</label>@Html.TextBox("key")</div> 
+        <div class="email"><label for="email">Email:</label>@Html.TextBox("email", "test@test.com")</div>
+        <div class="subject"><label for="subject">Subject:</label>@Html.TextBox("subject", "subject")</div>    
+        <div class="key"><label for="key">Key:</label>@Html.TextBox("key", "hello")</div> 
         <input type="hidden" id="action" name="action" />
         <div class="submit"><input id="bt_send" type="button" value="SendMail"/></div>
         <div class="submit"><input id="bt_enqueue" type="button" value="EnqueueMail"/></div>
