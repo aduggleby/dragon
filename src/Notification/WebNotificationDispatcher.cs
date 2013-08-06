@@ -93,7 +93,7 @@ namespace Dragon.Notification
                     "Init() needs to be called in Application_Start() of Global.asax before dispatching notifications!");
             }
 
-            _context.Clients.Group(notifiable.UserID.ToString()).addNotification(BuildNotification(notification));
+            _context.Clients.Group(notifiable.UserID.ToString()).addNotification(BuildNotification(notification), notification.ID.ToString());
         }
 
         public void DispatchAllUndispatched(Guid userID, string connectionID)
@@ -105,13 +105,13 @@ namespace Dragon.Notification
         public void SetNotificationDispatched(string userID, string notificationID)
         {
             _notificationStore.SetDispatched(new Guid(notificationID));
-            _context.Clients.Group(userID).notifyNotificationRead(notificationID);
+            _context.Clients.Group(userID).notifyNotificationDispatched(notificationID);
         }
 
         private void SetNotificationsDispatched(string userID)
         {
             _notificationStore.SetAllDispatched(new Guid(userID));
-            _context.Clients.Group(userID).notifyAllNotificationsRead();
+            _context.Clients.Group(userID).notifyAllNotificationsDispatched();
         }
 
         /// <summary>

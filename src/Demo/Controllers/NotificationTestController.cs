@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Web;
 using System.Web.Mvc;
 using Dragon.Context;
@@ -105,6 +106,7 @@ namespace Demo.Controllers
         {
             var notification = new Notification
             {
+                ID = Guid.NewGuid(),
                 LanguageCode = "de",
                 Parameter = new Dictionary<string, string> {{"name", email}},
                 Subject = subject,
