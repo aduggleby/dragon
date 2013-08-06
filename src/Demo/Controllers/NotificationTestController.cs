@@ -61,10 +61,12 @@ namespace Demo.Controllers
                 UserID = DragonContext.Current.CurrentUserID
             };
 
-            var webDispatcher = new WebNotificationDispatcher(CreateTemplateService(), CreateDataSource(), CreateNotificationStore());
+            var notificationStore = CreateNotificationStore();
+            var webDispatcher = new WebNotificationDispatcher(CreateTemplateService(), CreateDataSource(), notificationStore);
             webDispatcher.Dispatch(webNotifiable, notification);
+            notificationStore.Add(webNotifiable.UserID, notification);
 
-            return Json("Sent.");
+            return Json("Sent and stored, notified web client.");
         }
 
         private INotificationStore CreateNotificationStore()

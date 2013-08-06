@@ -8,11 +8,21 @@
         var messaging;
         $(function () {
             messaging = $.connection.notificationHub;
-            messaging.client.addMessage = function (message) {
+            messaging.client.addNotification = function (message) {
                 $('#messages').append('<li>' + message + '</li>');
             };
+            messaging.client.addNotifications = function (message) {
+                $.each($.parseJSON(message), function() {
+                    $('#messages').append('<li>' + this + '</li>');
+                });
+            };
+            messaging.client.notifyAllNotificationsRead = function() {
+                $('#messages').append('<li>Notifications Read.</li>');
+            };
             $.connection.hub.start().done(function () {
+                $('#messages').empty();
                 messaging.server.login('@DragonContext.Current.CurrentUserID');
+                messaging.server.getUndispatchedNotifications('@DragonContext.Current.CurrentUserID');
             });
 
             $("#bt_send").click(function (e) {
@@ -25,6 +35,10 @@
 
             $("#bt_batchsend").click(function (e) {
                 sendRequest('BatchSendMails');
+            });
+
+            $("#bt_mark_read").click(function(e) {
+                messaging.server.setAllMessagesRead('@DragonContext.Current.CurrentUserID');
             });
         });
 
@@ -59,6 +73,7 @@
         <div class="submit"><input id="bt_send" type="button" value="SendMail"/></div>
         <div class="submit"><input id="bt_enqueue" type="button" value="EnqueueMail"/></div>
         <div class="submit"><input id="bt_batchsend" type="button" value="BatchSendMails"/></div>
+        <div class="submit"><input id="bt_mark_read" type="button" value="MarkRead"/></div>
     </div>
 }
 

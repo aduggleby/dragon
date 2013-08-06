@@ -54,7 +54,8 @@ CREATE TABLE [dbo].[Notification](
 ALTER TABLE [dbo].[Notification] ADD  CONSTRAINT [DF_Notification_Dispatched]  DEFAULT ((0)) FOR [Dispatched]
 
 * for WebNotification, add to Global.asx:
-  WebNotificationDispatcher.Init();  
+  WebNotificationDispatcher.Init();
+  WebNotificationDispatcher.NotificationHub.Dispatcher = new WebNotificationDispatcher(...);
 
 
 Usage
