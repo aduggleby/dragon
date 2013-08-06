@@ -98,7 +98,8 @@ namespace Dragon.Notification
 
         public void DispatchAllUndispatched(Guid userID, string connectionID)
         {
-            var notifications = _notificationStore.GetAllUndispatched(userID).Select(BuildNotification).ToList();
+            var notifications = _notificationStore.GetAllUndispatched(userID).Select(
+                x => new IComparable[] { x.ID, BuildNotification(x) }).ToList();
             _context.Clients.Client(connectionID).addNotifications(new JavaScriptSerializer().Serialize(notifications));
         }
 

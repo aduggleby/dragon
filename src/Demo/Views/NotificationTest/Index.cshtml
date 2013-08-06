@@ -13,7 +13,7 @@
             };
             messaging.client.addNotifications = function (message) {
                 $.each($.parseJSON(message), function() {
-                    addNotification(this, "TODO");
+                    addNotification(this[1], this[0]);
                 });
             };
             messaging.client.notifyAllNotificationsDispatched = function () {
@@ -42,7 +42,7 @@
                 sendRequest('BatchSendMails');
             });
 
-            $("#bt_mark_read").click(function(e) {
+            $("#bt_mark_dispatched").click(function(e) {
                 messaging.server.setAllMessagesRead('@DragonContext.Current.CurrentUserID');
             });
         });
@@ -95,7 +95,7 @@
         <div class="submit"><input id="bt_send" type="button" value="SendMail"/></div>
         <div class="submit"><input id="bt_enqueue" type="button" value="EnqueueMail"/></div>
         <div class="submit"><input id="bt_batchsend" type="button" value="BatchSendMails"/></div>
-        <div class="submit"><input id="bt_mark_read" type="button" value="MarkRead"/></div>
+        <div class="submit"><input id="bt_mark_dispatched" type="button" value="MarkDispatched"/></div>
     </div>
 }
 
