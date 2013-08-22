@@ -7,6 +7,15 @@ namespace Dragon.SQL
 {
     public class SqlBuilderHelper
     {
+
+        public static string BuildExistsTable(TableMetadata metadata)
+        {
+            var name = metadata.TableName;
+            var schema = metadata.Schema;
+            
+            return string.Format("SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[{1}].[{0}]') AND type in (N'U')",name, schema);
+        }
+
         public static string BuildCreate(
             TableMetadata metadata,
             bool onlyIfNotExists = false)
@@ -15,16 +24,18 @@ namespace Dragon.SQL
             StringBuilder sqlIndexes = new StringBuilder();
 
             var name = metadata.TableName;
-            var keys = metadata.Properties.Where(x => x.IsPK);
-            var nonkeys = metadata.Properties.Where(x => !x.IsPK);
+            var schema = metadata.Schema;
+
+            var keys = metadata.Properties.Where(x => x.IsPK).ToList();
+            var nonkeys = metadata.Properties.Where(x => !x.IsPK).ToList();
 
             if (onlyIfNotExists)
             {
                 sqlCreate.AppendFormat("IF NOT EXISTS (" +
-                    "SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[{0}]') AND type in (N'U'))\r\nBEGIN\r\n", name);
+                    "SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[{1}].[{0}]') AND type in (N'U'))\r\nBEGIN\r\n", name, schema);
             }
 
-            sqlCreate.AppendFormat("CREATE TABLE [dbo].[{0}](\r\n", name);
+            sqlCreate.AppendFormat("CREATE TABLE [{1}].[{0}](\r\n", name, schema);
 
             if (!keys.Any() || keys.Count() > 1)
             {
@@ -73,6 +84,24 @@ namespace Dragon.SQL
                 schema,
                 metadata.TableName,
                 BuildWhereClause(metadata));
+        }
+
+        public static string BuildSelectStar(
+         TableMetadata metadata)
+        {
+            return BuildSelectWithCustomColumns(metadata, "*");
+        }
+
+        public static string BuildSelectWithCustomColumns(
+        TableMetadata metadata,
+        string customColumns)
+        {
+            var schema = GetSchema(metadata);
+
+            return string.Format("SELECT {0} FROM {1}[{2}]",
+                customColumns,
+                schema,
+                metadata.TableName);
         }
 
         public static string BuildSelect(

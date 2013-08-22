@@ -65,6 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\Data\ColumnAttribute.cs" />
+    <Compile Include="Attributes\Data\HideAttribute.cs" />
     <Compile Include="Attributes\Data\NoColumnAttribute.cs" />
     <Compile Include="Attributes\Data\SchemaAttribute.cs" />
     <Compile Include="Attributes\Data\IndexAttribute.cs" />

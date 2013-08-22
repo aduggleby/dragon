@@ -5,6 +5,7 @@ using System.Text;
 
 namespace Dragon.SQL
 {
+    [Serializable]
     public class TableMetadata
     {
         public string ClassName { get; set; }

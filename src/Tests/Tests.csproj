@@ -89,6 +89,7 @@
     <Compile Include="SQL\SqlBuilderHelperTest.cs" />
     <Compile Include="SQL\SqlMapperExtensionsTest.cs" />
     <Compile Include="SQL\MetadataHelperTest.cs" />
+    <Compile Include="SQL\SqlBuilderTest.cs" />
     <Compile Include="TreeBuilder\TreeBuilderTest.cs" />
   </ItemGroup>
   <ItemGroup>

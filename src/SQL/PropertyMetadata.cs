@@ -6,6 +6,7 @@ using System.Text;
 
 namespace Dragon.SQL
 {
+    [Serializable]
     public class PropertyMetadata
     {
         public bool IsPK { get; set; }

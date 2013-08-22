@@ -10,6 +10,18 @@ namespace Dapper
 {
     public static partial class SqlMapperExtensions
     {
+        public static bool ExistsTable<T>(this IDbConnection connection, IDbTransaction transaction = null, int? commandTimeout = null) where T : class
+        {
+            var type = typeof(T);
+
+            var values = new Dictionary<string, object>();
+            var metadata = MetadataFor(type);
+
+            var sql = SqlBuilderHelper.BuildExistsTable(metadata);
+
+            return connection.Query(sql, transaction: transaction, commandTimeout: commandTimeout).Any();
+        }
+
         #region TableDropper
 
         public static void DropTableIfExists<T>(this IDbConnection connection, IDbTransaction transaction = null, int? commandTimeout = null) where T : class
@@ -66,7 +78,7 @@ namespace Dapper
             CreateTable<T>(connection, true, transaction, commandTimeout);
         }
 
-        public static void CreateTable<T>(this IDbConnection connection, bool onlyIfExists, IDbTransaction transaction = null, int? commandTimeout = null) where T : class
+        public static void CreateTable<T>(this IDbConnection connection, bool onlyIfNotExists, IDbTransaction transaction = null, int? commandTimeout = null) where T : class
         {
             var type = typeof(T);
 
@@ -79,7 +91,7 @@ namespace Dapper
             if (keys.Count() > 1)
                 throw new Exception("This only support entites with exactly one single key property at the moment.");
 
-            var sql = SqlBuilderHelper.BuildCreate(metadata);
+            var sql = SqlBuilderHelper.BuildCreate(metadata, onlyIfNotExists = onlyIfNotExists);
 
             connection.Execute(sql, transaction: transaction, commandTimeout: commandTimeout);
         }

@@ -72,10 +72,18 @@ namespace Dragon.SQL
 
             var sqlType = string.Empty;
 
+            
             if (actualType == typeof(int))
             {
                 sqlType = "[INT]";
-                isNullableType = true;
+            }
+            else if (actualType == typeof(byte))
+            {
+                sqlType = "[TINYINT]";
+            }
+            else if (actualType == typeof(Int16))
+            {
+                sqlType = "[SMALLINT]";
             }
             else if (actualType == typeof(string))
             {
@@ -84,38 +92,38 @@ namespace Dragon.SQL
             else if (actualType == typeof(Guid))
             {
                 sqlType = "[UNIQUEIDENTIFIER]";
-                isNullableType = true;
             }
             else if (actualType == typeof(DateTime))
             {
                 sqlType = "[DATETIME]";
-                isNullableType = true;
             }
             else if (actualType == typeof(decimal))
             {
                 sqlType = "[DECIMAL](18,4)";
-                isNullableType = true;
-
+            }
+            else if (actualType == typeof(Single))
+            {
+                sqlType = "[REAL]";
             }
             else if (actualType == typeof(Boolean))
             {
                 sqlType = "[BIT]";
-                isNullableType = true;
             }
             else if (actualType == typeof(byte[]))
             {
                 sqlType = "[VARBINARY](MAX)";
-                isNullableType = true;
-
+            }
+            else if (actualType == typeof(double))
+            {
+                sqlType = "[FLOAT]";
             }
             else if (actualType.IsEnum)
             {
                 sqlType = "[INT]";
-                isNullableType = true;
             }
             else
             {
-                throw new Exception(string.Format("Unknown data type '{0}'", metadata.PropertyInfo.PropertyType.Name));
+                throw new Exception(string.Format("Unknown data type '{0}'~'{1}'", metadata.PropertyInfo.PropertyType.Name, actualType));
             }
 
             metadata.SqlTypeString = sqlType;
