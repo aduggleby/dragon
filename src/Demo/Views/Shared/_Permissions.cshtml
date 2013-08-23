@@ -1,0 +1,36 @@
+﻿@model IEnumerable<Dragon.Interfaces.IPermissionInfo>
+
+<table>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Subject) |&nbsp;
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Spec) |&nbsp;
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Inherit) |&nbsp;
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Inherited)
+        </th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Subject)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Spec)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Inherit)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Inherited)
+        </td>
+    </tr>
+}
+
+</table>

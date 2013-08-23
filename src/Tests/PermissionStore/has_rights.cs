@@ -49,5 +49,18 @@ namespace Dragon.Tests.PermissionStore
             nodes.Should().Contain(n1_2_2);
             nodes.Should().Contain(special);
         }
+
+        [TestMethod]
+        public void and_isInherited_returns_correct_result()
+        {
+            store.IsRightInherited(n1, s1, READ).Should().Be(false);
+            store.IsRightInherited(n1_1, s1, READ).Should().Be(true);
+            store.IsRightInherited(n1_1_1, s1, READ).Should().Be(true);
+            store.IsRightInherited(special, s1, READ).Should().Be(true);
+            store.IsRightInherited(n1, s2, READ).Should().Be(false);
+            store.IsRightInherited(n1_1, s2, READ).Should().Be(false);
+            store.IsRightInherited(n1_1_1, s2, READ).Should().Be(false);
+            store.IsRightInherited(special, s2, READ).Should().Be(false);
+        }
     }
 }

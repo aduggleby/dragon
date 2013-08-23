@@ -73,6 +73,8 @@
   <ItemGroup>
     <Compile Include="Configuration\has_missing_values.cs" />
     <Compile Include="Configuration\has_values.cs" />
+    <Compile Include="PermissionStore\permission_info_has_rights.cs" />
+    <Compile Include="PermissionStore\DefaultNameResolverTest.cs" />
     <Compile Include="PermissionStore\has_nodes.cs" />
     <Compile Include="PermissionStore\has_no_nodes.cs" />
     <Compile Include="PermissionStore\has_removed_rights.cs" />
