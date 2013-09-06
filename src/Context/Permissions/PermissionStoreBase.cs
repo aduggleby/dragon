@@ -296,15 +296,15 @@ namespace Dragon.Context.Permissions
             return (right != null);
         }
 
-        public bool IsRightInherited(Guid nodeID, Guid subjectID, string spec)
+        public Guid? NodeRightIsInheritedFrom(Guid nodeID, Guid subjectID, string spec)
         {
             var node = GetNode(nodeID);
 
             var right = node.Data.FirstOrDefault(x => x.SubjectID.Equals(subjectID) && x.Spec.Equals(spec));
 
-            if (right == null) return false;
+            if (right == null) return (Guid?)null;
 
-            return !right.NodeID.Equals(node.Node);
+            return !right.NodeID.Equals(node.Node) ? right.NodeID : (Guid?)null;
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -316,7 +316,7 @@ namespace Dragon.Context.Permissions
             {
                 foreach (var right in node.Data)
                 {
-                   
+
                     if (right.SubjectID.Equals(subjectID))
                     {
                         Debug.WriteLine(node.Node + ": LID " + right.LID);

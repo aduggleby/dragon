@@ -28,14 +28,15 @@ namespace Dragon.Tests.PermissionStore.PermissionInfo
                     DisplayName = s1.ToString(),
                     Spec = READ,
                     Inherit = true,
-                    Inherited = false,
+                    InheritedFrom = null,
                 },
                 new Context.Permissions.PermissionInfo
                 {
                     DisplayName = s2.ToString(),
                     Spec = READ,
                     Inherit = false,
-                    Inherited = false,
+                                       InheritedFrom = null,
+
                 },
             };
             var nameResolver = new DefaultNameResolver();
@@ -60,14 +61,16 @@ namespace Dragon.Tests.PermissionStore.PermissionInfo
                     DisplayName = s1.ToString(),
                     Spec = READ,
                     Inherit = true,
-                    Inherited = true,
+                    InheritedFrom = n1.ToString(),
+
                 },
                 new Context.Permissions.PermissionInfo
                 {
                     DisplayName = s2.ToString(),
                     Spec = WRITE,
                     Inherit = false,
-                    Inherited = false,
+                                      InheritedFrom = null,
+
                 },
             };
             var nameResolver = new DefaultNameResolver("");
@@ -94,14 +97,15 @@ namespace Dragon.Tests.PermissionStore.PermissionInfo
                     DisplayName = n1.ToString(),
                     Spec = READ,
                     Inherit = false,
-                    Inherited = false,
+                    InheritedFrom = null,
                 },
                 new Context.Permissions.PermissionInfo
                 {
                     DisplayName = n1_2.ToString(),
                     Spec = WRITE,
                     Inherit = false,
-                    Inherited = false,
+                                       InheritedFrom = null,
+
                 },
             };
 
@@ -113,7 +117,7 @@ namespace Dragon.Tests.PermissionStore.PermissionInfo
                     DisplayName = g.ToString(),
                     Spec = MANAGE,
                     Inherit = true,
-                    Inherited = g != n1,
+                    InheritedFrom = g != n1 ? n1.ToString() : null,
                 });
             }
 

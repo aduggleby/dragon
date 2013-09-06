@@ -26,12 +26,24 @@ namespace Dragon.Context.Permissions
                 DisplayName = _nameResolver.ResolveSubjectID(permission.SubjectID),
                 Spec = permission.Spec,
                 Inherit = permission.Inherit,
-                Inherited = _permissionStore.IsRightInherited(
+                InheritedFrom = ResolveNodeID(_permissionStore.NodeRightIsInheritedFrom(
                     nodeID /* test the node it inherits to */, 
                     permission.SubjectID, 
-                    permission.Spec)
+                    permission.Spec))
             });
            
+        }
+
+           private string ResolveSubjectID(Guid? subjectID)
+        {
+            if (!subjectID.HasValue) return null;
+            return _nameResolver.ResolveSubjectID(subjectID.Value);
+        }
+
+        private string ResolveNodeID(Guid? nodeID)
+        {
+            if (!nodeID.HasValue) return null;
+            return _nameResolver.ResolveNodeID(nodeID.Value);
         }
 
         public IEnumerable<IPermissionInfo> GetPermissionInfoForSubject(Guid subjectID)
@@ -43,10 +55,10 @@ namespace Dragon.Context.Permissions
                 DisplayName = _nameResolver.ResolveNodeID(node.Key),
                 Spec = permission.Spec,
                 Inherit = permission.Inherit,
-                Inherited = _permissionStore.IsRightInherited(
+                InheritedFrom = ResolveNodeID(_permissionStore.NodeRightIsInheritedFrom(
                     node.Key /* test the node we are in */, 
                     permission.SubjectID, 
-                    permission.Spec)
+                    permission.Spec))
             }));
         }
 

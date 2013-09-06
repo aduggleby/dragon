@@ -51,24 +51,24 @@ namespace Dragon.Tests.PermissionStore
         public void and_inherited_rights_are_returned_correctly()
         {
             // Not inherited: right is set on the actual node
-            store.IsRightInherited(n1, s2, READ).Should().BeFalse();
+            store.NodeRightIsInheritedFrom(n1, s2, READ).Should().Be(null);
 
             // Not inherited: right does not exist
-            store.IsRightInherited(n1_1, s2, READ).Should().BeFalse();
+            store.NodeRightIsInheritedFrom(n1_1, s2, READ).Should().Be(null);
 
             // Inherited: right is set on the actual node
-            store.IsRightInherited(n1, s1, READ).Should().BeFalse();
+            store.NodeRightIsInheritedFrom(n1, s1, READ).Should().Be(null);
 
             // Inherited: right exist and was inherited
-            store.IsRightInherited(n1_1, s1, READ).Should().BeTrue();
-            store.IsRightInherited(n1_1_1, s1, READ).Should().BeTrue();
-            store.IsRightInherited(n1_2_2, s1, READ).Should().BeTrue();
+            store.NodeRightIsInheritedFrom(n1_1, s1, READ).Should().Be(n1.ToString());
+            store.NodeRightIsInheritedFrom(n1_1_1, s1, READ).Should().Be(n1.ToString());
+            store.NodeRightIsInheritedFrom(n1_2_2, s1, READ).Should().Be(n1.ToString());
 
-            store.IsRightInherited(special, s3, MANAGE).Should().BeTrue();
+            store.NodeRightIsInheritedFrom(special, s3, MANAGE).Should().Be(n1_2_2.ToString());
 
             // some specific tests
-            store.IsRightInherited(n1_2, s1, READ).Should().BeTrue();
-            store.IsRightInherited(n1_2, s2, WRITE).Should().BeFalse();
+            store.NodeRightIsInheritedFrom(n1_2, s1, READ).Should().Be(n1.ToString());
+            store.NodeRightIsInheritedFrom(n1_2, s2, WRITE).Should().Be(null);
 
         }
 

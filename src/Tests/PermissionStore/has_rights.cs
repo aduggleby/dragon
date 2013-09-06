@@ -53,14 +53,14 @@ namespace Dragon.Tests.PermissionStore
         [TestMethod]
         public void and_isInherited_returns_correct_result()
         {
-            store.IsRightInherited(n1, s1, READ).Should().Be(false);
-            store.IsRightInherited(n1_1, s1, READ).Should().Be(true);
-            store.IsRightInherited(n1_1_1, s1, READ).Should().Be(true);
-            store.IsRightInherited(special, s1, READ).Should().Be(true);
-            store.IsRightInherited(n1, s2, READ).Should().Be(false);
-            store.IsRightInherited(n1_1, s2, READ).Should().Be(false);
-            store.IsRightInherited(n1_1_1, s2, READ).Should().Be(false);
-            store.IsRightInherited(special, s2, READ).Should().Be(false);
+            store.NodeRightIsInheritedFrom(n1, s1, READ).Should().Be(null);
+            store.NodeRightIsInheritedFrom(n1_1, s1, READ).Should().Be(n1.ToString());
+            store.NodeRightIsInheritedFrom(n1_1_1, s1, READ).Should().Be(n1.ToString());
+            store.NodeRightIsInheritedFrom(special, s1, READ).Should().Be(n1.ToString());
+            store.NodeRightIsInheritedFrom(n1, s2, READ).Should().Be(null);
+            store.NodeRightIsInheritedFrom(n1_1, s2, READ).Should().Be(null);
+            store.NodeRightIsInheritedFrom(n1_1_1, s2, READ).Should().Be(null);
+            store.NodeRightIsInheritedFrom(special, s2, READ).Should().Be(null);
         }
     }
 }
