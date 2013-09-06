@@ -1,7 +1,6 @@
 ﻿using System;
 using Dragon.Common.Attributes.Data;
 using Dragon.CPR.Attributes;
-using Dragon.CPR.Attributes.UI;
 
 namespace Dragon.CPR
 {

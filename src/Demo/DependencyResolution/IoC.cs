@@ -18,6 +18,7 @@
 
 using Demo.Controllers;
 using Dragon.Context;
+using Dragon.Context.Profile;
 using Dragon.Context.ReverseIPLookup;
 using Dragon.Context.Sessions;
 using Dragon.Context.Sessions.ReverseIPLookup;
@@ -44,6 +45,7 @@ namespace Demo.DependencyResolution {
                             x.For<IUserStore>().Use<SqlUserStore>();
                             x.For<IReverseIPLookupService>().Use<HostIpReverseLookupService>();
                             x.For<IConfiguration>().Use<ConfigurationManagerConfiguration>();
+                            x.For<IProfileStore>().Use<SqlProfileStore>();
                             
                             x.FillAllPropertiesOfType<DragonContext>();
                             x.FillAllPropertiesOfType<ContextController>();

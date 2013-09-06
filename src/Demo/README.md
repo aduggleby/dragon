@@ -8,16 +8,17 @@
 Install
 =======
 
+* create a db.config with a ConnectionString called Dragon
 * create database (see Dragon in db.config)
 * add schema to database:
 
-CREATE TABLE [dbo].[PermissionNode](
+CREATE TABLE [dbo].[DragonPermissionNode](
 	[LID] [uniqueidentifier] ROWGUIDCOL  NULL,
 	[ParentID] [uniqueidentifier] NULL,
 	[ChildID] [uniqueidentifier] NULL
 ) ON [PRIMARY]
 
-CREATE TABLE [dbo].[PermissionRight](
+CREATE TABLE [dbo].[DragonPermissionRight](
 	[LID] [uniqueidentifier] ROWGUIDCOL  NOT NULL,
 	[NodeID] [uniqueidentifier] NULL,
 	[SubjectID] [uniqueidentifier] NULL,
@@ -25,7 +26,7 @@ CREATE TABLE [dbo].[PermissionRight](
 	[Inherit] [bit] NULL
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
-CREATE TABLE [dbo].[Registration](
+CREATE TABLE [dbo].[DragonRegistration](
 	[RegistrationID] [uniqueidentifier] ROWGUIDCOL  NULL,
 	[UserID] [uniqueidentifier] NULL,
 	[Service] [nvarchar](50) NULL,
@@ -33,12 +34,19 @@ CREATE TABLE [dbo].[Registration](
 	[Secret] [nvarchar](550) NULL
 ) ON [PRIMARY]
 
-CREATE TABLE [dbo].[Session](
+CREATE TABLE [dbo].[DragonSession](
 	[SessionID] [uniqueidentifier] ROWGUIDCOL  NULL,
 	[UserID] [uniqueidentifier] NULL,
 	[Location] [nvarchar](50) NULL,
 	[Hash] [integer] NULL,
 	[Expires] [datetime] NULL
+) ON [PRIMARY]
+
+CREATE TABLE [dbo].[DragonProfile](
+	[LID] [uniqueidentifier] ROWGUIDCOL  NULL,
+	[UserID] [uniqueidentifier] NULL,
+	[Key] [nvarchar](50) NULL,
+	[Value] [nvarchar](400) NULL,
 ) ON [PRIMARY]
 
 CREATE TABLE [dbo].[Notification](
