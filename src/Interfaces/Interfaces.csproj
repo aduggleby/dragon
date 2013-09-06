@@ -59,6 +59,8 @@
   <ItemGroup>
     <Compile Include="IConfiguration.cs" />
     <Compile Include="IDragonTable.cs" />
+    <Compile Include="PermissionInfo\INameResolver.cs" />
+    <Compile Include="PermissionInfo\IPermissionInfo.cs" />
     <Compile Include="Notifications\IBatchNotificationDispatcher.cs" />
     <Compile Include="Notifications\ILocalizedDataSource.cs" />
     <Compile Include="Notifications\INotification.cs" />
@@ -79,6 +81,7 @@
     <Compile Include="IUserStore.cs" />
     <Compile Include="Notifications\ITemplateService.cs" />
     <Compile Include="Notifications\IWebNotifiable.cs" />
+    <Compile Include="PermissionInfo\IPermissionInfoExtractor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

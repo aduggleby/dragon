@@ -296,6 +296,19 @@ namespace Dragon.Context.Permissions
             return (right != null);
         }
 
+        // TODO: this should be checked and optimized
+        public bool IsRightInherited(Guid nodeID, Guid subjectID, string spec)
+        {
+            if (!HasRight(nodeID, subjectID, spec)) return false;
+            foreach (var node in AllNodes())
+            {
+                if (!node.HasChildInTree(nodeID)) continue;
+                if (node.Node.Equals(nodeID)) continue;
+                if (node.Data.Any(right => right.SubjectID == subjectID && right.Spec == spec)) return true;
+            }
+            return false;
+        }
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         public IEnumerable<Guid> GetNodesWithRight(Guid subjectID, string spec)

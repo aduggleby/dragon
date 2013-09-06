@@ -61,7 +61,25 @@ namespace Dragon.Notification {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SELECT * FROM [Notification].
+        ///   Looks up a localized string similar to INSERT INTO [Notification] ([NotificationID], [TypeKey], [LanguageCode], [Subject], [Parameter], [UserID], [Dispatched]) VALUES (@NotificationID, @TypeKey, @LanguageCode, @Subject,  @Parameter, @UserID, @Dispatched).
+        /// </summary>
+        internal static string SQLNotificationStore_Add {
+            get {
+                return ResourceManager.GetString("SQLNotificationStore_Add", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SELECT * FROM [Notification] where NotificationID=@NotificationID.
+        /// </summary>
+        internal static string SQLNotificationStore_Get {
+            get {
+                return ResourceManager.GetString("SQLNotificationStore_Get", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SELECT * FROM [Notification] where UserID=@UserID.
         /// </summary>
         internal static string SQLNotificationStore_GetAll {
             get {
@@ -70,11 +88,29 @@ namespace Dragon.Notification {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to INSERT INTO [Notification] ([ID], [TypeKey], [LanguageCode], [Subject], [Parameter]) VALUES (@NotificationID, @TypeKey, @LanguageCode, @Subject, @Parameter).
+        ///   Looks up a localized string similar to SELECT * FROM [Notification] where UserID=@UserID and Dispatched=@Dispatched.
         /// </summary>
-        internal static string SQLNotificationStore_Insert {
+        internal static string SQLNotificationStore_GetAllDispatched {
             get {
-                return ResourceManager.GetString("SQLNotificationStore_Insert", resourceCulture);
+                return ResourceManager.GetString("SQLNotificationStore_GetAllDispatched", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to UPDATE [Notification] SET Dispatched=@Dispatched WHERE UserID= @UserID.
+        /// </summary>
+        internal static string SQLNotificationStore_UpdateAllDispatched {
+            get {
+                return ResourceManager.GetString("SQLNotificationStore_UpdateAllDispatched", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to UPDATE [Notification] SET Dispatched = @Dispatched WHERE NotificationID = @NotificationID.
+        /// </summary>
+        internal static string SQLNotificationStore_UpdateDispatched {
+            get {
+                return ResourceManager.GetString("SQLNotificationStore_UpdateDispatched", resourceCulture);
             }
         }
     }

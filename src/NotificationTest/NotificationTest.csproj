@@ -32,11 +32,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Dapper, Version=1.12.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Dapper.1.12.1\lib\net40\Dapper.dll</HintPath>
+    </Reference>
     <Reference Include="Moq">
       <HintPath>..\..\packages\Moq.4.0.10827\lib\NET40\Moq.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -51,14 +57,19 @@
     <Compile Include="EmailBatchNotificationDispatcherTest.cs" />
     <Compile Include="EmailEqComparerTest.cs" />
     <Compile Include="EmailNotificationBase.cs" />
+    <Compile Include="SqlNotificationStoreIT.cs" />
     <Compile Include="WebNotificationDispatcherTest.cs" />
-    <Compile Include="FileSystemLocalizedDataSourceIntegrationTest.cs" />
+    <Compile Include="FileSystemLocalizedDataSourceIT.cs" />
     <Compile Include="StringTemplateTemplateServiceTest.cs" />
     <Compile Include="NetEmailServiceTest.cs" />
     <Compile Include="EmailNotificationDispatcherTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Core\Core.csproj">
+      <Project>{F44FB8F4-CF8C-4C49-8E07-FA4AF3359696}</Project>
+      <Name>Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Interfaces\Interfaces.csproj">
       <Project>{2AE2966B-6F2B-4254-85C6-588C8690898F}</Project>
       <Name>Interfaces</Name>
@@ -69,7 +80,14 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="db.config">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="packages.config" />
+    <Content Include="App.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />

@@ -19,7 +19,7 @@ namespace NotificationTest
 
             emailNotificationDispatcher.Dispatch(CreateNotifiableStub().Object, CreateNotificationStub().Object);
 
-            emailService.Verify(_ => _.Send(EmailAddress, It.IsAny<string>(), It.IsAny<string>(), UseHtmlEmail));
+            emailService.Verify(x => x.Send(EmailAddress, It.IsAny<string>(), It.IsAny<string>(), UseHtmlEmail));
         }
 
         [TestMethod]
@@ -31,7 +31,7 @@ namespace NotificationTest
 
             emailNotificationDispatcher.Dispatch(CreateNotifiableStub().Object, CreateNotificationStub().Object);
 
-            localizedDataSource.Verify(_ => _.GetContent(MessageType, LanguageCode));
+            localizedDataSource.Verify(x => x.GetContent(MessageType, LanguageCode));
         }
 
         [TestMethod]
@@ -43,7 +43,7 @@ namespace NotificationTest
 
             emailNotificationDispatcher.Dispatch(CreateNotifiableStub().Object, CreateNotificationStub().Object);
 
-            templateService.Verify(_ => _.Parse(TemplateText, Parameter));
+            templateService.Verify(x => x.Parse(TemplateText, Parameter));
         }
 
         [TestMethod]
@@ -55,7 +55,7 @@ namespace NotificationTest
 
             emailNotificationDispatcher.Dispatch(CreateNotifiableStub().Object, CreateNotificationStub().Object);
 
-            emailService.Verify(_ => _.Send(EmailAddress, Subject, Body, UseHtmlEmail));
+            emailService.Verify(x => x.Send(EmailAddress, Subject, Body, UseHtmlEmail));
         }
     }
 }

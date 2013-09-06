@@ -118,9 +118,21 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="SQLNotificationStore_GetAll" xml:space="preserve">
-    <value>SELECT * FROM [Notification]</value>
+    <value>SELECT * FROM [Notification] where UserID=@UserID</value>
   </data>
-  <data name="SQLNotificationStore_Insert" xml:space="preserve">
-    <value>INSERT INTO [Notification] ([ID], [TypeKey], [LanguageCode], [Subject], [Parameter]) VALUES (@NotificationID, @TypeKey, @LanguageCode, @Subject, @Parameter)</value>
+  <data name="SQLNotificationStore_GetAllDispatched" xml:space="preserve">
+    <value>SELECT * FROM [Notification] where UserID=@UserID and Dispatched=@Dispatched</value>
+  </data>
+  <data name="SQLNotificationStore_Add" xml:space="preserve">
+    <value>INSERT INTO [Notification] ([NotificationID], [TypeKey], [LanguageCode], [Subject], [Parameter], [UserID], [Dispatched]) VALUES (@NotificationID, @TypeKey, @LanguageCode, @Subject,  @Parameter, @UserID, @Dispatched)</value>
+  </data>
+  <data name="SQLNotificationStore_UpdateAllDispatched" xml:space="preserve">
+    <value>UPDATE [Notification] SET Dispatched=@Dispatched WHERE UserID= @UserID</value>
+  </data>
+  <data name="SQLNotificationStore_UpdateDispatched" xml:space="preserve">
+    <value>UPDATE [Notification] SET Dispatched = @Dispatched WHERE NotificationID = @NotificationID</value>
+  </data>
+  <data name="SQLNotificationStore_Get" xml:space="preserve">
+    <value>SELECT * FROM [Notification] where NotificationID=@NotificationID</value>
   </data>
 </root>
