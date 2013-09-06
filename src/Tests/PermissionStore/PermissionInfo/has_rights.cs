@@ -109,7 +109,7 @@ namespace Dragon.Tests.PermissionStore.PermissionInfo
                 },
             };
 
-            var guids = new Guid[] { n1, n1_1, n1_2, n1_1_1, special, n1_2, n1_2_1, n1_2_2, n1_2_3 };
+            var guids = new Guid[] { n1, n1_1, n1_2, n1_1_1, special, n1_2_1, n1_2_2, n1_2_3 };
             foreach (var g in guids)
             {
                 expected.Add(new Context.Permissions.PermissionInfo
@@ -130,6 +130,10 @@ namespace Dragon.Tests.PermissionStore.PermissionInfo
             foreach (var ex in expected)
             {
                 actual.Should().Contain(ex);
+            }
+            foreach (var ac in actual)
+            {
+                expected.Should().Contain(ac);
             }
         }
     }

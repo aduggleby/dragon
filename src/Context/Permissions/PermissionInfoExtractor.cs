@@ -24,7 +24,7 @@ namespace Dragon.Context.Permissions
             return permissions.Select(permission => new PermissionInfo
             {
                 DisplayName = _nameResolver.ResolveSubjectID(permission.SubjectID),
-                Spec = permission.Spec,
+                Spec = permission.Spec + " (" + permission.LID.ToString().Substring(0, 4) + ")",
                 Inherit = permission.Inherit,
                 InheritedFrom = ResolveNodeID(_permissionStore.NodeRightIsInheritedFrom(
                     nodeID /* test the node it inherits to */, 
@@ -53,7 +53,7 @@ namespace Dragon.Context.Permissions
                 node.Value.Select(permission=> new PermissionInfo
             {
                 DisplayName = _nameResolver.ResolveNodeID(node.Key),
-                Spec = permission.Spec,
+                Spec = permission.Spec + " (" + permission.LID.ToString().Substring(0,4) + ")",
                 Inherit = permission.Inherit,
                 InheritedFrom = ResolveNodeID(_permissionStore.NodeRightIsInheritedFrom(
                     node.Key /* test the node we are in */, 

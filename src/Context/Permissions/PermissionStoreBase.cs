@@ -190,6 +190,19 @@ namespace Dragon.Context.Permissions
             }
         }
 
+        private IEnumerable<ITreeNode<Guid, List<IPermissionRight>>> AllUniqueNodes()
+        {
+            var visited = new List<Guid>();
+            foreach (var node in AllNodes())
+            {
+                if (!visited.Contains(node.Node))
+                {
+                    visited.Add(node.Node);
+                    yield return node;
+                }
+            }
+        }
+
         private ITreeNode<Guid, List<IPermissionRight>> GetNode(Guid nodeID)
         {
             return GetNode(nodeID, Tree);
@@ -311,21 +324,20 @@ namespace Dragon.Context.Permissions
 
         public Dictionary<Guid, List<IPermissionRight>> GetNodesSubjectHasRightsOn(Guid subjectID)
         {
-            var nodes = new Dictionary<Guid, List<IPermissionRight>>();
-            foreach (var node in AllNodes())
-            {
-                foreach (var right in node.Data)
-                {
+            Debug.WriteLine(DebugOutputTree().ToString());
 
-                    if (right.SubjectID.Equals(subjectID))
+            var nodes = new Dictionary<Guid, List<IPermissionRight>>();
+            foreach (var node in AllUniqueNodes())
+            {
+                var rightsOfThisUse = node.Data.Where(x => x.SubjectID.Equals(subjectID));
+                foreach (var right in rightsOfThisUse )
+                {
+                    Debug.WriteLine(node.Node + ": LID " + right.LID);
+                    if (!nodes.ContainsKey(node.Node))
                     {
-                        Debug.WriteLine(node.Node + ": LID " + right.LID);
-                        if (!nodes.ContainsKey(node.Node))
-                        {
-                            nodes.Add(node.Node, new List<IPermissionRight>());
-                        }
-                        nodes[node.Node].Add(right);
+                        nodes.Add(node.Node, new List<IPermissionRight>());
                     }
+                    nodes[node.Node].Add(right);
                 }
             }
 
