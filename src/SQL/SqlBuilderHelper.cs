@@ -35,7 +35,7 @@ namespace Dragon.SQL
                     "SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[{1}].[{0}]') AND type in (N'U'))\r\nBEGIN\r\n", name, schema);
             }
 
-            sqlCreate.AppendFormat("CREATE TABLE [{1}].[{0}](\r\n", name, schema);
+            sqlCreate.AppendFormat("CREATE TABLE [{1}].[{0}](\r\n", name, schema??"dbo");
 
             if (!keys.Any() || keys.Count() > 1)
             {

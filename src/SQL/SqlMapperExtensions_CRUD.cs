@@ -137,16 +137,31 @@ namespace Dapper
             }
         }
 
-        public static bool Update<T>(this IDbConnection connection, T entityToUpdate, IDbTransaction transaction = null, int? commandTimeout = null) where T : class
+        public static void InsertWithMultipleKeys<T>(this IDbConnection connection,
+         T entityToInsert,
+         IDbTransaction transaction = null,
+         int? commandTimeout = null) where T : class
         {
             var type = typeof(T);
             var metadata = MetadataFor(type);
 
-            var keys = metadata.Properties.Where(x => x.IsPK);
-            if (!keys.Any())
-                throw new Exception("This only support entites with a single key property at the moment.");
-            if (keys.Count() > 1)
-                throw new Exception("This only support entites with a single key property at the moment.");
+            string sql;
+            if (!s_insertQueries.TryGetValue(type.TypeHandle, out sql))
+            {
+                s_insertQueries[type.TypeHandle] = sql = SqlBuilderHelper.BuildInsert(metadata, withoutKeys: false);
+            }
+
+            connection.Execute(
+                sql,
+                entityToInsert,
+                transaction: transaction,
+                commandTimeout: commandTimeout);
+        }
+
+        public static bool Update<T>(this IDbConnection connection, T entityToUpdate, IDbTransaction transaction = null, int? commandTimeout = null) where T : class
+        {
+            var type = typeof(T);
+            var metadata = MetadataFor(type);
 
             string sql;
             if (!s_updateQueries.TryGetValue(type.TypeHandle, out sql))
