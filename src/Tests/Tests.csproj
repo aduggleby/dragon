@@ -75,7 +75,7 @@
     <Compile Include="Configuration\has_values.cs" />
     <Compile Include="PermissionStore\complex_test.cs" />
     <Compile Include="PermissionStore\has_multiple_rights_to_one_node.cs" />
-    <Compile Include="PermissionStore\permission_info_has_rights.cs" />
+    <Compile Include="PermissionStore\PermissionInfo\has_rights.cs" />
     <Compile Include="PermissionStore\DefaultNameResolverTest.cs" />
     <Compile Include="PermissionStore\has_nodes.cs" />
     <Compile Include="PermissionStore\has_no_nodes.cs" />

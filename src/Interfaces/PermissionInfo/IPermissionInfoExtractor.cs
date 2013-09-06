@@ -5,6 +5,7 @@ namespace Dragon.Interfaces.PermissionInfo
 {
     public interface IPermissionInfoExtractor
     {
-        IEnumerable<IPermissionInfo> GetPermissionInfo(Guid node);
+        IEnumerable<IPermissionInfo> GetPermissionInfoForNode(Guid nodeID);
+        IEnumerable<IPermissionInfo> GetPermissionInfoForSubject(Guid subjectID);
     }
 }

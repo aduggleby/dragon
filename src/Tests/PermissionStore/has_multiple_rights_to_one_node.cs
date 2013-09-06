@@ -47,5 +47,6 @@ namespace Dragon.Tests.PermissionStore
             store.Tree.Select(x => x.GetChildInTree(n3)).Count(x => x != null).Should().Be(1);
             store.Tree.Select(x => x.GetChildInTree(n4)).Count(x => x != null).Should().Be(0);
         }
+
     }
 }

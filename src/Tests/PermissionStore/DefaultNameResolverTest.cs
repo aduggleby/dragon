@@ -8,13 +8,26 @@ namespace Dragon.Tests.PermissionStore
     public class DefaultNameResolverTest
     {
         [TestMethod]
-        public void ResolveShouldReturnCorrectID()
+        public void ResolveSubjectShouldReturnCorrectID()
         {
-            const string prefix = "test";
-            var nameResolver = new DefaultNameResolver(prefix);
+            const string prefix1 = "test";
+            const string prefix2 = "test2";
+            var nameResolver = new DefaultNameResolver(prefix1, prefix2);
             var guid = new Guid();
-            var expected = prefix + guid;
-            var actual = nameResolver.Resolve(guid);
+            var expected = prefix1 + guid;
+            var actual = nameResolver.ResolveSubjectID(guid);
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void ResolveNodeShouldReturnCorrectID()
+        {
+            const string prefix1 = "test";
+            const string prefix2 = "test2";
+            var nameResolver = new DefaultNameResolver(prefix1, prefix2);
+            var guid = new Guid();
+            var expected = prefix2 + guid;
+            var actual = nameResolver.ResolveNodeID(guid);
             Assert.AreEqual(expected, actual);
         }
     }

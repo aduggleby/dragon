@@ -58,7 +58,7 @@ namespace Dragon.Context.Permissions
             {
                 var exNode = m_treeInternal
                     .Select(x => x.GetChildInTree(right.NodeID))
-                    .FirstOrDefault(x => x != null); 
+                    .FirstOrDefault(x => x != null);
 
                 if (exNode == null)
                 {
@@ -82,7 +82,7 @@ namespace Dragon.Context.Permissions
                     }
                     else
                     {
-                        DebugPrint("Node '{0}' found, but right already exists: {1}", right.NodeID, Dump(right));                        
+                        DebugPrint("Node '{0}' found, but right already exists: {1}", right.NodeID, Dump(right));
                     }
                 }
             }
@@ -177,7 +177,7 @@ namespace Dragon.Context.Permissions
         private IEnumerable<ITreeNode<Guid, List<IPermissionRight>>> AllNodes(
             IEnumerable<ITreeNode<Guid, List<IPermissionRight>>> nodes = null)
         {
-            if (nodes==null) nodes = Tree;
+            if (nodes == null) nodes = Tree;
 
             foreach (var node in nodes)
             {
@@ -189,7 +189,7 @@ namespace Dragon.Context.Permissions
                 }
             }
         }
-        
+
         private ITreeNode<Guid, List<IPermissionRight>> GetNode(Guid nodeID)
         {
             return GetNode(nodeID, Tree);
@@ -216,7 +216,7 @@ namespace Dragon.Context.Permissions
         {
             DebugPrint("RemoveNode P: {0} C: {1}", parentID, childID);
 
-            if (!IsChildNodeOf(parentID, childID)) 
+            if (!IsChildNodeOf(parentID, childID))
                 throw new NodeDoesNotExistException();
 
             EnumerateAllRightsInternal()
@@ -230,7 +230,7 @@ namespace Dragon.Context.Permissions
 
         protected abstract void AddNodeInternal(Guid parentID, Guid childID);
         protected abstract void RemoveNodeInternal(Guid parentID, Guid childID);
-        
+
         protected abstract IEnumerable<Guid> EnumerateParentNodesInternal(Guid childID);
         protected abstract IEnumerable<Guid> EnumerateChildrenNodesInternal(Guid parentID);
 
@@ -238,13 +238,13 @@ namespace Dragon.Context.Permissions
         {
             var parent = GetNode(parentID);
             if (parent == null) return false;
-            return parent.Children.Any(x=>x.Node.Equals(childID));
+            return parent.Children.Any(x => x.Node.Equals(childID));
         }
 
         public virtual bool IsChildNodeOf(Guid parentID, Guid childID)
         {
             var parent = GetNode(parentID);
-            if (parent==null) return false;
+            if (parent == null) return false;
             return parent.HasChildInTree(childID);
         }
 
@@ -259,20 +259,20 @@ namespace Dragon.Context.Permissions
             AddRightInternal(nodeID, subjectID, spec, inherit);
             m_treeDirty = true;
         }
-        
+
         public void RemoveRight(Guid nodeID, Guid subjectID, string spec)
         {
             if (!HasRight(nodeID, subjectID, spec)) throw new RightDoesNotExistException();
 
             DebugPrint("RemoveRight N: {0} S: {1} R: {2}", nodeID, subjectID, spec);
-            
+
             RemoveRightInternal(nodeID, subjectID, spec);
             m_treeDirty = true;
         }
-        
+
         protected abstract void AddRightInternal(Guid nodeID, Guid subjectID, string spec, bool inherit);
         protected abstract void RemoveRightInternal(Guid nodeID, Guid subjectID, string spec);
-        
+
         protected abstract IEnumerable<IPermissionRight> EnumerateRightsInternal(Guid nodeID);
         protected abstract IEnumerable<IPermissionRight> EnumerateAllRightsInternal();
 
@@ -296,20 +296,41 @@ namespace Dragon.Context.Permissions
             return (right != null);
         }
 
-        // TODO: this should be checked and optimized
         public bool IsRightInherited(Guid nodeID, Guid subjectID, string spec)
         {
-            if (!HasRight(nodeID, subjectID, spec)) return false;
-            foreach (var node in AllNodes())
-            {
-                if (!node.HasChildInTree(nodeID)) continue;
-                if (node.Node.Equals(nodeID)) continue;
-                if (node.Data.Any(right => right.SubjectID == subjectID && right.Spec == spec)) return true;
-            }
-            return false;
+            var node = GetNode(nodeID);
+
+            var right = node.Data.FirstOrDefault(x => x.SubjectID.Equals(subjectID) && x.Spec.Equals(spec));
+
+            if (right == null) return false;
+
+            return !right.NodeID.Equals(node.Node);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public Dictionary<Guid, List<IPermissionRight>> GetNodesSubjectHasRightsOn(Guid subjectID)
+        {
+            var nodes = new Dictionary<Guid, List<IPermissionRight>>();
+            foreach (var node in AllNodes())
+            {
+                foreach (var right in node.Data)
+                {
+                   
+                    if (right.SubjectID.Equals(subjectID))
+                    {
+                        Debug.WriteLine(node.Node + ": LID " + right.LID);
+                        if (!nodes.ContainsKey(node.Node))
+                        {
+                            nodes.Add(node.Node, new List<IPermissionRight>());
+                        }
+                        nodes[node.Node].Add(right);
+                    }
+                }
+            }
+
+            return nodes;
+        }
 
         public IEnumerable<Guid> GetNodesWithRight(Guid subjectID, string spec)
         {

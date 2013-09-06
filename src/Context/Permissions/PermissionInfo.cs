@@ -4,7 +4,7 @@ namespace Dragon.Context.Permissions
 {
     public class PermissionInfo : IPermissionInfo
     {
-        public string Subject { get; set; }
+        public string DisplayName { get; set; }
         public string Spec { get; set; }
         public bool Inherit { get; set; }
         public bool Inherited { get; set; }
@@ -13,7 +13,7 @@ namespace Dragon.Context.Permissions
 
         protected bool Equals(PermissionInfo other)
         {
-            return string.Equals(Subject, other.Subject) && string.Equals(Spec, other.Spec) &&
+            return string.Equals(DisplayName, other.DisplayName) && string.Equals(Spec, other.Spec) &&
                    Inherit.Equals(other.Inherit) && Inherited.Equals(other.Inherited);
         }
 
@@ -29,7 +29,7 @@ namespace Dragon.Context.Permissions
         {
             unchecked
             {
-                int hashCode = (Subject != null ? Subject.GetHashCode() : 0);
+                int hashCode = (DisplayName != null ? DisplayName.GetHashCode() : 0);
                 hashCode = (hashCode*397) ^ (Spec != null ? Spec.GetHashCode() : 0);
                 hashCode = (hashCode*397) ^ Inherit.GetHashCode();
                 hashCode = (hashCode*397) ^ Inherited.GetHashCode();

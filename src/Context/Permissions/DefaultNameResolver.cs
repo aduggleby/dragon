@@ -5,16 +5,35 @@ namespace Dragon.Context.Permissions
 {
     public class DefaultNameResolver : INameResolver
     {
-        private readonly string _prefix;
+        private readonly string m_subjectPrefix;
+        private readonly string m_nodePrefix;
 
-        public DefaultNameResolver(String prefix)
+        public DefaultNameResolver(string subjectPrefix, string nodePrefix)
         {
-            _prefix = prefix;
+            m_subjectPrefix = subjectPrefix;
+            m_nodePrefix = nodePrefix;
         }
 
-        public string Resolve(Guid ID)
+        public DefaultNameResolver(string generalPrefix)
         {
-            return _prefix + ID;
+            m_subjectPrefix = generalPrefix;
+            m_nodePrefix = generalPrefix;
+        }
+
+        public DefaultNameResolver():this(string.Empty)
+        {
+        }
+        
+        public string ResolveSubjectID(Guid subjectID)
+        {
+            return m_subjectPrefix + subjectID;
+
+        }
+
+        public string ResolveNodeID(Guid nodeID)
+        {
+            return m_nodePrefix + nodeID;
+
         }
     }
 }

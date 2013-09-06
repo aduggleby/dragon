@@ -46,6 +46,52 @@ namespace Dragon.Tests.PermissionStore
 
         }
 
+
+        [TestMethod]
+        public void and_inherited_rights_are_returned_correctly()
+        {
+            // Not inherited: right is set on the actual node
+            store.IsRightInherited(n1, s2, READ).Should().BeFalse();
+
+            // Not inherited: right does not exist
+            store.IsRightInherited(n1_1, s2, READ).Should().BeFalse();
+
+            // Inherited: right is set on the actual node
+            store.IsRightInherited(n1, s1, READ).Should().BeFalse();
+
+            // Inherited: right exist and was inherited
+            store.IsRightInherited(n1_1, s1, READ).Should().BeTrue();
+            store.IsRightInherited(n1_1_1, s1, READ).Should().BeTrue();
+            store.IsRightInherited(n1_2_2, s1, READ).Should().BeTrue();
+
+            store.IsRightInherited(special, s3, MANAGE).Should().BeTrue();
+
+            // some specific tests
+            store.IsRightInherited(n1_2, s1, READ).Should().BeTrue();
+            store.IsRightInherited(n1_2, s2, WRITE).Should().BeFalse();
+
+        }
+
+        
+        [TestMethod]
+        public void and_a_subjects_nodes_are_correctly_enumerated()
+        {
+            var s2nodes = store.GetNodesSubjectHasRightsOn(s2);
+            s2nodes.Count().Should().Be(2); // no inherited rights
+
+            store.AddRight(n1_2_1, s1, WRITE, false);
+
+            var s1nodes = store.GetNodesSubjectHasRightsOn(s1);
+            s1nodes.Count().Should().Be(8); // only number of nodes not +1 (that extra right should be listed in n1_2_1 though)
+
+            foreach (var readNode in s1nodes)
+            {
+                readNode.Value.Any(x => x.Spec.Equals(READ)).Should().BeTrue(); // read is inherited
+            }
+        }
+
+        
+
         [TestMethod]
         public void and_getrights_gives_no_rights_for_removed_child()
         {

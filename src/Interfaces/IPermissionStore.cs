@@ -21,6 +21,8 @@ namespace Dragon.Interfaces
 
         IEnumerable<Guid> GetNodesWithRight(Guid subjectID, string spec);
         IEnumerable<IPermissionRight> GetRightsOnNodeWithInherited(Guid nodeID);
+        Dictionary<Guid, List<IPermissionRight>> GetNodesSubjectHasRightsOn(Guid subjectID);
+
 
         IEnumerable<ITreeNode<Guid, List<IPermissionRight>>> Tree { get; }
         IEnumerable<ITreeNode<Guid, List<IPermissionRight>>> NodeListWithInheritedRights();

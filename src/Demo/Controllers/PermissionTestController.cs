@@ -24,7 +24,7 @@ namespace Demo.Controllers
         [HttpPost]
         public ActionResult Index(String permissionID)
         {
-            return View(_permissionInfoExtractor.GetPermissionInfo(new Guid(permissionID)));
+            return View(_permissionInfoExtractor.GetPermissionInfoForNode(new Guid(permissionID)));
         }
     }
 }
