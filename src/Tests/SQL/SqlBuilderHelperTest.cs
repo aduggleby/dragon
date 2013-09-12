@@ -89,6 +89,24 @@ namespace Dragon.Tests.SQL
         }
 
         [TestMethod]
+        public void BuildSelectList_WithSchema()
+        {
+            var tableMD = GetTestMetadata();
+            tableMD.Schema = "testschema";
+
+            var values = new Dictionary<string, object>();
+            values.Add("aa", new int[] { 1, 2, 3 });
+            values.Add("cc", "test");
+
+            var parameters = new Dictionary<string, object>();
+
+            var sql = SqlBuilderHelper.BuildSelect(tableMD, values, ref parameters);
+
+            Assert.AreEqual("SELECT [a] AS 'aa',[b] AS 'bb',[c] AS 'cc' FROM [testschema].[testtable] WHERE [a] IN @aa AND [c]=@cc", sql);
+            Assert.AreEqual(2, parameters.Count);
+        }
+
+        [TestMethod]
         public void BuildInsert_NoSchema()
         {
             var tableMD = GetTestMetadata();
@@ -155,7 +173,7 @@ namespace Dragon.Tests.SQL
             Assert.AreEqual("DELETE FROM [testschema].[testtable] WHERE [a]=@aa", sql);
         }
 
-        
+
         [TestMethod]
         public void BuildParameterList_WithKeys()
         {
@@ -185,7 +203,7 @@ namespace Dragon.Tests.SQL
 
             tableMD.Properties.Add(new PropertyMetadata()
             {
-                IsPK= true,
+                IsPK = true,
                 ColumnName = "a",
                 PropertyName = "aa"
             });

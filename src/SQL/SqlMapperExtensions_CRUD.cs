@@ -22,6 +22,9 @@ namespace Dapper
         private static readonly ConcurrentDictionary<RuntimeTypeHandle, string> s_selectAllQueries =
             new ConcurrentDictionary<RuntimeTypeHandle, string>();
 
+        private static readonly ConcurrentDictionary<RuntimeTypeHandle, string> s_selectListQueries =
+            new ConcurrentDictionary<RuntimeTypeHandle, string>();
+         
         private static readonly ConcurrentDictionary<RuntimeTypeHandle, string> s_selectQueries =
             new ConcurrentDictionary<RuntimeTypeHandle, string>();
 
@@ -82,6 +85,38 @@ namespace Dapper
             T obj = null;
             obj = connection.Query<T>(sql, dynParms, transaction: transaction, commandTimeout: commandTimeout).FirstOrDefault();
             return obj;
+        }
+
+        public static IEnumerable<T> GetList<T>(this IDbConnection connection, IEnumerable<dynamic> ids, IDbTransaction transaction = null, int? commandTimeout = null) where T : class
+        {
+            var type = typeof(T);
+            var parameters = new Dictionary<string, object>();
+
+            var values = new Dictionary<string, object>();
+            var metadata = MetadataFor(type);
+
+            var keys = metadata.Properties.Where(x => x.IsPK);
+            if (!keys.Any())
+                throw new Exception("This only support entites with a single key property at the moment.");
+            if (keys.Count() > 1)
+                throw new Exception("This only support entites with a single key property at the moment.");
+
+            values.Add(keys.First().PropertyName, ids.Select(x=>(object)x));
+
+            string sql;
+            if (!s_selectQueries.TryGetValue(type.TypeHandle, out sql))
+            {
+                s_selectListQueries[type.TypeHandle] = sql = SqlBuilderHelper.BuildSelect(metadata);
+            }
+            else
+            {
+                SqlBuilderHelper.BuildParameters(metadata, values, ref parameters);
+            }
+
+            var dynParms = new DynamicParameters(parameters);
+
+            IEnumerable<T> objs = connection.Query<T>(sql, dynParms, transaction: transaction, commandTimeout: commandTimeout);
+            return objs;
         }
 
         public static IEnumerable<T> GetAll<T>(this IDbConnection connection, IDbTransaction transaction = null, int? commandTimeout = null) where T : class

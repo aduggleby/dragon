@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -91,6 +92,13 @@ namespace Dragon.SQL
         {
             return BuildSelectWithCustomColumns(metadata, "*");
         }
+
+        public static string BuildSelectCount(
+         TableMetadata metadata)
+        {
+            return BuildSelectWithCustomColumns(metadata, "COUNT(0)");
+        }
+        
 
         public static string BuildSelectWithCustomColumns(
         TableMetadata metadata,
@@ -254,8 +262,16 @@ namespace Dragon.SQL
 
                 var propertyName = FindUniqueNameInDictionary(GetVariableName(propMetadata), parameters);
 
-                sb.AppendFormat("[{0}]={1}", propMetadata.ColumnName, propertyName);
-                parameters.Add(propertyName, where.Value);
+                if (!(where.Value is string) && where.Value is IEnumerable)
+                {
+                    sb.AppendFormat("[{0}] IN {1}", propMetadata.ColumnName, propertyName);
+                    parameters.Add(propertyName, where.Value);
+                }
+                else
+                {
+                    sb.AppendFormat("[{0}]={1}", propMetadata.ColumnName, propertyName);
+                    parameters.Add(propertyName, where.Value);
+                }
 
                 first = false;
             }

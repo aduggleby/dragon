@@ -121,8 +121,7 @@ namespace Dragon.Tests.SQL
             Assert.AreEqual(5, param.Count);
         }
 
-
-        
+     
         public class TestClass
         {
             [Column("AA")]
