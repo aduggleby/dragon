@@ -34,7 +34,7 @@ namespace FilesTest
             var actual = new StreamReader(stream.FileStream).ReadToEnd();
             stream.FileStream.Close();
             fileStorage.Delete(id); // cleanup
-            Assert.AreEqual("hello s3!\r\n...\r\n..\r\n.\r\n", actual);
+            Assert.AreEqual(TestFileContent, actual);
         }
         
         [TestMethod]

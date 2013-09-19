@@ -34,7 +34,7 @@ namespace FilesTest
             var actualUrl = ((RedirectResult)fileStorage.RetrieveUrl(id)).Url;
             var actual = new System.Net.WebClient().DownloadString(actualUrl);
             fileStorage.Delete(id); // cleanup
-            Assert.AreEqual("hello s3!\r\n...\r\n..\r\n.\r\n", actual);
+            Assert.AreEqual(TestFileContent, actual);
         }
 
         [Ignore] // S3 does not throw an exception in this case...

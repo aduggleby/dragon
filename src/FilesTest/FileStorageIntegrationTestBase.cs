@@ -17,6 +17,7 @@ namespace FilesTest
         public abstract IFileStorage CreateFileStorage();
 
         protected const string TestFilePath = "resources/test.txt";
+        protected const string TestFileContent = "hello s3!\r\n...\r\n..\r\n.\r\n";
 
         [TestMethod]
         [TestCategory("IntegrationTest")]
@@ -87,7 +88,7 @@ namespace FilesTest
             var id = fileStorage.Store(TestFilePath);
             var actual = new StreamReader(fileStorage.Retrieve(id)).ReadToEnd();
             fileStorage.Delete(id); // cleanup
-            Assert.AreEqual("hello s3!\r\n...\r\n..\r\n.\r\n", actual);
+            Assert.AreEqual(TestFileContent, actual);
         }
 
     }
