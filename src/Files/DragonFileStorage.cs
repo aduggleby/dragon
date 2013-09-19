@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Web.Mvc;
 using Dragon.Interfaces;
 using Dragon.Interfaces.Files;
 
@@ -47,6 +48,11 @@ namespace Files
         public bool Exists(string resourceID)
         {
             return _fileStorage.Exists(resourceID);
+        }
+
+        public ActionResult RetrieveUrl(string resourceID)
+        {
+            return _fileStorage.RetrieveUrl(resourceID);
         }
     }
 }

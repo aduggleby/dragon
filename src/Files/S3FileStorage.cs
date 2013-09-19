@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Web.Mvc;
 using Amazon;
 using Amazon.S3;
 using Amazon.S3.Model;
@@ -54,6 +55,22 @@ namespace Files
             }
             memoryStream.Position = 0;
             return memoryStream;
+        }
+
+        public ActionResult RetrieveUrl(string resourceID)
+        {
+            var request = new GetPreSignedUrlRequest {BucketName = _bucket, Key = resourceID, Expires = DateTime.Now.AddHours(1)};
+            string url;
+            try
+            {
+                 url = _client.GetPreSignedURL(request);
+            }
+            catch (AmazonS3Exception e)
+            {
+                // Catching exception instead of checking if the resource exists beforehand for performance reasons only.
+                throw new FileStoreResourceNotFoundException("Unable to retrieve resource.", e);
+            }
+            return new RedirectResult(url);
         }
 
         public void Delete(string resourceID)

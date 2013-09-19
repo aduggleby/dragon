@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using System.Web;
+using System.Web.Mvc;
 using Dragon.Interfaces;
 using Dragon.Interfaces.Files;
 
@@ -35,6 +37,13 @@ namespace Files
             }
             stream.Position = 0;
             return stream;
+        }
+
+        public ActionResult RetrieveUrl(string resourceID)
+        {
+            var mimeMapping = MimeMapping.GetMimeMapping(CreatePath(resourceID));
+            // This may lock the resource, if this is an issue clone the stream like in the Retrieve method.
+            return new FileStreamResult(new FileStream(CreatePath(resourceID), FileMode.Open), mimeMapping);
         }
 
         public void Delete(string resourceID)

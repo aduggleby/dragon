@@ -23,5 +23,15 @@ namespace FilesTest
             }).Object);
             return fileStorage;
         }
+
+        [TestMethod]
+        public void RetrieveUrl_validFile_shouldReturnUrl()
+        {
+            var fileStorage = CreateFileStorage();
+            var id = fileStorage.Store(TestFilePath);
+            var actual = fileStorage.RetrieveUrl(id);
+            fileStorage.Delete(id); // cleanup
+            Assert.IsNotNull(actual);
+        }
     }
 }

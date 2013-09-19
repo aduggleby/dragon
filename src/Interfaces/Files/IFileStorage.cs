@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Web.Mvc;
 
 namespace Dragon.Interfaces.Files
 {
@@ -31,5 +32,12 @@ namespace Dragon.Interfaces.Files
         /// <param name="resourceID">The unique id of the resource to search for.</param>
         /// <returns></returns>
         bool Exists(string resourceID);
+
+        /// <summary>
+        ///     Returns an ActionResult that points to the resource.
+        /// </summary>
+        /// <param name="resourceID">The unique id of the resource to search for.</param>
+        /// <returns></returns>
+        ActionResult RetrieveUrl(string resourceID);
     }
 }

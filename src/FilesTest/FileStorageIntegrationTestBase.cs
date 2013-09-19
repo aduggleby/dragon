@@ -1,8 +1,12 @@
 ﻿using System;
 using System.IO;
+using System.Web;
+using System.Web.Mvc;
+using System.Web.Routing;
 using Dragon.Interfaces.Files;
 using Files;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 
 namespace FilesTest
 {
@@ -16,7 +20,7 @@ namespace FilesTest
     {
         public abstract IFileStorage CreateFileStorage();
 
-        private const string TEST_FILE_PATH = "resources/test.txt";
+        protected const string TestFilePath = "resources/test.txt";
 
         [TestMethod]
         [TestCategory("IntegrationTest")]
@@ -32,7 +36,7 @@ namespace FilesTest
         public void Delete_validFile_shouldDeleteFile()
         {
             var fileStorage = CreateFileStorage();
-            var id = fileStorage.Store(TEST_FILE_PATH);
+            var id = fileStorage.Store(TestFilePath);
             Assert.AreNotEqual("", id);
             fileStorage.Delete(id);
             Assert.AreEqual(false, fileStorage.Exists(id));
@@ -52,11 +56,10 @@ namespace FilesTest
         public void Exists_validFile_shouldReturnTrue()
         {
             var fileStorage = CreateFileStorage();
-            var id = fileStorage.Store(TEST_FILE_PATH);
+            var id = fileStorage.Store(TestFilePath);
             var actual = fileStorage.Exists(id);
+            fileStorage.Delete(id); // cleanup
             Assert.AreEqual(true, actual);
-            // cleanup
-            fileStorage.Delete(id);
         }
 
         [TestMethod]
@@ -64,11 +67,11 @@ namespace FilesTest
         public void Store_validFile_shouldUploadFile()
         {
             var fileStorage = CreateFileStorage();
-            var id = fileStorage.Store(TEST_FILE_PATH);
+            var id = fileStorage.Store(TestFilePath);
+            var exists = fileStorage.Exists(id);
+            fileStorage.Delete(id); // cleanup
             Assert.AreNotEqual("", id);
-            Assert.AreEqual(true, fileStorage.Exists(id));
-            // cleanup
-            fileStorage.Delete(id);
+            Assert.AreEqual(true, exists);
         }
 
         [TestMethod]
@@ -85,12 +88,21 @@ namespace FilesTest
         public void Retrieve_validFile_shouldDownloadFile()
         {
             var fileStorage = CreateFileStorage();
-            var id = fileStorage.Store(TEST_FILE_PATH);
+            var id = fileStorage.Store(TestFilePath);
             var actual = new StreamReader(fileStorage.Retrieve(id)).ReadToEnd();
+            fileStorage.Delete(id); // cleanup
             Assert.AreEqual("hello s3!\r\n...\r\n..\r\n.\r\n", actual);
-            // cleanup
-            fileStorage.Delete(id);
         }
 
+
+        private ControllerContext GetControllerContext()
+        {
+            var request = new Mock<HttpRequestBase>();
+            request.Setup(r => r.HttpMethod).Returns("GET");
+            var mockHttpContext = new Mock<HttpContextBase>();
+            mockHttpContext.Setup(c => c.Request).Returns(request.Object);
+            var controllerContext = new ControllerContext(mockHttpContext.Object, new RouteData(), new Mock<ControllerBase>().Object);
+            return controllerContext;
+        }
     }
 }
