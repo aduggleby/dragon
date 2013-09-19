@@ -41,6 +41,7 @@ namespace Files
 
         public ActionResult RetrieveUrl(string resourceID)
         {
+            if (!Exists(resourceID)) throw new FileStoreResourceNotFoundException("Key not found: " + resourceID);
             var mimeMapping = MimeMapping.GetMimeMapping(CreatePath(resourceID));
             // This may lock the resource, if this is an issue clone the stream like in the Retrieve method.
             return new FileStreamResult(new FileStream(CreatePath(resourceID), FileMode.Open), mimeMapping);

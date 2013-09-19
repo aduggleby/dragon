@@ -1,5 +1,7 @@
-﻿using System.Collections.Specialized;
+﻿using System;
+using System.Collections.Specialized;
 using System.Configuration;
+using System.IO;
 using System.Web.Mvc;
 using Dragon.Interfaces.Files;
 using Files;
@@ -28,11 +30,19 @@ namespace FilesTest
         {
             var fileStorage = CreateFileStorage();
             var id = fileStorage.Store(TestFilePath);
-            var actual = fileStorage.RetrieveUrl(id);
-            var stream = (FileStreamResult) actual;
+            var stream = (FileStreamResult) fileStorage.RetrieveUrl(id);
+            var actual = new StreamReader(stream.FileStream).ReadToEnd();
             stream.FileStream.Close();
             fileStorage.Delete(id); // cleanup
-            Assert.IsNotNull(actual);
+            Assert.AreEqual("hello s3!\r\n...\r\n..\r\n.\r\n", actual);
+        }
+        
+        [TestMethod]
+        [ExpectedException(typeof(FileStoreResourceNotFoundException))]
+        public void RetrieveUrl_invalidFile_shouldThrowException()
+        {
+            var fileStorage = CreateFileStorage();
+            fileStorage.RetrieveUrl(Guid.NewGuid().ToString());
         }
     }
 }

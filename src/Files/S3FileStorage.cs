@@ -70,7 +70,13 @@ namespace Files
                 // Catching exception instead of checking if the resource exists beforehand for performance reasons only.
                 throw new FileStoreResourceNotFoundException("Unable to retrieve resource.", e);
             }
-            return new RedirectResult(url);
+            return new RedirectResult(FixUrl(url));
+        }
+
+        private static string FixUrl(string url)
+        {
+            var subDomain = new Uri(url).PathAndQuery.Split('/')[1];
+            return url.Replace(subDomain + "/", "").Replace("//", "//" + subDomain + ".");
         }
 
         public void Delete(string resourceID)

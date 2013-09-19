@@ -1,5 +1,7 @@
-﻿using System.Collections.Specialized;
+﻿using System;
+using System.Collections.Specialized;
 using System.Configuration;
+using System.Web.Mvc;
 using Dragon.Interfaces.Files;
 using Files;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -29,9 +31,19 @@ namespace FilesTest
         {
             var fileStorage = CreateFileStorage();
             var id = fileStorage.Store(TestFilePath);
-            var actual = fileStorage.RetrieveUrl(id);
+            var actualUrl = ((RedirectResult)fileStorage.RetrieveUrl(id)).Url;
+            var actual = new System.Net.WebClient().DownloadString(actualUrl);
             fileStorage.Delete(id); // cleanup
-            Assert.IsNotNull(actual);
+            Assert.AreEqual("hello s3!\r\n...\r\n..\r\n.\r\n", actual);
         }
+
+        [Ignore] // S3 does not throw an exception in this case...
+        [TestMethod]
+        [ExpectedException(typeof(FileStoreResourceNotFoundException))]
+        public void RetrieveUrl_invalidFile_shouldThrowException()
+        {
+            var fileStorage = CreateFileStorage();
+            fileStorage.RetrieveUrl(Guid.NewGuid().ToString());
+        }    
     }
 }

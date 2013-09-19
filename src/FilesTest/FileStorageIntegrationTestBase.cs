@@ -1,12 +1,8 @@
 ﻿using System;
 using System.IO;
-using System.Web;
-using System.Web.Mvc;
-using System.Web.Routing;
 using Dragon.Interfaces.Files;
 using Files;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
 
 namespace FilesTest
 {
@@ -94,15 +90,5 @@ namespace FilesTest
             Assert.AreEqual("hello s3!\r\n...\r\n..\r\n.\r\n", actual);
         }
 
-
-        private ControllerContext GetControllerContext()
-        {
-            var request = new Mock<HttpRequestBase>();
-            request.Setup(r => r.HttpMethod).Returns("GET");
-            var mockHttpContext = new Mock<HttpContextBase>();
-            mockHttpContext.Setup(c => c.Request).Returns(request.Object);
-            var controllerContext = new ControllerContext(mockHttpContext.Object, new RouteData(), new Mock<ControllerBase>().Object);
-            return controllerContext;
-        }
     }
 }
