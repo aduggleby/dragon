@@ -17,6 +17,6 @@ namespace Dragon.Interfaces.Files
         /// </summary>
         /// <param name="resourceID">The unique id of the resource to retrieve.</param>
         /// <returns>The resource.</returns>
-        StreamReader Retrieve(String resourceID);
+        Stream Retrieve(string resourceID);
     }
 }

@@ -8,6 +8,7 @@ bin/
 obj/
 
 db.config
+src/FileTest/App.config
 *.user
 *.suo
 *resharper*

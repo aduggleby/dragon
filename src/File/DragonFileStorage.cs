@@ -34,7 +34,7 @@ namespace File
         ///     Retrieves a file from the storage as defined in the configuration.
         ///     See cref="Dragon.Interfaces.Files.IFileStorage.Store(System.String)"/> for details.
         /// </summary>
-        public StreamReader Retrieve(string resourceID)
+        public Stream Retrieve(string resourceID)
         {
             return _fileStorage.Retrieve(resourceID);
         }

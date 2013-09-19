@@ -2,7 +2,6 @@
 using System.Collections.Specialized;
 using System.IO;
 using System.Text;
-using Dragon.Interfaces;
 using Dragon.Interfaces.Files;
 using File;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -26,9 +25,9 @@ namespace FileTest
             var localFileStorage = CreateFileStorageMock(expectedResourceIdentifier, null);
             var s3FileStorage = CreateFileStorageMock();
             var fileStorage = new DragonFileStorage(
-                CreateConfigurationMock(new NameValueCollection
+                TestHelper.CreateConfigurationMock(new NameValueCollection
                 {
-                    {CONFIG_KEY_STORAGE_TYPE,  CONFIG_DEFAULT_STORAGE_TYPE}
+                    {CONFIG_KEY_STORAGE_TYPE, CONFIG_DEFAULT_STORAGE_TYPE}
                 }).Object, localFileStorage.Object, s3FileStorage.Object);
 
             var acutalResourceIdentifier = fileStorage.Store(FILE_TO_STORE_PATH);
@@ -46,7 +45,7 @@ namespace FileTest
             var localFileStorage = CreateFileStorageMock();
             var s3FileStorage = CreateFileStorageMock(expectedResourceIdentifier, null);
             var fileStorage = new DragonFileStorage(
-                CreateConfigurationMock(new NameValueCollection
+                TestHelper.CreateConfigurationMock(new NameValueCollection
                 {
                     {CONFIG_KEY_STORAGE_TYPE, CONFIG_VALUE_STORAGE_TYPE_S3}
                 }).Object, localFileStorage.Object, s3FileStorage.Object);
@@ -67,7 +66,7 @@ namespace FileTest
             var localFileStorage = CreateFileStorageMock(resourceIdentifier, CreateStreamReader(RESOURCE_CONTENT));
             var s3FileStorage = CreateFileStorageMock();
             var fileStorage = new DragonFileStorage(
-                CreateConfigurationMock(new NameValueCollection
+                TestHelper.CreateConfigurationMock(new NameValueCollection
                 {
                     {CONFIG_KEY_STORAGE_TYPE, CONFIG_DEFAULT_STORAGE_TYPE}
                 }).Object, localFileStorage.Object, s3FileStorage.Object);
@@ -77,7 +76,7 @@ namespace FileTest
             localFileStorage.Verify(x => x.Retrieve(resourceIdentifier), Times.Once());
             s3FileStorage.Verify(x => x.Retrieve(It.IsAny<String>()), Times.Never());
 
-            Assert.AreEqual(expectedResourceContent.ReadToEnd(), actualResourceContent.ReadToEnd());
+            Assert.AreEqual(new StreamReader(expectedResourceContent).ReadToEnd(), new StreamReader(actualResourceContent).ReadToEnd());
             expectedResourceContent.Close();
             actualResourceContent.Close();
         }
@@ -90,7 +89,7 @@ namespace FileTest
             var localFileStorage = CreateFileStorageMock();
             var s3FileStorage = CreateFileStorageMock(resourceIdentifier, CreateStreamReader(RESOURCE_CONTENT));
             var fileStorage = new DragonFileStorage(
-                CreateConfigurationMock(new NameValueCollection
+                TestHelper.CreateConfigurationMock(new NameValueCollection
                 {
                     {CONFIG_KEY_STORAGE_TYPE, CONFIG_VALUE_STORAGE_TYPE_S3}
                 }).Object, localFileStorage.Object, s3FileStorage.Object);
@@ -100,16 +99,16 @@ namespace FileTest
             s3FileStorage.Verify(x => x.Retrieve(resourceIdentifier), Times.Once());
             localFileStorage.Verify(x => x.Retrieve(It.IsAny<String>()), Times.Never());
 
-            Assert.AreEqual(expectedResourceContent.ReadToEnd(), actualResourceContent.ReadToEnd());
+            Assert.AreEqual(new StreamReader(expectedResourceContent).ReadToEnd(), new StreamReader(actualResourceContent).ReadToEnd());
             expectedResourceContent.Close();
             actualResourceContent.Close();
         }
 
         # region helper
 
-        private static StreamReader CreateStreamReader(string ohai)
+        private static MemoryStream CreateStreamReader(string ohai)
         {
-            return new StreamReader(new MemoryStream(Encoding.Default.GetBytes(ohai)));
+            return (new MemoryStream(Encoding.Default.GetBytes(ohai)));
         }
 
         private static Mock<IFileStorage> CreateFileStorageMock()
@@ -117,24 +116,12 @@ namespace FileTest
             return new Mock<IFileStorage>();
         }
 
-        private static Mock<IFileStorage> CreateFileStorageMock(string expectedResourceIdentifier, StreamReader expectedResourceContent)
+        private static Mock<IFileStorage> CreateFileStorageMock(string expectedResourceIdentifier, Stream expectedResourceContent)
         {
             var localFileStorage = new Mock<IFileStorage>();
             localFileStorage.Setup(x => x.Store(It.IsAny<String>())).Returns(expectedResourceIdentifier);
             localFileStorage.Setup(x => x.Retrieve(expectedResourceIdentifier)).Returns(expectedResourceContent);
             return localFileStorage;
-        }
-
-        private static Mock<IConfiguration> CreateConfigurationMock(NameValueCollection appSettings)
-        {
-            var configuration = new Mock<IConfiguration>();
-
-            foreach (var setting in appSettings.AllKeys)
-            {
-                var settingTmp = setting;
-                configuration.Setup(x => x.GetValue(settingTmp, It.IsAny<String>())).Returns(appSettings.Get(setting));
-            }
-            return configuration;
         }
 
         # endregion
