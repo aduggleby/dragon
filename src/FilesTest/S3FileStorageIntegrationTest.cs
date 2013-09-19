@@ -1,10 +1,10 @@
 ﻿using System.Collections.Specialized;
 using System.Configuration;
 using Dragon.Interfaces.Files;
-using File;
+using Files;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace FileTest
+namespace FilesTest
 {
     /// <summary>
     /// Needs valid Amazon S3 credentials configured in the application configuration file.

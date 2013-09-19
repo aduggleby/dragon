@@ -3,11 +3,11 @@ using System.Collections.Specialized;
 using System.IO;
 using System.Text;
 using Dragon.Interfaces.Files;
-using File;
+using Files;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
-namespace FileTest
+namespace FilesTest
 {
     [TestClass]
     public class DragonFileStorageTest

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.IO;
 using Dragon.Interfaces.Files;
-using File;
+using Files;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace FileTest
+namespace FilesTest
 {
     /// <summary>
     /// Needs valid configuration provided in the application configuration file.
@@ -24,7 +24,7 @@ namespace FileTest
         public void Delete_inexistentFile_shouldThrowException()
         {
             var fileStorage = CreateFileStorage();
-            fileStorage.Delete("blah");
+            fileStorage.Delete(Guid.NewGuid().ToString());
         }
 
         [TestMethod]

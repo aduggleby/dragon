@@ -7,7 +7,7 @@ using Amazon.S3.Model;
 using Dragon.Interfaces;
 using Dragon.Interfaces.Files;
 
-namespace File
+namespace Files
 {
     /// <summary>
     ///     Reads following settings from the configuration:
@@ -25,28 +25,32 @@ namespace File
             var accessKeyID = configuration.GetValue("Dragon.Files.S3.AccessKeyID", "");
             var accessKeySecret = configuration.GetValue("Dragon.Files.S3.AccessKeySecret", "");
             _bucket = configuration.GetValue("Dragon.Files.S3.Bucket", "");
-            _client = AWSClientFactory.CreateAmazonS3Client(
-                accessKeyID, accessKeySecret);
+            _client = AWSClientFactory.CreateAmazonS3Client(accessKeyID, accessKeySecret);
         }
 
         public string Store(string filePath)
         {
             var id = Guid.NewGuid();
             var request = new PutObjectRequest {BucketName = _bucket, FilePath = filePath, Key = id.ToString()};
-            var response = _client.PutObject(request);
-            string blah;
-            response.ResponseMetadata.Metadata.TryGetValue("Key", out blah);
+            _client.PutObject(request);
             return id.ToString();
         }
 
         public Stream Retrieve(string resourceID)
         {
-            if (!Exists(resourceID)) throw new FileStoreResourceNotFoundException("Key not found: " + resourceID);
             var request = new GetObjectRequest {BucketName = _bucket, Key = resourceID};
             var memoryStream = new MemoryStream();
-            using (var response = _client.GetObject(request))
+            try
             {
-                response.ResponseStream.CopyTo(memoryStream);
+                using (var response = _client.GetObject(request))
+                {
+                    response.ResponseStream.CopyTo(memoryStream);
+                }
+            }
+            catch (AmazonS3Exception e)
+            {
+                // Catching exception instead of checking if the resource exists beforehand for performance reasons only.
+                throw new FileStoreResourceNotFoundException("Unable to retrieve resource.", e);
             }
             memoryStream.Position = 0;
             return memoryStream;

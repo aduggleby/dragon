@@ -2,7 +2,7 @@
 using Dragon.Interfaces;
 using Dragon.Interfaces.Files;
 
-namespace File
+namespace Files
 {
     public class DragonFileStorage : IFileStorage
     {

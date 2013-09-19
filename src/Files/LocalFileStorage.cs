@@ -3,7 +3,7 @@ using System.IO;
 using Dragon.Interfaces;
 using Dragon.Interfaces.Files;
 
-namespace File
+namespace Files
 {
     /// <summary>
     ///     Reads following settings from the configuration:
@@ -21,7 +21,7 @@ namespace File
         public string Store(string filePath)
         {
             var id = Guid.NewGuid().ToString();
-            System.IO.File.Copy(filePath, CreatePath(id));
+            File.Copy(filePath, CreatePath(id));
             return id;
         }
 
@@ -40,12 +40,12 @@ namespace File
         public void Delete(string resourceID)
         {
             if (!Exists(resourceID)) throw new FileStoreResourceNotFoundException("Key not found: " + resourceID);
-            System.IO.File.Delete(CreatePath(resourceID));
+            File.Delete(CreatePath(resourceID));
         }
 
         public bool Exists(string resourceID)
         {
-            return System.IO.File.Exists(CreatePath(resourceID));
+            return File.Exists(CreatePath(resourceID));
         }
 
         private string CreatePath(string id)

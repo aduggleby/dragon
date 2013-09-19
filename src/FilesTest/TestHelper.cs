@@ -3,7 +3,7 @@ using System.Collections.Specialized;
 using Dragon.Interfaces;
 using Moq;
 
-namespace FileTest
+namespace FilesTest
 {
     public class TestHelper
     {
