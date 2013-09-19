@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FileStoreResourceNotFoundException.cs" />
+    <Compile Include="LocalFileStorage.cs" />
     <Compile Include="S3FileStorage.cs" />
     <Compile Include="DragonFileStorage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

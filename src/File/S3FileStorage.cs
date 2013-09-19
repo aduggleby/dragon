@@ -13,7 +13,7 @@ namespace File
     ///     Reads following settings from the configuration:
     ///     Dragon.Files.S3.AccessKeyID
     ///     Dragon.Files.S3.AccessKeySecret
-    ///     Dragon.Files.S3.Bucke
+    ///     Dragon.Files.S3.Bucket
     /// </summary>
     public class S3FileStorage : IFileStorage, IDisposable
     {
@@ -41,13 +41,14 @@ namespace File
 
         public Stream Retrieve(string resourceID)
         {
+            if (!Exists(resourceID)) throw new FileStoreResourceNotFoundException("Key not found: " + resourceID);
             var request = new GetObjectRequest {BucketName = _bucket, Key = resourceID};
             var memoryStream = new MemoryStream();
             using (var response = _client.GetObject(request))
             {
                 response.ResponseStream.CopyTo(memoryStream);
             }
-            memoryStream.Seek(0, 0);
+            memoryStream.Position = 0;
             return memoryStream;
         }
 

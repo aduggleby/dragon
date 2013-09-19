@@ -55,6 +55,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FileStorageIntegrationTestBase.cs" />
+    <Compile Include="LocalFileStorageIntegrationTest.cs" />
     <Compile Include="DragonFileStorageTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="S3FileStorageIntegrationTest.cs" />
@@ -77,6 +79,9 @@
   <ItemGroup>
     <Content Include="App.config">
       <SubType>Designer</SubType>
+    </Content>
+    <Content Include="data\index.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="resources\test.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

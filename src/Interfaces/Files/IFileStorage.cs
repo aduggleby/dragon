@@ -18,5 +18,18 @@ namespace Dragon.Interfaces.Files
         /// <param name="resourceID">The unique id of the resource to retrieve.</param>
         /// <returns>The resource.</returns>
         Stream Retrieve(string resourceID);
+
+        /// <summary>
+        ///     Deletes a file from the storage provider.
+        /// </summary>
+        /// <param name="resourceID">The unique id of the resource to delete.</param>
+        void Delete(string resourceID);
+
+        /// <summary>
+        ///     Checks if a file is available on the storage provider.
+        /// </summary>
+        /// <param name="resourceID">The unique id of the resource to search for.</param>
+        /// <returns></returns>
+        bool Exists(string resourceID);
     }
 }

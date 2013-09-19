@@ -38,5 +38,15 @@ namespace File
         {
             return _fileStorage.Retrieve(resourceID);
         }
+
+        public void Delete(string resourceID)
+        {
+            _fileStorage.Delete(resourceID);
+        }
+
+        public bool Exists(string resourceID)
+        {
+            return _fileStorage.Exists(resourceID);
+        }
     }
 }
