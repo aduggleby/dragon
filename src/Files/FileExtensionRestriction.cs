@@ -26,11 +26,13 @@ namespace Files
                 "doc", "docx", "odt", // writer
                 "xls", "xlsx", "ods", // spreadsheet
                 "ppt", "pptx", "odp", // presentation
-                "txt", "pdf", "html", "epub", "tex", // documents
-                "css", "xml", "ps", "xslt",
+                "txt", "pdf", "ps", "epub", "tex", // documents
+                "css", "xml", "html", "xslt",
                 "zip", "rar", "7zip", "tar", "gz", // packer
                 "bmp", "jpg", "jpeg", "tif", "png", "gif", // raster graphics
-                "svg" // vector graphics
+                "svg", // vector graphics
+                "wav", "mp3", // audio
+                "mpeg", "avi" // video
             };
         }
     }
