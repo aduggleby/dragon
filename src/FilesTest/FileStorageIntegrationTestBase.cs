@@ -17,11 +17,12 @@ namespace FilesTest
         public abstract IFileStorage CreateFileStorage();
 
         protected const string TestFilePath = "resources/test.txt";
+        protected const string DisallowedTestFilePath = "resources/test.php";
         protected const string TestFileContent = "hello s3!\r\n...\r\n..\r\n.\r\n";
 
         [TestMethod]
         [TestCategory("IntegrationTest")]
-        [ExpectedException(typeof(FileStoreResourceNotFoundException))]
+        [ExpectedException(typeof(ResourceToRetrieveNotFoundException))]
         public void Delete_inexistentFile_shouldThrowException()
         {
             var fileStorage = CreateFileStorage();
@@ -73,7 +74,25 @@ namespace FilesTest
 
         [TestMethod]
         [TestCategory("IntegrationTest")]
-        [ExpectedException(typeof(FileStoreResourceNotFoundException))]
+        [ExpectedException(typeof(ResourceToStoreNotFoundException))]
+        public void Store_invalidFile_shouldThrowException()
+        {
+            var fileStorage = CreateFileStorage();
+            fileStorage.Store(TestFilePath + "doesnotexist");
+        }
+
+        [TestMethod]
+        [TestCategory("IntegrationTest")]
+        [ExpectedException(typeof(FileTypeNotAllowedException))]
+        public void Store_disallowedFile_shouldThrowException()
+        {
+            var fileStorage = CreateFileStorage();
+            fileStorage.Store(DisallowedTestFilePath);
+        }
+
+        [TestMethod]
+        [TestCategory("IntegrationTest")]
+        [ExpectedException(typeof(ResourceToRetrieveNotFoundException))]
         public void Retrieve_invalidFile_shoulThrowException()
         {
             var fileStorage = CreateFileStorage();

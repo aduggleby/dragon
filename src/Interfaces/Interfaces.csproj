@@ -85,6 +85,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Files\IFileRestriction.cs" />
     <Compile Include="Files\IFileStorage.cs" />
     <Compile Include="IConfiguration.cs" />
     <Compile Include="IDragonTable.cs" />

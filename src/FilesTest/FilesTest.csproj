@@ -57,6 +57,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FileExtensionRestrictionTest.cs" />
     <Compile Include="FileStorageIntegrationTestBase.cs" />
     <Compile Include="LocalFileStorageIntegrationTest.cs" />
     <Compile Include="DragonFileStorageTest.cs" />
@@ -82,6 +83,9 @@
     <Content Include="App.config">
       <SubType>Designer</SubType>
     </Content>
+    <None Include="resources\test.php">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Content Include="data\index.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

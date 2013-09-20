@@ -9,7 +9,7 @@ namespace Dragon.Interfaces.Files
         /// <summary>
         ///     Uploads a file to a storage provider.
         /// </summary>
-        /// <param name="filePath">The path of the file that is to be uploaded</param>
+        /// <param name="filePath">The path of the file that is to be uploaded.</param>
         /// <returns>A unique id of the stored resource.</returns>
         String Store(String filePath);
 

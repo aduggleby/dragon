@@ -21,7 +21,7 @@ namespace FilesTest
             var fileStorage = new LocalFileStorage(TestHelper.CreateConfigurationMock(new NameValueCollection
             {
                 {"Dragon.Files.Local.Path", ConfigurationManager.AppSettings["Dragon.Files.Local.Path"]},
-            }).Object);
+            }).Object, new FileExtensionRestriction(FileExtensionRestriction.GetDefaultAllowedFileTypes()));
             return fileStorage;
         }
 
@@ -38,7 +38,7 @@ namespace FilesTest
         }
         
         [TestMethod]
-        [ExpectedException(typeof(FileStoreResourceNotFoundException))]
+        [ExpectedException(typeof(ResourceToRetrieveNotFoundException))]
         public void RetrieveUrl_invalidFile_shouldThrowException()
         {
             var fileStorage = CreateFileStorage();

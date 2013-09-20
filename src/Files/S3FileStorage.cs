@@ -18,11 +18,13 @@ namespace Files
     /// </summary>
     public class S3FileStorage : IFileStorage, IDisposable
     {
+        private readonly IFileRestriction _fileRestriction;
         private readonly string _bucket;
         private readonly IAmazonS3 _client;
 
-        public S3FileStorage(IConfiguration configuration)
+        public S3FileStorage(IConfiguration configuration, IFileRestriction fileRestriction)
         {
+            _fileRestriction = fileRestriction;
             var accessKeyID = configuration.GetValue("Dragon.Files.S3.AccessKeyID", "");
             var accessKeySecret = configuration.GetValue("Dragon.Files.S3.AccessKeySecret", "");
             _bucket = configuration.GetValue("Dragon.Files.S3.Bucket", "");
@@ -31,10 +33,12 @@ namespace Files
 
         public string Store(string filePath)
         {
-            var id = Guid.NewGuid();
-            var request = new PutObjectRequest {BucketName = _bucket, FilePath = filePath, Key = id.ToString()};
+            if (!File.Exists(filePath)) throw new ResourceToStoreNotFoundException();
+            if (!_fileRestriction.IsAllowed(filePath)) throw new FileTypeNotAllowedException();
+            var id = Guid.NewGuid() + Path.GetExtension(filePath);
+            var request = new PutObjectRequest {BucketName = _bucket, FilePath = filePath, Key = id};
             _client.PutObject(request);
-            return id.ToString();
+            return id;
         }
 
         public Stream Retrieve(string resourceID)
@@ -51,7 +55,7 @@ namespace Files
             catch (AmazonS3Exception e)
             {
                 // Catching exception instead of checking if the resource exists beforehand for performance reasons only.
-                throw new FileStoreResourceNotFoundException("Unable to retrieve resource.", e);
+                throw new ResourceToRetrieveNotFoundException("Unable to retrieve resource.", e);
             }
             memoryStream.Position = 0;
             return memoryStream;
@@ -68,7 +72,7 @@ namespace Files
             catch (AmazonS3Exception e)
             {
                 // Catching exception instead of checking if the resource exists beforehand for performance reasons only.
-                throw new FileStoreResourceNotFoundException("Unable to retrieve resource.", e);
+                throw new ResourceToRetrieveNotFoundException("Unable to retrieve resource.", e);
             }
             return new RedirectResult(FixUrl(url));
         }
@@ -81,7 +85,7 @@ namespace Files
 
         public void Delete(string resourceID)
         {
-            if (!Exists(resourceID)) throw new FileStoreResourceNotFoundException("Key not found: " + resourceID);
+            if (!Exists(resourceID)) throw new ResourceToRetrieveNotFoundException("Key not found: " + resourceID);
             var deleteObjectRequest = new DeleteObjectRequest {BucketName = _bucket, Key = resourceID};
             _client.DeleteObject(deleteObjectRequest);
         }

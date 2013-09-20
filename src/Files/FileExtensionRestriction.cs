@@ -1,0 +1,37 @@
+﻿using System.IO;
+using System.Linq;
+using Dragon.Interfaces.Files;
+
+namespace Files
+{
+    public class FileExtensionRestriction : IFileRestriction
+    {
+        private readonly string[] _allowedFileExtensions;
+
+        public FileExtensionRestriction(string[] allowedFileExtensions)
+        {
+            _allowedFileExtensions = allowedFileExtensions;
+        }
+
+        public bool IsAllowed(string filePath)
+        {
+            var extension = Path.GetExtension(filePath);
+            return extension != null && _allowedFileExtensions.Contains(extension.TrimStart('.'));
+        }
+
+        public static string[] GetDefaultAllowedFileTypes()
+        {
+            return new[]
+            {
+                "doc", "docx", "odt", // writer
+                "xls", "xlsx", "ods", // spreadsheet
+                "ppt", "pptx", "odp", // presentation
+                "txt", "pdf", "html", "epub", "tex", // documents
+                "css", "xml", "ps", "xslt",
+                "zip", "rar", "7zip", "tar", "gz", // packer
+                "bmp", "jpg", "jpeg", "tif", "png", "gif", // raster graphics
+                "svg" // vector graphics
+            };
+        }
+    }
+}

@@ -77,7 +77,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FileStoreResourceNotFoundException.cs" />
+    <Compile Include="ResourceToStoreNotFoundException.cs" />
+    <Compile Include="FileTypeNotAllowedException.cs" />
+    <Compile Include="ResourceToRetrieveNotFoundException.cs" />
+    <Compile Include="FileExtensionRestriction.cs" />
     <Compile Include="LocalFileStorage.cs" />
     <Compile Include="S3FileStorage.cs" />
     <Compile Include="DragonFileStorage.cs" />

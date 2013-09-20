@@ -22,7 +22,7 @@ namespace FilesTest
                 {"Dragon.Files.S3.AccessKeyID", ConfigurationManager.AppSettings["Dragon.Files.S3.AccessKeyID"]},
                 {"Dragon.Files.S3.AccessKeySecret", ConfigurationManager.AppSettings["Dragon.Files.S3.AccessKeySecret"]},
                 {"Dragon.Files.S3.Bucket", ConfigurationManager.AppSettings["Dragon.Files.S3.Bucket"]}
-            }).Object);
+            }).Object, new FileExtensionRestriction(FileExtensionRestriction.GetDefaultAllowedFileTypes()));
             return fileStorage;
         }
 
@@ -39,7 +39,7 @@ namespace FilesTest
 
         [Ignore] // S3 does not throw an exception in this case...
         [TestMethod]
-        [ExpectedException(typeof(FileStoreResourceNotFoundException))]
+        [ExpectedException(typeof(ResourceToRetrieveNotFoundException))]
         public void RetrieveUrl_invalidFile_shouldThrowException()
         {
             var fileStorage = CreateFileStorage();
