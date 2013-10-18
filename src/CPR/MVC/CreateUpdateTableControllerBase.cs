@@ -10,7 +10,7 @@ using Dragon.Interfaces;
 
 namespace Dragon.CPR.MVC
 {
-    public abstract class CreateUpdateTableControllerBase<TCreate, TUpdate, TTable> : CPRControllerBase
+    public abstract class CreateUpdateTableControllerBase<TCreate, TUpdate, TTable> : TableControllerBase<TTable>
         where TCreate : CommandBase
         where TUpdate : CommandBase
         where TTable : class
@@ -23,31 +23,17 @@ namespace Dragon.CPR.MVC
         public CommandDispatcher<TCreate> CreateCommandDispatcher { get; set; }
         public CommandDispatcher<TUpdate> UpdateCommandDispatcher { get; set; }
 
-        public CreateUpdateTableControllerBase(IPermissionStore permissionStore)
+        public CreateUpdateTableControllerBase(IPermissionStore permissionStore):base(permissionStore)
         {
 
         }
 
-        public virtual ActionResult Index(Guid? id)
+        public override ActionResult Index(Guid? id)
         {
-            PreIndex();
             AddViewLink(Url.Action("Create"), "Create");
-            return View();
-        }
-
-        public virtual ActionResult FXGrid(SortingPagingViewModel sortingPaging, string filterString)
-        {
-            var model = new TableViewModel<TTable>(sortingPaging, "Created", false);
-
-            BuildIndex(model);
-           
-            ReadModelRepository.PopulateTable(model);
-
-            return PartialView("_FXGrid", model);
-
+            return base.Index(id);
         }
         
-
         [HttpGet]
         public virtual ActionResult Create(TCreate cmd)
         {
@@ -107,14 +93,6 @@ namespace Dragon.CPR.MVC
             return RedirectToAction("Index");
         }
 
-        protected virtual void PreIndex()
-        {
-        }
-
-        protected virtual void BuildIndex(TableViewModel<TTable> model)
-        {
-        }
-
         protected virtual void PreCreate(TCreate cmd)
         {
         }
@@ -134,13 +112,13 @@ namespace Dragon.CPR.MVC
         protected TUpdate Load(Guid id)
         {
             var cmd = Activator.CreateInstance<TUpdate>();
-            var tableData = ReadModelRepository.Get<TTable>(id);
+            var tableData = Repository.Get(id);
             if (tableData == null) return default(TUpdate);
             Mapper.Map(tableData, cmd);
             return cmd;
         }
         
-        protected ActionResult AfterProcess(
+        protected virtual ActionResult AfterProcess(
             TCreate cmd,
             Func<object, ActionResult> success,
             Func<object, ActionResult> error)
@@ -148,7 +126,7 @@ namespace Dragon.CPR.MVC
             return AfterProcess(cmd, CreateCommandDispatcher, success, error);
         }
 
-        protected ActionResult AfterProcess(
+        protected virtual ActionResult AfterProcess(
             TUpdate cmd,
             Func<object, ActionResult> success,
             Func<object, ActionResult> error)

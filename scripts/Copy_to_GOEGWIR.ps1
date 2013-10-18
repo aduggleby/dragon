@@ -1,0 +1,1 @@
+Copy-Item ..\release\debug\* ..\..\Work\GOEG-WIR\lib\dragon-debug -Force

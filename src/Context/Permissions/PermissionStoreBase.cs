@@ -367,7 +367,7 @@ namespace Dragon.Context.Permissions
         public IEnumerable<IPermissionRight> GetRightsOnNodeWithInherited(Guid nodeID)
         {
             var candidate = AllNodes().FirstOrDefault(x => x.Node.Equals(nodeID));
-            if (candidate == null) throw new NodeDoesNotExistException();
+            if (candidate == null) return new List<IPermissionRight>();
             return candidate.Data;
         }
 

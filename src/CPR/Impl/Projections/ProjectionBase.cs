@@ -10,8 +10,9 @@ using StructureMap;
 namespace Dragon.CPR.Impl.Projections
 {
     public abstract class ProjectionBase<T> : IProjection<T>
+        where T : class
     {
-        public IReadModelRepository Repository { get; set; }
+        public IRepository<T> Repository { get; set; }
         public IPermissionStore PermissionStore { get; set; }
         public IProfileStore ProfileStore { get; set; }
         public IContainer Container { get; set; }

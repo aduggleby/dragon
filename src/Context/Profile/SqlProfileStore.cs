@@ -7,7 +7,7 @@ using System.Text;
 using Dapper;
 using Dragon.Common;
 using Dragon.Context.Users;
-using Dragon.Core.Sql;
+using Dragon.Core.Configuration;
 using Dragon.Interfaces;
 
 namespace Dragon.Context.Profile
@@ -22,7 +22,7 @@ namespace Dragon.Context.Profile
 
         protected override string GetPropertyInternal(Guid userID, string key)
         {
-            using (var conn = new SqlConnection(StandardSqlStore.ConnectionString))
+            using (var conn = new SqlConnection(ConnectionStringManager.Value))
             {
                 conn.Open();
                 var param = new { UserID = userID, Key = key };
@@ -33,7 +33,7 @@ namespace Dragon.Context.Profile
 
         protected override void SetPropertyInternal(Guid userID, string key, string val)
         {
-            using (var conn = new SqlConnection(StandardSqlStore.ConnectionString))
+            using (var conn = new SqlConnection(ConnectionStringManager.Value))
             {
                 conn.Open();
                 var param = new { LID = Guid.NewGuid(), UserID = userID, Key = key, Value = val };

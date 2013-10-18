@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using Dapper;
 using Dragon.Common;
-using Dragon.Core.Sql;
+using Dragon.Core.Configuration;
 using Dragon.Interfaces;
 
 namespace Dragon.Context.Users
@@ -23,7 +23,7 @@ namespace Dragon.Context.Users
 
         protected override IEnumerable<IRegistration> LoadUser(Guid userID)
         {
-            using (var conn = new SqlConnection(StandardSqlStore.ConnectionString))
+            using (var conn = new SqlConnection(ConnectionStringManager.Value))
             {
                 conn.Open();
                 var param = new { UserID = userID };
@@ -33,7 +33,7 @@ namespace Dragon.Context.Users
 
         protected override IRegistration LoadRegistration(string service, string key)
         {
-            using (var conn = new SqlConnection(StandardSqlStore.ConnectionString))
+            using (var conn = new SqlConnection(ConnectionStringManager.Value))
             {
                 conn.Open();
                 var param = new { Service = service, Key = key };
@@ -43,7 +43,7 @@ namespace Dragon.Context.Users
 
         protected override void Save(Guid userID, string service, string key, string hashedSaltedSecret)
         {
-            using (var conn = new SqlConnection(StandardSqlStore.ConnectionString))
+            using (var conn = new SqlConnection(ConnectionStringManager.Value))
             {
                 var existing = LoadRegistration(service, key);
                 conn.Open();

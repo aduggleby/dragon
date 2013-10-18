@@ -6,6 +6,7 @@ using System.Linq;
 using AutoMapper;
 using Dragon.CPR.Interfaces;
 using Dragon.Common.Attributes.Data;
+using Dragon.Interfaces;
 using StructureMap;
 using StructureMap.Attributes;
 using IContainer = StructureMap.IContainer;
@@ -56,14 +57,6 @@ namespace Dragon.CPR.Impl.Projections
 
         }
 
-
-
-        public IWriteRepository Repository
-        {
-            get;
-            set;
-        }
-
         protected virtual Func<TSrc, Guid> SrcKey
         {
             get { return m_srcKey; }
@@ -106,12 +99,12 @@ namespace Dragon.CPR.Impl.Projections
 
         protected virtual TSrc FetchSrc(Guid id)
         {
-            return Repository.Get<TSrc>(id);
+            return RepositorySource.Get(id);
         }
 
         protected virtual TDest FetchDest(Guid id)
         {
-            return Repository.Get<TDest>(id);
+            return RepositoryDestination.Get(id);
         }
 
         protected virtual void Map(TSrc src, TDest dest)
@@ -124,12 +117,12 @@ namespace Dragon.CPR.Impl.Projections
 
         protected virtual void Insert(TDest t)
         {
-            Repository.Insert<TDest>(t);
+            RepositoryDestination.Insert(t);
         }
 
         protected virtual void Save(TDest t)
         {
-            Repository.Update<TDest>(t);
+            RepositoryDestination.Update(t);
         }
     }
 }

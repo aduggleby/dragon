@@ -13,7 +13,8 @@ namespace Dragon.CPR.Impl.Projections
         where TSrc : class
         where TDest : class
     {
-        public IReadModelRepository Repository { get; set; }
+        public IRepository<TSrc> RepositorySource { get; set; }
+        public IRepository<TDest> RepositoryDestination { get; set; }
         public IPermissionStore PermissionStore { get; set; }
         public DragonContext Ctx { get; set; }
 

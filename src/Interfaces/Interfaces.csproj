@@ -33,14 +33,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Facebook">
-      <HintPath>..\..\packages\Facebook.6.1.4\lib\net40-client\Facebook.dll</HintPath>
+    <Reference Include="Facebook, Version=6.0.10.0, Culture=neutral, PublicKeyToken=58cb4f2111d1e6de, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Facebook.6.4.2\lib\net40-client\Facebook.dll</HintPath>
     </Reference>
-    <Reference Include="FluentAssertions">
-      <HintPath>..\..\packages\FluentAssertions.2.0.1\lib\net40\FluentAssertions.dll</HintPath>
+    <Reference Include="FluentAssertions, Version=2.1.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\FluentAssertions.2.1.0.0\lib\net40\FluentAssertions.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Newtonsoft.Json.5.0.6\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="PGK.Extensions">
       <HintPath>..\..\packages\PGK.Extensions.2011.6\lib\PGK.Extensions.dll</HintPath>
@@ -57,18 +60,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActivityCenter\IActivity.cs" />
+    <Compile Include="ActivityCenter\Services\IActivityDispatcher.cs" />
+    <Compile Include="ActivityCenter\Services\IActivityMultiplexer.cs" />
+    <Compile Include="ActivityCenter\Services\IActivityService.cs" />
+    <Compile Include="ActivityCenter\IEmailNotificationActivity.cs" />
+    <Compile Include="ActivityCenter\IEmailProfile.cs" />
+    <Compile Include="ActivityCenter\Services\IEmailProfileService.cs" />
+    <Compile Include="ActivityCenter\IEmailTemplate.cs" />
+    <Compile Include="Core\IEmailTemplateService.cs" />
+    <Compile Include="ActivityCenter\INotifiable.cs" />
+    <Compile Include="ActivityCenter\Services\INotificationDispatcher.cs" />
+    <Compile Include="Core\ITemplateServiceResult.cs" />
     <Compile Include="IConfiguration.cs" />
+    <Compile Include="IDirectoryService.cs" />
     <Compile Include="IDragonTable.cs" />
+    <Compile Include="IFileService.cs" />
+    <Compile Include="IRepository.cs" />
+    <Compile Include="IRepositorySetup.cs" />
     <Compile Include="PermissionInfo\INameResolver.cs" />
     <Compile Include="PermissionInfo\IPermissionInfo.cs" />
-    <Compile Include="Notifications\IBatchNotificationDispatcher.cs" />
-    <Compile Include="Notifications\ILocalizedDataSource.cs" />
-    <Compile Include="Notifications\INotification.cs" />
-    <Compile Include="Notifications\IEmailService.cs" />
-    <Compile Include="Notifications\IEmailNotifiable.cs" />
-    <Compile Include="Notifications\INotifiable.cs" />
-    <Compile Include="Notifications\INotificationDispatcher.cs" />
-    <Compile Include="Notifications\INotificationStore.cs" />
+    <Compile Include="Core\IEmailService.cs" />
     <Compile Include="IPermissionNode.cs" />
     <Compile Include="IPermissionStore.cs" />
     <Compile Include="IProfileStore.cs" />
@@ -79,8 +91,6 @@
     <Compile Include="IRegistration.cs" />
     <Compile Include="IUser.cs" />
     <Compile Include="IUserStore.cs" />
-    <Compile Include="Notifications\ITemplateService.cs" />
-    <Compile Include="Notifications\IWebNotifiable.cs" />
     <Compile Include="PermissionInfo\IPermissionInfoExtractor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

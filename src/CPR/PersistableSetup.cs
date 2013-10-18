@@ -5,6 +5,8 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Diagnostics;
 using Dragon.CPR.Interfaces;
+using Dragon.Interfaces;
+using Dragon.IoC;
 
 namespace Dragon.CPR
 {
@@ -15,32 +17,40 @@ namespace Dragon.CPR
         
         public SortedSet<string> Errors { get; private set; }
 
-        private ISetupRepository m_setupRepository;
-        private IDropRepository m_dropRepository;
+        private IRepositorySetup m_setupRepository;
 
-        public PersistableSetup(ISetupRepository setupRep, IDropRepository dropRep)
+        public PersistableSetup(IRepositorySetup rep)
         {
             CreatedTables = new SortedSet<string>();
             DroppedTables = new SortedSet<string>();
             Errors = new SortedSet<string>();
 
-            m_setupRepository = setupRep;
-            m_dropRepository = dropRep;
+            m_setupRepository = rep;
         }
 
         public void EnsureTablesForDerivingFrom<TBase>()
         {
-            GetTypesForDerivingFrom<TBase>().ToList().ForEach(EnsureTable);
+            var all =GetTypesForDerivingFrom<TBase>().ToList();
+            foreach (var t in all)
+            {
+                Debug.WriteLine(t);
+            }
+            all.ForEach(EnsureTable);
         }
 
         public void DropTablesForDerivingFrom<TBase>()
         {
-            GetTypesForDerivingFrom<TBase>().ToList().ForEach(DropTable);
+            var all =GetTypesForDerivingFrom<TBase>().ToList();
+            foreach (var t in all)
+            {
+                Debug.WriteLine(t);
+            }
+            all.ForEach(DropTable);
         }
 
         private IEnumerable<Type> GetTypesForDerivingFrom<TBase>()
         {
-            return Dragon.CPR.Config.Assemblies.SelectMany(x=>x.GetTypes())
+            return AssemblyConfig.Assemblies.SelectMany(x=>x.GetTypes())
                 .Where(t =>
                     t.IsClass && !t.IsAbstract && !t.IsNestedPublic &&
                     !(t.IsAbstract && t.IsSealed) /* => IsStatic */&&
@@ -93,7 +103,7 @@ namespace Dragon.CPR
 
         public void DropTable<T>() where T : class
         {
-            m_dropRepository.DropTableIfExists<T>();
+            m_setupRepository.DropTableIfExists<T>();
             DroppedTables.Add(typeof(T).Name);
         }
 
@@ -127,7 +137,7 @@ namespace Dragon.CPR
 
         public void DropTable(string name)
         {
-            m_dropRepository.DropTableIfExists(name);
+            m_setupRepository.DropTableIfExists(name);
             DroppedTables.Add(name);
         }
 

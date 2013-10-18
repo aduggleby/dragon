@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using Dragon.SQL;
+using System.Linq;
 
 namespace Dragon.Tests.SQL
 {
@@ -14,13 +15,13 @@ namespace Dragon.Tests.SQL
             var dict = new Dictionary<string, object>();
             var subject = "test";
 
-            var s1 = SqlBuilderHelper.FindUniqueNameInDictionary(subject, dict);
+            var s1 = TSQLGenerator.FindUniqueNameInDictionary(subject, dict);
             Assert.IsTrue(s1.Equals("test"));
             dict.Add(s1, null);
-            var s2 = SqlBuilderHelper.FindUniqueNameInDictionary(subject, dict);
+            var s2 = TSQLGenerator.FindUniqueNameInDictionary(subject, dict);
             Assert.IsTrue(s2.Equals("test2"));
             dict.Add(s2, null);
-            var s3 = SqlBuilderHelper.FindUniqueNameInDictionary(subject, dict);
+            var s3 = TSQLGenerator.FindUniqueNameInDictionary(subject, dict);
             Assert.IsTrue(s3.Equals("test3"));
         }
 
@@ -36,7 +37,7 @@ namespace Dragon.Tests.SQL
 
             var parameters = new Dictionary<string, object>();
 
-            var sql = SqlBuilderHelper.BuildWhereClause(tableMD, values, ref parameters);
+            var sql = TSQLGenerator.BuildWhereClause(tableMD, values, ref parameters);
 
             Assert.AreEqual("[a]=@aa AND [c]=@cc", sql);
             Assert.AreEqual(2, parameters.Count);
@@ -47,7 +48,7 @@ namespace Dragon.Tests.SQL
         {
             var tableMD = GetTestMetadata();
 
-            var sql = SqlBuilderHelper.BuildColumnList(tableMD);
+            var sql = TSQLGenerator.BuildColumnList(tableMD);
 
             Assert.AreEqual("[a],[b],[c]", sql);
         }
@@ -64,7 +65,7 @@ namespace Dragon.Tests.SQL
 
             var parameters = new Dictionary<string, object>();
 
-            var sql = SqlBuilderHelper.BuildSelect(tableMD, values, ref parameters);
+            var sql = TSQLGenerator.BuildSelect(tableMD, values, ref parameters);
 
             Assert.AreEqual("SELECT [a] AS 'aa',[b] AS 'bb',[c] AS 'cc' FROM [testtable] WHERE [a]=@aa AND [c]=@cc", sql);
             Assert.AreEqual(2, parameters.Count);
@@ -82,7 +83,7 @@ namespace Dragon.Tests.SQL
 
             var parameters = new Dictionary<string, object>();
 
-            var sql = SqlBuilderHelper.BuildSelect(tableMD, values, ref parameters);
+            var sql = TSQLGenerator.BuildSelect(tableMD, values, ref parameters);
 
             Assert.AreEqual("SELECT [a] AS 'aa',[b] AS 'bb',[c] AS 'cc' FROM [testschema].[testtable] WHERE [a]=@aa AND [c]=@cc", sql);
             Assert.AreEqual(2, parameters.Count);
@@ -100,7 +101,7 @@ namespace Dragon.Tests.SQL
 
             var parameters = new Dictionary<string, object>();
 
-            var sql = SqlBuilderHelper.BuildSelect(tableMD, values, ref parameters);
+            var sql = TSQLGenerator.BuildSelect(tableMD, values, ref parameters);
 
             Assert.AreEqual("SELECT [a] AS 'aa',[b] AS 'bb',[c] AS 'cc' FROM [testschema].[testtable] WHERE [a] IN @aa AND [c]=@cc", sql);
             Assert.AreEqual(2, parameters.Count);
@@ -112,7 +113,7 @@ namespace Dragon.Tests.SQL
             var tableMD = GetTestMetadata();
             Assert.IsNull(tableMD.Schema);
 
-            var sql = SqlBuilderHelper.BuildInsert(tableMD, withoutKeys: false);
+            var sql = TSQLGenerator.BuildInsert(tableMD, withoutKeys: false);
 
             Assert.AreEqual("INSERT INTO [testtable] ([a],[b],[c]) VALUES (@aa,@bb,@cc)", sql);
         }
@@ -123,7 +124,7 @@ namespace Dragon.Tests.SQL
             var tableMD = GetTestMetadata();
             tableMD.Schema = "testschema";
 
-            var sql = SqlBuilderHelper.BuildInsert(tableMD, withoutKeys: false);
+            var sql = TSQLGenerator.BuildInsert(tableMD, withoutKeys: false);
 
             Assert.AreEqual("INSERT INTO [testschema].[testtable] ([a],[b],[c]) VALUES (@aa,@bb,@cc)", sql);
         }
@@ -134,7 +135,7 @@ namespace Dragon.Tests.SQL
             var tableMD = GetTestMetadata();
             Assert.IsNull(tableMD.Schema);
 
-            var sql = SqlBuilderHelper.BuildUpdate(tableMD);
+            var sql = TSQLGenerator.BuildUpdate(tableMD);
 
             Assert.AreEqual("UPDATE [testtable] SET [b]=@bb,[c]=@cc WHERE [a]=@aa", sql);
         }
@@ -145,7 +146,7 @@ namespace Dragon.Tests.SQL
             var tableMD = GetTestMetadata();
             tableMD.Schema = "testschema";
 
-            var sql = SqlBuilderHelper.BuildUpdate(tableMD);
+            var sql = TSQLGenerator.BuildUpdate(tableMD);
 
             Assert.AreEqual("UPDATE [testschema].[testtable] SET [b]=@bb,[c]=@cc WHERE [a]=@aa", sql);
         }
@@ -157,7 +158,7 @@ namespace Dragon.Tests.SQL
             var tableMD = GetTestMetadata();
             Assert.IsNull(tableMD.Schema);
 
-            var sql = SqlBuilderHelper.BuildDelete(tableMD);
+            var sql = TSQLGenerator.BuildDelete(tableMD);
 
             Assert.AreEqual("DELETE FROM [testtable] WHERE [a]=@aa", sql);
         }
@@ -168,9 +169,95 @@ namespace Dragon.Tests.SQL
             var tableMD = GetTestMetadata();
             tableMD.Schema = "testschema";
 
-            var sql = SqlBuilderHelper.BuildDelete(tableMD);
+            var sql = TSQLGenerator.BuildDelete(tableMD);
 
             Assert.AreEqual("DELETE FROM [testschema].[testtable] WHERE [a]=@aa", sql);
+        }
+
+
+        [TestMethod]
+        public void BuildCreate_NoSchema()
+        {
+            var tableMD = GetTestMetadata();
+            Assert.IsNull(tableMD.Schema);
+
+            var sql = TSQLGenerator.BuildCreate(tableMD);
+
+            Assert.AreEqual(@"CREATE TABLE [dbo].[testtable](
+   [a]  NOT NULL,
+   [b]  NOT NULL,
+   [c]  NOT NULL,
+CONSTRAINT [PK_testtable] PRIMARY KEY CLUSTERED ( [a] ASC )
+);
+", sql);
+        }
+
+        [TestMethod]
+        public void BuildCreate_WithSchema()
+        {
+            var tableMD = GetTestMetadata();
+            tableMD.Schema = "testschema";
+
+            var sql = TSQLGenerator.BuildCreate(tableMD, true);
+
+            Assert.AreEqual(@"IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[testschema].[testtable]') AND type in (N'U'))
+BEGIN
+CREATE TABLE [testschema].[testtable](
+   [a]  NOT NULL,
+   [b]  NOT NULL,
+   [c]  NOT NULL,
+CONSTRAINT [PK_testtable] PRIMARY KEY CLUSTERED ( [a] ASC )
+);
+END
+", sql);
+        }
+
+        [TestMethod]
+        public void BuildCreate_WithSchemaAndMultipleKeys()
+        {
+            var tableMD = GetTestMetadata();
+            tableMD.Properties.Add(new PropertyMetadata()
+            {
+                IsPK = true,
+                ColumnName = "a2",
+                PropertyName = "aa22"
+            });
+            tableMD.Schema = "testschema";
+            
+            var sql = TSQLGenerator.BuildCreate(tableMD, true);
+
+            Assert.AreEqual(@"IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[testschema].[testtable]') AND type in (N'U'))
+BEGIN
+CREATE TABLE [testschema].[testtable](
+   [a]  NOT NULL,
+   [a2]  NOT NULL,
+   [b]  NOT NULL,
+   [c]  NOT NULL,
+CONSTRAINT [PK_testtable] PRIMARY KEY CLUSTERED ( [a] ASC,[a2] ASC )
+);
+END
+", sql);
+        }
+
+        [TestMethod]
+        public void BuildCreate_WithSchemaAndNoKeys()
+        {
+            var tableMD = GetTestMetadata();
+            tableMD.Properties.Where(x => x.IsPK).ForEach(x => x.IsPK = false);
+            tableMD.Schema = "testschema";
+
+            var sql = TSQLGenerator.BuildCreate(tableMD, true);
+
+            Assert.AreEqual(@"IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[testschema].[testtable]') AND type in (N'U'))
+BEGIN
+CREATE TABLE [testschema].[testtable](
+   [a]  NOT NULL,
+   [b]  NOT NULL,
+   [c]  NOT NULL,
+
+);
+END
+", sql);
         }
 
 
@@ -180,7 +267,7 @@ namespace Dragon.Tests.SQL
             var tableMD = GetTestMetadata();
             tableMD.Schema = "testschema";
 
-            var sql = SqlBuilderHelper.BuildParameterList(tableMD, withoutKeys: false);
+            var sql = TSQLGenerator.BuildParameterList(tableMD, withoutKeys: false);
 
             Assert.AreEqual("@aa,@bb,@cc", sql);
         }
@@ -191,7 +278,7 @@ namespace Dragon.Tests.SQL
             var tableMD = GetTestMetadata();
             tableMD.Schema = "testschema";
 
-            var sql = SqlBuilderHelper.BuildParameterList(tableMD, withoutKeys: true);
+            var sql = TSQLGenerator.BuildParameterList(tableMD, withoutKeys: true);
 
             Assert.AreEqual("@bb,@cc", sql);
         }

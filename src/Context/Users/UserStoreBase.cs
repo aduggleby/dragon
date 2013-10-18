@@ -75,15 +75,58 @@ namespace Dragon.Context.Users
 
             var user = LoadRegistration(service, key);
 
-            if (user != null && !user.Secret.Equals(secret))
-            {
-                // Reset token is not logged-in
-                //if (!user.UserID.Equals(m_sessionStore.ConnectedUserID))
-                //{
-                //    throw new InvalidOperationException("Cannot update another users secret");
-                //}
+            UpdateSecret(user, (s)=>true, secret);
+        }
 
-                Save(user.UserID, service, key, secret);
+        public bool UpdateSecret(string service, string key, Func<string, bool> secretVerification, string secret)
+        {
+            EnsureArgumentsMeetLengthConstraints(service, key, string.Empty);
+
+            var user = LoadRegistration(service, key);
+
+            return UpdateSecret(user, secretVerification, secret);
+        }
+
+        public bool UpdateSecret(Guid userID, Func<string, bool> secretVerification, string secret)
+        {
+            var user = LoadUser(userID);
+            if (!user.Any())
+            {
+                return false;
+            }
+            var reg = user.First();
+            return UpdateSecret(reg, secretVerification, secret);
+        }
+
+        public bool UpdateSecret(IRegistration user, Func<string, bool> secretVerification, string secret)
+        {
+            if (user != null)
+            {
+                if (!secretVerification(user.Secret))
+                {
+                    return false;
+                }
+
+                if (!user.Secret.Equals(secret))
+                {
+                    var key = user.Key;
+                    var service = user.Service;
+
+                    // Reset token is not logged-in
+                    //if (!user.UserID.Equals(m_sessionStore.ConnectedUserID))
+                    //{
+                    //    throw new InvalidOperationException("Cannot update another users secret");
+                    //}
+
+                    Save(user.UserID, service, key, secret);
+                }
+
+                return true;
+
+            }
+            else
+            {
+                return false;
             }
         }
 

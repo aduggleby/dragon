@@ -4,7 +4,7 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using Demo.DependencyResolution;
-using Dragon.Core.Sql;
+using Dragon.Core.Configuration;
 using Dragon.Notification;
 
 namespace Demo
@@ -16,13 +16,7 @@ namespace Demo
     {
         protected void Application_Start()
         {
-            WebNotificationDispatcher.Init();
-            WebNotificationDispatcher.NotificationHub.Dispatcher = new WebNotificationDispatcher(
-                new StringTemplateTemplateService(),
-                new FileSystemLocalizedDataSource(HttpContext.Current.Server.MapPath("~/Resources/templates"), "txt"),
-                new SqlNotificationStore(StandardSqlStore.ConnectionString)
-                );
-
+            
             AreaRegistration.RegisterAllAreas();
 
             WebApiConfig.Register(GlobalConfiguration.Configuration);

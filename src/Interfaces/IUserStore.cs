@@ -8,7 +8,12 @@ namespace Dragon.Interfaces
 
         bool TryLogin(string service, string key, Func<string,bool> secretVerification);
 
+        bool UpdateSecret(string service, string key, Func<string, bool> secretVerification, string secret);
+
+        bool UpdateSecret(Guid userID, Func<string, bool> secretVerification, string secret);
+
         void UpdateSecret(string service, string key, string secret);
+        
 
         void Register(string service, string key, string secret);
         

@@ -26,12 +26,22 @@ namespace Dragon.Context.Users
         {
             return true;
         }
-
+        
         public void UpdateSecret(string service, string key, string secret)
         {
             // NOP
         }
 
+        public bool UpdateSecret(string service, string key, Func<string, bool> secretVerification, string secret)
+        {
+            // NOP
+            return true;
+        }
+        public bool UpdateSecret(Guid userID, Func<string, bool> secretVerification, string secret)
+        {
+            // NOP
+            return true;
+        }
         public void Register(string service, string key, string secret)
         {
             // NOP

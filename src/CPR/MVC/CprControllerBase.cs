@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -12,9 +13,9 @@ using Dragon.MVC;
 
 namespace Dragon.CPR.MVC
 {
-    public abstract class CPRControllerBase : ControllerBase
+    public abstract class CPRControllerBase : 
+        ControllerBase
     {
-        public IReadModelRepository ReadModelRepository { get; set; }
         public IPermissionStore PermissionStore { get; set; }
         public IProfileStore ProfileStore { get; set; }
 
@@ -24,12 +25,13 @@ namespace Dragon.CPR.MVC
 
         public CPRControllerBase()
         {
+
             ViewBag.Title = string.Empty; // Page Title
             ViewBag.IsEditing = false;
         }
 
 
-        public ActionResult CommandView(object model)
+        public virtual ActionResult CommandView(object model)
         {
             return View("Command", model);
         }

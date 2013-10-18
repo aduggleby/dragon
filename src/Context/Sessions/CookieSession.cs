@@ -34,10 +34,16 @@ namespace Dragon.Context.Sessions
                 CheckAndSetHttpContext();
                 SetVariablesFromHttpContext();
                 LoadFromCookie();
-                SaveToCookie();
+                
+                // WebSocket Requests do not have Response Objects to Save Cookies to
+                if (!HttpContext.Current.IsWebSocketRequest)
+                {
+                    SaveToCookie();
+                }
             }
             catch (Exception ex)
             {
+                if (Debugger.IsAttached) Debugger.Break();
                 throw new Exception("Ctor in CookieSession caught exception.", ex);
             }
         }

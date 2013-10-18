@@ -197,7 +197,7 @@ WHERE [ParentID] = @ParentID</value>
   </data>
   <data name="SqlPermissionStore_DeletePermissionNode" xml:space="preserve">
     <value>DELETE FROM {TABLE}
-           WHERE [ParentID] = @ParentID AND [ChildID = @ChildID]</value>
+           WHERE [ParentID] = @ParentID AND [ChildID] = @ChildID</value>
   </data>
   <data name="SqlPermissionStore_DeletePermissionRight" xml:space="preserve">
     <value>DELETE FROM {TABLE}

@@ -7,7 +7,7 @@ using System.Text;
 using Dapper;
 using Dragon.Common;
 using Dragon.Context.Exceptions;
-using Dragon.Core.Sql;
+using Dragon.Core.Configuration;
 using Dragon.Interfaces;
 
 namespace Dragon.Context.Permissions
@@ -29,7 +29,7 @@ namespace Dragon.Context.Permissions
 
             if (!parents.Contains(parentID))
             {
-                using (var conn = new SqlConnection(StandardSqlStore.ConnectionString))
+                using (var conn = new SqlConnection(ConnectionStringManager.Value))
                 {
                     conn.Open();
                     var param = new DragonPermissionNode() {ParentID = parentID, ChildID = childID};
@@ -44,7 +44,7 @@ namespace Dragon.Context.Permissions
         {
             // no parenthood test here because delete will ignore anyway
 
-            using (var conn = new SqlConnection(StandardSqlStore.ConnectionString))
+            using (var conn = new SqlConnection(ConnectionStringManager.Value))
             {
                 conn.Open();
                 var param = new { ParentID = parentID, ChildID = childID };
@@ -56,7 +56,7 @@ namespace Dragon.Context.Permissions
 
         protected override IEnumerable<Guid> EnumerateParentNodesInternal(Guid childID)
         {
-            using (var conn = new SqlConnection(StandardSqlStore.ConnectionString))
+            using (var conn = new SqlConnection(ConnectionStringManager.Value))
             {
                 conn.Open();
                 var param = new { ChildID = childID };
@@ -69,7 +69,7 @@ namespace Dragon.Context.Permissions
 
         protected override IEnumerable<Guid> EnumerateChildrenNodesInternal(Guid parentID)
         {
-            using (var conn = new SqlConnection(StandardSqlStore.ConnectionString))
+            using (var conn = new SqlConnection(ConnectionStringManager.Value))
             {
                 conn.Open();
                 var param = new { ParentID = parentID };
@@ -80,7 +80,7 @@ namespace Dragon.Context.Permissions
 
         protected override IEnumerable<IPermissionNode> EnumerateAllNodesInternal()
         {
-            using (var conn = new SqlConnection(StandardSqlStore.ConnectionString))
+            using (var conn = new SqlConnection(ConnectionStringManager.Value))
             {
                 conn.Open();
                 var param = new {};
@@ -106,7 +106,7 @@ namespace Dragon.Context.Permissions
                 RemoveRightInternal(nodeID, subjectID, spec);
             }
         
-            using (var conn = new SqlConnection(StandardSqlStore.ConnectionString))
+            using (var conn = new SqlConnection(ConnectionStringManager.Value))
             {
                 conn.Open();
                 var param = new DragonPermissionRight()
@@ -131,7 +131,7 @@ namespace Dragon.Context.Permissions
             if (candidate == null) 
                 throw new RightDoesNotExistException();
 
-            using (var conn = new SqlConnection(StandardSqlStore.ConnectionString))
+            using (var conn = new SqlConnection(ConnectionStringManager.Value))
             {
                 conn.Open();
                 var param = new
@@ -146,7 +146,7 @@ namespace Dragon.Context.Permissions
 
         protected override IEnumerable<IPermissionRight> EnumerateRightsInternal(Guid nodeID)
         {
-            using (var conn = new SqlConnection(StandardSqlStore.ConnectionString))
+            using (var conn = new SqlConnection(ConnectionStringManager.Value))
             {
                 conn.Open();
                 var param = new { NodeID = nodeID };
@@ -156,7 +156,7 @@ namespace Dragon.Context.Permissions
 
         protected override IEnumerable<IPermissionRight> EnumerateAllRightsInternal()
         {
-            using (var conn = new SqlConnection(StandardSqlStore.ConnectionString))
+            using (var conn = new SqlConnection(ConnectionStringManager.Value))
             {
                 conn.Open();
                 var param = new {  };

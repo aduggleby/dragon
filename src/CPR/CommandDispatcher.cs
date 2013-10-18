@@ -5,6 +5,7 @@ using Dragon.CPR.Errors;
 using Dragon.CPR.Impl.Projections;
 using Dragon.CPR.Interfaces;
 using Dragon.Context;
+using Dragon.Interfaces;
 using Newtonsoft.Json;
 using StructureMap;
 
@@ -15,12 +16,12 @@ namespace Dragon.CPR
     {
         private readonly IProjection<TCommand>[] m_projections;
         private readonly IHandler<TCommand>[] m_handlers;
-        private readonly ICommandRepository m_repository;
+        private readonly IRepository<Command> m_commandRepository;
         private readonly JsonSerializerSettings m_jsonSerializerSettings;
 
         public DragonContext Ctx { get; set; }
 
-        public CommandDispatcher(ICommandRepository r, IContainer container)
+        public CommandDispatcher(IRepository<Command> r, IContainer container)
         {
             m_jsonSerializerSettings = new JsonSerializerSettings();
 
@@ -30,7 +31,7 @@ namespace Dragon.CPR
             m_projections = container.GetAllInstances<IProjection<TCommand>>().ToArray();
             m_handlers = container.GetAllInstances<IHandler<TCommand>>().OrderBy(x => x.Order).ToArray();
 
-            m_repository = r;
+            m_commandRepository = r;
         }
 
         public override IEnumerable<ErrorBase> Dispatch(TCommand o)
@@ -69,12 +70,14 @@ namespace Dragon.CPR
             var cmd = new Command();
             cmd.CommandID = o.CommandID;
             cmd.Executed = DateTime.UtcNow;
-            cmd.UserID = Ctx.CurrentUserID;
+            if (Ctx != null)
+            {
+                cmd.UserID = Ctx.CurrentUserID;
+            }
             cmd.Type = o.GetType().ToString();
             cmd.JSON = JsonConvert.SerializeObject(o, m_jsonSerializerSettings);
 
-            m_repository.Insert(cmd);
-
+            m_commandRepository.Insert(cmd);
         }
 
         public void Project(TCommand o)
