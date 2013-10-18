@@ -38,8 +38,12 @@ namespace Dragon.Context.Attributes
         protected override void HandleUnauthorizedRequest(AuthorizationContext filterContext)
         {
             Debug.WriteLine(string.Format("Unauthorized request (UserID: '{0}'). Redirecting to login page.", UserID));
+            
             var url = LoginUrl;
-            filterContext.Result = new RedirectResult(url);
+            var ctx = filterContext.RequestContext.HttpContext;
+            var go = ctx.Request.Path;
+            go = ctx.Server.UrlEncode(go);
+            filterContext.Result = new RedirectResult(url + "?go=" + go);
         }
 
         public static string LoginUrl

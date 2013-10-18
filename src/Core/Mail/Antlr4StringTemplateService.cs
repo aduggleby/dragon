@@ -19,8 +19,7 @@ namespace Dragon.Core.Mail
         private readonly IFileService m_fileService;
 
         private const string CONFIG_BASEDIR = "Dragon.Templates.StringTemplate.BaseDir";
-
-
+        
         [DefaultConstructor]
         public Antlr4StringTemplateService(IConfiguration configuration, IDirectoryService dirService, IFileService fileService)
         {
@@ -90,15 +89,22 @@ namespace Dragon.Core.Mail
                 file = file.Skip(1).ToArray();
             }
 
+            
+            var list = activity.ToList();
+            var first = list.FirstOrDefault();
+
             var tmpl = new Template(string.Join(Environment.NewLine, file), '$', '$');
-            tmpl.Add("model", activity);
+            tmpl.Add("models", list);
+            tmpl.Add("model", first);
+
             tmpl.Add("to", notifiable);
             result.Body = tmpl.Render();
 
             if (subject != null)
             {
                 var subjecttmpl = new Template(subject, '$', '$');
-                subjecttmpl.Add("model", activity);
+                tmpl.Add("models", list);
+                tmpl.Add("model", first);
                 subjecttmpl.Add("to", notifiable);
                 result.Subject = subjecttmpl.Render();
             }
