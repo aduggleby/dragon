@@ -35,6 +35,9 @@ namespace Dragon.Context.Extensions.Login
             }
         }
 
+        /// <summary>
+        /// Note: Does not check old password of oldpassword is set to null!
+        /// </summary>
         public static void ChangePassword(this DragonContext ctx, string username, string oldpassword, string password)
         {
             if (!ctx.UserStore.HasUserByKey(SERVICE_ID, username))
@@ -45,7 +48,17 @@ namespace Dragon.Context.Extensions.Login
             {
                 var hashedSaltedSecret = HashUtil.ComputeHash(password);
 
-                var res = ctx.UserStore.UpdateSecret(SERVICE_ID, username, (s) => HashUtil.VerifyHash(oldpassword, s), hashedSaltedSecret);
+                bool res;
+                if (oldpassword == null)
+                {
+                    // do not verify oldpassword if set to null
+                    ctx.UserStore.UpdateSecret(SERVICE_ID, username, hashedSaltedSecret);
+                    res = true;
+                }
+                else
+                {
+                    res = ctx.UserStore.UpdateSecret(SERVICE_ID, username, (s) => HashUtil.VerifyHash(oldpassword, s), hashedSaltedSecret);
+                }
                 if (!res) throw new InvalidUserOrOldSecretException();
             }
         }
