@@ -28,12 +28,15 @@ namespace Dragon.Context.Extensions.Login
         public static bool ExistsAccountForExternallyValidatedAccount(
           this DragonContext ctx, string service, string identifier)
         {
+            if (service == null) throw new Exception("Service is null");
+            if (identifier == null) throw new Exception("Identifier is null");
+
             var success = ctx.UserStore.TryLogin(PrefixedService(service), identifier, (s) => true);
             if (success)
             {
                 DragonContext.ProfileStore.SetProperty(ctx.CurrentUserID,
-                                                               DragonContext.PROFILEKEY_SERVICE,
-                                                               SERVICE_ID);
+                    DragonContext.PROFILEKEY_SERVICE,
+                    SERVICE_ID);
             }
             return success;
         }

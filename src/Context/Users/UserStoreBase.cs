@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using Common.Logging;
 using Dragon.Context.Exceptions;
 using Dragon.Interfaces;
 using Dragon.Common.Util;
@@ -12,6 +13,8 @@ namespace Dragon.Context.Users
     public abstract class UserStoreBase : IUserStore
     {
         private ISessionStore m_sessionStore;
+        
+        private static readonly ILog s_log = LogManager.GetCurrentClassLogger();
 
         public UserStoreBase(ISessionStore sessionStore)
         {
@@ -50,6 +53,16 @@ namespace Dragon.Context.Users
 
         public bool TryLogin(string service, string key, Func<string, bool> secretVerification)
         {
+            if (service == null)
+            {
+                throw new Exception("Service is null");
+            }
+
+            if (key == null)
+            {
+                throw new Exception("Key is null");
+            }
+
             EnsureArgumentsMeetLengthConstraints(service, key, string.Empty);
 
             m_sessionStore.ConnectedUserID = Guid.Empty;
@@ -151,7 +164,7 @@ namespace Dragon.Context.Users
             var existingUser = LoadRegistration(service, key) ?? LoadUser(userID).FirstOrDefault();
             if (existingUser != null)
             {
-                throw new ServiceAlreadyConnectedToUserException();
+                throw new ServiceAlreadyConnectedToUserException() { Service = existingUser.Service };
             }
 
             Save(userID, service, key, secret);

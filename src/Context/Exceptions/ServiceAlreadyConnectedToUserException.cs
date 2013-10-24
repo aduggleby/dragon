@@ -7,5 +7,6 @@ namespace Dragon.Context.Exceptions
 {
     public class ServiceAlreadyConnectedToUserException : Exception
     {
+        public string Service { get; set; }
     }
 }
