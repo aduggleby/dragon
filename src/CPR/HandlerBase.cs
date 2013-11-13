@@ -11,7 +11,6 @@ namespace Dragon.CPR
     public abstract class HandlerBase<T> : IHandler<T>
         where T : CommandBase
     {
-        public IRepository<T> Repository { get; set; }
 
         public abstract IEnumerable<ErrorBase> Handle(T obj);
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Transactions;
 using Dragon.CPR.Errors;
 using Dragon.CPR.Impl.Projections;
 using Dragon.CPR.Interfaces;
@@ -36,20 +37,26 @@ namespace Dragon.CPR
 
         public override IEnumerable<ErrorBase> Dispatch(TCommand o)
         {
-            if (o.CommandID == Guid.Empty) o.CommandID = Guid.NewGuid();
-
-            var errors = Handle(o).ToList();
-            if (!errors.Any())
+            using (var tx = new TransactionScope())
             {
-                Persist(o);
-                Project(o);
+                if (o.CommandID == Guid.Empty) o.CommandID = Guid.NewGuid();
+
+                var errors = Handle(o).ToList();
+                if (!errors.Any())
+                {
+                    Persist(o);
+                    Project(o);
+                }
+                
+                tx.Complete();
+
+                return errors;
             }
-            return errors;
         }
 
         public IEnumerable<ErrorBase> Handle(TCommand o)
         {
-            List<ErrorBase> l = new List<ErrorBase>();
+            var l = new List<ErrorBase>();
             foreach (var handlerGroup in m_handlers.GroupBy(x => x.Order).OrderBy(X => X.Key))
             {
                 foreach (var handler in handlerGroup)
