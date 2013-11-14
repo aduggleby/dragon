@@ -71,20 +71,14 @@ namespace Files
             return memoryStream;
         }
 
-        public ActionResult RetrieveUrl(string resourceID)
+        public ActionResult RetrieveAsActionResult(string resourceID)
         {
-            var request = new GetPreSignedUrlRequest {BucketName = _bucket, Key = resourceID, Expires = DateTime.Now.AddHours(1)};
-            string url;
-            try
-            {
-                 url = _client.GetPreSignedURL(request);
-            }
-            catch (AmazonS3Exception e)
-            {
-                // Catching exception instead of checking if the resource exists beforehand for performance reasons only.
-                throw new ResourceToRetrieveNotFoundException("Unable to retrieve resource.", e);
-            }
-            return new RedirectResult(FixUrl(url));
+            return new RedirectResult(GetUrl(resourceID));
+        }
+
+        public string RetrieveAsUrl(string resourceID)
+        {
+            return GetUrl(resourceID);
         }
 
         public void Delete(string resourceID)
@@ -115,6 +109,27 @@ namespace Files
         {
             var subDomain = new Uri(url).PathAndQuery.Split('/')[1];
             return url.Replace(subDomain + "/", "").Replace("//", "//" + subDomain + ".");
+        }
+
+        private string GetUrl(string resourceID)
+        {
+            var request = new GetPreSignedUrlRequest
+            {
+                BucketName = _bucket,
+                Key = resourceID,
+                Expires = DateTime.Now.AddHours(1)
+            };
+            string url;
+            try
+            {
+                url = _client.GetPreSignedURL(request);
+            }
+            catch (AmazonS3Exception e)
+            {
+                // Catching exception instead of checking if the resource exists beforehand for performance reasons only.
+                throw new ResourceToRetrieveNotFoundException("Unable to retrieve resource.", e);
+            }
+            return FixUrl(url);
         }
     }
 }

@@ -46,6 +46,13 @@ namespace Dragon.Interfaces.Files
         /// </summary>
         /// <param name="resourceID">The unique id of the resource to search for.</param>
         /// <returns></returns>
-        ActionResult RetrieveUrl(string resourceID);
+        ActionResult RetrieveAsActionResult(string resourceID);
+
+        /// <summary>
+        ///     Returns an Url that points to the resource.
+        /// </summary>
+        /// <param name="resourceID">The unique id of the resource to search for.</param>
+        /// <returns></returns>
+        string RetrieveAsUrl(string resourceID);
     }
 }

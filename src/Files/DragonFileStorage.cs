@@ -56,9 +56,14 @@ namespace Files
             return _fileStorage.Exists(resourceID);
         }
 
-        public ActionResult RetrieveUrl(string resourceID)
+        public ActionResult RetrieveAsActionResult(string resourceID)
         {
-            return _fileStorage.RetrieveUrl(resourceID);
+            return _fileStorage.RetrieveAsActionResult(resourceID);
+        }
+
+        public string RetrieveAsUrl(string resourceID)
+        {
+            return _fileStorage.RetrieveAsUrl(resourceID);
         }
     }
 }

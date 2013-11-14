@@ -26,23 +26,42 @@ namespace FilesTest
         }
 
         [TestMethod]
-        public void RetrieveUrl_validFile_shouldReturnUrl()
+        [ExpectedException(typeof(ResourceToRetrieveNotFoundException))]
+        public void RetrieveAsActionResult_invalidFile_shouldThrowException()
+        {
+            var fileStorage = CreateFileStorage();
+            fileStorage.RetrieveAsActionResult(Guid.NewGuid().ToString());
+        }
+
+        [TestMethod]
+        public void RetrieveAsActionResult_validFile_shouldReturnActionResult()
         {
             var fileStorage = CreateFileStorage();
             var id = fileStorage.Store(TestFilePath);
-            var stream = (FileStreamResult) fileStorage.RetrieveUrl(id);
+            var stream = (FileStreamResult) fileStorage.RetrieveAsActionResult(id);
             var actual = new StreamReader(stream.FileStream).ReadToEnd();
             stream.FileStream.Close();
             fileStorage.Delete(id); // cleanup
             Assert.AreEqual(TestFileContent, actual);
         }
-        
+
         [TestMethod]
         [ExpectedException(typeof(ResourceToRetrieveNotFoundException))]
-        public void RetrieveUrl_invalidFile_shouldThrowException()
+        public void RetrieveAsUrl_invalidFile_shouldThrowException()
         {
             var fileStorage = CreateFileStorage();
-            fileStorage.RetrieveUrl(Guid.NewGuid().ToString());
+            fileStorage.RetrieveAsUrl(Guid.NewGuid().ToString());
+        }
+
+        [TestMethod]
+        [TestCategory("IntegrationTest")]
+        public void RetrieveAsUrl_validFile_shouldReturnUrl()
+        {
+            var fileStorage = CreateFileStorage();
+            var id = fileStorage.Store(TestFilePath);
+            var actual = File.ReadAllText(fileStorage.RetrieveAsUrl(id));
+            fileStorage.Delete(id); // cleanup
+            Assert.AreEqual(TestFileContent, actual);
         }
     }
 }

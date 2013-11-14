@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Specialized;
 using System.Configuration;
+using System.Net;
 using System.Web.Mvc;
 using Dragon.Interfaces.Files;
 using Files;
@@ -26,13 +27,22 @@ namespace FilesTest
             return fileStorage;
         }
 
+        [Ignore] // S3 does not throw an exception in this case...
         [TestMethod]
-        public void RetrieveUrl_validFile_shouldReturnUrl()
+        [ExpectedException(typeof(ResourceToRetrieveNotFoundException))]
+        public void RetrieveAsActionResult_invalidFile_shouldThrowException()
+        {
+            var fileStorage = CreateFileStorage();
+            fileStorage.RetrieveAsActionResult(Guid.NewGuid().ToString());
+        }
+
+        [TestMethod]
+        public void RetrieveAsActionResult_validFile_shouldReturnActionResult()
         {
             var fileStorage = CreateFileStorage();
             var id = fileStorage.Store(TestFilePath);
-            var actualUrl = ((RedirectResult)fileStorage.RetrieveUrl(id)).Url;
-            var actual = new System.Net.WebClient().DownloadString(actualUrl);
+            var actualUrl = ((RedirectResult)fileStorage.RetrieveAsActionResult(id)).Url;
+            var actual = new WebClient().DownloadString(actualUrl);
             fileStorage.Delete(id); // cleanup
             Assert.AreEqual(TestFileContent, actual);
         }
@@ -40,10 +50,21 @@ namespace FilesTest
         [Ignore] // S3 does not throw an exception in this case...
         [TestMethod]
         [ExpectedException(typeof(ResourceToRetrieveNotFoundException))]
-        public void RetrieveUrl_invalidFile_shouldThrowException()
+        public void RetrieveAsUrl_invalidFile_shouldThrowException()
         {
             var fileStorage = CreateFileStorage();
-            fileStorage.RetrieveUrl(Guid.NewGuid().ToString());
-        }    
+            fileStorage.RetrieveAsUrl(Guid.NewGuid().ToString());
+        }
+ 
+        [TestMethod]
+        [TestCategory("IntegrationTest")]
+        public void RetrieveAsUrl_validFile_shouldRetrieveUrl()
+        {
+            var fileStorage = CreateFileStorage();
+            var id = fileStorage.Store(TestFilePath);
+            var actual = new WebClient().DownloadString(fileStorage.RetrieveAsUrl(id));
+            fileStorage.Delete(id); // cleanup
+            Assert.AreEqual(TestFileContent, actual);
+        }
     }
 }

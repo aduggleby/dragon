@@ -55,12 +55,18 @@ namespace Files
             return stream;
         }
 
-        public ActionResult RetrieveUrl(string resourceID)
+        public ActionResult RetrieveAsActionResult(string resourceID)
         {
             if (!Exists(resourceID)) throw new ResourceToRetrieveNotFoundException("Key not found: " + resourceID);
             var mimeMapping = MimeMapping.GetMimeMapping(CreatePath(resourceID));
             // This may lock the resource, if this is an issue clone the stream like in the Retrieve method.
             return new FileStreamResult(new FileStream(CreatePath(resourceID), FileMode.Open), mimeMapping);
+        }
+
+        public string RetrieveAsUrl(string resourceID)
+        {
+            if (!Exists(resourceID)) throw new ResourceToRetrieveNotFoundException("Key not found: " + resourceID);
+            return Path.GetFullPath(CreatePath(resourceID));
         }
 
         public void Delete(string resourceID)
