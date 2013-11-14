@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Net;
 using System.Net.Mail;
+using System.Web;
 using Dragon.Interfaces;
 using Dragon.Interfaces.Core;
 
@@ -32,8 +33,15 @@ namespace Dragon.Notification
             msg.IsBodyHtml = useHtmlEmail;
             msg.Body = body;
 
-
-            client.Send(msg); // TODO ASYNC
+            try
+            {
+                client.Send(msg); // TODO ASYNC
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(string.Format("Failure sending email with configuration ({0}:{1}, {2})",
+                    _client.Host, _client.Port, Configuration.GetValue(DragonMailSmtpUserKey, String.Empty)));
+            }
         }
 
         protected SmtpClient GetSmtpClient()
