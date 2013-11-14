@@ -1,9 +1,14 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using Dragon.Interfaces.Files;
 
 namespace Files
 {
+    /// <summary>
+    /// Checks the file extension to determine if a file is allowed.
+    /// Note: Also allows files with no extension to be uploaded!
+    /// </summary>
     public class FileExtensionRestriction : IFileRestriction
     {
         private readonly string[] _allowedFileExtensions;
@@ -15,7 +20,9 @@ namespace Files
 
         public bool IsAllowed(string filePath)
         {
+            if (filePath == null) throw new ArgumentNullException("filePath");
             var extension = Path.GetExtension(filePath);
+            if (extension == "") return true;
             return extension != null && _allowedFileExtensions.Contains(extension.TrimStart('.'));
         }
 

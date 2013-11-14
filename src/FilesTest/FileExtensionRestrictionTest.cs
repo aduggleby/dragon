@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Dragon.Interfaces.Files;
 using Files;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -22,6 +23,21 @@ namespace FilesTest
         {
             var fileRestriction = CreateFileRestriction();
             Assert.IsFalse(fileRestriction.IsAllowed("file." + AllowedExtensions.First() + "blub"));            
+        }
+
+        [TestMethod]
+        public void IsAllowed_noExtension_shouldReturnTrue()
+        {
+            var fileRestriction = CreateFileRestriction();
+            Assert.IsTrue(fileRestriction.IsAllowed("blah"));
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void IsAllowed_pathIsNull_shouldThrowNullPointerException()
+        {
+            var fileRestriction = CreateFileRestriction();
+            Assert.IsTrue(fileRestriction.IsAllowed(null));
         }
 
         private static IFileRestriction CreateFileRestriction()
