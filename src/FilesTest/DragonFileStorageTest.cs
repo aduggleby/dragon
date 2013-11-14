@@ -106,9 +106,9 @@ namespace FilesTest
 
         # region helper
 
-        private static MemoryStream CreateStreamReader(string ohai)
+        private static MemoryStream CreateStreamReader(string content)
         {
-            return (new MemoryStream(Encoding.Default.GetBytes(ohai)));
+            return (new MemoryStream(Encoding.Default.GetBytes(content)));
         }
 
         private static Mock<IFileStorage> CreateFileStorageMock()

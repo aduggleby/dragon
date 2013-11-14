@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Web.Mvc;
 using Dragon.Interfaces;
 using Dragon.Interfaces.Files;
@@ -29,6 +30,11 @@ namespace Files
         public string Store(string filePath)
         {
             return _fileStorage.Store(filePath);
+        }
+
+        public string Store(Stream content, String filePath)
+        {
+            return _fileStorage.Store(content, filePath);
         }
 
         /// <summary>

@@ -35,8 +35,18 @@ namespace Files
         {
             if (!File.Exists(filePath)) throw new ResourceToStoreNotFoundException();
             if (!_fileRestriction.IsAllowed(filePath)) throw new FileTypeNotAllowedException();
-            var id = Guid.NewGuid() + Path.GetExtension(filePath);
+            var id = CreateKey(filePath);
             var request = new PutObjectRequest {BucketName = _bucket, FilePath = filePath, Key = id};
+            _client.PutObject(request);
+            return id;
+        }
+
+        public string Store(Stream content, String filePath)
+        {
+            if (content == null) throw new ResourceToStoreNotFoundException("The passed stream is null.");
+            if (!_fileRestriction.IsAllowed(filePath)) throw new FileTypeNotAllowedException();
+            var id = CreateKey(filePath);
+            var request = new PutObjectRequest {BucketName = _bucket, Key = id, InputStream = content};
             _client.PutObject(request);
             return id;
         }
@@ -77,12 +87,6 @@ namespace Files
             return new RedirectResult(FixUrl(url));
         }
 
-        private static string FixUrl(string url)
-        {
-            var subDomain = new Uri(url).PathAndQuery.Split('/')[1];
-            return url.Replace(subDomain + "/", "").Replace("//", "//" + subDomain + ".");
-        }
-
         public void Delete(string resourceID)
         {
             if (!Exists(resourceID)) throw new ResourceToRetrieveNotFoundException("Key not found: " + resourceID);
@@ -100,6 +104,17 @@ namespace Files
         public void Dispose()
         {
             _client.Dispose();
+        }
+
+        private static string CreateKey(string filePath)
+        {
+            return Guid.NewGuid() + Path.GetExtension(filePath);
+        }
+
+        private static string FixUrl(string url)
+        {
+            var subDomain = new Uri(url).PathAndQuery.Split('/')[1];
+            return url.Replace(subDomain + "/", "").Replace("//", "//" + subDomain + ".");
         }
     }
 }

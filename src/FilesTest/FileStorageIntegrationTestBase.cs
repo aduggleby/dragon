@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Text;
 using Dragon.Interfaces.Files;
 using Files;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -66,9 +67,9 @@ namespace FilesTest
         {
             var fileStorage = CreateFileStorage();
             var id = fileStorage.Store(TestFilePath);
+            Assert.IsFalse(string.IsNullOrEmpty(id));
             var exists = fileStorage.Exists(id);
             fileStorage.Delete(id); // cleanup
-            Assert.AreNotEqual("", id);
             Assert.AreEqual(true, exists);
         }
 
@@ -92,8 +93,41 @@ namespace FilesTest
 
         [TestMethod]
         [TestCategory("IntegrationTest")]
+        [ExpectedException(typeof(ResourceToStoreNotFoundException))]
+        public void Store_nullStream_shouldThrowException()
+        {
+            var fileStorage = CreateFileStorage();
+            fileStorage.Store(null, "blah.txt");
+        }
+
+        [TestMethod]
+        [TestCategory("IntegrationTest")]
+        public void Store_validStream_shouldUploadFile()
+        {
+            const string content = "testcontent\n\n23";
+            var fileStorage = CreateFileStorage();
+            var id = fileStorage.Store(new MemoryStream(Encoding.UTF8.GetBytes(content)), "blah.txt");
+            Assert.IsFalse(string.IsNullOrEmpty(id));
+            var exists = fileStorage.Exists(id);
+            var actual = new StreamReader(fileStorage.Retrieve(id)).ReadToEnd();
+            fileStorage.Delete(id); // cleanup
+            Assert.AreEqual(true, exists);
+            Assert.AreEqual(content, actual);
+        }
+
+        [TestMethod]
+        [TestCategory("IntegrationTest")]
+        [ExpectedException(typeof(FileTypeNotAllowedException))]
+        public void Store_disallowedStream_shouldThrowException()
+        {
+            var fileStorage = CreateFileStorage();
+            fileStorage.Store(new MemoryStream(Encoding.UTF8.GetBytes("blah")), DisallowedTestFilePath);
+        }
+
+        [TestMethod]
+        [TestCategory("IntegrationTest")]
         [ExpectedException(typeof(ResourceToRetrieveNotFoundException))]
-        public void Retrieve_invalidFile_shoulThrowException()
+        public void Retrieve_invalidFile_shouldThrowException()
         {
             var fileStorage = CreateFileStorage();
             fileStorage.Retrieve(Guid.NewGuid().ToString());

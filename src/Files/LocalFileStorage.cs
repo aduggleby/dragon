@@ -31,6 +31,18 @@ namespace Files
             return id;
         }
 
+        public string Store(Stream content, String filePath)
+        {
+            if (content == null) throw new ResourceToStoreNotFoundException("The passed stream is null.");
+            if (!_fileRestriction.IsAllowed(filePath)) throw new FileTypeNotAllowedException();
+            var id = Guid.NewGuid() + Path.GetExtension(filePath);
+            using (var fileStream = File.Create(CreatePath(id)))
+            {
+                content.CopyTo(fileStream);
+            }
+            return id;
+        }
+
         public Stream Retrieve(string resourceID)
         {
             if (!Exists(resourceID)) throw new ResourceToRetrieveNotFoundException("Key not found: " + resourceID);

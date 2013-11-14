@@ -16,6 +16,8 @@ src/FilesTest/App.config
 UpgradeLog.*
 _UpgradeReport_Files/
 
+*.orig
+
 # OS generated files #
 ######################
 .DS_Store?

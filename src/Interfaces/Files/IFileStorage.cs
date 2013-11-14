@@ -7,11 +7,19 @@ namespace Dragon.Interfaces.Files
     public interface IFileStorage
     {
         /// <summary>
-        ///     Uploads a file to a storage provider.
+        ///     Uploads a local file to a storage provider.
         /// </summary>
         /// <param name="filePath">The path of the file that is to be uploaded.</param>
         /// <returns>A unique id of the stored resource.</returns>
         String Store(String filePath);
+
+        /// <summary>
+        ///     Uploads the content of a stream to a storage provider.
+        /// </summary>
+        /// <param name="content">The content of the file to store.</param>
+        /// <param name="filePath">The path of the file. This is just used to check restrictions.</param>
+        /// <returns>A unique id of the stored resource.</returns>
+        String Store(Stream content, String filePath);
 
         /// <summary>
         ///     Retrieves a file from a storage provider.
