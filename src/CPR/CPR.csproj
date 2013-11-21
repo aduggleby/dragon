@@ -101,6 +101,7 @@
     <Compile Include="Command.cs" />
     <Compile Include="CommandBase.cs" />
     <Compile Include="CommandDispatcher.cs" />
+    <Compile Include="RepositoryHandlerBase.cs" />
     <Compile Include="Impl\Projections\InterceptingProjectionBase.cs" />
     <Compile Include="Impl\Projections\TargetProjectionBase.cs" />
     <Compile Include="Impl\Projections\ProjectionBase.cs" />

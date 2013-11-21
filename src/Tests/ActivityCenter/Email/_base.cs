@@ -16,6 +16,8 @@ namespace Dragon.Tests.Notification.Email
         protected Func<INotifiable, IActivity, IEnumerable<IActivity>> m_flushSinceActivityFor;
         protected Func<IEnumerable<IActivity>, string[], INotifiable, ITemplateServiceResult> m_generate;
         protected Action<string, string, string, bool> m_send;
+        protected Action<string, string, string, bool, Dictionary<string, byte[]>> m_sendWithAttachments;
+
         //protected Action<IActivity, INotifiable> m_saveNotifiable;
         //protected Action<IActivity> m_save;
         //protected Func<IActivity, IEnumerable<IActivity>> m_getSince;
@@ -51,6 +53,11 @@ namespace Dragon.Tests.Notification.Email
             m_send(to,subject,body,useHtmlEmail);
         }
 
+        public void Send(string to, string subject, string body, bool useHtmlEmail, Dictionary<string, byte[]> attachments)
+        {
+            m_sendWithAttachments(to, subject, body, useHtmlEmail, attachments);
+        }
+
         public ITemplateServiceResult Generate(IEnumerable<IActivity> activity, string[] subtypeOrder, INotifiable notifiable)
         {
             return m_generate(activity, subtypeOrder, notifiable);
@@ -59,7 +66,6 @@ namespace Dragon.Tests.Notification.Email
         public IEnumerable<IActivity> AppendAndFlushIfNecessary(INotifiable notifiable, IActivity activity)
         {
             return m_flushSinceActivityFor(notifiable, activity);
-
         }
         
         public IEmailProfile GetProfile(INotifiable notifiable)

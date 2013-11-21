@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Net;
 using System.Net.Mail;
 using System.Web;
@@ -23,7 +25,16 @@ namespace Dragon.Notification
 
         public void Send(string to, string subject, string body, bool useHtmlEmail)
         {
+            SendInternal(to, subject, body, useHtmlEmail, null);
+        }
 
+        public void Send(string to, string subject, string body, bool useHtmlEmail, Dictionary<string, byte[]> attachments)
+        {
+            SendInternal(to, subject, body, useHtmlEmail, attachments);
+        }
+
+        private void SendInternal(string to, string subject, string body, bool useHtmlEmail, Dictionary<string, byte[]> attachments)
+        {
             var client = GetSmtpClient();
 
             var msg = new MailMessage();
@@ -32,6 +43,17 @@ namespace Dragon.Notification
             msg.Subject = subject;
             msg.IsBodyHtml = useHtmlEmail;
             msg.Body = body;
+
+            if (attachments != null)
+            {
+                foreach (var attachment in attachments)
+                {
+                    using (var ms = new MemoryStream(attachment.Value))
+                    {
+                        msg.Attachments.Add(new Attachment(ms, attachment.Key));
+                    }
+                }
+            }
 
             try
             {
