@@ -10,7 +10,7 @@ using Dragon.Context;
 using Dragon.Context.Exceptions;
 using Dragon.Context.Extensions.Login;
 using Dragon.Interfaces;
-using StructureMap;
+
 
 namespace Demo.Controllers
 {

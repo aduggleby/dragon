@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Transactions;
 using Dragon.CPR.Errors;
@@ -16,6 +17,8 @@ namespace Dragon.CPR
         where TCommand : CommandBase
     {
         private readonly IProjection<TCommand>[] m_projections;
+        private readonly IProjection<object>[] m_genericprojections;
+
         private readonly IHandler<TCommand>[] m_handlers;
         private readonly IRepository<Command> m_commandRepository;
         private readonly JsonSerializerSettings m_jsonSerializerSettings;
@@ -30,6 +33,8 @@ namespace Dragon.CPR
             m_jsonSerializerSettings.TypeNameHandling = TypeNameHandling.All;
 
             m_projections = container.GetAllInstances<IProjection<TCommand>>().ToArray();
+            m_genericprojections = container.GetAllInstances<IProjection<object>>().ToArray();
+
             m_handlers = container.GetAllInstances<IHandler<TCommand>>().OrderBy(x => x.Order).ToArray();
 
             m_commandRepository = r;
@@ -79,7 +84,7 @@ namespace Dragon.CPR
             cmd.Executed = DateTime.UtcNow;
             if (Ctx != null)
             {
-                cmd.UserID = Ctx.CurrentUserID;
+                cmd.UserID = o.ExecutingUserID;
             }
             cmd.Type = o.GetType().ToString();
             cmd.JSON = JsonConvert.SerializeObject(o, m_jsonSerializerSettings);
@@ -97,6 +102,11 @@ namespace Dragon.CPR
                     usesCommand.Command = o;
                 }
                 
+                projection.Project(o);
+            }
+
+            foreach (var projection in m_genericprojections)
+            {
                 projection.Project(o);
             }
         }

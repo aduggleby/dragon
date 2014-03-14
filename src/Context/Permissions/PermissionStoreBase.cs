@@ -13,6 +13,7 @@ namespace Dragon.Context.Permissions
     {
         private List<ITreeNode<Guid, List<IPermissionRight>>> m_treeInternal;
         private bool m_treeDirty = true;
+        private object m_lockObj = new object();
 
         public PermissionStoreBase()
         {
@@ -22,77 +23,83 @@ namespace Dragon.Context.Permissions
         {
             get
             {
-                if (m_treeDirty)
+                lock (m_lockObj)
                 {
-                    DebugPrint("Rebuilding tree...");
-                    DebugPrint(DebugOutputTree(null, m_treeInternal).ToString());
-                    DebugPrint("... now ...");
-                    RebuildTree();
-                    DebugPrint(DebugOutputTree(null, m_treeInternal).ToString());
-                    DebugPrint("...done");
+                    if (m_treeDirty)
+                    {
+                        DebugPrint("Rebuilding tree...");
+                        DebugPrint(DebugOutputTree(null, m_treeInternal).ToString());
+                        DebugPrint("... now ...");
+                        RebuildTree();
+                        DebugPrint(DebugOutputTree(null, m_treeInternal).ToString());
+                        DebugPrint("...done");
 
+                    }
+                    else
+                    {
+                        DebugPrint("Tree is not dirty.");
+                    }
+                    return m_treeInternal;
                 }
-                else
-                {
-                    DebugPrint("Tree is not dirty.");
-                }
-                return m_treeInternal;
             }
         }
 
         protected virtual void RebuildTree()
         {
-            var rights = EnumerateAllRightsInternal();
-            m_treeInternal = TreeBuilder.Build(
-                EnumerateAllNodesInternal(),
-                (x) => x.ParentID,
-                (x) => x.ChildID,
-                (x) => rights.Where(r => r.NodeID == x).ToList()).ToList();
-
-            DebugPrint("Tree built internally...");
-            DebugPrint(DebugOutputTree(null, m_treeInternal).ToString());
-            DebugPrint("...now adding loose rights");
-
-            // add rights that are not in a tree structure
-            foreach (var right in rights)
+            lock (m_lockObj)
             {
-                var exNode = m_treeInternal
-                    .Select(x => x.GetChildInTree(right.NodeID))
-                    .FirstOrDefault(x => x != null);
+                var rights = EnumerateAllRightsInternal();
+                m_treeInternal = TreeBuilder.Build(
+                    EnumerateAllNodesInternal(),
+                    (x) => x.ParentID,
+                    (x) => x.ChildID,
+                    (x) => rights.Where(r => r.NodeID == x).ToList()).ToList();
 
-                if (exNode == null)
+                DebugPrint("Tree built internally...");
+                DebugPrint(DebugOutputTree(null, m_treeInternal).ToString());
+                DebugPrint("...now adding loose rights");
+
+                // add rights that are not in a tree structure
+                foreach (var right in rights)
                 {
-                    var node = new TreeNode<Guid, List<IPermissionRight>>()
+                    var exNode = m_treeInternal
+                        .Select(x => x.GetChildInTree(right.NodeID))
+                        .FirstOrDefault(x => x != null);
+
+                    if (exNode == null)
+                    {
+                        var node = new TreeNode<Guid, List<IPermissionRight>>()
                         {
                             Node = right.NodeID,
                             Data = new List<IPermissionRight>()
                         };
-                    DebugPrint("Node '{0}' not found, so adding with right: {1}", right.NodeID, Dump(right));
-                    node.Data.Add(right);
-                    m_treeInternal.Add(node);
-                }
-
-                else
-                {
-
-                    if (!exNode.Data.Any(x => x.SubjectID.Equals(right.SubjectID) && x.Spec.Equals(right.Spec)))
-                    {
-                        DebugPrint("Node '{0}' found, so adding a right: {1}", right.NodeID, Dump(right));
-                        exNode.Data.Add(right);
+                        DebugPrint("Node '{0}' not found, so adding with right: {1}", right.NodeID, Dump(right));
+                        node.Data.Add(right);
+                        m_treeInternal.Add(node);
                     }
+
                     else
                     {
-                        DebugPrint("Node '{0}' found, but right already exists: {1}", right.NodeID, Dump(right));
+
+                        if (!exNode.Data.Any(x => x.SubjectID.Equals(right.SubjectID) && x.Spec.Equals(right.Spec)))
+                        {
+                            DebugPrint("Node '{0}' found, so adding a right: {1}", right.NodeID, Dump(right));
+                            exNode.Data.Add(right);
+                        }
+                        else
+                        {
+                            DebugPrint("Node '{0}' found, but right already exists: {1}", right.NodeID, Dump(right));
+                        }
                     }
                 }
-            }
 
-            foreach (var node in m_treeInternal)
-            {
-                PushRights(node);
-            }
+                foreach (var node in m_treeInternal)
+                {
+                    PushRights(node);
+                }
 
-            m_treeDirty = false;
+                m_treeDirty = false;
+            }
         }
 
         public StringBuilder DebugOutputTree(

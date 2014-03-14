@@ -22,6 +22,11 @@ namespace Dragon.Context.Users
             get { return m_user; }
         }
 
+        public bool Impersonate(Guid userID)
+        {
+            return true;
+        }
+
         public bool TryLogin(string service, string key, Func<string, bool> secretVerification)
         {
             return true;

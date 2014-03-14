@@ -42,6 +42,7 @@ namespace Dragon.IoC.StructureMap
                     x.AddAllTypesOf(projectionInterface);
                 });
 
+
                 //var projectionInterface = typeof(IProjection<>).MakeGenericType(cmdType);
                 var dispatcher = typeof (CommandDispatcher<>).MakeGenericType(command);
                 SetAllProperties(a => a.TypeMatches(p => p.Equals(dispatcher)));

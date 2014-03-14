@@ -10,7 +10,7 @@ namespace Dragon.CPR
         public Guid CommandID { get; set; }
 
         [Hide]
-        public Guid UserID { get; set; }
+        public Guid ExecutingUserID { get; set; }
 
     }
 }

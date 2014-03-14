@@ -51,6 +51,23 @@ namespace Dragon.Context.Users
             return HasUserByKey(service, key, out g);
         }
 
+        public bool Impersonate(Guid userID)
+        {
+            m_sessionStore.ConnectedUserID = Guid.Empty;
+
+            var user = LoadUser(userID);
+
+            if (user == null)
+            {
+                return false;
+            }
+
+            m_sessionStore.ConnectedUserID = userID;
+            
+            return !m_sessionStore.ConnectedUserID.Equals(Guid.Empty);
+        }
+
+
         public bool TryLogin(string service, string key, Func<string, bool> secretVerification)
         {
             if (service == null)

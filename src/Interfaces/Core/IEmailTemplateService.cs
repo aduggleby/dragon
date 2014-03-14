@@ -9,6 +9,15 @@ namespace Dragon.Interfaces
 {
     public interface IEmailTemplateService
     {
-        ITemplateServiceResult Generate(IEnumerable<IActivity> activity, string[] subtypeOrder, INotifiable notifiable);
+        ITemplateServiceResult Generate(
+            string type, 
+            string[] subtypeOrder, 
+            string culture,
+            Dictionary<string, object> model);
+
+        ITemplateServiceResult Generate(
+            IEnumerable<IActivity> activity, 
+            string[] subtypeOrder, 
+            INotifiable notifiable);
     }
 }

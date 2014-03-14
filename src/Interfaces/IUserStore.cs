@@ -6,6 +6,8 @@ namespace Dragon.Interfaces
     {
         IUser User { get; }
 
+        bool Impersonate(Guid userID);
+
         bool TryLogin(string service, string key, Func<string,bool> secretVerification);
 
         bool UpdateSecret(string service, string key, Func<string, bool> secretVerification, string secret);

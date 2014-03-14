@@ -1,0 +1,1 @@
+Copy-Item ..\release\debug\* ..\..\Work\WAV-FN\lib\dragon-debug -Force

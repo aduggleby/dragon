@@ -18,6 +18,7 @@ namespace Dragon.Notification
         public const string DragonMailSmtpPasswordKey = "Dragon.Mail.SmtpPassword";
         public const string DragonMailEmailFrom = "Dragon.Mail.EmailFrom";
         public const string DragonMailEmailEmailOverride = "Dragon.Mail.EmailOverride";
+        public const string DragonUseDefaultSMTP = "Dragon.Mail.UseDefaultSMTP";
 
 
         public IConfiguration Configuration { get; set; }
@@ -44,14 +45,19 @@ namespace Dragon.Notification
             msg.IsBodyHtml = useHtmlEmail;
             msg.Body = body;
 
+
+            var m_openedStreams = new List<Stream>();
+
             if (attachments != null)
             {
+
                 foreach (var attachment in attachments)
                 {
-                    using (var ms = new MemoryStream(attachment.Value))
-                    {
-                        msg.Attachments.Add(new Attachment(ms, attachment.Key));
-                    }
+                    var ms = new MemoryStream(attachment.Value);
+                    ms.Position = 0;
+                    m_openedStreams.Add(ms);
+                    msg.Attachments.Add(new Attachment(ms, attachment.Key));
+
                 }
             }
 
@@ -61,15 +67,23 @@ namespace Dragon.Notification
             }
             catch (Exception ex)
             {
-                throw new Exception(string.Format("Failure sending email with configuration ({0}:{1}, {2})",
-                    _client.Host, _client.Port, Configuration.GetValue(DragonMailSmtpUserKey, String.Empty)));
+                throw new Exception(
+                    Configuration.GetValue<bool>(DragonUseDefaultSMTP, true) ? 
+                    "Failure sending email with default configuration." :
+                    string.Format("Failure sending email with configuration ({0}:{1}, {2}) \r\n{3}",
+                    _client.Host, _client.Port, Configuration.GetValue(DragonMailSmtpUserKey, String.Empty),
+                    ex.ToString()));
+            }
+            finally
+            {
+                m_openedStreams.ForEach(x => x.Dispose());
             }
         }
 
         protected SmtpClient GetSmtpClient()
         {
             return _client ??
-                (_client = new SmtpClient
+                (_client = Configuration.GetValue<bool>(DragonUseDefaultSMTP, true) ? new SmtpClient() : new SmtpClient
                 {
                     Host = Configuration.GetValue(DragonMailSmtpServerKey, String.Empty),
                     Port = Convert.ToInt32(Configuration.GetValue(DragonMailSmtpPortKey, String.Empty)),

@@ -24,32 +24,31 @@ using Dragon.Context.Sessions.ReverseIPLookup;
 using Dragon.Context.Users;
 using Dragon.Core.Configuration;
 using Dragon.Interfaces;
-using StructureMap;
 using Dragon.Context.Permissions;
 
 namespace Demo.DependencyResolution {
-    public static class IoC {
-        public static IContainer Initialize() {
-            ObjectFactory.Initialize(x =>
-                        {
-                            x.Scan(scan =>
-                                    {
-                                        scan.TheCallingAssembly();
-                                        scan.WithDefaultConventions();
-                                    });
-            //                x.For<IExample>().Use<Example>();
-                            x.For<IPermissionStore>().Use<SqlPermissionStore>();
-                            x.For<ISessionStore>().Use<SqlSessionStore>();
-                            x.For<ISession>().Use<CookieSession>();
-                            x.For<IUserStore>().Use<SqlUserStore>();
-                            x.For<IReverseIPLookupService>().Use<HostIpReverseLookupService>();
-                            x.For<IConfiguration>().Use<ConfigurationManagerConfiguration>();
+    //public static class IoC {
+    //    public static IContainer Initialize() {
+    //        ObjectFactory.Initialize(x =>
+    //                    {
+    //                        x.Scan(scan =>
+    //                                {
+    //                                    scan.TheCallingAssembly();
+    //                                    scan.WithDefaultConventions();
+    //                                });
+    //        //                x.For<IExample>().Use<Example>();
+    //                        x.For<IPermissionStore>().Use<SqlPermissionStore>();
+    //                        x.For<ISessionStore>().Use<SqlSessionStore>();
+    //                        x.For<ISession>().Use<CookieSession>();
+    //                        x.For<IUserStore>().Use<SqlUserStore>();
+    //                        x.For<IReverseIPLookupService>().Use<HostIpReverseLookupService>();
+    //                        x.For<IConfiguration>().Use<ConfigurationManagerConfiguration>();
                             
-                            x.FillAllPropertiesOfType<DragonContext>();
-                            x.FillAllPropertiesOfType<ContextController>();
-                        });
-            return ObjectFactory.Container;
-        }
-    }
+    //                        x.FillAllPropertiesOfType<DragonContext>();
+    //                        x.FillAllPropertiesOfType<ContextController>();
+    //                    });
+    //        return ObjectFactory.Container;
+    //    }
+    //}
 
 }

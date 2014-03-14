@@ -58,6 +58,11 @@ namespace Dragon.Tests.Notification.Email
             m_sendWithAttachments(to, subject, body, useHtmlEmail, attachments);
         }
 
+        public ITemplateServiceResult Generate(string type, string[] subtypeOrder, string culture, Dictionary<string, object> model)
+        {
+            throw new NotImplementedException();
+        }
+
         public ITemplateServiceResult Generate(IEnumerable<IActivity> activity, string[] subtypeOrder, INotifiable notifiable)
         {
             return m_generate(activity, subtypeOrder, notifiable);

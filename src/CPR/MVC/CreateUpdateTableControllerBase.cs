@@ -37,6 +37,7 @@ namespace Dragon.CPR.MVC
         [HttpGet]
         public virtual ActionResult Create(TCreate cmd)
         {
+            ViewData["button-continue"] = "Create";
             AddCustomLessCss();
             PreCreate(cmd);
             return CommandView(cmd);
@@ -45,6 +46,7 @@ namespace Dragon.CPR.MVC
         [HttpPost]
         public virtual ActionResult Create(TCreate cmd, FormCollection fc)
         {
+            ViewData["button-continue"] = "Create";
             PreCreate(cmd);
             return AfterProcess(cmd,
                     (success) =>
@@ -61,15 +63,24 @@ namespace Dragon.CPR.MVC
         [HttpGet]
         public virtual ActionResult Update(Guid id, TUpdate cmd = null)
         {
+            ViewData["button-continue"] = "Save";
+
             cmd = cmd.CommandID == Guid.Empty ? Load(id) : cmd;
             PreUpdate(id, cmd);
             if (cmd == null) return new HttpNotFoundResult();
+            return UpdateView(cmd);
+        }
+
+        protected virtual ActionResult UpdateView(TUpdate cmd)
+        {
             return CommandView(cmd);
         }
 
         [HttpPost]
         public virtual ActionResult Update(Guid id, TUpdate cmd, FormCollection fc)
         {
+            ViewData["button-continue"] = "Save";
+
             PreUpdate(id, cmd);
             return AfterProcess(cmd,
                     (success) =>
