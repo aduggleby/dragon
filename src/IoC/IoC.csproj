@@ -87,6 +87,10 @@
       <Project>{580953f4-15b3-4239-ba2d-162b8bf8943b}</Project>
       <Name>SQL</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Tasks\Tasks.csproj">
+      <Project>{23428fc1-272e-42b8-b985-12eb59a1e494}</Project>
+      <Name>Tasks</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

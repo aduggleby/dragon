@@ -184,6 +184,14 @@ namespace Dragon.SQL.Repositories
             }
         }
 
+        public TReturn ExecuteScalar<TReturn>(string sql, dynamic param = null)
+        {
+            using (var c = OpenConnection())
+            {
+                return c.Query<TReturn>(PreprocessSQLString<T>(sql), (object)param).First();
+            }
+        }
+
         public TReturn ExecuteScalar<TReturn, TDBObject>(string sql, dynamic param = null)
         {
             using (var c = OpenConnection())
@@ -283,6 +291,14 @@ namespace Dragon.SQL.Repositories
             using (var c = OpenConnection())
             {
                 c.Execute(PreprocessSQLString<T>(sql), (object)param);
+            }
+        }
+
+        public void ExecuteSP(string sql, dynamic param = null)
+        {
+            using (var c = OpenConnection())
+            {
+                c.Execute(PreprocessSQLString<T>(sql), (object)param, commandType: CommandType.StoredProcedure);
             }
         }
 

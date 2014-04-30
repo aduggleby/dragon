@@ -17,6 +17,9 @@ namespace Dragon.Notification
         public const string DragonMailSmtpUserKey = "Dragon.Mail.SmtpUser";
         public const string DragonMailSmtpPasswordKey = "Dragon.Mail.SmtpPassword";
         public const string DragonMailEmailFrom = "Dragon.Mail.EmailFrom";
+        public const string DragonMailEmailDisplayName = "Dragon.Mail.EmailFromDisplayName";
+
+        
         public const string DragonMailEmailEmailOverride = "Dragon.Mail.EmailOverride";
         public const string DragonUseDefaultSMTP = "Dragon.Mail.UseDefaultSMTP";
 
@@ -40,7 +43,7 @@ namespace Dragon.Notification
 
             var msg = new MailMessage();
             msg.To.Add(Configuration.GetValue(DragonMailEmailEmailOverride, (string)null) ?? to);
-            msg.From = new MailAddress(Configuration.GetValue(DragonMailEmailFrom, String.Empty));
+            msg.From = new MailAddress(Configuration.GetValue(DragonMailEmailFrom, String.Empty), Configuration.GetValue(DragonMailEmailDisplayName, String.Empty));
             msg.Subject = subject;
             msg.IsBodyHtml = useHtmlEmail;
             msg.Body = body;

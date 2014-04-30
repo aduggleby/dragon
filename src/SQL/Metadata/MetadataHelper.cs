@@ -85,6 +85,10 @@ namespace Dragon.SQL
             {
                 sqlType = "[SMALLINT]";
             }
+            else if (actualType == typeof(Int64))
+            {
+                sqlType = "[BIGINT]";
+            }
             else if (actualType == typeof(string))
             {
                 sqlType = string.Format("[NVARCHAR]({0})", metadata.Length);

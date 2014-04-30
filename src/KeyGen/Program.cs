@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Dragon.Common.Util;
+using Dragon.Core.Configuration;
+using Dragon.Interfaces;
+using StructureMap;
 
 namespace KeyGen
 {
@@ -10,6 +13,8 @@ namespace KeyGen
     {
         static void Main(string[] args)
         {
+            ObjectFactory.Container.Inject<IConfiguration>(new ConfigurationManagerConfiguration());
+
             Console.WriteLine("Dragon Context - Key Generator");
 
             Console.WriteLine();

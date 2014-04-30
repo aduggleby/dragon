@@ -1,0 +1,442 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<HelpKI>
+  <HelpKINode Title="AddNode method" Url="html/13c832eb-d9da-9552-e768-7dcd2f00540b.htm" />
+  <HelpKINode Title="AddRight method" Url="html/f5f947bb-9730-cdd9-6c0a-0a7c10371054.htm" />
+  <HelpKINode Title="AppendAndFlushIfNecessary method" Url="html/26fd3662-0635-b323-8c5c-88d26159d334.htm" />
+  <HelpKINode Title="Body property">
+    <HelpKINode Title="IEmailTemplate.Body Property " Url="html/4efc7995-1ea1-7340-7876-61ac01f14d4b.htm" />
+    <HelpKINode Title="ITemplateServiceResult.Body Property " Url="html/270103b8-4744-e4f9-67b2-ca042b2f6a10.htm" />
+  </HelpKINode>
+  <HelpKINode Title="ChildID property" Url="html/3c9dfc44-0809-d90c-794b-17b368237976.htm" />
+  <HelpKINode Title="Children property" Url="html/b25dfa2e-d619-6b1f-fd36-2c096bae288e.htm" />
+  <HelpKINode Title="ConnectedUserID property" Url="html/bb91547a-0349-5384-a519-fe118d190129.htm" />
+  <HelpKINode Title="Data property" Url="html/28acfca6-5f6d-dc0c-e89f-78aa06b6e43c.htm" />
+  <HelpKINode Title="Delete method" Url="html/aca12b46-27f0-5201-1d3d-88f1a60f83a6.htm" />
+  <HelpKINode Title="Dispatch method" Url="html/d09d9973-05c9-7b9f-ea50-3229732c88b7.htm" />
+  <HelpKINode Title="DisplayName property" Url="html/6cbcb161-ef10-d693-aaae-a391e5c55333.htm" />
+  <HelpKINode Title="Dragon.Interfaces namespace" Url="html/a0b97632-a867-2f9a-e9ac-6078a6c301c4.htm" />
+  <HelpKINode Title="Dragon.Interfaces.ActivityCenter namespace" Url="html/34b0b9ed-c106-7fcd-ca6c-ae5025941975.htm" />
+  <HelpKINode Title="Dragon.Interfaces.ActivityCenter.IActivity interface" Url="html/5557e869-7f8b-414a-874d-81a3acd0ad10.htm" />
+  <HelpKINode Title="Dragon.Interfaces.ActivityCenter.IActivityDispatcher interface" Url="html/914e741f-edab-f1ee-1384-4deb8fc415d7.htm" />
+  <HelpKINode Title="Dragon.Interfaces.ActivityCenter.IActivityMultiplexer interface" Url="html/df7b3c49-4de9-06b4-146d-811ef9b0ec02.htm" />
+  <HelpKINode Title="Dragon.Interfaces.ActivityCenter.IActivityService interface" Url="html/35eb3f09-ebf7-f84e-268a-0118d1243e1d.htm" />
+  <HelpKINode Title="Dragon.Interfaces.ActivityCenter.IEmailNotificationActivity interface" Url="html/132b4c39-f084-f1fa-18f2-f54aabeb8f03.htm" />
+  <HelpKINode Title="Dragon.Interfaces.ActivityCenter.IEmailProfile interface" Url="html/e8e2953a-da81-6711-b24e-c9213dfd5d46.htm" />
+  <HelpKINode Title="Dragon.Interfaces.ActivityCenter.IEmailProfileService interface" Url="html/cbfa31fb-175c-88a9-8d39-69b4cc8f2d5e.htm" />
+  <HelpKINode Title="Dragon.Interfaces.ActivityCenter.IEmailTemplate interface" Url="html/706f94cf-0026-bbdb-fe83-6e97bceed6f9.htm" />
+  <HelpKINode Title="Dragon.Interfaces.ActivityCenter.INotifiable interface" Url="html/75522a80-166a-1592-2d27-0a98e510c765.htm" />
+  <HelpKINode Title="Dragon.Interfaces.ActivityCenter.INotificationDispatcher interface" Url="html/9529c5ae-2c55-7474-9635-ca01c158b3a8.htm" />
+  <HelpKINode Title="Dragon.Interfaces.Core namespace" Url="html/441f4af3-8a39-0b04-853f-e487ccd9843e.htm" />
+  <HelpKINode Title="Dragon.Interfaces.Core.IEmailService interface" Url="html/0f87b139-565b-6efa-d157-c7eabe0c8c24.htm" />
+  <HelpKINode Title="Dragon.Interfaces.Core.ITemplateServiceResult interface" Url="html/4c455c3f-be8f-bc7f-3fb1-cc5805ed8c9d.htm" />
+  <HelpKINode Title="Dragon.Interfaces.IConfiguration interface" Url="html/4b151d62-4483-93de-75d9-c807562bff17.htm" />
+  <HelpKINode Title="Dragon.Interfaces.IDirectoryService interface" Url="html/e565f452-f689-39e0-3d6f-4553136526ce.htm" />
+  <HelpKINode Title="Dragon.Interfaces.IDragonTable interface" Url="html/9349fd97-e290-0ef9-276f-c1317c8be6ad.htm" />
+  <HelpKINode Title="Dragon.Interfaces.IEmailTemplateService interface" Url="html/4399549a-0afd-92b5-edd8-13c972d1bdcb.htm" />
+  <HelpKINode Title="Dragon.Interfaces.IFileService interface" Url="html/49ec8f30-3918-422b-2228-cd34acf381a6.htm" />
+  <HelpKINode Title="Dragon.Interfaces.IPermissionInfo interface" Url="html/6ce3d3e9-37e8-db1e-eba1-b914777a7229.htm" />
+  <HelpKINode Title="Dragon.Interfaces.IPermissionNode interface" Url="html/f8a7ca49-2d62-afcc-2ab0-3e7bb8d61679.htm" />
+  <HelpKINode Title="Dragon.Interfaces.IPermissionRight interface" Url="html/f540b1ad-1f22-17f1-b61e-5d76f6057e37.htm" />
+  <HelpKINode Title="Dragon.Interfaces.IPermissionStore interface" Url="html/9bae41ae-d13e-7bd0-5a0f-379a2896d243.htm" />
+  <HelpKINode Title="Dragon.Interfaces.IProfileStore interface" Url="html/a01ff094-00ff-72e2-16e0-b250630e3431.htm" />
+  <HelpKINode Title="Dragon.Interfaces.IRegistration interface" Url="html/06daea25-7259-f189-8b4b-301e9ac092d1.htm" />
+  <HelpKINode Title="Dragon.Interfaces.IRepository(Of T) interface" Url="html/49b64737-73fe-1b51-cebb-bb89add6119e.htm" />
+  <HelpKINode Title="Dragon.Interfaces.IRepository&lt;T&gt; interface" Url="html/49b64737-73fe-1b51-cebb-bb89add6119e.htm" />
+  <HelpKINode Title="Dragon.Interfaces.IRepositorySetup interface" Url="html/30d7009f-6e70-6a87-ca82-5c5fa24bba5b.htm" />
+  <HelpKINode Title="Dragon.Interfaces.ISession interface" Url="html/3f366a8a-9758-2938-ded9-4a0a772b4f09.htm" />
+  <HelpKINode Title="Dragon.Interfaces.ISessionStore interface" Url="html/12a09a85-485c-c079-f547-da756b608481.htm" />
+  <HelpKINode Title="Dragon.Interfaces.ITreeNode(Of T, TData) interface" Url="html/82e49ee9-ab79-cae6-3e2b-7f75b902bf75.htm" />
+  <HelpKINode Title="Dragon.Interfaces.ITreeNode&lt;T, TData&gt; interface" Url="html/82e49ee9-ab79-cae6-3e2b-7f75b902bf75.htm" />
+  <HelpKINode Title="Dragon.Interfaces.IUser interface" Url="html/cdb83d82-da57-9e63-f6c9-4770d03228ab.htm" />
+  <HelpKINode Title="Dragon.Interfaces.IUserStore interface" Url="html/c35b76ab-8ec7-6962-4b64-f9d403f27863.htm" />
+  <HelpKINode Title="Dragon.Interfaces.PermissionInfo namespace" Url="html/24234aed-1c84-9137-a5a1-0960508476f5.htm" />
+  <HelpKINode Title="Dragon.Interfaces.PermissionInfo.INameResolver interface" Url="html/11c21381-f1cc-9d3e-74ea-a5af3ef09859.htm" />
+  <HelpKINode Title="Dragon.Interfaces.PermissionInfo.IPermissionInfoExtractor interface" Url="html/20406765-fd84-ddc3-6182-bb89b0e9661e.htm" />
+  <HelpKINode Title="Dragon.Interfaces.Tasks namespace" Url="html/58b2c83f-ff83-7745-5511-01c70d549f81.htm" />
+  <HelpKINode Title="Dragon.Interfaces.Tasks.ITask interface" Url="html/e037a53f-1c2a-c30b-05e1-5080edaf049b.htm" />
+  <HelpKINode Title="Dragon.Interfaces.Tasks.ITaskRunner interface" Url="html/c25eafdf-99c0-ba65-3b60-663d8a5e5f77.htm" />
+  <HelpKINode Title="Dragon.Interfaces.Tasks.ITaskService interface" Url="html/edf4943f-e35a-723d-5609-8a971ce4bcc9.htm" />
+  <HelpKINode Title="DropTableIfExists method" Url="html/01408cf5-fc47-52ed-4a7f-4c72dc00340a.htm" />
+  <HelpKINode Title="EnsureTableExists(Of T) method" Url="html/f62177d6-a1db-f179-ee02-bdd8a9cd2c09.htm" />
+  <HelpKINode Title="EnsureTableExists&lt;T&gt; method" Url="html/f62177d6-a1db-f179-ee02-bdd8a9cd2c09.htm" />
+  <HelpKINode Title="EnsureValue(Of T) method" Url="html/e592985a-64ab-503e-3ede-9fd51c4d921b.htm" />
+  <HelpKINode Title="EnsureValue&lt;T&gt; method" Url="html/e592985a-64ab-503e-3ede-9fd51c4d921b.htm" />
+  <HelpKINode Title="Execute method" Url="html/ce585592-d8a3-beb1-b043-abf065bc55fd.htm" />
+  <HelpKINode Title="ExecuteScalar method" Url="html/86cc72cf-8b1a-3e7c-7e99-b420b8dcce2a.htm" />
+  <HelpKINode Title="Exists method">
+    <HelpKINode Title="IDirectoryService.Exists Method " Url="html/93a216cf-cb57-8d96-0ceb-826ec1dfd2a0.htm" />
+    <HelpKINode Title="IFileService.Exists Method " Url="html/87fa68db-f68c-2751-2b6f-605b453ca901.htm" />
+  </HelpKINode>
+  <HelpKINode Title="ForwardedForAddress property" Url="html/569736cf-c0dd-32ea-7162-91e89a03bc32.htm" />
+  <HelpKINode Title="Generate method" Url="html/0599aaa0-99b0-37d6-e1bc-31d7b6770603.htm" />
+  <HelpKINode Title="Get method">
+    <HelpKINode Title="IActivityService.Get Method " Url="html/dea5723c-3108-f9ac-b9ba-52e011581415.htm" />
+    <HelpKINode Title="IRepository(T).Get Method " Url="html/ad507e2e-5c17-903b-7dc6-776ca016f4ab.htm" />
+  </HelpKINode>
+  <HelpKINode Title="GetAll method" Url="html/cf02f1d0-212e-2ee2-c529-8eeaa45f3bcc.htm" />
+  <HelpKINode Title="GetByWhere method" Url="html/9a0b690d-5c1b-7c03-7115-d54b49c27511.htm" />
+  <HelpKINode Title="GetChildInTree method" Url="html/37c1a4d4-5df7-6864-cf61-852ea876a3db.htm" />
+  <HelpKINode Title="GetFileContents method" Url="html/f1063fd4-de31-01f7-195a-052d4061eb68.htm" />
+  <HelpKINode Title="GetNodesSubjectHasRightsOn method" Url="html/75739937-12c2-f1b6-f2af-00f4f6a2a696.htm" />
+  <HelpKINode Title="GetNodesWithRight method" Url="html/d2c830d3-53de-92ba-757b-40eaebaccb35.htm" />
+  <HelpKINode Title="GetPermissionInfoForNode method" Url="html/fdc08669-0cd0-42ae-33ca-34b56049605f.htm" />
+  <HelpKINode Title="GetPermissionInfoForSubject method" Url="html/5c83d08f-8fd9-afed-1964-a45d0431a525.htm" />
+  <HelpKINode Title="GetProfile method" Url="html/da3d71c6-5b34-ab46-8fe7-15db85693c50.htm" />
+  <HelpKINode Title="GetProperty(Of T) method" Url="html/d0d20407-883b-b518-0b5b-9195e7b55070.htm" />
+  <HelpKINode Title="GetProperty&lt;T&gt; method" Url="html/d0d20407-883b-b518-0b5b-9195e7b55070.htm" />
+  <HelpKINode Title="GetRightsOnNodeWithInherited method" Url="html/eb3b2151-9148-c5d5-07b9-20207d3d483f.htm" />
+  <HelpKINode Title="GetValue(Of T) method" Url="html/ecff4bfd-0229-5d97-f0c9-9155ea98bd56.htm" />
+  <HelpKINode Title="GetValue&lt;T&gt; method" Url="html/ecff4bfd-0229-5d97-f0c9-9155ea98bd56.htm" />
+  <HelpKINode Title="HasChildInTree method" Url="html/34d0dca5-d34f-b27a-2758-92c3f216693d.htm" />
+  <HelpKINode Title="HasNode method" Url="html/01220178-4c39-9f76-1b92-de4c5f4a83e6.htm" />
+  <HelpKINode Title="HasRight method" Url="html/a613e174-eaa6-d954-768f-4255eb11c1b8.htm" />
+  <HelpKINode Title="HasUserByKey method" Url="html/bd2145d0-519c-901e-64a8-7e61cee74e2e.htm" />
+  <HelpKINode Title="HtmlBody property" Url="html/8e04f417-9d2c-b8cc-3102-57d343da68ad.htm" />
+  <HelpKINode Title="IActivity interface">
+    <HelpKINode Title="IActivity Interface" Url="html/5557e869-7f8b-414a-874d-81a3acd0ad10.htm" />
+    <HelpKINode Title="about IActivity interface" Url="html/5557e869-7f8b-414a-874d-81a3acd0ad10.htm" />
+  </HelpKINode>
+  <HelpKINode Title="IActivityDispatcher interface">
+    <HelpKINode Title="IActivityDispatcher Interface" Url="html/914e741f-edab-f1ee-1384-4deb8fc415d7.htm" />
+    <HelpKINode Title="about IActivityDispatcher interface" Url="html/914e741f-edab-f1ee-1384-4deb8fc415d7.htm" />
+    <HelpKINode Title="methods" Url="html/893ce34b-453d-66ff-aa6a-5c18cfab55f4.htm" />
+  </HelpKINode>
+  <HelpKINode Title="IActivityDispatcher.Dispatch method" Url="html/d09d9973-05c9-7b9f-ea50-3229732c88b7.htm" />
+  <HelpKINode Title="IActivityMultiplexer interface">
+    <HelpKINode Title="IActivityMultiplexer Interface" Url="html/df7b3c49-4de9-06b4-146d-811ef9b0ec02.htm" />
+    <HelpKINode Title="about IActivityMultiplexer interface" Url="html/df7b3c49-4de9-06b4-146d-811ef9b0ec02.htm" />
+    <HelpKINode Title="methods" Url="html/dbbc1362-ad05-1896-15e2-82758fd66747.htm" />
+  </HelpKINode>
+  <HelpKINode Title="IActivityMultiplexer.Multiplex method" Url="html/37453a3a-bd32-7828-be87-7c3b7acfc143.htm" />
+  <HelpKINode Title="IActivityService interface">
+    <HelpKINode Title="IActivityService Interface" Url="html/35eb3f09-ebf7-f84e-268a-0118d1243e1d.htm" />
+    <HelpKINode Title="about IActivityService interface" Url="html/35eb3f09-ebf7-f84e-268a-0118d1243e1d.htm" />
+    <HelpKINode Title="methods" Url="html/492d02de-1a0a-2c64-7f3a-7b648dd72ba5.htm" />
+  </HelpKINode>
+  <HelpKINode Title="IActivityService.Get method" Url="html/dea5723c-3108-f9ac-b9ba-52e011581415.htm" />
+  <HelpKINode Title="IActivityService.Save method" Url="html/66afbfb1-7a23-036c-0fc3-9bbe2ef0a69d.htm" />
+  <HelpKINode Title="IActivityService.SaveNotification method" Url="html/4fc0c63c-daf5-aa15-446a-cb78f1735a3e.htm" />
+  <HelpKINode Title="IConfiguration interface">
+    <HelpKINode Title="IConfiguration Interface" Url="html/4b151d62-4483-93de-75d9-c807562bff17.htm" />
+    <HelpKINode Title="about IConfiguration interface" Url="html/4b151d62-4483-93de-75d9-c807562bff17.htm" />
+    <HelpKINode Title="methods" Url="html/08bdd8ac-1613-a2b8-9cc5-905eea22d5cd.htm" />
+  </HelpKINode>
+  <HelpKINode Title="IConfiguration.EnsureValue(Of T) method" Url="html/e592985a-64ab-503e-3ede-9fd51c4d921b.htm" />
+  <HelpKINode Title="IConfiguration.EnsureValue&lt;T&gt; method" Url="html/e592985a-64ab-503e-3ede-9fd51c4d921b.htm" />
+  <HelpKINode Title="IConfiguration.GetValue(Of T) method" Url="html/ecff4bfd-0229-5d97-f0c9-9155ea98bd56.htm" />
+  <HelpKINode Title="IConfiguration.GetValue&lt;T&gt; method" Url="html/ecff4bfd-0229-5d97-f0c9-9155ea98bd56.htm" />
+  <HelpKINode Title="ID property" Url="html/a90581c2-cdbd-b1d6-765c-644d03e2a708.htm" />
+  <HelpKINode Title="IDirectoryService interface">
+    <HelpKINode Title="IDirectoryService Interface" Url="html/e565f452-f689-39e0-3d6f-4553136526ce.htm" />
+    <HelpKINode Title="about IDirectoryService interface" Url="html/e565f452-f689-39e0-3d6f-4553136526ce.htm" />
+    <HelpKINode Title="methods" Url="html/f44febcf-5f6f-861c-003c-91483d5c0e9a.htm" />
+  </HelpKINode>
+  <HelpKINode Title="IDirectoryService.Exists method" Url="html/93a216cf-cb57-8d96-0ceb-826ec1dfd2a0.htm" />
+  <HelpKINode Title="IDragonTable interface">
+    <HelpKINode Title="IDragonTable Interface" Url="html/9349fd97-e290-0ef9-276f-c1317c8be6ad.htm" />
+    <HelpKINode Title="about IDragonTable interface" Url="html/9349fd97-e290-0ef9-276f-c1317c8be6ad.htm" />
+  </HelpKINode>
+  <HelpKINode Title="IEmailNotificationActivity interface">
+    <HelpKINode Title="IEmailNotificationActivity Interface" Url="html/132b4c39-f084-f1fa-18f2-f54aabeb8f03.htm" />
+    <HelpKINode Title="about IEmailNotificationActivity interface" Url="html/132b4c39-f084-f1fa-18f2-f54aabeb8f03.htm" />
+  </HelpKINode>
+  <HelpKINode Title="IEmailProfile interface">
+    <HelpKINode Title="IEmailProfile Interface" Url="html/e8e2953a-da81-6711-b24e-c9213dfd5d46.htm" />
+    <HelpKINode Title="about IEmailProfile interface" Url="html/e8e2953a-da81-6711-b24e-c9213dfd5d46.htm" />
+    <HelpKINode Title="properties" Url="html/0c20bde2-5098-f541-2c63-85a8fb4b50b5.htm" />
+  </HelpKINode>
+  <HelpKINode Title="IEmailProfile.PrimaryEmailAddress property" Url="html/5ef07631-80ed-1345-c3a5-a9352296045c.htm" />
+  <HelpKINode Title="IEmailProfile.WantsHtml property" Url="html/ed5b6f42-5217-ce1c-87cc-de45930df6e9.htm" />
+  <HelpKINode Title="IEmailProfileService interface">
+    <HelpKINode Title="IEmailProfileService Interface" Url="html/cbfa31fb-175c-88a9-8d39-69b4cc8f2d5e.htm" />
+    <HelpKINode Title="about IEmailProfileService interface" Url="html/cbfa31fb-175c-88a9-8d39-69b4cc8f2d5e.htm" />
+    <HelpKINode Title="methods" Url="html/bba1c0bf-8917-b4fe-f98b-78e634beb083.htm" />
+  </HelpKINode>
+  <HelpKINode Title="IEmailProfileService.AppendAndFlushIfNecessary method" Url="html/26fd3662-0635-b323-8c5c-88d26159d334.htm" />
+  <HelpKINode Title="IEmailProfileService.GetProfile method" Url="html/da3d71c6-5b34-ab46-8fe7-15db85693c50.htm" />
+  <HelpKINode Title="IEmailService interface">
+    <HelpKINode Title="IEmailService Interface" Url="html/0f87b139-565b-6efa-d157-c7eabe0c8c24.htm" />
+    <HelpKINode Title="about IEmailService interface" Url="html/0f87b139-565b-6efa-d157-c7eabe0c8c24.htm" />
+    <HelpKINode Title="methods" Url="html/08f4e236-08f1-c9d0-c55c-6497dc2cf4ec.htm" />
+  </HelpKINode>
+  <HelpKINode Title="IEmailService.Send method" Url="html/03e8409c-e8b2-6753-58a6-aec59c7087a0.htm" />
+  <HelpKINode Title="IEmailTemplate interface">
+    <HelpKINode Title="IEmailTemplate Interface" Url="html/706f94cf-0026-bbdb-fe83-6e97bceed6f9.htm" />
+    <HelpKINode Title="about IEmailTemplate interface" Url="html/706f94cf-0026-bbdb-fe83-6e97bceed6f9.htm" />
+    <HelpKINode Title="properties" Url="html/fbbfb2c0-69b3-044e-d8da-51ba9239cf95.htm" />
+  </HelpKINode>
+  <HelpKINode Title="IEmailTemplate.Body property" Url="html/4efc7995-1ea1-7340-7876-61ac01f14d4b.htm" />
+  <HelpKINode Title="IEmailTemplate.HtmlBody property" Url="html/8e04f417-9d2c-b8cc-3102-57d343da68ad.htm" />
+  <HelpKINode Title="IEmailTemplate.Subject property" Url="html/166f418b-ea4b-f461-eff6-cda9ad6a0e01.htm" />
+  <HelpKINode Title="IEmailTemplate.SupportsHtml property" Url="html/2f55bb2e-942b-8ffd-bf56-069f6c6c5e7c.htm" />
+  <HelpKINode Title="IEmailTemplateService interface">
+    <HelpKINode Title="IEmailTemplateService Interface" Url="html/4399549a-0afd-92b5-edd8-13c972d1bdcb.htm" />
+    <HelpKINode Title="about IEmailTemplateService interface" Url="html/4399549a-0afd-92b5-edd8-13c972d1bdcb.htm" />
+    <HelpKINode Title="methods" Url="html/20c88bbf-7b06-8c7f-9e92-4aaa0b68221b.htm" />
+  </HelpKINode>
+  <HelpKINode Title="IEmailTemplateService.Generate method" Url="html/0599aaa0-99b0-37d6-e1bc-31d7b6770603.htm" />
+  <HelpKINode Title="IFileService interface">
+    <HelpKINode Title="IFileService Interface" Url="html/49ec8f30-3918-422b-2228-cd34acf381a6.htm" />
+    <HelpKINode Title="about IFileService interface" Url="html/49ec8f30-3918-422b-2228-cd34acf381a6.htm" />
+    <HelpKINode Title="methods" Url="html/abc29ab0-e661-3f11-ee6e-bc7bdc3550c3.htm" />
+  </HelpKINode>
+  <HelpKINode Title="IFileService.Exists method" Url="html/87fa68db-f68c-2751-2b6f-605b453ca901.htm" />
+  <HelpKINode Title="IFileService.GetFileContents method" Url="html/f1063fd4-de31-01f7-195a-052d4061eb68.htm" />
+  <HelpKINode Title="Impersonate method" Url="html/44f23936-2668-860d-2133-18aba56cb998.htm" />
+  <HelpKINode Title="INameResolver interface">
+    <HelpKINode Title="INameResolver Interface" Url="html/11c21381-f1cc-9d3e-74ea-a5af3ef09859.htm" />
+    <HelpKINode Title="about INameResolver interface" Url="html/11c21381-f1cc-9d3e-74ea-a5af3ef09859.htm" />
+    <HelpKINode Title="methods" Url="html/ed424d3e-2d42-9e7a-e5cc-0fa4ba6628e2.htm" />
+  </HelpKINode>
+  <HelpKINode Title="INameResolver.ResolveNodeID method" Url="html/f0784cfa-deae-56ec-c4e5-8bd2120a0266.htm" />
+  <HelpKINode Title="INameResolver.ResolveSubjectID method" Url="html/3d8a1741-ef6d-1070-9474-91e9e77ba7d0.htm" />
+  <HelpKINode Title="Inherit property">
+    <HelpKINode Title="IPermissionInfo.Inherit Property " Url="html/64244b73-8f64-33d6-f3bb-d455a536c978.htm" />
+    <HelpKINode Title="IPermissionRight.Inherit Property " Url="html/10fea8c5-f67f-bb3b-6baa-c6890e837837.htm" />
+  </HelpKINode>
+  <HelpKINode Title="InheritedFrom property" Url="html/e0cb78c4-c132-b45b-4774-ade6140e4b21.htm" />
+  <HelpKINode Title="INotifiable interface">
+    <HelpKINode Title="INotifiable Interface" Url="html/75522a80-166a-1592-2d27-0a98e510c765.htm" />
+    <HelpKINode Title="about INotifiable interface" Url="html/75522a80-166a-1592-2d27-0a98e510c765.htm" />
+    <HelpKINode Title="properties" Url="html/9595f59c-a430-a3d9-64ac-b0eff06d34f8.htm" />
+  </HelpKINode>
+  <HelpKINode Title="INotifiable.PrimaryCulture property" Url="html/669a6c1e-1099-872a-73a2-2173a903f118.htm" />
+  <HelpKINode Title="INotificationDispatcher interface">
+    <HelpKINode Title="INotificationDispatcher Interface" Url="html/9529c5ae-2c55-7474-9635-ca01c158b3a8.htm" />
+    <HelpKINode Title="about INotificationDispatcher interface" Url="html/9529c5ae-2c55-7474-9635-ca01c158b3a8.htm" />
+    <HelpKINode Title="methods" Url="html/a57a1cdd-12e3-100a-322f-654760ebbaaa.htm" />
+  </HelpKINode>
+  <HelpKINode Title="INotificationDispatcher.Notify method" Url="html/a69e73c3-51f3-ca35-dd4e-30ef25c9da83.htm" />
+  <HelpKINode Title="Insert method" Url="html/c54bc50b-c2cb-32db-3e0f-5a0cd8019c54.htm" />
+  <HelpKINode Title="IPAddress property" Url="html/1e12ddbe-e710-ed65-8446-cc79602b04ea.htm" />
+  <HelpKINode Title="IPermissionInfo interface">
+    <HelpKINode Title="IPermissionInfo Interface" Url="html/6ce3d3e9-37e8-db1e-eba1-b914777a7229.htm" />
+    <HelpKINode Title="about IPermissionInfo interface" Url="html/6ce3d3e9-37e8-db1e-eba1-b914777a7229.htm" />
+    <HelpKINode Title="properties" Url="html/7b1c7945-a765-201b-341f-309882565c85.htm" />
+  </HelpKINode>
+  <HelpKINode Title="IPermissionInfo.DisplayName property" Url="html/6cbcb161-ef10-d693-aaae-a391e5c55333.htm" />
+  <HelpKINode Title="IPermissionInfo.Inherit property" Url="html/64244b73-8f64-33d6-f3bb-d455a536c978.htm" />
+  <HelpKINode Title="IPermissionInfo.InheritedFrom property" Url="html/e0cb78c4-c132-b45b-4774-ade6140e4b21.htm" />
+  <HelpKINode Title="IPermissionInfo.Spec property" Url="html/eccc1f0f-208c-9969-34b3-9385faa3de4f.htm" />
+  <HelpKINode Title="IPermissionInfoExtractor interface">
+    <HelpKINode Title="IPermissionInfoExtractor Interface" Url="html/20406765-fd84-ddc3-6182-bb89b0e9661e.htm" />
+    <HelpKINode Title="about IPermissionInfoExtractor interface" Url="html/20406765-fd84-ddc3-6182-bb89b0e9661e.htm" />
+    <HelpKINode Title="methods" Url="html/7ed67d46-2cec-8264-2359-e1d6630f0d75.htm" />
+  </HelpKINode>
+  <HelpKINode Title="IPermissionInfoExtractor.GetPermissionInfoForNode method" Url="html/fdc08669-0cd0-42ae-33ca-34b56049605f.htm" />
+  <HelpKINode Title="IPermissionInfoExtractor.GetPermissionInfoForSubject method" Url="html/5c83d08f-8fd9-afed-1964-a45d0431a525.htm" />
+  <HelpKINode Title="IPermissionNode interface">
+    <HelpKINode Title="IPermissionNode Interface" Url="html/f8a7ca49-2d62-afcc-2ab0-3e7bb8d61679.htm" />
+    <HelpKINode Title="about IPermissionNode interface" Url="html/f8a7ca49-2d62-afcc-2ab0-3e7bb8d61679.htm" />
+    <HelpKINode Title="properties" Url="html/aafcd184-3e04-1099-a124-151cc545f269.htm" />
+  </HelpKINode>
+  <HelpKINode Title="IPermissionNode.ChildID property" Url="html/3c9dfc44-0809-d90c-794b-17b368237976.htm" />
+  <HelpKINode Title="IPermissionNode.ParentID property" Url="html/94a528f0-374c-e4aa-48b7-1a177f0ced16.htm" />
+  <HelpKINode Title="IPermissionRight interface">
+    <HelpKINode Title="IPermissionRight Interface" Url="html/f540b1ad-1f22-17f1-b61e-5d76f6057e37.htm" />
+    <HelpKINode Title="about IPermissionRight interface" Url="html/f540b1ad-1f22-17f1-b61e-5d76f6057e37.htm" />
+    <HelpKINode Title="properties" Url="html/c8d0aefc-d5e3-02cc-966c-d433ed6eb4c7.htm" />
+  </HelpKINode>
+  <HelpKINode Title="IPermissionRight.Inherit property" Url="html/10fea8c5-f67f-bb3b-6baa-c6890e837837.htm" />
+  <HelpKINode Title="IPermissionRight.LID property" Url="html/e6db190c-5ed9-26a4-45bb-a44581a64def.htm" />
+  <HelpKINode Title="IPermissionRight.NodeID property" Url="html/5e986d8f-f132-9bca-001e-5aa656c7c65d.htm" />
+  <HelpKINode Title="IPermissionRight.Spec property" Url="html/d0d6dbe7-20b3-a824-871e-bb1f278bfbeb.htm" />
+  <HelpKINode Title="IPermissionRight.SubjectID property" Url="html/9a66eb7b-9ff3-5586-b373-bd59a61080c5.htm" />
+  <HelpKINode Title="IPermissionStore interface">
+    <HelpKINode Title="IPermissionStore Interface" Url="html/9bae41ae-d13e-7bd0-5a0f-379a2896d243.htm" />
+    <HelpKINode Title="about IPermissionStore interface" Url="html/9bae41ae-d13e-7bd0-5a0f-379a2896d243.htm" />
+    <HelpKINode Title="methods" Url="html/67289418-2023-1493-a11a-17e9d1e035bd.htm" />
+    <HelpKINode Title="properties" Url="html/2a0f1b5b-5d0d-277f-869f-3e3e04a79b49.htm" />
+  </HelpKINode>
+  <HelpKINode Title="IPermissionStore.AddNode method" Url="html/13c832eb-d9da-9552-e768-7dcd2f00540b.htm" />
+  <HelpKINode Title="IPermissionStore.AddRight method" Url="html/f5f947bb-9730-cdd9-6c0a-0a7c10371054.htm" />
+  <HelpKINode Title="IPermissionStore.GetNodesSubjectHasRightsOn method" Url="html/75739937-12c2-f1b6-f2af-00f4f6a2a696.htm" />
+  <HelpKINode Title="IPermissionStore.GetNodesWithRight method" Url="html/d2c830d3-53de-92ba-757b-40eaebaccb35.htm" />
+  <HelpKINode Title="IPermissionStore.GetRightsOnNodeWithInherited method" Url="html/eb3b2151-9148-c5d5-07b9-20207d3d483f.htm" />
+  <HelpKINode Title="IPermissionStore.HasNode method" Url="html/01220178-4c39-9f76-1b92-de4c5f4a83e6.htm" />
+  <HelpKINode Title="IPermissionStore.HasRight method" Url="html/a613e174-eaa6-d954-768f-4255eb11c1b8.htm" />
+  <HelpKINode Title="IPermissionStore.IsChildNodeOf method" Url="html/eba426c9-236b-3b91-2c2f-d66140bb1689.htm" />
+  <HelpKINode Title="IPermissionStore.IsDirectChildNodeOf method" Url="html/b714c81f-6453-c54f-7276-fdad6045255e.htm" />
+  <HelpKINode Title="IPermissionStore.NodeListWithInheritedRights method" Url="html/22168667-3730-77df-e0d6-7ff958963bf5.htm" />
+  <HelpKINode Title="IPermissionStore.NodeRightIsInheritedFrom method" Url="html/34bda00f-edfa-8858-aeeb-ef176106043e.htm" />
+  <HelpKINode Title="IPermissionStore.RemoveNode method" Url="html/c830e77e-4347-1171-7818-89e396e7f1ec.htm" />
+  <HelpKINode Title="IPermissionStore.RemoveRight method" Url="html/11d47140-a05d-3ad0-50d9-f2f8df4bc5ef.htm" />
+  <HelpKINode Title="IPermissionStore.Tree property" Url="html/d5de1043-8c1d-fc9f-9861-394bd12f943d.htm" />
+  <HelpKINode Title="IProfileStore interface">
+    <HelpKINode Title="IProfileStore Interface" Url="html/a01ff094-00ff-72e2-16e0-b250630e3431.htm" />
+    <HelpKINode Title="about IProfileStore interface" Url="html/a01ff094-00ff-72e2-16e0-b250630e3431.htm" />
+    <HelpKINode Title="methods" Url="html/411c0ae4-df16-2d0b-54b9-aa13b03c1724.htm" />
+  </HelpKINode>
+  <HelpKINode Title="IProfileStore.GetProperty(Of T) method" Url="html/d0d20407-883b-b518-0b5b-9195e7b55070.htm" />
+  <HelpKINode Title="IProfileStore.GetProperty&lt;T&gt; method" Url="html/d0d20407-883b-b518-0b5b-9195e7b55070.htm" />
+  <HelpKINode Title="IProfileStore.SetProperty method" Url="html/2a52d515-1504-8a01-085a-6a14028734bc.htm" />
+  <HelpKINode Title="IRegistration interface">
+    <HelpKINode Title="IRegistration Interface" Url="html/06daea25-7259-f189-8b4b-301e9ac092d1.htm" />
+    <HelpKINode Title="about IRegistration interface" Url="html/06daea25-7259-f189-8b4b-301e9ac092d1.htm" />
+    <HelpKINode Title="properties" Url="html/8c966212-9c65-1077-82e6-cedc05aa15f2.htm" />
+  </HelpKINode>
+  <HelpKINode Title="IRegistration.Key property" Url="html/eef36037-391e-e889-49d5-0157403f64b1.htm" />
+  <HelpKINode Title="IRegistration.RegistrationID property" Url="html/5a783aee-e8df-23c1-8bf3-19fe00f54bd8.htm" />
+  <HelpKINode Title="IRegistration.Secret property" Url="html/6d061bfe-6dcd-2af2-0eb4-d33a38828e73.htm" />
+  <HelpKINode Title="IRegistration.Service property" Url="html/8bca377b-1cb8-4c81-5587-23bc2404e8b4.htm" />
+  <HelpKINode Title="IRepository(Of T) interface">
+    <HelpKINode Title="IRepository(T) Interface" Url="html/49b64737-73fe-1b51-cebb-bb89add6119e.htm" />
+    <HelpKINode Title="about IRepository(Of T) interface" Url="html/49b64737-73fe-1b51-cebb-bb89add6119e.htm" />
+    <HelpKINode Title="methods" Url="html/9092985c-e221-a605-7eb1-18b357473d65.htm" />
+  </HelpKINode>
+  <HelpKINode Title="IRepository(Of T).Delete method" Url="html/aca12b46-27f0-5201-1d3d-88f1a60f83a6.htm" />
+  <HelpKINode Title="IRepository(Of T).Execute method" Url="html/ce585592-d8a3-beb1-b043-abf065bc55fd.htm" />
+  <HelpKINode Title="IRepository(Of T).ExecuteScalar method" Url="html/86cc72cf-8b1a-3e7c-7e99-b420b8dcce2a.htm" />
+  <HelpKINode Title="IRepository(Of T).Get method" Url="html/ad507e2e-5c17-903b-7dc6-776ca016f4ab.htm" />
+  <HelpKINode Title="IRepository(Of T).GetAll method" Url="html/cf02f1d0-212e-2ee2-c529-8eeaa45f3bcc.htm" />
+  <HelpKINode Title="IRepository(Of T).GetByWhere method" Url="html/9a0b690d-5c1b-7c03-7115-d54b49c27511.htm" />
+  <HelpKINode Title="IRepository(Of T).Insert method" Url="html/c54bc50b-c2cb-32db-3e0f-5a0cd8019c54.htm" />
+  <HelpKINode Title="IRepository(Of T).Query method" Url="html/504148e7-ce46-a0c2-6a9c-a7f81877f6e4.htm" />
+  <HelpKINode Title="IRepository(Of T).Save(Of TKey) method" Url="html/f585fca3-fd2a-524b-959c-daa6382462d4.htm" />
+  <HelpKINode Title="IRepository(Of T).Update method" Url="html/2ca9fe72-5c03-b40b-a617-2bed7b43add5.htm" />
+  <HelpKINode Title="IRepository&lt;T&gt; interface">
+    <HelpKINode Title="IRepository(T) Interface" Url="html/49b64737-73fe-1b51-cebb-bb89add6119e.htm" />
+    <HelpKINode Title="about IRepository&lt;T&gt; interface" Url="html/49b64737-73fe-1b51-cebb-bb89add6119e.htm" />
+    <HelpKINode Title="methods" Url="html/9092985c-e221-a605-7eb1-18b357473d65.htm" />
+  </HelpKINode>
+  <HelpKINode Title="IRepository&lt;T&gt;.Delete method" Url="html/aca12b46-27f0-5201-1d3d-88f1a60f83a6.htm" />
+  <HelpKINode Title="IRepository&lt;T&gt;.Execute method" Url="html/ce585592-d8a3-beb1-b043-abf065bc55fd.htm" />
+  <HelpKINode Title="IRepository&lt;T&gt;.ExecuteScalar method" Url="html/86cc72cf-8b1a-3e7c-7e99-b420b8dcce2a.htm" />
+  <HelpKINode Title="IRepository&lt;T&gt;.Get method" Url="html/ad507e2e-5c17-903b-7dc6-776ca016f4ab.htm" />
+  <HelpKINode Title="IRepository&lt;T&gt;.GetAll method" Url="html/cf02f1d0-212e-2ee2-c529-8eeaa45f3bcc.htm" />
+  <HelpKINode Title="IRepository&lt;T&gt;.GetByWhere method" Url="html/9a0b690d-5c1b-7c03-7115-d54b49c27511.htm" />
+  <HelpKINode Title="IRepository&lt;T&gt;.Insert method" Url="html/c54bc50b-c2cb-32db-3e0f-5a0cd8019c54.htm" />
+  <HelpKINode Title="IRepository&lt;T&gt;.Query method" Url="html/504148e7-ce46-a0c2-6a9c-a7f81877f6e4.htm" />
+  <HelpKINode Title="IRepository&lt;T&gt;.Save&lt;TKey&gt; method" Url="html/f585fca3-fd2a-524b-959c-daa6382462d4.htm" />
+  <HelpKINode Title="IRepository&lt;T&gt;.Update method" Url="html/2ca9fe72-5c03-b40b-a617-2bed7b43add5.htm" />
+  <HelpKINode Title="IRepositorySetup interface">
+    <HelpKINode Title="IRepositorySetup Interface" Url="html/30d7009f-6e70-6a87-ca82-5c5fa24bba5b.htm" />
+    <HelpKINode Title="about IRepositorySetup interface" Url="html/30d7009f-6e70-6a87-ca82-5c5fa24bba5b.htm" />
+    <HelpKINode Title="methods" Url="html/2212594c-80a2-9c8d-5270-423b86fb1add.htm" />
+  </HelpKINode>
+  <HelpKINode Title="IRepositorySetup.DropTableIfExists method" Url="html/01408cf5-fc47-52ed-4a7f-4c72dc00340a.htm" />
+  <HelpKINode Title="IRepositorySetup.EnsureTableExists(Of T) method" Url="html/f62177d6-a1db-f179-ee02-bdd8a9cd2c09.htm" />
+  <HelpKINode Title="IRepositorySetup.EnsureTableExists&lt;T&gt; method" Url="html/f62177d6-a1db-f179-ee02-bdd8a9cd2c09.htm" />
+  <HelpKINode Title="IsChildNodeOf method" Url="html/eba426c9-236b-3b91-2c2f-d66140bb1689.htm" />
+  <HelpKINode Title="IsDirectChildNodeOf method" Url="html/b714c81f-6453-c54f-7276-fdad6045255e.htm" />
+  <HelpKINode Title="ISession interface">
+    <HelpKINode Title="ISession Interface" Url="html/3f366a8a-9758-2938-ded9-4a0a772b4f09.htm" />
+    <HelpKINode Title="about ISession interface" Url="html/3f366a8a-9758-2938-ded9-4a0a772b4f09.htm" />
+    <HelpKINode Title="properties" Url="html/52caf111-6f6b-8191-51d4-eeb28694223a.htm" />
+  </HelpKINode>
+  <HelpKINode Title="ISession.ForwardedForAddress property" Url="html/569736cf-c0dd-32ea-7162-91e89a03bc32.htm" />
+  <HelpKINode Title="ISession.ID property" Url="html/a90581c2-cdbd-b1d6-765c-644d03e2a708.htm" />
+  <HelpKINode Title="ISession.IPAddress property" Url="html/1e12ddbe-e710-ed65-8446-cc79602b04ea.htm" />
+  <HelpKINode Title="ISessionStore interface">
+    <HelpKINode Title="ISessionStore Interface" Url="html/12a09a85-485c-c079-f547-da756b608481.htm" />
+    <HelpKINode Title="about ISessionStore interface" Url="html/12a09a85-485c-c079-f547-da756b608481.htm" />
+    <HelpKINode Title="properties" Url="html/68d51c67-67de-1100-df29-f1be7b53eccf.htm" />
+  </HelpKINode>
+  <HelpKINode Title="ISessionStore.ConnectedUserID property" Url="html/bb91547a-0349-5384-a519-fe118d190129.htm" />
+  <HelpKINode Title="ISessionStore.Session property" Url="html/45e66514-c8b2-5da7-5347-c2a4a67aa881.htm" />
+  <HelpKINode Title="ITask interface">
+    <HelpKINode Title="ITask Interface" Url="html/e037a53f-1c2a-c30b-05e1-5080edaf049b.htm" />
+    <HelpKINode Title="about ITask interface" Url="html/e037a53f-1c2a-c30b-05e1-5080edaf049b.htm" />
+  </HelpKINode>
+  <HelpKINode Title="ITaskRunner interface">
+    <HelpKINode Title="ITaskRunner Interface" Url="html/c25eafdf-99c0-ba65-3b60-663d8a5e5f77.htm" />
+    <HelpKINode Title="about ITaskRunner interface" Url="html/c25eafdf-99c0-ba65-3b60-663d8a5e5f77.htm" />
+  </HelpKINode>
+  <HelpKINode Title="ITaskService interface">
+    <HelpKINode Title="ITaskService Interface" Url="html/edf4943f-e35a-723d-5609-8a971ce4bcc9.htm" />
+    <HelpKINode Title="about ITaskService interface" Url="html/edf4943f-e35a-723d-5609-8a971ce4bcc9.htm" />
+  </HelpKINode>
+  <HelpKINode Title="ITemplateServiceResult interface">
+    <HelpKINode Title="ITemplateServiceResult Interface" Url="html/4c455c3f-be8f-bc7f-3fb1-cc5805ed8c9d.htm" />
+    <HelpKINode Title="about ITemplateServiceResult interface" Url="html/4c455c3f-be8f-bc7f-3fb1-cc5805ed8c9d.htm" />
+    <HelpKINode Title="properties" Url="html/07921b11-53d2-87f3-90e2-4db246d15a38.htm" />
+  </HelpKINode>
+  <HelpKINode Title="ITemplateServiceResult.Body property" Url="html/270103b8-4744-e4f9-67b2-ca042b2f6a10.htm" />
+  <HelpKINode Title="ITemplateServiceResult.Subject property" Url="html/827029c1-294f-72e3-2647-f573e28c19e1.htm" />
+  <HelpKINode Title="ITemplateServiceResult.Subtype property" Url="html/2aa1dea4-02ec-728f-c7b4-bfb8dcf623ea.htm" />
+  <HelpKINode Title="ITreeNode(Of T, TData) interface">
+    <HelpKINode Title="ITreeNode(T, TData) Interface" Url="html/82e49ee9-ab79-cae6-3e2b-7f75b902bf75.htm" />
+    <HelpKINode Title="about ITreeNode(Of T, TData) interface" Url="html/82e49ee9-ab79-cae6-3e2b-7f75b902bf75.htm" />
+    <HelpKINode Title="methods" Url="html/00456d29-ff5a-34e4-d2ad-32fa607db640.htm" />
+    <HelpKINode Title="properties" Url="html/c6cd09e9-82d1-e399-390c-c15d2f7b7ad7.htm" />
+  </HelpKINode>
+  <HelpKINode Title="ITreeNode(Of T, TData).Children property" Url="html/b25dfa2e-d619-6b1f-fd36-2c096bae288e.htm" />
+  <HelpKINode Title="ITreeNode(Of T, TData).Data property" Url="html/28acfca6-5f6d-dc0c-e89f-78aa06b6e43c.htm" />
+  <HelpKINode Title="ITreeNode(Of T, TData).GetChildInTree method" Url="html/37c1a4d4-5df7-6864-cf61-852ea876a3db.htm" />
+  <HelpKINode Title="ITreeNode(Of T, TData).HasChildInTree method" Url="html/34d0dca5-d34f-b27a-2758-92c3f216693d.htm" />
+  <HelpKINode Title="ITreeNode(Of T, TData).Node property" Url="html/c11c0be5-d8e1-e925-b333-32de37b76057.htm" />
+  <HelpKINode Title="ITreeNode&lt;T, TData&gt; interface">
+    <HelpKINode Title="ITreeNode(T, TData) Interface" Url="html/82e49ee9-ab79-cae6-3e2b-7f75b902bf75.htm" />
+    <HelpKINode Title="about ITreeNode&lt;T, TData&gt; interface" Url="html/82e49ee9-ab79-cae6-3e2b-7f75b902bf75.htm" />
+    <HelpKINode Title="methods" Url="html/00456d29-ff5a-34e4-d2ad-32fa607db640.htm" />
+    <HelpKINode Title="properties" Url="html/c6cd09e9-82d1-e399-390c-c15d2f7b7ad7.htm" />
+  </HelpKINode>
+  <HelpKINode Title="ITreeNode&lt;T, TData&gt;.Children property" Url="html/b25dfa2e-d619-6b1f-fd36-2c096bae288e.htm" />
+  <HelpKINode Title="ITreeNode&lt;T, TData&gt;.Data property" Url="html/28acfca6-5f6d-dc0c-e89f-78aa06b6e43c.htm" />
+  <HelpKINode Title="ITreeNode&lt;T, TData&gt;.GetChildInTree method" Url="html/37c1a4d4-5df7-6864-cf61-852ea876a3db.htm" />
+  <HelpKINode Title="ITreeNode&lt;T, TData&gt;.HasChildInTree method" Url="html/34d0dca5-d34f-b27a-2758-92c3f216693d.htm" />
+  <HelpKINode Title="ITreeNode&lt;T, TData&gt;.Node property" Url="html/c11c0be5-d8e1-e925-b333-32de37b76057.htm" />
+  <HelpKINode Title="IUser interface">
+    <HelpKINode Title="IUser Interface" Url="html/cdb83d82-da57-9e63-f6c9-4770d03228ab.htm" />
+    <HelpKINode Title="about IUser interface" Url="html/cdb83d82-da57-9e63-f6c9-4770d03228ab.htm" />
+    <HelpKINode Title="properties" Url="html/0f516ace-3752-e120-6cf4-2344621338eb.htm" />
+  </HelpKINode>
+  <HelpKINode Title="IUser.UserID property" Url="html/81dd8fd6-cb69-ec1f-e407-127276c5ccaa.htm" />
+  <HelpKINode Title="IUserStore interface">
+    <HelpKINode Title="IUserStore Interface" Url="html/c35b76ab-8ec7-6962-4b64-f9d403f27863.htm" />
+    <HelpKINode Title="about IUserStore interface" Url="html/c35b76ab-8ec7-6962-4b64-f9d403f27863.htm" />
+    <HelpKINode Title="methods" Url="html/c3be7059-28a9-3ce7-f42e-49cbb3ade80b.htm" />
+    <HelpKINode Title="properties" Url="html/15198a87-32d3-e427-931c-917aba3efcf8.htm" />
+  </HelpKINode>
+  <HelpKINode Title="IUserStore.HasUserByKey method" Url="html/bd2145d0-519c-901e-64a8-7e61cee74e2e.htm" />
+  <HelpKINode Title="IUserStore.Impersonate method" Url="html/44f23936-2668-860d-2133-18aba56cb998.htm" />
+  <HelpKINode Title="IUserStore.Register method" Url="html/cb0cd4b5-a33c-865d-1661-e8a64a352c2d.htm" />
+  <HelpKINode Title="IUserStore.TryLogin method" Url="html/de655963-4594-66d2-0496-c3c41bd5a507.htm" />
+  <HelpKINode Title="IUserStore.UpdateSecret method" Url="html/13ce83ac-b35d-2466-8665-7e8a43f1be45.htm" />
+  <HelpKINode Title="IUserStore.User property" Url="html/e2c65116-5690-d177-8d97-f678330008f3.htm" />
+  <HelpKINode Title="Key property" Url="html/eef36037-391e-e889-49d5-0157403f64b1.htm" />
+  <HelpKINode Title="LID property" Url="html/e6db190c-5ed9-26a4-45bb-a44581a64def.htm" />
+  <HelpKINode Title="Multiplex method" Url="html/37453a3a-bd32-7828-be87-7c3b7acfc143.htm" />
+  <HelpKINode Title="Node property" Url="html/c11c0be5-d8e1-e925-b333-32de37b76057.htm" />
+  <HelpKINode Title="NodeID property" Url="html/5e986d8f-f132-9bca-001e-5aa656c7c65d.htm" />
+  <HelpKINode Title="NodeListWithInheritedRights method" Url="html/22168667-3730-77df-e0d6-7ff958963bf5.htm" />
+  <HelpKINode Title="NodeRightIsInheritedFrom method" Url="html/34bda00f-edfa-8858-aeeb-ef176106043e.htm" />
+  <HelpKINode Title="Notify method" Url="html/a69e73c3-51f3-ca35-dd4e-30ef25c9da83.htm" />
+  <HelpKINode Title="ParentID property" Url="html/94a528f0-374c-e4aa-48b7-1a177f0ced16.htm" />
+  <HelpKINode Title="PrimaryCulture property" Url="html/669a6c1e-1099-872a-73a2-2173a903f118.htm" />
+  <HelpKINode Title="PrimaryEmailAddress property" Url="html/5ef07631-80ed-1345-c3a5-a9352296045c.htm" />
+  <HelpKINode Title="Query method" Url="html/504148e7-ce46-a0c2-6a9c-a7f81877f6e4.htm" />
+  <HelpKINode Title="Register method" Url="html/cb0cd4b5-a33c-865d-1661-e8a64a352c2d.htm" />
+  <HelpKINode Title="RegistrationID property" Url="html/5a783aee-e8df-23c1-8bf3-19fe00f54bd8.htm" />
+  <HelpKINode Title="RemoveNode method" Url="html/c830e77e-4347-1171-7818-89e396e7f1ec.htm" />
+  <HelpKINode Title="RemoveRight method" Url="html/11d47140-a05d-3ad0-50d9-f2f8df4bc5ef.htm" />
+  <HelpKINode Title="ResolveNodeID method" Url="html/f0784cfa-deae-56ec-c4e5-8bd2120a0266.htm" />
+  <HelpKINode Title="ResolveSubjectID method" Url="html/3d8a1741-ef6d-1070-9474-91e9e77ba7d0.htm" />
+  <HelpKINode Title="Save method" Url="html/66afbfb1-7a23-036c-0fc3-9bbe2ef0a69d.htm" />
+  <HelpKINode Title="Save(Of TKey) method" Url="html/f585fca3-fd2a-524b-959c-daa6382462d4.htm" />
+  <HelpKINode Title="Save&lt;TKey&gt; method" Url="html/f585fca3-fd2a-524b-959c-daa6382462d4.htm" />
+  <HelpKINode Title="SaveNotification method" Url="html/4fc0c63c-daf5-aa15-446a-cb78f1735a3e.htm" />
+  <HelpKINode Title="Secret property" Url="html/6d061bfe-6dcd-2af2-0eb4-d33a38828e73.htm" />
+  <HelpKINode Title="Send method" Url="html/03e8409c-e8b2-6753-58a6-aec59c7087a0.htm" />
+  <HelpKINode Title="Service property" Url="html/8bca377b-1cb8-4c81-5587-23bc2404e8b4.htm" />
+  <HelpKINode Title="Session property" Url="html/45e66514-c8b2-5da7-5347-c2a4a67aa881.htm" />
+  <HelpKINode Title="SetProperty method" Url="html/2a52d515-1504-8a01-085a-6a14028734bc.htm" />
+  <HelpKINode Title="Spec property">
+    <HelpKINode Title="IPermissionInfo.Spec Property " Url="html/eccc1f0f-208c-9969-34b3-9385faa3de4f.htm" />
+    <HelpKINode Title="IPermissionRight.Spec Property " Url="html/d0d6dbe7-20b3-a824-871e-bb1f278bfbeb.htm" />
+  </HelpKINode>
+  <HelpKINode Title="Subject property">
+    <HelpKINode Title="IEmailTemplate.Subject Property " Url="html/166f418b-ea4b-f461-eff6-cda9ad6a0e01.htm" />
+    <HelpKINode Title="ITemplateServiceResult.Subject Property " Url="html/827029c1-294f-72e3-2647-f573e28c19e1.htm" />
+  </HelpKINode>
+  <HelpKINode Title="SubjectID property" Url="html/9a66eb7b-9ff3-5586-b373-bd59a61080c5.htm" />
+  <HelpKINode Title="Subtype property" Url="html/2aa1dea4-02ec-728f-c7b4-bfb8dcf623ea.htm" />
+  <HelpKINode Title="SupportsHtml property" Url="html/2f55bb2e-942b-8ffd-bf56-069f6c6c5e7c.htm" />
+  <HelpKINode Title="Tree property" Url="html/d5de1043-8c1d-fc9f-9861-394bd12f943d.htm" />
+  <HelpKINode Title="TryLogin method" Url="html/de655963-4594-66d2-0496-c3c41bd5a507.htm" />
+  <HelpKINode Title="Update method" Url="html/2ca9fe72-5c03-b40b-a617-2bed7b43add5.htm" />
+  <HelpKINode Title="UpdateSecret method" Url="html/13ce83ac-b35d-2466-8665-7e8a43f1be45.htm" />
+  <HelpKINode Title="User property" Url="html/e2c65116-5690-d177-8d97-f678330008f3.htm" />
+  <HelpKINode Title="UserID property" Url="html/81dd8fd6-cb69-ec1f-e407-127276c5ccaa.htm" />
+  <HelpKINode Title="WantsHtml property" Url="html/ed5b6f42-5217-ce1c-87cc-de45930df6e9.htm" />
+</HelpKI>

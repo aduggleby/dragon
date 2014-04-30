@@ -31,8 +31,8 @@ namespace Dragon.IoC.StructureMap
 
             foreach (var command in commands)
             {
-                var handlerInterface = typeof (IHandler<>).MakeGenericType(command);
-                var projectionInterface = typeof (IProjection<>).MakeGenericType(command);
+                var handlerInterface = typeof(IHandler<>).MakeGenericType(command);
+                var projectionInterface = typeof(IProjection<>).MakeGenericType(command);
 
                 Scan(x =>
                 {
@@ -44,21 +44,31 @@ namespace Dragon.IoC.StructureMap
 
 
                 //var projectionInterface = typeof(IProjection<>).MakeGenericType(cmdType);
-                var dispatcher = typeof (CommandDispatcher<>).MakeGenericType(command);
+                var dispatcher = typeof(CommandDispatcher<>).MakeGenericType(command);
                 SetAllProperties(a => a.TypeMatches(p => p.Equals(dispatcher)));
 
                 // 
                 var autoProject =
-                    command.GetCustomAttributes(typeof (AutoProjectToAttribute), true).FirstOrDefault() as
+                    command.GetCustomAttributes(typeof(AutoProjectToAttribute), true).FirstOrDefault() as
                         AutoProjectToAttribute;
                 if (autoProject != null)
                 {
-                    var commandProjectionImpl = typeof (CommandProjection<,>).MakeGenericType(command, autoProject.Type);
+                    var commandProjectionImpl = typeof(CommandProjection<,>).MakeGenericType(command, autoProject.Type);
                     For(projectionInterface).Use(commandProjectionImpl);
                 }
             }
 
-            SetAllProperties(a => a.TypeMatches(p => p.IsArray && typeof(IInterceptor<>).IsAssignableFrom(p.GetElementType().GetGenericTypeDefinition())));
+            //SetAllProperties(a =>
+            //{
+            //    Debug.WriteLine("A:" + a);
+            //    a.TypeMatches(
+            //        p =>
+            //        {
+            //            Debug.WriteLine("P:" + p);
+            //            return p.IsArray &&
+            //                   typeof(IInterceptor<>).IsAssignableFrom(p.GetElementType().GetGenericTypeDefinition());
+            //        });
+            //});
         }
     }
 

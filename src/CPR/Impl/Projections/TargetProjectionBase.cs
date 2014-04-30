@@ -13,16 +13,9 @@ namespace Dragon.CPR.Impl.Projections
         where TSrc : class
         where TDest : class
     {
+        [Obsolete("There should be no need to use command repository.")]
         public IRepository<TSrc> RepositorySource { get; set; }
         public IRepository<TDest> RepositoryDestination { get; set; }
-        public IPermissionStore PermissionStore { get; set; }
-        public DragonContext Ctx { get; set; }
-
-
-        public IContainer Container { get; set; }
-
-     
-
      
     }
 }

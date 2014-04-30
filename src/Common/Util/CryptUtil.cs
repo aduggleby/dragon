@@ -7,7 +7,7 @@ using StructureMap;
 namespace Dragon.Common.Util
 {
 
-    public class CryptUtil
+    public class CryptUtil 
     {
         private const string CONFIG_KEY = "Dragon.Context.Encryption.Key";
         private const string CONFIG_IV = "Dragon.Context.Encryption.IV";
@@ -16,7 +16,8 @@ namespace Dragon.Common.Util
 
         static CryptUtil()
         {
-            m_configuration = ObjectFactory.GetInstance<IConfiguration>();
+            m_configuration = 
+                ObjectFactory.TryGetInstance<IConfiguration>();
         }
 
         public CryptUtil(IConfiguration configuration)

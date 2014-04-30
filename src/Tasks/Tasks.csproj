@@ -52,6 +52,10 @@
       <Project>{2AE2966B-6F2B-4254-85C6-588C8690898F}</Project>
       <Name>Interfaces</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SQL\SQL.csproj">
+      <Project>{580953f4-15b3-4239-ba2d-162b8bf8943b}</Project>
+      <Name>SQL</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
