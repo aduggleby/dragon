@@ -21,6 +21,8 @@ namespace Dragon.SQL
                 t, typeof(SchemaAttribute), a => a.Name, () => null);
 
             MetadataForProperties(t, ref metadata);
+
+            
         }
 
         public static void MetadataForProperties(Type t, ref TableMetadata metadata)
@@ -36,6 +38,16 @@ namespace Dragon.SQL
                     MetadataForProperty(property, ref propmetadata);
                 }
             }
+
+            foreach (var p in metadata.Properties)
+            {
+                p.AfterPropertyMetadataSet(p, metadata);
+            }
+
+            foreach (var p in metadata.Properties)
+            {
+                SqlMetadataForProperty(p);
+            }
         }
 
         public static void MetadataForProperty(PropertyInfo pi, ref PropertyMetadata metadata)
@@ -49,10 +61,16 @@ namespace Dragon.SQL
                 pi, typeof(LengthAttribute), a => a.Length, () => "50");
             metadata.Indexed = pi.GetCustomAttributes(true).Any(a => a is IndexAttribute);
 
-            SqlMetadataForProperty(ref metadata);
+            metadata.AfterPropertyMetadataSet = (propmd, tablemd) =>
+            {
+                propmd.IsOnlyPK = propmd.IsPK &&
+                                  tablemd.Properties.Count(x => x.IsPK) == 1;
+
+            };
+
         }
 
-        public static void SqlMetadataForProperty(ref PropertyMetadata metadata)
+        public static void SqlMetadataForProperty(PropertyMetadata metadata)
         {
             var actualType = metadata.PropertyInfo.PropertyType;
             var isNullableType = false;
@@ -132,6 +150,7 @@ namespace Dragon.SQL
 
             metadata.SqlTypeString = sqlType;
             metadata.Nullable = isNullableType;
+            metadata.IsAutoIncrementingPK = false;
 
             if (metadata.IsPK)
             {
@@ -141,7 +160,15 @@ namespace Dragon.SQL
                 }
                 else if (actualType== typeof (int))
                 {
-                    metadata.SqlKeyTypeString = "[int] IDENTITY(1,1)";
+                    if (metadata.IsOnlyPK) // if multiple ints as keys don't autoincrement them
+                    {
+                        metadata.SqlKeyTypeString = "[int] IDENTITY(1,1)";
+                        metadata.IsAutoIncrementingPK = metadata.IsPK; // ints autoincrement
+                    }
+                    else
+                    {
+                        metadata.SqlKeyTypeString = sqlType;
+                    }
                 }
                 else
                 {

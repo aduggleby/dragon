@@ -10,6 +10,9 @@ namespace Dragon.SQL
     public class PropertyMetadata
     {
         public bool IsPK { get; set; }
+        public bool IsOnlyPK { get; set; }
+        public bool IsAutoIncrementingPK { get; set; }
+
         public bool Indexed { get; set; }
         public string PropertyName { get; set; }
         public string ColumnName { get; set; }
@@ -21,5 +24,6 @@ namespace Dragon.SQL
         public string SqlKeyTypeString { get; set; }
         public bool Nullable { get; set; }
 
+        public Action<PropertyMetadata, TableMetadata> AfterPropertyMetadataSet { get;set;}
     }
 }
