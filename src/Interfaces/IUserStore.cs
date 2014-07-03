@@ -15,8 +15,9 @@ namespace Dragon.Interfaces
         bool UpdateSecret(Guid userID, Func<string, bool> secretVerification, string secret);
 
         void UpdateSecret(string service, string key, string secret);
-        
 
+        void UpdateKey(string service, string oldkey, string newkey);
+       
         void Register(string service, string key, string secret);
         
         bool HasUserByKey(string service, string key);

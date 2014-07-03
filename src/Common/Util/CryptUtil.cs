@@ -17,7 +17,7 @@ namespace Dragon.Common.Util
         static CryptUtil()
         {
             m_configuration = 
-                ObjectFactory.TryGetInstance<IConfiguration>();
+                ObjectFactory.Container.TryGetInstance<IConfiguration>();
         }
 
         public CryptUtil(IConfiguration configuration)

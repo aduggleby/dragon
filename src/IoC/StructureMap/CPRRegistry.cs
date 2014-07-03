@@ -8,6 +8,7 @@ using Dragon.CPR;
 using Dragon.CPR.Attributes;
 using Dragon.CPR.Impl.Projections;
 using Dragon.CPR.Interfaces;
+using StructureMap.Configuration.DSL;
 using StructureMap.Graph;
 
 namespace Dragon.IoC.StructureMap
@@ -72,9 +73,10 @@ namespace Dragon.IoC.StructureMap
         }
     }
 
-    public class InterceptorConvention : ITypeScanner
+    public class InterceptorConvention : IRegistrationConvention
     {
-        public void Process(Type type, PluginGraph graph)
+
+        public void Process(Type type, Registry registry)
         {
             if (typeof(IInterceptor<>).IsAssignableFrom(type))
             {
@@ -85,9 +87,9 @@ namespace Dragon.IoC.StructureMap
 
                 foreach (var subclass in allSubclasses)
                 {
-                    Debug.WriteLine("Registering subclass " + subclass.ToString() + " to " + type.ToString());
+                    Debug.WriteLine("RegisteriBng subclass " + subclass.ToString() + " to " + type.ToString());
                     var c = subclass;
-                    graph.Configure(x => x.For(c).Use(type));
+                    registry.Configure(x => x.For(c).Use(type));
                 }
             }
         }

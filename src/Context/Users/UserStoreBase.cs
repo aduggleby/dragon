@@ -13,7 +13,7 @@ namespace Dragon.Context.Users
     public abstract class UserStoreBase : IUserStore
     {
         private ISessionStore m_sessionStore;
-        
+
         private static readonly ILog s_log = LogManager.GetCurrentClassLogger();
 
         public UserStoreBase(ISessionStore sessionStore)
@@ -31,7 +31,7 @@ namespace Dragon.Context.Users
 
         protected abstract IRegistration LoadRegistration(string service, string key);
 
-        protected abstract void Save(Guid userID, string service, string key, string secret);
+        protected abstract void Save(Guid userID, string service, string key, string secret, string newkey = null);
 
         public virtual bool HasUserByKey(string service, string key, out Guid? userID)
         {
@@ -63,7 +63,7 @@ namespace Dragon.Context.Users
             }
 
             m_sessionStore.ConnectedUserID = userID;
-            
+
             return !m_sessionStore.ConnectedUserID.Equals(Guid.Empty);
         }
 
@@ -99,13 +99,23 @@ namespace Dragon.Context.Users
             return !m_sessionStore.ConnectedUserID.Equals(Guid.Empty);
         }
 
+        public void UpdateKey(string service, string oldkey, string newkey)
+        {
+            EnsureArgumentsMeetLengthConstraints(service, oldkey, string.Empty);
+            EnsureArgumentsMeetLengthConstraints(service, newkey, string.Empty);
+
+            var user = LoadRegistration(service, oldkey);
+            var secret = user.Secret;
+            Save(user.UserID, service, oldkey, secret, newkey: newkey);
+        }
+
         public void UpdateSecret(string service, string key, string secret)
         {
             EnsureArgumentsMeetLengthConstraints(service, key, string.Empty);
 
             var user = LoadRegistration(service, key);
 
-            UpdateSecret(user, (s)=>true, secret);
+            UpdateSecret(user, (s) => true, secret);
         }
 
         public bool UpdateSecret(string service, string key, Func<string, bool> secretVerification, string secret)

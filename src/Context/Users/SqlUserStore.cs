@@ -41,7 +41,7 @@ namespace Dragon.Context.Users
             }
         }
 
-        protected override void Save(Guid userID, string service, string key, string hashedSaltedSecret)
+        protected override void Save(Guid userID, string service, string key, string hashedSaltedSecret, string newkey = null)
         {
             using (var conn = new SqlConnection(ConnectionStringManager.Value))
             {
@@ -52,7 +52,7 @@ namespace Dragon.Context.Users
                     RegistrationID = Guid.NewGuid(),
                     UserID = userID,
                     Service = service,
-                    Key = key,
+                    Key = newkey??key, /* can rename key */
                     Secret = hashedSaltedSecret
                 };
 

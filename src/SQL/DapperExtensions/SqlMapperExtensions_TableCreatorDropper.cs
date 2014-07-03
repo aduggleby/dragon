@@ -85,7 +85,7 @@ namespace Dapper
             var values = new Dictionary<string, object>();
             var metadata = MetadataFor(type);
 
-            var sql = TSQLGenerator.BuildCreate(metadata, onlyIfNotExists = onlyIfNotExists);
+            var sql = TSQLGenerator.BuildCreate(metadata, onlyIfNotExists: onlyIfNotExists);
 
             connection.Execute(sql, transaction: transaction, commandTimeout: commandTimeout);
         }

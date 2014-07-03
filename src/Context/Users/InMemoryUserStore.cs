@@ -37,6 +37,12 @@ namespace Dragon.Context.Users
             // NOP
         }
 
+        public void UpdateKey(string service, string oldkey, string newkey)
+        {
+            // NOP
+            return;
+        }
+
         public bool UpdateSecret(string service, string key, Func<string, bool> secretVerification, string secret)
         {
             // NOP

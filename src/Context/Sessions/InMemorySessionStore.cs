@@ -52,7 +52,6 @@ namespace Dragon.Context.Sessions
                 if (s_sessions.TryGetValue(sessionID, out sessionRecord))
                 {
                     return true;
-                    break;
                 }
             }
 

@@ -71,11 +71,11 @@ namespace Demo.Controllers
                 Ctx.RegisterUsernamePassword(username, password);
                 return RedirectToAction("Index");
             }
-            catch (UserKeyAlreadyExistsForThisServiceException ex)
+            catch (UserKeyAlreadyExistsForThisServiceException )
             {
                 TempData["Error"] = "Username already exists.";
             }
-            catch (ServiceAlreadyConnectedToUserException ex)
+            catch (ServiceAlreadyConnectedToUserException )
             {
                 TempData["Error"] = "You are already connected to this authentication service.";
             }

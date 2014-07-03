@@ -1,4 +1,5 @@
-﻿using Dragon.Common.Util;
+﻿using System;
+using Dragon.Common.Util;
 using Dragon.Context.Exceptions;
 
 namespace Dragon.Context.Extensions.Login
@@ -34,6 +35,19 @@ namespace Dragon.Context.Extensions.Login
                 ctx.UserStore.Register(SERVICE_ID, username, hashedSaltedSecret);
             }
         }
+
+        public static void ChangeUsername(this DragonContext ctx, string username, string newusername)
+        {
+            if (!ctx.IsAuthenticated())
+            {
+                throw new Exception("User not authenticated");
+            }
+            else
+            {
+                ctx.UserStore.UpdateKey(SERVICE_ID, username, newusername);
+            }
+        }
+
 
         /// <summary>
         /// Note: Does not check old password of oldpassword is set to null!
