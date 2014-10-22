@@ -63,8 +63,8 @@ namespace Dragon.Context.Users
                     if (!existing.Key.Equals(key))
                         throw new InvalidOperationException(
                             "Trying to attach another account from the already connected service");
-                    conn.ExecuteFor<DragonRegistration>(SQL.SqlUserStore_Update, sqlUser);
 
+                    conn.ExecuteFor<DragonRegistration>(SQL.SqlUserStore_Update, sqlUser);
                 }
                 else
                 {

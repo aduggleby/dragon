@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Dragon.CPR;
 using Dragon.Interfaces;
 using Dragon.SQL.Repositories;
+using StructureMap.Web;
 
 namespace Dragon.IoC.StructureMap
 {
@@ -14,14 +15,13 @@ namespace Dragon.IoC.StructureMap
     {
         public SQLRegistry()
         {
-
             For(typeof(IRepository<>)).Use(typeof(Repository<>));
             For<IRepositorySetup>().HybridHttpOrThreadLocalScoped().Use<RepositorySetup>();
             For<PersistableSetup>().Use<PersistableSetup>();
             //FillAllPropertiesOfType<IPermissionStore>();
             //FillAllPropertiesOfType<IProfileStore>();
 
-            SetAllProperties(
+            Policies.SetAllProperties(
                 p => p.TypeMatches(t => t.IsGenericType && t.GetGenericTypeDefinition() == typeof (IRepository<>)));
         }
     }

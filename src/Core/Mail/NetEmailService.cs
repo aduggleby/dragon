@@ -39,15 +39,29 @@ namespace Dragon.Notification
 
         private void SendInternal(string to, string subject, string body, bool useHtmlEmail, Dictionary<string, byte[]> attachments)
         {
+            Trace.WriteLine("SendInternal email to " + to + ": " + subject);
+
             var client = GetSmtpClient();
 
             var msg = new MailMessage();
-            msg.To.Add(Configuration.GetValue(DragonMailEmailEmailOverride, (string)null) ?? to);
+            
+            var overrideemail = Configuration.GetValue(DragonMailEmailEmailOverride, (string) null);
+
+            if (string.IsNullOrWhiteSpace(overrideemail))
+            {
+                msg.To.Add(to);
+            }
+            else
+            {
+                msg.To.Add(overrideemail);
+            }
+
             msg.From = new MailAddress(Configuration.GetValue(DragonMailEmailFrom, String.Empty), Configuration.GetValue(DragonMailEmailDisplayName, String.Empty));
             msg.Subject = subject;
             msg.IsBodyHtml = useHtmlEmail;
             msg.Body = body;
 
+            Trace.WriteLine("Sending email to " + msg.To[0].Address + ": " + msg.Subject);
 
             var m_openedStreams = new List<Stream>();
 
@@ -70,6 +84,8 @@ namespace Dragon.Notification
             }
             catch (Exception ex)
             {
+                Trace.Fail("Failure sending email to " + msg.To[0].Address + ". Error: " + ex.Message);
+
                 throw new Exception(
                     Configuration.GetValue<bool>(DragonUseDefaultSMTP, true) ? 
                     "Failure sending email with default configuration." :

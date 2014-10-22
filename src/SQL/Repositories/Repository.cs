@@ -204,7 +204,18 @@ namespace Dragon.SQL.Repositories
         {
             using (var c = OpenConnection())
             {
-                return c.Query<TFirst, TSecond, TResult>(PreprocessSQLString<TResult>(sql), mapping, (object)param);
+                var mdSplit = new TableMetadata();
+                MetadataHelper.MetadataForClass(typeof(TSecond), ref mdSplit);
+
+                var pk = mdSplit.Properties.FirstOrDefault(x => x.IsPK);
+                
+                if (pk==null || !pk.IsOnlyPK)
+                {
+                    throw new ArgumentException("You can only use a single key class for TSecond.");
+                }
+                var key = pk.ColumnName;
+
+                return c.Query<TFirst, TSecond, TResult>(PreprocessSQLString<TResult>(sql), mapping, (object)param, splitOn: key);
             }
         }
 
@@ -250,7 +261,7 @@ namespace Dragon.SQL.Repositories
             var pk = PrimaryKeyFor<TKey>(obj);
             if (pk.Equals(default(TKey)))
             {
-                if (typeof (TKey) == typeof (Guid))
+                if (typeof(TKey) == typeof(Guid))
                 {
                     SetPrimaryKey(obj, Guid.NewGuid());
                 }

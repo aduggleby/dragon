@@ -105,6 +105,14 @@ namespace Dragon.Context.Users
             EnsureArgumentsMeetLengthConstraints(service, newkey, string.Empty);
 
             var user = LoadRegistration(service, oldkey);
+
+
+            var existingUser = LoadRegistration(service, newkey);
+            if (existingUser != null)
+            {
+                throw new ServiceAlreadyConnectedToUserException() { Service = existingUser.Service };
+            }
+
             var secret = user.Secret;
             Save(user.UserID, service, oldkey, secret, newkey: newkey);
         }

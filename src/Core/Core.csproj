@@ -39,31 +39,36 @@
     <Reference Include="Antlr4.StringTemplate">
       <HintPath>..\..\packages\Antlr4.StringTemplate.4.0.6.9004\lib\net35\Antlr4.StringTemplate.dll</HintPath>
     </Reference>
-    <Reference Include="Dapper">
-      <HintPath>..\..\packages\Dapper.1.25\lib\net45\Dapper.dll</HintPath>
+    <Reference Include="Dapper, Version=1.34.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Dapper.1.34\lib\net45\Dapper.dll</HintPath>
     </Reference>
     <Reference Include="Facebook, Version=6.0.10.0, Culture=neutral, PublicKeyToken=58cb4f2111d1e6de, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Facebook.6.6.0\lib\net45\Facebook.dll</HintPath>
+      <HintPath>..\..\packages\Facebook.6.8.0\lib\net45\Facebook.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="FluentAssertions">
-      <HintPath>..\..\packages\FluentAssertions.3.0.107\lib\net45\FluentAssertions.dll</HintPath>
+      <HintPath>..\..\packages\FluentAssertions.3.2.1\lib\net45\FluentAssertions.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="FluentAssertions.Core">
-      <HintPath>..\..\packages\FluentAssertions.3.0.107\lib\net45\FluentAssertions.Core.dll</HintPath>
+      <HintPath>..\..\packages\FluentAssertions.3.2.1\lib\net45\FluentAssertions.Core.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Newtonsoft.Json.6.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\packages\Newtonsoft.Json.6.0.5\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="PGK.Extensions">
       <HintPath>..\..\packages\PGK.Extensions.2011.6\lib\PGK.Extensions.dll</HintPath>
     </Reference>
-    <Reference Include="StructureMap, Version=3.0.4.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\structuremap.3.0.4.125\lib\net40\StructureMap.dll</HintPath>
+    <Reference Include="StructureMap">
+      <HintPath>..\..\packages\structuremap.3.1.2.138\lib\net40\StructureMap.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="StructureMap.Net4">
-      <HintPath>..\..\packages\structuremap.3.0.4.125\lib\net40\StructureMap.Net4.dll</HintPath>
+      <HintPath>..\..\packages\structuremap.3.1.2.138\lib\net40\StructureMap.Net4.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />

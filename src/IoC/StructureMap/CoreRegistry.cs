@@ -25,8 +25,8 @@ namespace Dragon.IoC.StructureMap
             For<IEmailService>().Use<NetEmailService>();
             For<IEmailTemplateService>().Use<Antlr4StringTemplateService>();
 
-            FillAllPropertiesOfType<IEmailTemplateService>();
-            FillAllPropertiesOfType<IEmailService>();
+            Policies.FillAllPropertiesOfType<IEmailTemplateService>();
+            Policies.FillAllPropertiesOfType<IEmailService>();
 
         }
     }

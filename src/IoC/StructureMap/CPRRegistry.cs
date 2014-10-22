@@ -46,7 +46,7 @@ namespace Dragon.IoC.StructureMap
 
                 //var projectionInterface = typeof(IProjection<>).MakeGenericType(cmdType);
                 var dispatcher = typeof(CommandDispatcher<>).MakeGenericType(command);
-                SetAllProperties(a => a.TypeMatches(p => p.Equals(dispatcher)));
+                Policies.SetAllProperties(a => a.TypeMatches(p => p.Equals(dispatcher)));
 
                 // 
                 var autoProject =
@@ -89,7 +89,7 @@ namespace Dragon.IoC.StructureMap
                 {
                     Debug.WriteLine("RegisteriBng subclass " + subclass.ToString() + " to " + type.ToString());
                     var c = subclass;
-                    registry.Configure(x => x.For(c).Use(type));
+                    registry.Configure(x => x.AddType(type, c));
                 }
             }
         }
