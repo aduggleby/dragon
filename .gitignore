@@ -8,12 +8,15 @@ bin/
 obj/
 
 db.config
+src/FilesTest/App.config
 *.user
 *.suo
 *resharper*
 
 UpgradeLog.*
 _UpgradeReport_Files/
+
+*.orig
 
 # OS generated files #
 ######################

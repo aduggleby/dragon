@@ -26,17 +26,16 @@ namespace Dragon.Tests.PermissionStore.PermissionInfo
                 new Context.Permissions.PermissionInfo
                 {
                     DisplayName = s1.ToString(),
-                    Spec = READ,
+                    Spec = GetPermissionRightString(n1, s1, READ),
                     Inherit = true,
                     InheritedFrom = null,
                 },
                 new Context.Permissions.PermissionInfo
                 {
                     DisplayName = s2.ToString(),
-                    Spec = READ,
+                    Spec = GetPermissionRightString(n1, s2, READ),
                     Inherit = false,
-                                       InheritedFrom = null,
-
+                    InheritedFrom = null,
                 },
             };
             var nameResolver = new DefaultNameResolver();
@@ -59,7 +58,7 @@ namespace Dragon.Tests.PermissionStore.PermissionInfo
                 new Context.Permissions.PermissionInfo
                 {
                     DisplayName = s1.ToString(),
-                    Spec = READ,
+                    Spec =  GetPermissionRightString(n1_2, s1, READ),
                     Inherit = true,
                     InheritedFrom = n1.ToString(),
 
@@ -67,10 +66,9 @@ namespace Dragon.Tests.PermissionStore.PermissionInfo
                 new Context.Permissions.PermissionInfo
                 {
                     DisplayName = s2.ToString(),
-                    Spec = WRITE,
+                    Spec = GetPermissionRightString(n1_2, s2, WRITE),
                     Inherit = false,
-                                      InheritedFrom = null,
-
+                    InheritedFrom = null,
                 },
             };
             var nameResolver = new DefaultNameResolver("");
@@ -85,6 +83,16 @@ namespace Dragon.Tests.PermissionStore.PermissionInfo
             }
         }
 
+        private string GetPermissionRightString(Guid node, Guid subject, string spec)
+        {
+            foreach (var permissionRight in store.GetRightsOnNodeWithInherited(node).Where(
+                permissionRight => permissionRight.Spec == spec && permissionRight.SubjectID == subject))
+            {
+                return spec + " (" + permissionRight.LID.ToString().Substring(0,4) + ")";
+            }
+            throw new Exception("Right not found on node.");
+        }
+
         [TestMethod]
         public void and_permission_info_extractor_returns_correct_info_for_subjects()
         {
@@ -95,27 +103,26 @@ namespace Dragon.Tests.PermissionStore.PermissionInfo
                 new Context.Permissions.PermissionInfo
                 {
                     DisplayName = n1.ToString(),
-                    Spec = READ,
+                    Spec = GetPermissionRightString(n1, s2, READ),
                     Inherit = false,
                     InheritedFrom = null,
                 },
                 new Context.Permissions.PermissionInfo
                 {
                     DisplayName = n1_2.ToString(),
-                    Spec = WRITE,
+                    Spec = GetPermissionRightString(n1_2, s2, WRITE),
                     Inherit = false,
-                                       InheritedFrom = null,
-
+                    InheritedFrom = null,
                 },
             };
 
-            var guids = new Guid[] { n1, n1_1, n1_2, n1_1_1, special, n1_2_1, n1_2_2, n1_2_3 };
+            var guids = new[] { n1, n1_1, n1_2, n1_1_1, special, n1_2_1, n1_2_2, n1_2_3 };
             foreach (var g in guids)
             {
                 expected.Add(new Context.Permissions.PermissionInfo
                 {
                     DisplayName = g.ToString(),
-                    Spec = MANAGE,
+                    Spec = GetPermissionRightString(g, s2, MANAGE),
                     Inherit = true,
                     InheritedFrom = g != n1 ? n1.ToString() : null,
                 });
