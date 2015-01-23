@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using Dragon.Core.Mail;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using FluentAssertions;
+
 
 namespace Dragon.Tests.Core.Mail.StringTemplateService
 {
@@ -42,11 +44,11 @@ namespace Dragon.Tests.Core.Mail.StringTemplateService
         }
 
         [TestMethod]
-        [ExpectedException(typeof(Exception))]
-        public void not_running_in_httpcontext_with_tilde_throws_error()
+        public void not_running_in_httpcontext_with_tilde_leads_to_invalid_configuration()
         {
             m_existsDir = (x) => x == "~/x";
             var subject = new Antlr4StringTemplateService("~/x", this, this);
+            subject.ConfigurationOK.Should().BeTrue();
         }
         
     }

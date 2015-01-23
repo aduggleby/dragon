@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Web;
 using Antlr4.StringTemplate;
@@ -17,6 +18,7 @@ namespace Dragon.Core.Mail
         private string m_commonTemplateDirectory;
         private readonly IDirectoryService m_dirService;
         private readonly IFileService m_fileService;
+        public bool ConfigurationOK { get; set; }
 
         private const string CONFIG_BASEDIR = "Dragon.Templates.StringTemplate.BaseDir";
         
@@ -45,6 +47,8 @@ namespace Dragon.Core.Mail
 
         public ITemplateServiceResult Generate(string type, string[] subtypeOrder, string culture, Dictionary<string,object> model)
         {
+            if (!ConfigurationOK) throw new Exception("Your configuration is incorrect. Check trac log.");
+
             culture = culture ?? "en-us";
 
             var result = new TemplateServiceResult();
@@ -109,6 +113,8 @@ namespace Dragon.Core.Mail
 
         public ITemplateServiceResult Generate(IEnumerable<IActivity> activity, string[] subtypeOrder, INotifiable notifiable)
         {
+            if (!ConfigurationOK) throw new Exception("Your configuration is incorrect. Check trac log.");
+
             if (!activity.Any()) throw new Exception("No activities to process.");
 
             if (!activity.All(x => x.GetType() == activity.First().GetType()))
@@ -195,27 +201,39 @@ namespace Dragon.Core.Mail
             {
                 var ctx = HttpContext.Current;
                 if (ctx == null)
-                    throw new Exception(
+                {
+                    Trace.Write(
                         string.Format(
                             "Configuration value {0} starts with ~ but you are not running in an HttpContext.",
                             CONFIG_BASEDIR));
+                    ConfigurationOK = false;
 
-                m_commonTemplateDirectory = ctx.Server.MapPath(baseDir);
+                }
+                else
+                {
+                    m_commonTemplateDirectory = ctx.Server.MapPath(baseDir);
+                    ConfigurationOK = true;
+                }
             }
             else
             {
                 m_commonTemplateDirectory = baseDir;
+                ConfigurationOK = true;
+
             }
         }
 
 
         private void EnsureBaseDirExists()
         {
-            if (!m_dirService.Exists(m_commonTemplateDirectory))
-                throw new Exception(
-                    string.Format(
-                        "Base directory '{0}' points to a non existant directory.",
-                        m_commonTemplateDirectory));
+            if (ConfigurationOK)
+            {
+                if (!m_dirService.Exists(m_commonTemplateDirectory))
+                    throw new Exception(
+                        string.Format(
+                            "Base directory '{0}' points to a non existant directory.",
+                            m_commonTemplateDirectory));
+            }
         }
 
 

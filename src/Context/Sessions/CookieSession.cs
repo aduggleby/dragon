@@ -31,14 +31,17 @@ namespace Dragon.Context.Sessions
 
                 CookieName = m_configuration.GetValue<string>(CONFIG_COOKIENAME, "DRAGON.COOKIE");
 
-                CheckAndSetHttpContext();
-                SetVariablesFromHttpContext();
-                LoadFromCookie();
-                
-                // WebSocket Requests do not have Response Objects to Save Cookies to
-                if (!HttpContext.Current.IsWebSocketRequest)
+                if (HttpContext.Current != null)
                 {
-                    SaveToCookie();
+                    CheckAndSetHttpContext();
+                    SetVariablesFromHttpContext();
+                    LoadFromCookie();
+
+                    // WebSocket Requests do not have Response Objects to Save Cookies to
+                    if (!HttpContext.Current.IsWebSocketRequest)
+                    {
+                        SaveToCookie();
+                    }
                 }
             }
             catch (Exception ex)
