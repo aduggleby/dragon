@@ -14,20 +14,22 @@ namespace Dragon.SQL.Repositories
     {
         private static readonly ILog s_log = LogManager.GetCurrentClassLogger();
 
-        public static Func<string,DbConnection> ConnectionFactory;
+        public static Func<string, DbConnection> ConnectionFactory;
         public static Func<string, DbConnection> DefaultConnectionFactory;
-        public static string ConnectionString = null;
+        public static Func<string> DefaultConnectionString = null;
+        public static Func<string> ConnectionString = null;
 
         static ConnectionHelper()
         {
             DefaultConnectionFactory = (s) => new SqlConnection(s);
             ConnectionFactory = DefaultConnectionFactory;
-            ConnectionString = ConnectionStringManager.Value;
+            DefaultConnectionString = () => ConnectionStringManager.Value;
+            ConnectionString = DefaultConnectionString;
         }
 
         public static DbConnection Open()
         {
-            var conn = ConnectionFactory(ConnectionString);
+            var conn = ConnectionFactory(ConnectionString());
 
             try
             {
