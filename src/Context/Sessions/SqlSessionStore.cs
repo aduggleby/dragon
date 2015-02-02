@@ -10,6 +10,7 @@ using Dragon.Context.Permissions;
 using Dragon.Context.ReverseIPLookup;
 using Dragon.Core.Configuration;
 using Dragon.Interfaces;
+using Dragon.SQL.Repositories;
 
 namespace Dragon.Context.Sessions
 {
@@ -43,7 +44,7 @@ namespace Dragon.Context.Sessions
 
         protected virtual DragonSession GetSessionRecord(Guid sessionID)
         {
-            using (var conn = new SqlConnection(ConnectionStringManager.Value))
+            using (var conn = ConnectionHelper.Open())
             {
                 conn.Open();
                 return conn.QueryFor<DragonSession>(SQL.SqlSessionStore_Get, new { SessionID = sessionID }).FirstOrDefault();
@@ -52,7 +53,7 @@ namespace Dragon.Context.Sessions
 
         protected override void SaveSessionRecord(DragonSession sessionRecord)
         {
-            using (var conn = new SqlConnection(ConnectionStringManager.Value))
+            using (var conn = ConnectionHelper.Open())
             {
                 conn.Open();
 
@@ -78,7 +79,7 @@ namespace Dragon.Context.Sessions
         {
             base.RemoveSessionRecord(sessionID);
 
-            using (var conn = new SqlConnection(ConnectionStringManager.Value))
+            using (var conn = ConnectionHelper.Open())
             {
                 conn.Open();
                 conn.ExecuteFor<DragonSession>(SQL.SqlSessionStore_Delete, new { SessionID = sessionID });
