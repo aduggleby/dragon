@@ -25,7 +25,6 @@ namespace Dragon.Context.Profile
         {
             using (var conn = ConnectionHelper.Open())
             {
-                conn.Open();
                 var param = new { UserID = userID, Key = key };
                 var candidate = conn.QueryFor<DragonProfile>(SQL.SqlProfileStore_Get, param).FirstOrDefault();
                 return candidate == null ? null : candidate.Value;
@@ -36,7 +35,6 @@ namespace Dragon.Context.Profile
         {
             using (var conn = ConnectionHelper.Open())
             {
-                conn.Open();
                 var param = new { LID = Guid.NewGuid(), UserID = userID, Key = key, Value = val };
                 if (conn.ExecuteFor<DragonProfile>(SQL.SqlProfileStore_Update, param) == 0)
                 {

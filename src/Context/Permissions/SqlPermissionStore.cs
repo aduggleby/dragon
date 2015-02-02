@@ -32,7 +32,6 @@ namespace Dragon.Context.Permissions
             {
                 using (var conn = ConnectionHelper.Open())
                 {
-                    conn.Open();
                     var param = new DragonPermissionNode() {ParentID = parentID, ChildID = childID};
                     conn.ExecuteFor<DragonPermissionNode>(SQL.SqlPermissionStore_InsertPermissionNode, param);
                 }
@@ -47,7 +46,6 @@ namespace Dragon.Context.Permissions
 
             using (var conn = ConnectionHelper.Open())
             {
-                conn.Open();
                 var param = new { ParentID = parentID, ChildID = childID };
                 conn.ExecuteFor<DragonPermissionNode>(SQL.SqlPermissionStore_DeletePermissionNode, param);
             }
@@ -59,7 +57,6 @@ namespace Dragon.Context.Permissions
         {
             using (var conn = ConnectionHelper.Open())
             {
-                conn.Open();
                 var param = new { ChildID = childID };
                 return
                     conn.QueryFor<DragonPermissionNode>(SQL.SqlPermissionStore_GetPermissionParentNodes, param)
@@ -72,7 +69,6 @@ namespace Dragon.Context.Permissions
         {
             using (var conn = ConnectionHelper.Open())
             {
-                conn.Open();
                 var param = new { ParentID = parentID };
                 return conn.QueryFor<DragonPermissionNode>(SQL.SqlPermissionStore_GetPermissionNodesByParentID, param)
                     .Select(x=>x.ParentID);
@@ -83,7 +79,6 @@ namespace Dragon.Context.Permissions
         {
             using (var conn = ConnectionHelper.Open())
             {
-                conn.Open();
                 var param = new {};
                 return conn.QueryFor<DragonPermissionNode>(SQL.SqlPermissionStore_GetAllPermissionNodes, param);
             }
@@ -109,7 +104,6 @@ namespace Dragon.Context.Permissions
         
             using (var conn = ConnectionHelper.Open())
             {
-                conn.Open();
                 var param = new DragonPermissionRight()
                     {
                         LID = Guid.NewGuid(),
@@ -134,7 +128,6 @@ namespace Dragon.Context.Permissions
 
             using (var conn = ConnectionHelper.Open())
             {
-                conn.Open();
                 var param = new
                 {
                     LID = candidate.LID
@@ -149,7 +142,6 @@ namespace Dragon.Context.Permissions
         {
             using (var conn = ConnectionHelper.Open())
             {
-                conn.Open();
                 var param = new { NodeID = nodeID };
                 return conn.QueryFor<DragonPermissionRight>(SQL.SqlPermissionStore_GetPermissionRightsByNode, param);
             }
@@ -159,7 +151,6 @@ namespace Dragon.Context.Permissions
         {
             using (var conn = ConnectionHelper.Open())
             {
-                conn.Open();
                 var param = new {  };
                 return conn.QueryFor<DragonPermissionRight>(SQL.SqlPermissionStore_GetAllPermissionRights, param);
             }

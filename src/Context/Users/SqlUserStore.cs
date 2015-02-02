@@ -26,7 +26,6 @@ namespace Dragon.Context.Users
         {
             using (var conn = ConnectionHelper.Open())
             {
-                conn.Open();
                 var param = new { UserID = userID };
                 return conn.QueryFor<DragonRegistration>(SQL.SqlUserStore_GetByUserID, param);
             }
@@ -36,7 +35,6 @@ namespace Dragon.Context.Users
         {
             using (var conn = ConnectionHelper.Open())
             {
-                conn.Open();
                 var param = new { Service = service, Key = key };
                 return conn.QueryFor<DragonRegistration>(SQL.SqlUserStore_GetByServiceAndKey, param).FirstOrDefault();
             }
@@ -44,10 +42,10 @@ namespace Dragon.Context.Users
 
         protected override void Save(Guid userID, string service, string key, string hashedSaltedSecret, string newkey = null)
         {
+            var existing = LoadRegistration(service, key);
+
             using (var conn = ConnectionHelper.Open())
             {
-                var existing = LoadRegistration(service, key);
-                conn.Open();
                 var sqlUser = new DragonRegistration()
                 {
                     RegistrationID = Guid.NewGuid(),

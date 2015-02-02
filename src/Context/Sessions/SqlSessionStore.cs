@@ -46,7 +46,6 @@ namespace Dragon.Context.Sessions
         {
             using (var conn = ConnectionHelper.Open())
             {
-                conn.Open();
                 return conn.QueryFor<DragonSession>(SQL.SqlSessionStore_Get, new { SessionID = sessionID }).FirstOrDefault();
             }
         }
@@ -55,7 +54,6 @@ namespace Dragon.Context.Sessions
         {
             using (var conn = ConnectionHelper.Open())
             {
-                conn.Open();
 
                 SetSessionData(sessionRecord);
                 var p = new
@@ -81,7 +79,6 @@ namespace Dragon.Context.Sessions
 
             using (var conn = ConnectionHelper.Open())
             {
-                conn.Open();
                 conn.ExecuteFor<DragonSession>(SQL.SqlSessionStore_Delete, new { SessionID = sessionID });
             }
         }
