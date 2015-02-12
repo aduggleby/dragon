@@ -21,14 +21,14 @@ namespace Dragon.IoC.StructureMap
             Scan(x =>
             {
                 x.TheCallingAssembly();
-                AssemblyConfig.Assemblies.ForEach(x.Assembly);
+                AssemblyConfig.Assemblies.ToList().ForEach(x.Assembly);
                 x.AddAllTypesOf(typeof(IInterceptor<>));
             });
 
-            var commands = AssemblyConfig.Assemblies
+            var commands = AssemblyConfig.Assemblies.ToList()
                               .SelectMany(a => a.GetTypes())
                              .Where(x => !x.IsAbstract)
-                             .Where(x => typeof(CommandBase).IsAssignableFrom(x));
+                             .Where(x => typeof(CommandBase).IsAssignableFrom(x)).ToArray();
 
             foreach (var command in commands)
             {
@@ -38,7 +38,7 @@ namespace Dragon.IoC.StructureMap
                 Scan(x =>
                 {
                     x.TheCallingAssembly();
-                    AssemblyConfig.Assemblies.ForEach(x.Assembly);
+                    AssemblyConfig.Assemblies.ToList().ForEach(x.Assembly);
                     x.AddAllTypesOf(handlerInterface);
                     x.AddAllTypesOf(projectionInterface);
                 });
@@ -83,11 +83,11 @@ namespace Dragon.IoC.StructureMap
                 var interceptedType = type.GetGenericArguments().First();
 
                 var allSubclasses =
-                    AssemblyConfig.Assemblies.SelectMany(x => x.GetTypes()).Where(t => t.IsSubclassOf(interceptedType));
+                    AssemblyConfig.Assemblies.ToList().SelectMany(x => x.GetTypes()).Where(t => t.IsSubclassOf(interceptedType));
 
-                foreach (var subclass in allSubclasses)
+                foreach (var subclass in allSubclasses.ToArray())
                 {
-                    Debug.WriteLine("RegisteriBng subclass " + subclass.ToString() + " to " + type.ToString());
+                    Debug.WriteLine("Registering subclass " + subclass.ToString() + " to " + type.ToString());
                     var c = subclass;
                     registry.Configure(x => x.AddType(type, c));
                 }

@@ -6,7 +6,6 @@ using System.Linq;
 using System.Text;
 using Dapper;
 using Dragon.Common;
-using Dragon.Context.Permissions;
 using Dragon.Context.ReverseIPLookup;
 using Dragon.Core.Configuration;
 using Dragon.Interfaces;

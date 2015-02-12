@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Dragon.ActivityCenter;
 using Dragon.Core.Mail;
 using Dragon.CPR;
 using Dragon.CPR.Attributes;

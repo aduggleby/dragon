@@ -92,21 +92,6 @@
     <Compile Include="Core\Mail\StringTemplateService\templates.cs" />
     <Compile Include="Core\Mail\StringTemplateService\initialization.cs" />
     <Compile Include="Core\Mail\StringTemplateService\_base.cs" />
-    <Compile Include="ActivityCenter\Email\basics.cs" />
-    <Compile Include="ActivityCenter\Email\_base.cs" />
-    <Compile Include="PermissionStore\complex_test.cs" />
-    <Compile Include="PermissionStore\has_multiple_rights_to_one_node.cs" />
-    <Compile Include="PermissionStore\PermissionInfo\has_rights.cs" />
-    <Compile Include="PermissionStore\DefaultNameResolverTest.cs" />
-    <Compile Include="PermissionStore\has_nodes.cs" />
-    <Compile Include="PermissionStore\has_no_nodes.cs" />
-    <Compile Include="PermissionStore\has_removed_rights.cs" />
-    <Compile Include="PermissionStore\has_no_rights.cs" />
-    <Compile Include="PermissionStore\Helpers\InMemoryPermissionStore.cs" />
-    <Compile Include="PermissionStore\has_groups.cs" />
-    <Compile Include="PermissionStore\Helpers\Base.cs" />
-    <Compile Include="PermissionStore\has_rights.cs" />
-    <Compile Include="PermissionStore\has_one_right.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Common\Util\RandomUtil.cs" />
     <Compile Include="SQL\PKMetadataAndSqlBuilderTest.cs" />
@@ -117,10 +102,6 @@
     <Compile Include="TreeBuilder\TreeBuilderTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ActivityCenter\ActivityCenter.csproj">
-      <Project>{792d5e8d-6f45-4dd3-8de6-b5fb34360463}</Project>
-      <Name>ActivityCenter</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{CAB6CB7C-5661-4D64-BC65-0259A12E38CF}</Project>
       <Name>Common</Name>
@@ -148,9 +129,7 @@
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ActivityCenter\Dispatcher\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

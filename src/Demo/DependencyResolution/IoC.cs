@@ -24,7 +24,6 @@ using Dragon.Context.Sessions.ReverseIPLookup;
 using Dragon.Context.Users;
 using Dragon.Core.Configuration;
 using Dragon.Interfaces;
-using Dragon.Context.Permissions;
 
 namespace Demo.DependencyResolution {
     //public static class IoC {

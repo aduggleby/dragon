@@ -29,15 +29,7 @@ namespace Dragon.Context
                 return ObjectFactory.GetInstance<DragonContext>();
             }
         }
-
-        public static IPermissionStore PermissionStore
-        {
-            get
-            {
-                return ObjectFactory.GetInstance<IPermissionStore>();
-            }
-        }
-
+        
         public static IProfileStore ProfileStore
         {
             get

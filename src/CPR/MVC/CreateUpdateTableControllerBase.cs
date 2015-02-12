@@ -23,7 +23,7 @@ namespace Dragon.CPR.MVC
         public CommandDispatcher<TCreate> CreateCommandDispatcher { get; set; }
         public CommandDispatcher<TUpdate> UpdateCommandDispatcher { get; set; }
 
-        public CreateUpdateTableControllerBase(IPermissionStore permissionStore):base(permissionStore)
+        public CreateUpdateTableControllerBase():base()
         {
 
         }

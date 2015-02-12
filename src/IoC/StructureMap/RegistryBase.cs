@@ -18,7 +18,7 @@ namespace Dragon.IoC.StructureMap
 
         private bool IsAssignableToGenericType(Type givenType, Type genericType)
         {
-            var interfaceTypes = givenType.GetInterfaces();
+            var interfaceTypes = givenType.GetInterfaces().ToArray();
 
             foreach (var it in interfaceTypes)
                 if (it.IsGenericType)

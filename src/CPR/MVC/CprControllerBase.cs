@@ -16,7 +16,6 @@ namespace Dragon.CPR.MVC
     public abstract class CPRControllerBase : 
         ControllerBase
     {
-        public IPermissionStore PermissionStore { get; set; }
         public IProfileStore ProfileStore { get; set; }
 
         public IConfiguration Configuration { get; set; }

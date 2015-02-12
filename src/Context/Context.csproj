@@ -102,13 +102,6 @@
     <Compile Include="Extensions\Groups\GroupPermissionExtension.cs" />
     <Compile Include="Extensions\Login\AdminOverrideAuthExtension.cs" />
     <Compile Include="Extensions\Login\ExternallyValidatedAuthExtension.cs" />
-    <Compile Include="Permissions\DefaultNameResolver.cs" />
-    <Compile Include="Permissions\PermissionInfo.cs" />
-    <Compile Include="Permissions\PermissionInfoExtractor.cs" />
-    <Compile Include="Permissions\PermissionStoreBase.cs" />
-    <Compile Include="Permissions\DragonPermissionNode.cs" />
-    <Compile Include="Permissions\DragonPermissionRight.cs" />
-    <Compile Include="Permissions\SqlPermissionStore.cs" />
     <Compile Include="Profile\DragonProfile.cs" />
     <Compile Include="Profile\ProfileStoreBase.cs" />
     <Compile Include="Profile\SqlProfileStore.cs" />

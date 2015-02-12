@@ -50,7 +50,7 @@ namespace Dragon.CPR
 
         private IEnumerable<Type> GetTypesForDerivingFrom<TBase>()
         {
-            return AssemblyConfig.Assemblies.SelectMany(x=>x.GetTypes())
+            return AssemblyConfig.Assemblies.ToList().SelectMany(x=>x.GetTypes())
                 .Where(t =>
                     t.IsClass && !t.IsAbstract && !t.IsNestedPublic &&
                     !(t.IsAbstract && t.IsSealed) /* => IsStatic */&&

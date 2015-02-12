@@ -12,7 +12,6 @@ namespace Dragon.CPR.Impl.Projections
     public abstract class ProjectionBase<T> : IProjection<T>
         where T : class
     {
-        public IPermissionStore PermissionStore { get; set; }
         public IProfileStore ProfileStore { get; set; }
         public IContainer Container { get; set; }
         public DragonContext Ctx { get; set; }

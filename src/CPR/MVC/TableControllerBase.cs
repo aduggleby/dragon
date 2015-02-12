@@ -25,7 +25,7 @@ namespace Dragon.CPR.MVC
         }
 
 
-        public TableControllerBase(IPermissionStore permissionStore)
+        public TableControllerBase()
         {
 
         }

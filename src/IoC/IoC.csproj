@@ -57,7 +57,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StructureMap\ActivityStreamRegistry.cs" />
     <Compile Include="StructureMap\CoreRegistry.cs" />
     <Compile Include="StructureMap\CPRRegistry.cs" />
     <Compile Include="StructureMap\RegistryBase.cs" />
@@ -68,10 +67,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ActivityCenter\ActivityCenter.csproj">
-      <Project>{792d5e8d-6f45-4dd3-8de6-b5fb34360463}</Project>
-      <Name>ActivityCenter</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{cab6cb7c-5661-4d64-bc65-0259a12e38cf}</Project>
       <Name>Common</Name>
