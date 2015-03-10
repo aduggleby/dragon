@@ -1,0 +1,7 @@
+site_name: Dragon Framework
+pages:
+- [index.md, About]
+- [files/index.md, Dragon.Files, Introduction]
+- [files/local-quickstart.md, Dragon.Files, Local Storage]
+- [files/s3-quickstart.md, Dragon.Files, Amazon S3 Storage]
+theme: readthedocs
