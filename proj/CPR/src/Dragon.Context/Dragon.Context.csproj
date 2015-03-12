@@ -1,0 +1,168 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{005C8DEE-6257-4F37-8657-EC38C412FFF5}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Dragon.Context</RootNamespace>
+    <AssemblyName>Dragon.Context</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\..\..\release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Common.Logging">
+      <HintPath>..\..\packages\Common.Logging.3.0.0\lib\net40\Common.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Common.Logging.Core">
+      <HintPath>..\..\packages\Common.Logging.Core.3.0.0\lib\net40\Common.Logging.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Dragon.Data">
+      <HintPath>..\..\packages\Dragon.Data.1.0.0\lib\Dragon.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Facebook">
+      <HintPath>..\..\packages\Facebook.6.8.0\lib\net45\Facebook.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="StructureMap">
+      <HintPath>..\..\packages\structuremap.3.1.4.143\lib\net40\StructureMap.dll</HintPath>
+    </Reference>
+    <Reference Include="StructureMap.Net4">
+      <HintPath>..\..\packages\structuremap.3.1.4.143\lib\net40\StructureMap.Net4.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Attributes\RequiresAuthentication.cs" />
+    <Compile Include="Attributes\RequiresSystemRight.cs" />
+    <Compile Include="Configuration\AssemblyConfig.cs" />
+    <Compile Include="Configuration\ConfigurationBase.cs" />
+    <Compile Include="Configuration\ConfigurationManagerConfiguration.cs" />
+    <Compile Include="Configuration\IConfiguration.cs" />
+    <Compile Include="Configuration\IConfigurationExtensions.cs" />
+    <Compile Include="Configuration\InMemoryConfiguration.cs" />
+    <Compile Include="DragonContext.cs" />
+    <Compile Include="DragonContextExtensions.cs" />
+    <Compile Include="Embedded\Files.cs" />
+    <Compile Include="Exceptions\InvalidOldSecretException.cs" />
+    <Compile Include="Exceptions\NodeDoesNotExistException.cs" />
+    <Compile Include="Exceptions\RightDoesNotExistException.cs" />
+    <Compile Include="Exceptions\ServiceAlreadyConnectedToUserException.cs" />
+    <Compile Include="Exceptions\UserKeyAlreadyExistsForThisServiceException.cs" />
+    <Compile Include="Exceptions\UserKeyDoesNotExistException.cs" />
+    <Compile Include="Extensions\Groups\GroupPermissionExtension.cs" />
+    <Compile Include="Extensions\Login\AdminOverrideAuthExtension.cs" />
+    <Compile Include="Extensions\Login\ExternallyValidatedAuthExtension.cs" />
+    <Compile Include="Extensions\Login\FacebookAuthExtension.cs" />
+    <Compile Include="Extensions\Login\UsernamePasswordAuthExtension.cs" />
+    <Compile Include="Interfaces\IDragonTable.cs" />
+    <Compile Include="Interfaces\IPermissionNode.cs" />
+    <Compile Include="Interfaces\IPermissionRight.cs" />
+    <Compile Include="Interfaces\IPermissionStore.cs" />
+    <Compile Include="Interfaces\IProfileStore.cs" />
+    <Compile Include="Interfaces\IRegistration.cs" />
+    <Compile Include="Interfaces\ISession.cs" />
+    <Compile Include="Interfaces\ISessionStore.cs" />
+    <Compile Include="Interfaces\ITreeNode.cs" />
+    <Compile Include="Interfaces\IUser.cs" />
+    <Compile Include="Interfaces\IUserStore.cs" />
+    <Compile Include="IReverseIPLookupService.cs" />
+    <Compile Include="Profile\DragonProfile.cs" />
+    <Compile Include="Profile\ProfileStoreBase.cs" />
+    <Compile Include="Profile\SqlProfileStore.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sessions\CookieSession.cs" />
+    <Compile Include="Sessions\DragonIdentity.cs" />
+    <Compile Include="Sessions\DragonIdentityInjector.cs" />
+    <Compile Include="Sessions\DragonPrincipal.cs" />
+    <Compile Include="Sessions\DragonSession.cs" />
+    <Compile Include="Sessions\InMemorySession.cs" />
+    <Compile Include="Sessions\InMemorySessionStore.cs" />
+    <Compile Include="Sessions\ReverseIPLookup\HostIPReverseLookupService.cs" />
+    <Compile Include="Sessions\SessionStoreBase.cs" />
+    <Compile Include="Sessions\SqlSessionStore.cs" />
+    <Compile Include="SQL.Designer.cs" />
+    <Compile Include="StoreBase.cs" />
+    <Compile Include="Users\DragonRegistration.cs" />
+    <Compile Include="Users\InMemoryUserStore.cs" />
+    <Compile Include="Users\SqlUserStore.cs" />
+    <Compile Include="Users\User.cs" />
+    <Compile Include="Users\UserStoreBase.cs" />
+    <Compile Include="Util\CryptUtil.cs" />
+    <Compile Include="Util\EmbeddedUtil.cs" />
+    <Compile Include="Util\HashUtil.cs" />
+    <Compile Include="Util\RandomUtil.cs" />
+    <Compile Include="Util\ResourceUtil.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Embedded\facebook.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="SQL.resx" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
