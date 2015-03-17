@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+    <metadata>
+        <id>Dragon.Files.MVC</id>
+        <version>1.0.0</version>
+        <title>Dragon.Files - MVC Extensions</title>
+        <authors>Dragon Project</authors>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>Allows retrieving of ActionResults for files stored with Dragon.Files for use with MVC controllers.</description>
+        <dependencies>
+            <group targetFramework=".NETFramework4.5">
+                <dependency id="Dragon.Files" version="1.0.0" />
+                <dependency id="Dragon.Files.S3" version="1.0.1" />
+                <dependency id="Microsoft.AspNet.Mvc" version="5.2.3" />
+                <dependency id="Microsoft.AspNet.Razor" version="3.2.3" />
+                <dependency id="Microsoft.AspNet.WebPages" version="3.2.3" />
+                <dependency id="Microsoft.Web.Infrastructure" version="1.0.0.0" />
+            </group>
+        </dependencies>
+        <frameworkAssemblies>
+            <frameworkAssembly assemblyName="Microsoft.CSharp" targetFramework="" />
+            <frameworkAssembly assemblyName="System" targetFramework="" />
+            <frameworkAssembly assemblyName="System.Configuration" targetFramework="" />
+            <frameworkAssembly assemblyName="System.Core" targetFramework="" />
+            <frameworkAssembly assemblyName="System.Data" targetFramework="" />
+            <frameworkAssembly assemblyName="System.Data.DataSetExtensions" targetFramework="" />
+            <frameworkAssembly assemblyName="System.Xml" targetFramework="" />
+            <frameworkAssembly assemblyName="System.Xml.Linq" targetFramework="" />
+            <frameworkAssembly assemblyName="System.Web" targetFramework="" />
+        </frameworkAssemblies>
+    </metadata>
+    <files>
+        <file src="..\release\Dragon.Files.MVC.dll" target="lib\Dragon.Files.MVC.dll" />
+    </files>
+</package>

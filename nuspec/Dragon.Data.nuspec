@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+    <metadata>
+        <id>Dragon.Data</id>
+        <version>1.0.0</version>
+        <title>Dragon.Data</title>
+        <authors>Dragon Project</authors>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>A library of data helpers built on top of Dapper. Provides Repository, Table Setup, Information Query and Fluent SQL Builder.</description>
+        <dependencies>
+            <group targetFramework=".NETFramework4.5">
+                <dependency id="Common.Logging" version="3.0.0" />
+                <dependency id="Dapper" version="1.38" />
+            </group>
+        </dependencies>
+        <frameworkAssemblies>
+            <frameworkAssembly assemblyName="Microsoft.CSharp" targetFramework="" />
+            <frameworkAssembly assemblyName="System" targetFramework="" />
+            <frameworkAssembly assemblyName="System.Configuration" targetFramework="" />
+            <frameworkAssembly assemblyName="System.Core" targetFramework="" />
+            <frameworkAssembly assemblyName="System.Data" targetFramework="" />
+            <frameworkAssembly assemblyName="System.Data.DataSetExtensions" targetFramework="" />
+            <frameworkAssembly assemblyName="System.Xml" targetFramework="" />
+            <frameworkAssembly assemblyName="System.Xml.Linq" targetFramework="" />
+        </frameworkAssemblies>
+    </metadata>
+    <files>
+        <file src="..\release\Dragon.Data.dll" target="lib\Dragon.Data.dll" />
+    </files>
+</package>
