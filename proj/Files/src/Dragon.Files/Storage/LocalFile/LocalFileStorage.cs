@@ -20,7 +20,7 @@ namespace Dragon.Files.Storage
             _path = configuration.Path;
         }
 
-        public string Store(string filePath)
+        public string Store(string filePath, String contentType)
         {
             if (!File.Exists(filePath)) throw new ResourceToStoreNotFoundException();
             if (!_fileRestriction.IsAllowed(filePath)) throw new FileTypeNotAllowedException();
@@ -29,7 +29,7 @@ namespace Dragon.Files.Storage
             return id;
         }
 
-        public string Store(Stream content, String filePath)
+        public string Store(Stream content, String filePath, String contentType)
         {
             if (content == null) throw new ResourceToStoreNotFoundException("The passed stream is null.");
             if (!_fileRestriction.IsAllowed(filePath)) throw new FileTypeNotAllowedException();

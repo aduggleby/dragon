@@ -42,7 +42,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Storage\DragonFileStorage.cs" />
     <Compile Include="Restriction\FileExtensionRestriction.cs" />
     <Compile Include="Exceptions\FileTypeNotAllowedException.cs" />
     <Compile Include="Interfaces\IFileRestriction.cs" />

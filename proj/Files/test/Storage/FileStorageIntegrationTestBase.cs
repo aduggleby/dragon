@@ -35,7 +35,7 @@ namespace Dragon.Files.Test
         public void Delete_validFile_shouldDeleteFile()
         {
             var fileStorage = CreateFileStorage();
-            var id = fileStorage.Store(TestFilePath);
+            var id = fileStorage.Store(TestFilePath, null);
             Assert.AreNotEqual("", id);
             fileStorage.Delete(id);
             Assert.AreEqual(false, fileStorage.Exists(id));
@@ -55,7 +55,7 @@ namespace Dragon.Files.Test
         public void Exists_validFile_shouldReturnTrue()
         {
             var fileStorage = CreateFileStorage();
-            var id = fileStorage.Store(TestFilePath);
+            var id = fileStorage.Store(TestFilePath, null);
             var actual = fileStorage.Exists(id);
             fileStorage.Delete(id); // cleanup
             Assert.AreEqual(true, actual);
@@ -66,7 +66,7 @@ namespace Dragon.Files.Test
         public void Store_validFile_shouldUploadFile()
         {
             var fileStorage = CreateFileStorage();
-            var id = fileStorage.Store(TestFilePath);
+            var id = fileStorage.Store(TestFilePath, null);
             Assert.IsFalse(string.IsNullOrEmpty(id));
             var exists = fileStorage.Exists(id);
             fileStorage.Delete(id); // cleanup
@@ -79,7 +79,7 @@ namespace Dragon.Files.Test
         public void Store_invalidFile_shouldThrowException()
         {
             var fileStorage = CreateFileStorage();
-            fileStorage.Store(TestFilePath + "doesnotexist");
+            fileStorage.Store(TestFilePath + "doesnotexist", null);
         }
 
         [TestMethod]
@@ -88,7 +88,7 @@ namespace Dragon.Files.Test
         public void Store_disallowedFile_shouldThrowException()
         {
             var fileStorage = CreateFileStorage();
-            fileStorage.Store(DisallowedTestFilePath);
+            fileStorage.Store(DisallowedTestFilePath, null);
         }
 
         [TestMethod]
@@ -106,7 +106,7 @@ namespace Dragon.Files.Test
         {
             const string content = "testcontent\n\n23";
             var fileStorage = CreateFileStorage();
-            var id = fileStorage.Store(new MemoryStream(Encoding.UTF8.GetBytes(content)), "blah.txt");
+            var id = fileStorage.Store(new MemoryStream(Encoding.UTF8.GetBytes(content)), "blah.txt", null);
             Assert.IsFalse(string.IsNullOrEmpty(id));
             var exists = fileStorage.Exists(id);
             var actual = new StreamReader(fileStorage.Retrieve(id)).ReadToEnd();
@@ -121,7 +121,7 @@ namespace Dragon.Files.Test
         public void Store_disallowedStream_shouldThrowException()
         {
             var fileStorage = CreateFileStorage();
-            fileStorage.Store(new MemoryStream(Encoding.UTF8.GetBytes("blah")), DisallowedTestFilePath);
+            fileStorage.Store(new MemoryStream(Encoding.UTF8.GetBytes("blah")), DisallowedTestFilePath, null);
         }
 
         [TestMethod]
@@ -138,7 +138,7 @@ namespace Dragon.Files.Test
         public void Retrieve_validFile_shouldDownloadFile()
         {
             var fileStorage = CreateFileStorage();
-            var id = fileStorage.Store(TestFilePath);
+            var id = fileStorage.Store(TestFilePath, null);
             var actual = new StreamReader(fileStorage.Retrieve(id)).ReadToEnd();
             fileStorage.Delete(id); // cleanup
             Assert.AreEqual(TestFileContent, actual);

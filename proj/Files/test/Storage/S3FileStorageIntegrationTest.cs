@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Specialized;
-using System.Configuration;
+using System.IO;
 using System.Net;
+using System.Text;
 using System.Web.Mvc;
 using Dragon.Files.Exceptions;
 using Dragon.Files.Interfaces;
@@ -40,7 +40,7 @@ namespace Dragon.Files.Test
         public void RetrieveAsActionResult_validFile_shouldReturnActionResult()
         {
             var fileStorage = CreateFileStorage();
-            var id = fileStorage.Store(TestFilePath);
+            var id = fileStorage.Store(TestFilePath, null);
             var actualUrl = ((RedirectResult)fileStorage.RetrieveAsActionResult(id)).Url;
             var actual = new WebClient().DownloadString(actualUrl);
             fileStorage.Delete(id); // cleanup
@@ -55,18 +55,45 @@ namespace Dragon.Files.Test
             var fileStorage = CreateFileStorage();
             fileStorage.RetrieveAsUrl(Guid.NewGuid().ToString());
         }
-
-
  
         [TestMethod]
         [TestCategory("IntegrationTest")]
         public void RetrieveAsUrl_validFile_shouldRetrieveUrl()
         {
             var fileStorage = CreateFileStorage();
-            var id = fileStorage.Store(TestFilePath);
+            var id = fileStorage.Store(TestFilePath, null);
             var actual = new WebClient().DownloadString(fileStorage.RetrieveAsUrl(id));
             fileStorage.Delete(id); // cleanup
             Assert.AreEqual(TestFileContent, actual);
+        }
+
+        [TestMethod]
+        [TestCategory("IntegrationTest")]
+        public void Store_byPathAndSpecificContentType_shouldRetrieveAsSpecifiedContentType()
+        {
+            var fileStorage = CreateFileStorage();
+            const string contentType = "image/png";
+            var id = fileStorage.Store(TestFilePath, contentType);
+            var client = new WebClient();
+            client.DownloadString(fileStorage.RetrieveAsUrl(id));
+            var actual = client.ResponseHeaders["Content-Type"];
+            fileStorage.Delete(id); // cleanup
+            Assert.AreEqual(contentType, actual);
+        }
+
+        [TestMethod]
+        [TestCategory("IntegrationTest")]
+        public void Store_byStreamAndSpecificContentType_shouldRetrieveAsSpecifiedContentType()
+        {
+            const string contentType = "image/png";
+            const string content = "testcontent\n\n23";
+            var fileStorage = CreateFileStorage();
+            var id = fileStorage.Store(new MemoryStream(Encoding.UTF8.GetBytes(content)), "blah.txt", contentType);
+            var client = new WebClient();
+            client.DownloadString(fileStorage.RetrieveAsUrl(id));
+            var actual = client.ResponseHeaders["Content-Type"];
+            fileStorage.Delete(id); // cleanup
+            Assert.AreEqual(contentType, actual);
         }
     }
 }

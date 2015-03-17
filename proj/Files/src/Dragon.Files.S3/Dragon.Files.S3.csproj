@@ -32,7 +32,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AWSSDK">
+    <Reference Include="AWSSDK, Version=2.3.24.3, Culture=neutral, PublicKeyToken=9f476d3089b52be3, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\AWSSDK.2.3.24.3\lib\net45\AWSSDK.dll</HintPath>
     </Reference>
     <Reference Include="System" />

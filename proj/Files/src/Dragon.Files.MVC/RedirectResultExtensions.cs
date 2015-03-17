@@ -15,23 +15,6 @@ namespace Dragon.Files.MVC
 {
     public static class RedirectResultExtensions
     {
-        public static ActionResult RetrieveAsActionResult(this DragonFileStorage storage, string resourceID)
-        {
-            var iFileStorage = storage.StorageImplementation;
-            if (iFileStorage is S3FileStorage)
-            {
-                return ((S3FileStorage) iFileStorage).RetrieveAsActionResult(resourceID);
-            }
-            else if (iFileStorage is LocalFileStorage)
-            {
-                return ((LocalFileStorage)iFileStorage).RetrieveAsActionResult(resourceID);
-            }
-
-            throw new Exception("Storage type " + storage.GetType().FullName +
-                                " does not have an appropriate extension.");
-        }
-
-
         public static ActionResult RetrieveAsActionResult(this IFileStorage storage, string resourceID)
         {
             var iFileStorage = storage;

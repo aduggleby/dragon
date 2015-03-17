@@ -35,22 +35,30 @@ namespace Dragon.Files.Storage
                 region);
         }
 
-        public string Store(string filePath)
+        public string Store(string filePath, string contentType)
         {
             if (!File.Exists(filePath)) throw new ResourceToStoreNotFoundException();
             if (!_fileRestriction.IsAllowed(filePath)) throw new FileTypeNotAllowedException();
             var id = CreateKey(filePath);
             var request = new PutObjectRequest { BucketName = _bucket, FilePath = filePath, Key = id };
+            if (!string.IsNullOrEmpty(contentType))
+            {
+                request.ContentType = contentType;
+            }
             _client.PutObject(request);
             return id;
         }
 
-        public string Store(Stream content, String filePath)
+        public string Store(Stream content, String filePath, string contentType)
         {
             if (content == null) throw new ResourceToStoreNotFoundException("The passed stream is null.");
             if (!_fileRestriction.IsAllowed(filePath)) throw new FileTypeNotAllowedException();
             var id = CreateKey(filePath);
             var request = new PutObjectRequest { BucketName = _bucket, Key = id, InputStream = content };
+            if (!string.IsNullOrEmpty(contentType))
+            {
+                request.ContentType = contentType;
+            }
             _client.PutObject(request);
             return id;
         }
