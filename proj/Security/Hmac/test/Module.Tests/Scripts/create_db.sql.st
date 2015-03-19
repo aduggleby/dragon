@@ -1,0 +1,1 @@
+﻿CREATE DATABASE DragonSecurityHmacTest ON (name='DragonSecurityHmacTest', filename='<dbPath>');

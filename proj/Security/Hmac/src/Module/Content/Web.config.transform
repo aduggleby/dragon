@@ -1,0 +1,24 @@
+﻿<configuration>
+  <configSections>
+    <sectionGroup name="dragon">
+      <sectionGroup name="security">
+        <section name="hmac" type="Dragon.Security.Hmac.Module.Configuration.DragonSecurityHmacSection, Dragon.Security.Hmac.Module" />
+      </sectionGroup>
+    </sectionGroup>
+  </configSections>
+  <dragon>
+    <security>
+      <!-- The connection and tables that contain users and apps -->
+      <hmac
+        serviceId="TODO: Guid of the service"
+        connectionStringName="DefaultConnection"
+        usersTableName="DragonSecurityHmacUsers"
+        appsTableName="DragonSecurityHmacApps">
+        <Paths>
+          <add name="home" path="^/$" type="Exclude" /> <!-- allow start page -->
+          <add name="default" path="^/.*$" type="Include" /> <!-- restrict others -->
+        </Paths>
+      </hmac>
+    </security>
+  </dragon>
+</configuration>

@@ -73,3 +73,6 @@ packages/
 
 #Test files
 *.testsettings
+
+# Test data files
+App_Data
