@@ -30,7 +30,7 @@
     </frameworkAssemblies>
   </metadata>
   <files>
-    <file src="Content\Web.config.transform" target="Content\Web.config.transform" />
-    <file src="bin\Release\Dragon.Security.Hmac.Module.dll" target="lib\Dragon.Security.Hmac.Module.dll" />
+    <file src="..\release\Content\Web.config.transform" target="Content\Web.config.transform" />
+    <file src="..\release\Dragon.Security.Hmac.Module.dll" target="lib\Dragon.Security.Hmac.Module.dll" />
   </files>
 </package>

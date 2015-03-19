@@ -91,7 +91,9 @@
     <Compile Include="Services\IHmacHttpService.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Content\Web.config.transform" />
+    <None Include="Content\Web.config.transform">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj">

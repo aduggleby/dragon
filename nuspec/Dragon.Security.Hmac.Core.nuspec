@@ -22,6 +22,6 @@
     </frameworkAssemblies>
   </metadata>
   <files>
-    <file src="bin\Release\Dragon.Security.Hmac.Core.dll" target="lib\Dragon.Security.Hmac.Core.dll" />
+    <file src="..\release\Dragon.Security.Hmac.Core.dll" target="lib\Dragon.Security.Hmac.Core.dll" />
   </files>
 </package>
