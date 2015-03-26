@@ -89,6 +89,7 @@
     <Compile Include="Storage\FileStorageIntegrationTestBase.cs" />
     <Compile Include="Storage\LocalFileStorageIntegrationTest.cs" />
     <Compile Include="Storage\S3FileStorageIntegrationTest.cs" />
+    <Compile Include="Storage\AzureBlobStorageFileStorageIntegrationTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">
@@ -110,6 +111,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Dragon.Files.AzureBlobStorage\Dragon.Files.AzureBlobStorage.csproj">
+      <Project>{AEFCCE7B-7563-4DBB-8F5D-834B5CB7E763}</Project>
+      <Name>Dragon.Files.AzureBlobStorage</Name>
+    </ProjectReference>
     <ProjectReference Include="..\src\Dragon.Files.MVC\Dragon.Files.MVC.csproj">
       <Project>{9e03f634-858c-4856-99c3-ac3377ed666f}</Project>
       <Name>Dragon.Files.MVC</Name>
