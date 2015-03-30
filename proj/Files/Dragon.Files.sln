@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dragon.Files.MVC", "src\Dra
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dragon.Files.S3", "src\Dragon.Files.S3\Dragon.Files.S3.csproj", "{9E88086D-3FA8-44F8-ABC5-26BE37FF9D4A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dragon.Files.AzureBlobStorage", "Dragon.Files.AzureBlobStorage\Dragon.Files.AzureBlobStorage.csproj", "{AEFCCE7B-7563-4DBB-8F5D-834B5CB7E763}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{9E88086D-3FA8-44F8-ABC5-26BE37FF9D4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9E88086D-3FA8-44F8-ABC5-26BE37FF9D4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9E88086D-3FA8-44F8-ABC5-26BE37FF9D4A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AEFCCE7B-7563-4DBB-8F5D-834B5CB7E763}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AEFCCE7B-7563-4DBB-8F5D-834B5CB7E763}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AEFCCE7B-7563-4DBB-8F5D-834B5CB7E763}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AEFCCE7B-7563-4DBB-8F5D-834B5CB7E763}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

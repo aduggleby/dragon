@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+    <metadata>
+        <id>Dragon.Files.AzureBlobStorage</id>
+        <version>1.0.1</version>
+        <title>Dragon.Files - Azure Blob Storage Provider</title>
+        <authors>Dragon Project</authors>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>Adds Azure Blob storage capability to Dragon.Files</description>
+        <dependencies>
+            <group targetFramework=".NETFramework4.5">
+                <dependency id="WindowsAzure.Storage" version="4.3.0" />
+                <dependency id="Dragon.Files" version="1.0.0" />
+            </group>
+        </dependencies>
+        <frameworkAssemblies>
+            <frameworkAssembly assemblyName="Microsoft.CSharp" targetFramework="" />
+            <frameworkAssembly assemblyName="System" targetFramework="" />
+            <frameworkAssembly assemblyName="System.Configuration" targetFramework="" />
+            <frameworkAssembly assemblyName="System.Core" targetFramework="" />
+            <frameworkAssembly assemblyName="System.Data" targetFramework="" />
+            <frameworkAssembly assemblyName="System.Data.DataSetExtensions" targetFramework="" />
+            <frameworkAssembly assemblyName="System.Xml" targetFramework="" />
+            <frameworkAssembly assemblyName="System.Xml.Linq" targetFramework="" />
+        </frameworkAssemblies>
+    </metadata>
+    <files>
+        <file src="..\release\Dragon.Files.AzureBlobStorage.dll" target="lib\Dragon.Files.AzureBlobStorage.dll" />
+    </files>
+</package>

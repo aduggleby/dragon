@@ -120,7 +120,7 @@ namespace Dragon.Files.Storage
             {
                 BucketName = _bucket,
                 Key = resourceID,
-                Expires = DateTime.Now.AddHours(1)
+                Expires = DateTime.Now.Date.AddHours(DateTime.Now.Hour + 1).AddMinutes(5),
             };
             string url;
             try
