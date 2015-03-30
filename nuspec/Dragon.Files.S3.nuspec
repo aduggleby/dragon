@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
     <metadata>
         <id>Dragon.Files.S3</id>
-        <version>1.0.1</version>
+        <version>1.2.0</version>
         <title>Dragon.Files - S3 Storage Provider</title>
         <authors>Dragon Project</authors>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -10,7 +10,7 @@
         <dependencies>
             <group targetFramework=".NETFramework4.5">
                 <dependency id="AWSSDK" version="2.3.24.3" />
-                <dependency id="Dragon.Files" version="1.0.0" />
+                <dependency id="Dragon.Files" version="1.2.0" />
             </group>
         </dependencies>
         <frameworkAssemblies>

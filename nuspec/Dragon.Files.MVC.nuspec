@@ -2,15 +2,15 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
     <metadata>
         <id>Dragon.Files.MVC</id>
-        <version>1.0.0</version>
+        <version>1.2.0</version>
         <title>Dragon.Files - MVC Extensions</title>
         <authors>Dragon Project</authors>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>Allows retrieving of ActionResults for files stored with Dragon.Files for use with MVC controllers.</description>
         <dependencies>
             <group targetFramework=".NETFramework4.5">
-                <dependency id="Dragon.Files" version="1.0.0" />
-                <dependency id="Dragon.Files.S3" version="1.0.1" />
+                <dependency id="Dragon.Files" version="1.2.0" />
+                <dependency id="Dragon.Files.S3" version="1.2.0" />
                 <dependency id="Microsoft.AspNet.Mvc" version="5.2.3" />
                 <dependency id="Microsoft.AspNet.Razor" version="3.2.3" />
                 <dependency id="Microsoft.AspNet.WebPages" version="3.2.3" />
