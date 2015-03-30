@@ -95,8 +95,8 @@ namespace Dragon.Files.AzureBlobStorage
             {
                 Permissions = SharedAccessBlobPermissions.Read,
                 // subtract a few minutes to avoid issues when directly accessing after the URL has been generated
-                SharedAccessStartTime = DateTime.UtcNow.Subtract(TimeSpan.FromMinutes(5)),
-                SharedAccessExpiryTime = DateTime.UtcNow.AddHours(1),
+                SharedAccessStartTime = DateTime.UtcNow.Date.AddHours(DateTime.UtcNow.Hour).Subtract(TimeSpan.FromMinutes(5)),
+                SharedAccessExpiryTime = DateTime.UtcNow.Date.AddHours(DateTime.UtcNow.Hour + 1).AddMinutes(5),
             };
 
             return blob.Uri + blob.GetSharedAccessSignature(policy);

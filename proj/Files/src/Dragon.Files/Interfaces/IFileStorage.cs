@@ -43,7 +43,7 @@ namespace Dragon.Files.Interfaces
         bool Exists(string resourceID);
 
         /// <summary>
-        ///     Returns an Url that points to the resource.
+        ///     Returns an Url that points to the resource. The Url typically is valid within the current hour, which allows caching.
         /// </summary>
         /// <param name="resourceID">The unique id of the resource to search for.</param>
         /// <returns></returns>

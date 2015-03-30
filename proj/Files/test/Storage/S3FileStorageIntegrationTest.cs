@@ -2,6 +2,7 @@
 using System.IO;
 using System.Net;
 using System.Text;
+using System.Threading;
 using System.Web.Mvc;
 using Dragon.Files.Exceptions;
 using Dragon.Files.Interfaces;
@@ -65,6 +66,22 @@ namespace Dragon.Files.Test
             var actual = new WebClient().DownloadString(fileStorage.RetrieveAsUrl(id));
             fileStorage.Delete(id); // cleanup
             Assert.AreEqual(TestFileContent, actual);
+        }
+
+        [TestMethod]
+        [TestCategory("IntegrationTest")]
+        public void RetrieveAsUrl_validFile_shouldRetrieveSameUrlTwice()
+        {
+            var fileStorage = CreateFileStorage();
+            var id = fileStorage.Store(TestFilePath, null);
+            var expected = fileStorage.RetrieveAsUrl(id);
+            if (!(DateTime.Now.Minute == 59 && DateTime.Now.Second > 50))
+            {
+                Thread.Sleep(TimeSpan.FromSeconds(3));
+            }
+            var actual = fileStorage.RetrieveAsUrl(id);
+            fileStorage.Delete(id); // cleanup
+            Assert.AreEqual(expected, actual);
         }
 
         [TestMethod]
