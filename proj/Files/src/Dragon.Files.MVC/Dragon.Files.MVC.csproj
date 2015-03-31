@@ -73,7 +73,7 @@
     <Compile Include="RedirectResultExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Dragon.Files.AzureBlobStorage\Dragon.Files.AzureBlobStorage.csproj">
+    <ProjectReference Include="..\Dragon.Files.AzureBlobStorage\Dragon.Files.AzureBlobStorage.csproj">
       <Project>{AEFCCE7B-7563-4DBB-8F5D-834B5CB7E763}</Project>
       <Name>Dragon.Files.AzureBlobStorage</Name>
     </ProjectReference>

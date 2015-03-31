@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dragon.Files.MVC", "src\Dra
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dragon.Files.S3", "src\Dragon.Files.S3\Dragon.Files.S3.csproj", "{9E88086D-3FA8-44F8-ABC5-26BE37FF9D4A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dragon.Files.AzureBlobStorage", "Dragon.Files.AzureBlobStorage\Dragon.Files.AzureBlobStorage.csproj", "{AEFCCE7B-7563-4DBB-8F5D-834B5CB7E763}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dragon.Files.AzureBlobStorage", "src\Dragon.Files.AzureBlobStorage\Dragon.Files.AzureBlobStorage.csproj", "{AEFCCE7B-7563-4DBB-8F5D-834B5CB7E763}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

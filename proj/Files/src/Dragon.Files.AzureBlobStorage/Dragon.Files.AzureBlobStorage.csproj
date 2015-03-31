@@ -74,7 +74,7 @@
     <Compile Include="AzureBlobStorageConfiguration.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\src\Dragon.Files\Dragon.Files.csproj">
+    <ProjectReference Include="..\Dragon.Files\Dragon.Files.csproj">
       <Project>{72B5B216-3087-43AE-892B-10D0E0277718}</Project>
       <Name>Dragon.Files</Name>
     </ProjectReference>
