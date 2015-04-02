@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Dragon.Security.Hmac.Module</id>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <title>Dragon.Security.Hmac.Module</title>
     <authors>Dragon Project</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
