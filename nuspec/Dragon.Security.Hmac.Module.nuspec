@@ -14,7 +14,7 @@
         <dependency id="Microsoft.AspNet.Mvc" version="5.2.3" />
         <dependency id="Microsoft.Web.Infrastructure" version="1.0.0.0" />
         <dependency id="Dapper" version="1.38" />
-        <dependency id="Dragon.Security.Hmac.Core" version="1.0.0" />
+        <dependency id="Dragon.Security.Hmac.Core" version="1.0.1" />
       </group>
     </dependencies>
     <frameworkAssemblies>
