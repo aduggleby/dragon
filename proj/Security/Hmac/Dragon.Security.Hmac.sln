@@ -22,7 +22,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sql", "sql", "{E0682804-359
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "migrations", "migrations", "{51A87D53-8A4D-4186-A18C-D73D23AAD0CB}"
 	ProjectSection(SolutionItems) = preProject
-		sql\migrations\hmac_v1.0.0.0.sql = sql\migrations\hmac_v1.0.0.0.sql
+		sql\migrations\hmac_v1.0.0.sql = sql\migrations\hmac_v1.0.0.sql
+		sql\migrations\hmac_v1.0.1.sql = sql\migrations\hmac_v1.0.1.sql
 	EndProjectSection
 EndProject
 Global
