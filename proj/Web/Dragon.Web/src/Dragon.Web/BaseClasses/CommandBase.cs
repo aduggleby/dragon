@@ -9,6 +9,8 @@ namespace Dragon.Web
 {
     public abstract class CommandBase
     {
-        public abstract bool ExecutionAllowed();        
+        public abstract bool ExecutionAllowed(IContext context);
+
+        public bool HaltExecution { get; set;  }
     }
 }

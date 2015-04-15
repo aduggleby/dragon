@@ -51,6 +51,10 @@
     <Reference Include="Jil">
       <HintPath>..\..\packages\Jil.2.9.0\lib\net45\Jil.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="Sigil">
       <HintPath>..\..\packages\Sigil.4.4.0\lib\net45\Sigil.dll</HintPath>
     </Reference>
@@ -76,12 +80,19 @@
     <Compile Include="Attributes\PersistedAsAttribute.cs" />
     <Compile Include="BaseClasses\CommandBase.cs" />
     <Compile Include="Defaults\CommandTable.cs" />
+    <Compile Include="Defaults\DefaultCommandPersister.cs" />
+    <Compile Include="Defaults\NewtonsoftCommandSerializer.cs" />
+    <Compile Include="Defaults\JilCommandSerializer.cs" />
+    <Compile Include="Defaults\SimpleCommands.cs" />
     <Compile Include="Defaults\ServiceResult.cs" />
     <Compile Include="DependencyConfig.cs" />
+    <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="Interfaces\ICommandAfterSave.cs" />
     <Compile Include="Interfaces\ICommandBeforeProcess.cs" />
     <Compile Include="Interfaces\ICommandBeforeSave.cs" />
+    <Compile Include="Interfaces\ICommandPersister.cs" />
     <Compile Include="Interfaces\ICommandSave.cs" />
+    <Compile Include="Interfaces\ICommandSerializer.cs" />
     <Compile Include="Interfaces\ICommandValidator.cs" />
     <Compile Include="Interfaces\IContext.cs" />
     <Compile Include="Defaults\DefaultContext.cs" />

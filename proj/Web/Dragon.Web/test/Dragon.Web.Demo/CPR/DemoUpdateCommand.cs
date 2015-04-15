@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using Dragon.Data.Attributes;
 using Dragon.Web.Attributes;
+using Dragon.Web.Interfaces;
 
 namespace Dragon.Web.Demo.CPR
 {
@@ -16,7 +17,7 @@ namespace Dragon.Web.Demo.CPR
 
         public string DemoString { get; set; }
 
-        public override bool ExecutionAllowed()
+        public override bool ExecutionAllowed(IContext context)
         {
             return false; // Requires user
         }

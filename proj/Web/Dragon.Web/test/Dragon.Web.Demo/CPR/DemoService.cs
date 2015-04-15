@@ -16,13 +16,15 @@ namespace Dragon.Web.Demo.CPR
 
         [Import]
         public IRepository<DemoTable> DemoTables { get; set; }
-        
-        public ServiceResult<bool> Insert(DemoInsertCommand cmd)
+
+        public ServiceResult<bool> Insert(string s)
         {
-            return ExecuteCommand(cmd, () =>
+            return ExecuteCommand(new InsertCommandFor<DemoTable>()
             {
-                Trace.WriteLine("Insert");
-                return new ServiceResult<bool>(true);
+                Data = new DemoTable()
+                {
+                    DemoString = s
+                }
             });
         }
 
@@ -53,6 +55,6 @@ namespace Dragon.Web.Demo.CPR
         public DemoTable Get(Guid id)
         {
             return DemoTables.Get(id);
-        } 
+        }
     }
 }

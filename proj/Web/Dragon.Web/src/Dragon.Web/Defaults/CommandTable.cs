@@ -10,6 +10,7 @@ namespace Dragon.Web.Defaults
     [Table("_Command")]
     public class CommandTable
     {
+        [Length(200)]
         public string Type { get; set; }
 
         [Length("MAX")]

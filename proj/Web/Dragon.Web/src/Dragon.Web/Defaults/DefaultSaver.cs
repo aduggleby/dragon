@@ -15,17 +15,20 @@ namespace Dragon.Web.Defaults
     public class DefaultSaver<T> : ICommandSave<T>
         where T : CommandBase
     {
-        private static readonly Func<T, Guid> m_srcKey;
-        private static readonly Func<T, Guid> m_destKey;
-        private static readonly Action<T, Guid> m_setDestKey;
+        private static Func<T, Guid> m_srcKey;
+        private static Func<T, Guid> m_destKey;
+        private static Action<T, Guid> m_setDestKey;
 
         private readonly MethodInfo m_get;
         private readonly MethodInfo m_insert;
         private readonly MethodInfo m_update;
 
-        private static readonly Type m_persistedAsType;
+        protected static Type m_persistedAsType;
 
         private static readonly bool s_active = false;
+
+        private static Func<T, object, object> s_mapping;
+
 
         private readonly object RepositoryDestination;
 
@@ -42,39 +45,83 @@ namespace Dragon.Web.Defaults
 
                 var persistedAsAttr = (PersistedAsAttribute)persistedAs;
                 m_persistedAsType = persistedAsAttr.As;
-            }
 
-            if (persistedAs != null)
-            {
+                // map command properties to target type directly
+                Mapper.CreateMap(typeof(T), m_persistedAsType);
+
+                s_mapping = Mapper.Map;
+                //
+                // Source key properties
+                //
                 var srcKeyProps =
-                    typeof (T).GetProperties().Where(x => x.GetCustomAttributes(true).Any(a => a is KeyAttribute));
+                    typeof(T).GetProperties().Where(x => x.GetCustomAttributes(true).Any(a => a is KeyAttribute));
                 if (srcKeyProps.Count() != 1)
                     throw new Exception(
                         "DefaultSaver requires one property with Key attribute which TSrc does not have.");
 
-
-                var destKeyProps =
-                    m_persistedAsType.GetProperties()
-                        .Where(x => x.GetCustomAttributes(true).Any(a => a is KeyAttribute));
-                if (destKeyProps.Count() != 1)
-                    throw new Exception(
-                        "DefaultSaver requires one property with Key attribute which TDest does not have.");
-
                 var srcKeyProperty = srcKeyProps.FirstOrDefault();
-                var destKeyProperty = destKeyProps.FirstOrDefault();
 
-                if (!(srcKeyProperty.PropertyType == typeof (Guid)))
+                if (!(srcKeyProperty.PropertyType == typeof(Guid)))
                     throw new Exception("DefaultSaver requires a Guid key property which TSrc does not have.");
 
-                if (!(destKeyProperty.PropertyType == typeof (Guid)))
-                    throw new Exception("DefaultSaver requires a Guid key property which TDest does not have.");
+                m_srcKey = (o) => (Guid)srcKeyProperty.GetValue(o, null);
 
-                m_srcKey = (o) => (Guid) srcKeyProperty.GetValue(o, null);
-                m_destKey = (o) => (Guid) destKeyProperty.GetValue(o, null);
-                m_setDestKey = (o, k) => destKeyProperty.SetValue(o, k, null);
-
-                Mapper.CreateMap(typeof (T), m_persistedAsType);
+               
             }
+            else if (typeof (T).IsAssignableFromGenericType(typeof (SimpleCommand<>)))
+            {
+                s_active = true;
+
+                m_persistedAsType = typeof (T).GetGenericArguments()[0];
+
+                var dataProperty = typeof (T).GetProperty("Data").GetMethod;
+
+                s_mapping = (cmd, ignored) => { return dataProperty.Invoke(cmd, null); };
+
+                //
+                // Source key properties (for SimpleCommands)
+                //
+                var srcKeyProps =
+                    m_persistedAsType.GetProperties()
+                        .Where(x => x.GetCustomAttributes(true).Any(a => a is KeyAttribute));
+                if (srcKeyProps.Count() != 1)
+                    throw new Exception(
+                        "SimpleCommands require a Table with Key attribute which TSrc does not have.");
+
+                var srcKeyProperty = srcKeyProps.FirstOrDefault();
+
+                if (!(srcKeyProperty.PropertyType == typeof (Guid)))
+                    throw new Exception(
+                        "SimpleCommands require a Table with a Guid key property which TSrc does not have.");
+
+                m_srcKey = (o) => (Guid) srcKeyProperty.GetValue(dataProperty.Invoke(o, null), null);
+            }
+            else
+            {
+                throw new Exception(
+                    string.Format(
+                        "The command {0} must either have a PersistedAs attribute or inherit from SimpleCommand.",
+                        typeof (T).FullName));
+            }
+
+            //
+            // Destination key properties
+            //
+            var destKeyProps =
+                   m_persistedAsType.GetProperties()
+                       .Where(x => x.GetCustomAttributes(true).Any(a => a is KeyAttribute));
+            if (destKeyProps.Count() != 1)
+                throw new Exception(
+                    "DefaultSaver requires one property with Key attribute which TDest does not have.");
+
+            var destKeyProperty = destKeyProps.FirstOrDefault();
+            
+            if (!(destKeyProperty.PropertyType == typeof(Guid)))
+                throw new Exception("DefaultSaver requires a Guid key property which TDest does not have.");
+
+            m_destKey = (o) => (Guid)destKeyProperty.GetValue(o, null);
+            m_setDestKey = (o, k) => destKeyProperty.SetValue(o, k, null);
+
         }
 
         public DefaultSaver(Container container)
@@ -139,12 +186,12 @@ namespace Dragon.Web.Defaults
             {
                 foreach (var p in tableAfterSaveProcessors)
                 {
-                    tableBeforeSaveMethod.Invoke(p, new object[] { o });
+                    tableAfterSaveMethod.Invoke(p, new object[] { o });
                 }
             };
         }
 
-        public void Save(T obj)
+        public virtual void Save(T obj)
         {
             if (!s_active) return;
 
@@ -157,8 +204,8 @@ namespace Dragon.Web.Defaults
                 dest = Activator.CreateInstance(m_persistedAsType);
             }
 
-            Mapper.Map(obj, dest);
-
+            dest = s_mapping(obj, dest);
+            
             m_beforeSaveProcessors(dest);
 
             if (newObject)

@@ -13,6 +13,11 @@ namespace Dragon.Web.Demo.Controllers
 {
     public class HomeController : Controller
     {
+        // context userid
+
+        // automatic insert from table
+
+
         private PersistableSetup m_setup;
 
         [Import]
@@ -41,7 +46,7 @@ namespace Dragon.Web.Demo.Controllers
         [HttpPost]
         public ActionResult Insert(DemoInsertCommand cmd)
         {
-            if (DemoService.Insert(cmd).Payload)
+            if (DemoService.Insert(cmd.DemoString).WasSuccessfull())
             {
                 return RedirectToAction("Index");
             }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
+using Dragon.Web.Defaults;
 using Dragon.Web.Demo.CPR;
 using Dragon.Web.Interfaces;
 using Dragon.Web.Utils;
@@ -43,8 +44,6 @@ namespace Dragon.Web.Demo
             container.RegisterMvcIntegratedFilterProvider();
 
             container.Verify();
-
-            var x = container.GetAllInstances<ICommandSave<DemoDeleteCommand>>();
 
             DependencyResolver.SetResolver(new SimpleInjectorDependencyResolver(container));
         }
