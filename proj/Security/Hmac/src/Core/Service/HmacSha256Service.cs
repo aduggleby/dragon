@@ -23,14 +23,14 @@ namespace Dragon.Security.Hmac.Core.Service
             return ReplaceSpecialCharactersRegex.Replace(Convert.ToBase64String(hmacSig), "-");
         }
 
-        public string CreateSortedQueryValuesString(NameValueCollection queryString)
+        public string CreateSortedQueryString(NameValueCollection queryString)
         {
             if (queryString == null || queryString.Count < 1)
             {
                 throw new HmacInvalidArgumentException("Please provide a valid queryString that contains some elements.");
             }
             var ignoreKeys = new[] { "signature" /* used by the Hmac Module */, "_" /* used by jQuery to avoid caching */ };
-            return queryString.Keys.Cast<string>().Except(ignoreKeys).OrderBy(x => x).Select(x => queryString[x]).Aggregate((a, b) => a + b);
+            return queryString.Keys.Cast<string>().Except(ignoreKeys).OrderBy(x => x).Select(x => x + "=" + queryString[x]).Aggregate((a, b) => a + "&" + b);
         }
     }
 }

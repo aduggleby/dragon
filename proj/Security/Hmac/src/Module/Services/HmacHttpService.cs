@@ -75,7 +75,7 @@ namespace Dragon.Security.Hmac.Module.Services
                 return StatusCode.InvalidOrDisabledAppId;
             }
 
-            var actual = HmacService.CalculateHash(HmacService.CreateSortedQueryValuesString(queryString), app.Secret);
+            var actual = HmacService.CalculateHash(HmacService.CreateSortedQueryString(queryString), app.Secret);
             if (actual.ToLower() != signature.ToLower())
             {
                 return StatusCode.InvalidSignature;

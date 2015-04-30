@@ -356,7 +356,7 @@ namespace Dragon.Security.Hmac.Module.Tests.Services
                 { "expiry", DateTime.Now.AddDays(+1).Ticks.ToString() }, 
             };
             var hmacService = new HmacSha256Service();
-            queryString.Add("signature", hmacService.CalculateHash(hmacService.CreateSortedQueryValuesString(queryString), Secret));
+            queryString.Add("signature", hmacService.CalculateHash(hmacService.CreateSortedQueryString(queryString), Secret));
             return queryString;
         }
 

@@ -9,7 +9,7 @@ namespace Dragon.Security.Hmac.Core.Test.Service
     public class HmacSha256ServiceTest
     {
         private const string QueryString = "c2=wrgh&b1=yrgh&a1=zrgh";
-        private const string OrderedQueryStringValues = "zrghyrghwrgh";
+        private const string SortedQueryString = "a1=zrgh&b1=yrgh&c2=wrgh";
         private const string Secret = "a=42";
 
         [TestMethod]
@@ -126,57 +126,57 @@ namespace Dragon.Security.Hmac.Core.Test.Service
         }
 
         [TestMethod]
-        public void CreateSortedQueryValuesString_unsortedInput_shouldReturnSortedValues()
+        public void CreateSortedQueryString_unsortedInput_shouldReturnSortedValues()
         {
             // Arrange
             var service = new HmacSha256Service();
             var nameValues = HttpUtility.ParseQueryString(QueryString);
 
             // Act
-            var actual = service.CreateSortedQueryValuesString(nameValues);
+            var actual = service.CreateSortedQueryString(nameValues);
 
             // Assert
-            Assert.AreEqual(OrderedQueryStringValues, actual);
+            Assert.AreEqual(SortedQueryString, actual);
         }
 
         [TestMethod]
-        public void CreateSortedQueryValuesString_inputContainsSignature_shouldIgnoreSignature()
+        public void CreateSortedQueryString_inputContainsSignature_shouldIgnoreSignature()
         {
             // Arrange
             var service = new HmacSha256Service();
             var nameValues = HttpUtility.ParseQueryString(QueryString + "&signature=sig23");
 
             // Act
-            var actual = service.CreateSortedQueryValuesString(nameValues);
+            var actual = service.CreateSortedQueryString(nameValues);
 
             // Assert
-            Assert.AreEqual(OrderedQueryStringValues, actual);
+            Assert.AreEqual(SortedQueryString, actual);
         }
 
         [TestMethod]
-        public void CreateSortedQueryValuesString_inputContainsUnderscore_shouldIgnoreUnderscore()
+        public void CreateSortedQueryString_inputContainsUnderscore_shouldIgnoreUnderscore()
         {
             // Arrange
             var service = new HmacSha256Service();
             var nameValues = HttpUtility.ParseQueryString(QueryString + "&_=somecachebustvalue");
 
             // Act
-            var actual = service.CreateSortedQueryValuesString(nameValues);
+            var actual = service.CreateSortedQueryString(nameValues);
 
             // Assert
-            Assert.AreEqual(OrderedQueryStringValues, actual);
+            Assert.AreEqual(SortedQueryString, actual);
         }
 
         [TestMethod]
         [ExpectedException(typeof(HmacInvalidArgumentException))]
-        public void CreateSortedQueryValuesString_empty_shouldThrowException()
+        public void CreateSortedQueryString_empty_shouldThrowException()
         {
             // Arrange
             var service = new HmacSha256Service();
             var nameValues = HttpUtility.ParseQueryString("");
 
             // Act
-            service.CreateSortedQueryValuesString(nameValues);
+            service.CreateSortedQueryString(nameValues);
 
             // Assert
             // see expected exception
@@ -184,13 +184,13 @@ namespace Dragon.Security.Hmac.Core.Test.Service
 
         [TestMethod]
         [ExpectedException(typeof(HmacInvalidArgumentException))]
-        public void CreateSortedQueryValuesString_null_shouldThrowException()
+        public void CreateSortedQueryString_null_shouldThrowException()
         {
             // Arrange
             var service = new HmacSha256Service();
 
             // Act
-            service.CreateSortedQueryValuesString(null);
+            service.CreateSortedQueryString(null);
 
             // Assert
             // see expected exception

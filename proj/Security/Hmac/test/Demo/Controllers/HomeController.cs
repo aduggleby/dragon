@@ -16,7 +16,7 @@ namespace Dragon.Security.Hmac.Demo.Controllers
             queryString["userid"] = "00000001-0002-0001-0002-000000000001";
             queryString["expiry"] = DateTime.Now.AddDays(+1).Ticks.ToString();
             var hmacService = new HmacSha256Service();
-            queryString["signature"] = hmacService.CalculateHash(hmacService.CreateSortedQueryValuesString(queryString), "secret");
+            queryString["signature"] = hmacService.CalculateHash(hmacService.CreateSortedQueryString(queryString), "secret");
             ViewBag.QueryString = queryString.ToString();
             return View();
         }
