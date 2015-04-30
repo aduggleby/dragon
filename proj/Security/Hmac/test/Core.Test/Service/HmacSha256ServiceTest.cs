@@ -140,11 +140,39 @@ namespace Dragon.Security.Hmac.Core.Test.Service
         }
 
         [TestMethod]
+        public void CreateSortedQueryString_unsortedInputCustomSignatureParameterKey_shouldReturnSortedValuesIncludingDefaultSignature()
+        {
+            // Arrange
+            var service = new HmacSha256Service { SignatureParameterKey = "s" };
+            var nameValues = HttpUtility.ParseQueryString(QueryString + "&signature=somesignature");
+
+            // Act
+            var actual = service.CreateSortedQueryString(nameValues);
+
+            // Assert
+            Assert.AreEqual(SortedQueryString + "&signature=somesignature", actual);
+        }
+
+        [TestMethod]
         public void CreateSortedQueryString_inputContainsSignature_shouldIgnoreSignature()
         {
             // Arrange
             var service = new HmacSha256Service();
             var nameValues = HttpUtility.ParseQueryString(QueryString + "&signature=sig23");
+
+            // Act
+            var actual = service.CreateSortedQueryString(nameValues);
+
+            // Assert
+            Assert.AreEqual(SortedQueryString, actual);
+        }
+
+        [TestMethod]
+        public void CreateSortedQueryString_inputContainsCustomSignature_shouldIgnoreSignature()
+        {
+            // Arrange
+            var service = new HmacSha256Service { SignatureParameterKey = "s" };
+            var nameValues = HttpUtility.ParseQueryString(QueryString + "&s=sig23");
 
             // Act
             var actual = service.CreateSortedQueryString(nameValues);

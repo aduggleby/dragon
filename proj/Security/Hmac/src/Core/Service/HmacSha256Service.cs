@@ -9,8 +9,14 @@ namespace Dragon.Security.Hmac.Core.Service
 {
     public class HmacSha256Service : IHmacService
     {
+        public string SignatureParameterKey { get; set; }
         private static readonly UTF8Encoding Encoding = new UTF8Encoding();
         private static readonly Regex ReplaceSpecialCharactersRegex = new Regex(@"[/=\+]"); // needed to avoid mismatches caused by url encoding
+
+        public HmacSha256Service()
+        {
+            SignatureParameterKey = "signature";
+        }
 
         public string CalculateHash(string data, string secret)
         {
@@ -29,7 +35,7 @@ namespace Dragon.Security.Hmac.Core.Service
             {
                 throw new HmacInvalidArgumentException("Please provide a valid queryString that contains some elements.");
             }
-            var ignoreKeys = new[] { "signature" /* used by the Hmac Module */, "_" /* used by jQuery to avoid caching */ };
+            var ignoreKeys = new[] { SignatureParameterKey /* used by the Hmac Module */, "_" /* used by jQuery to avoid caching */ };
             return queryString.Keys.Cast<string>().Except(ignoreKeys).OrderBy(x => x).Select(x => x + "=" + queryString[x]).Aggregate((a, b) => a + "&" + b);
         }
     }

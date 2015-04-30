@@ -56,6 +56,19 @@ namespace Dragon.Security.Hmac.Module.Configuration
             }
         }
 
+        [ConfigurationProperty("signatureParameterKey", DefaultValue = "signature", IsRequired = false)]
+        public string SignatureParameterKey
+        {
+            get
+            {
+                return (string)this["signatureParameterKey"];
+            }
+            set
+            {
+                this["signatureParameterKey"] = value;
+            }
+        }
+
         [ConfigurationProperty("Paths", IsDefaultCollection = false)]
         [ConfigurationCollection(typeof(PathCollection),
             AddItemName = "add",

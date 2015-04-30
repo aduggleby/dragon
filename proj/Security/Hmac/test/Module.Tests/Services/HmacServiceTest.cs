@@ -18,12 +18,13 @@ namespace Dragon.Security.Hmac.Module.Tests.Services
         private static readonly Guid ServiceId = Guid.NewGuid();
         private static readonly Guid UserId = Guid.NewGuid();
         private const string Secret = "%DF47hf*hdf";
+        private const string DefaultSignatureParameterKey = "signature";
 
         [TestMethod]
         public void IsRequestAuthorized_rawUrlIsExcluded_shouldAllowAccess()
         {
             // Arrange
-            var service = new HmacHttpService(ServiceId.ToString(), CreatePathCollection())
+            var service = new HmacHttpService(ServiceId.ToString(), CreatePathCollection(), "signature")
             {
                 UserRepository = new Mock<IUserRepository>().Object,
                 AppRepository = new Mock<IAppRepository>().Object,
@@ -46,7 +47,7 @@ namespace Dragon.Security.Hmac.Module.Tests.Services
                 new PathConfig {Name = "included", Path = ".*", Type = PathConfig.PathType.Include},
                 new PathConfig {Name = "excluded", Path = "/public/.*", Type = PathConfig.PathType.Exclude}
             };
-            var service = new HmacHttpService(ServiceId.ToString(), pathCollection)
+            var service = new HmacHttpService(ServiceId.ToString(), pathCollection, "signature")
             {
                 UserRepository = new Mock<IUserRepository>().Object,
                 AppRepository = new Mock<IAppRepository>().Object,
@@ -64,7 +65,7 @@ namespace Dragon.Security.Hmac.Module.Tests.Services
         public void IsRequestAuthorized_rawUrlIsIncludedInvalidQueryString_shouldDisallowRequest()
         {
             // Arrange
-            var service = new HmacHttpService(ServiceId.ToString(), CreatePathCollection())
+            var service = new HmacHttpService(ServiceId.ToString(), CreatePathCollection(), "signature")
             {
                 UserRepository = new Mock<IUserRepository>().Object,
                 AppRepository = new Mock<IAppRepository>().Object,
@@ -82,7 +83,7 @@ namespace Dragon.Security.Hmac.Module.Tests.Services
         public void IsRequestAuthorized_mismatchingServiceId_shouldDisallowRequest()
         {
             // Arrange
-            var service = new HmacHttpService(Guid.NewGuid().ToString(), CreatePathCollection());
+            var service = new HmacHttpService(Guid.NewGuid().ToString(), CreatePathCollection(), "signature");
 
             // Act
             var actual = service.IsRequestAuthorized(GetValidRawUrl(), CreateValidQueryString());
@@ -208,6 +209,19 @@ namespace Dragon.Security.Hmac.Module.Tests.Services
         }
 
         [TestMethod]
+        public void IsRequestAuthorized_customSignatureKeyValidParameter_shouldAllowRequest()
+        {
+            // Arrange
+            var service = CreateHmacService("s");
+
+            // Act
+            var actual = service.IsRequestAuthorized(GetValidRawUrl(), CreateValidQueryString("s"));
+
+            // Assert
+            Assert.AreEqual(StatusCode.Authorized, actual);
+        }
+
+        [TestMethod]
         public void IsRequestAuthorized_userDoesntExistInDB_shouldStoreUserInDB()
         {
             // Arrange
@@ -324,15 +338,15 @@ namespace Dragon.Security.Hmac.Module.Tests.Services
 
         #region helper
 
-        private static HmacHttpService CreateHmacService()
+        private static HmacHttpService CreateHmacService(string signatureParameterKey = DefaultSignatureParameterKey)
         {
             var mockAppRepository = new Mock<IAppRepository>();
             mockAppRepository.Setup(x => x.Get(It.IsAny<Guid>(), It.IsAny<Guid>())).Returns(new AppModel { Enabled = true, Secret = Secret });
-            return new HmacHttpService(ServiceId.ToString(), CreatePathCollection())
+            return new HmacHttpService(ServiceId.ToString(), CreatePathCollection(), signatureParameterKey)
             {
                 UserRepository = new Mock<IUserRepository>().Object,
                 AppRepository = mockAppRepository.Object,
-                HmacService = new HmacSha256Service()
+                HmacService = signatureParameterKey == DefaultSignatureParameterKey ? new HmacSha256Service() : new HmacSha256Service { SignatureParameterKey = signatureParameterKey }
             };
         }
 
@@ -345,7 +359,7 @@ namespace Dragon.Security.Hmac.Module.Tests.Services
             };
         }
 
-        private static NameValueCollection CreateValidQueryString()
+        private static NameValueCollection CreateValidQueryString(string signatureParameterKey = DefaultSignatureParameterKey)
         {
             var queryString = new NameValueCollection
             {
@@ -355,8 +369,8 @@ namespace Dragon.Security.Hmac.Module.Tests.Services
                 { "userid", UserId.ToString() },
                 { "expiry", DateTime.Now.AddDays(+1).Ticks.ToString() }, 
             };
-            var hmacService = new HmacSha256Service();
-            queryString.Add("signature", hmacService.CalculateHash(hmacService.CreateSortedQueryString(queryString), Secret));
+            var hmacService = signatureParameterKey == DefaultSignatureParameterKey ? new HmacSha256Service() : new HmacSha256Service { SignatureParameterKey = signatureParameterKey };
+            queryString.Add(signatureParameterKey, hmacService.CalculateHash(hmacService.CreateSortedQueryString(queryString), Secret));
             return queryString;
         }
 

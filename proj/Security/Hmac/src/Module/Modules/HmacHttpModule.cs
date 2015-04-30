@@ -58,15 +58,16 @@ namespace Dragon.Security.Hmac.Module.Modules
             var userTableName = settings.UsersTableName;
             var applicationTableName = settings.AppsTableName;
             var serviceId = settings.ServiceId;
+            var signatureParameterKey = settings.SignatureParameterKey;
 
             _connection = new SqlConnection(connectionString);
             _connection.Open();
 
-            return new HmacHttpService(serviceId, settings.Paths)
+            return new HmacHttpService(serviceId, settings.Paths, signatureParameterKey)
             {
                 UserRepository = new DapperUserRepository(_connection, userTableName),
                 AppRepository = new DapperAppRepository(_connection, applicationTableName),
-                HmacService = new HmacSha256Service()
+                HmacService = new HmacSha256Service { SignatureParameterKey = signatureParameterKey }
             };
         }
 

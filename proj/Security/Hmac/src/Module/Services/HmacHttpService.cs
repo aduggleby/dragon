@@ -20,10 +20,12 @@ namespace Dragon.Security.Hmac.Module.Services
         private IEnumerable<PathInfo> PathsRegex { get; set; }
 
         private readonly string _serviceId;
+        private readonly string _signatureParameterKey;
 
-        public HmacHttpService(string serviceId, IEnumerable<PathConfig> paths)
+        public HmacHttpService(string serviceId, IEnumerable<PathConfig> paths, string signatureParameterKey)
         {
             _serviceId = serviceId;
+            _signatureParameterKey = signatureParameterKey;
             PathsRegex = paths.Select(x => new PathInfo
                 {
                     Regex = new Regex(x.Path, RegexOptions.Singleline | RegexOptions.Compiled | RegexOptions.IgnoreCase),
@@ -38,8 +40,8 @@ namespace Dragon.Security.Hmac.Module.Services
             {
                 return StatusCode.Authorized;
             }
-          
-            var mandatoryParameterNames = new[] { "appid", "serviceid", "userid", "expiry", "signature" };
+
+            var mandatoryParameterNames = new[] { "appid", "serviceid", "userid", "expiry", _signatureParameterKey };
             if (IsMandatoryParameterMissingOrEmpty(mandatoryParameterNames, queryString))
             {
                 return StatusCode.ParameterMissing;
@@ -57,7 +59,7 @@ namespace Dragon.Security.Hmac.Module.Services
                 return StatusCode.InvalidParameterFormat;
             }
 
-            var signature = queryString.Get("signature");
+            var signature = queryString.Get(_signatureParameterKey);
 
             if (!IsExpiryValid(queryString.Get("expiry")))
             {

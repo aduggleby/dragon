@@ -97,6 +97,15 @@ For the client that accesses the service:
     var hmacQueryString = queryString.ToString();
 
 
+HowTo
+-----
+
+* Customize the signature parameter key:
+
+    In the app set the SignatureParameterKey property on the HmacSha256Service object, 
+    in the service set the dragon.security.hmac.signatureParameterKey property.
+
+
 To be done
 ----------
 
