@@ -69,6 +69,19 @@ namespace Dragon.Security.Hmac.Module.Configuration
             }
         }
 
+        [ConfigurationProperty("useHexEncoding", DefaultValue = false, IsRequired = false)]
+        public bool UseHexEncoding
+        {
+            get
+            {
+                return (bool)this["useHexEncoding"];
+            }
+            set
+            {
+                this["useHexEncoding"] = value;
+            }
+        }
+
         [ConfigurationProperty("Paths", IsDefaultCollection = false)]
         [ConfigurationCollection(typeof(PathCollection),
             AddItemName = "add",

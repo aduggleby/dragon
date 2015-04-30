@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Web;
 using Dragon.Security.Hmac.Core.Service;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -23,6 +24,24 @@ namespace Dragon.Security.Hmac.Core.Test.Service
 
             // Assert
             Assert.AreEqual(44, actual.Length);
+        }
+
+        [TestMethod]
+        public void CalculateHash_validQueryStringUsingHexEncoding_shouldReturnHexEncodedHash()
+        {
+            // Arrange
+            var service = new HmacSha256Service { UseHexEncoding = true };
+
+            // Act
+            var actual = service.CalculateHash(QueryString, Secret);
+
+            // Assert
+            Assert.IsTrue(actual.All(IsHex));
+        }
+
+        private static bool IsHex(char c)
+        {
+            return (c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F');
         }
 
         [TestMethod]

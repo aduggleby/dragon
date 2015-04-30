@@ -105,6 +105,12 @@ HowTo
     In the app set the SignatureParameterKey property on the HmacSha256Service object, 
     in the service set the dragon.security.hmac.signatureParameterKey property.
 
+* Change the signature encoding:
+
+    Default is Base64, to switch to Hex:
+    In the app set the UseHexEncoding property on the HmacSha256Service object to true,
+    in the service set the dragon.security.hmac.useHexEncoding property to true.
+
 
 To be done
 ----------

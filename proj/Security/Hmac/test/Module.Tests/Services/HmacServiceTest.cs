@@ -222,6 +222,19 @@ namespace Dragon.Security.Hmac.Module.Tests.Services
         }
 
         [TestMethod]
+        public void IsRequestAuthorized_usingHexEncodingValidParameter_shouldAllowRequest()
+        {
+            // Arrange
+            var service = CreateHmacService("signature", true);
+
+            // Act
+            var actual = service.IsRequestAuthorized(GetValidRawUrl(), CreateValidQueryString("signature", true));
+
+            // Assert
+            Assert.AreEqual(StatusCode.Authorized, actual);
+        }
+
+        [TestMethod]
         public void IsRequestAuthorized_userDoesntExistInDB_shouldStoreUserInDB()
         {
             // Arrange
@@ -338,7 +351,7 @@ namespace Dragon.Security.Hmac.Module.Tests.Services
 
         #region helper
 
-        private static HmacHttpService CreateHmacService(string signatureParameterKey = DefaultSignatureParameterKey)
+        private static HmacHttpService CreateHmacService(string signatureParameterKey = DefaultSignatureParameterKey, bool useHexEncoding = false)
         {
             var mockAppRepository = new Mock<IAppRepository>();
             mockAppRepository.Setup(x => x.Get(It.IsAny<Guid>(), It.IsAny<Guid>())).Returns(new AppModel { Enabled = true, Secret = Secret });
@@ -346,7 +359,9 @@ namespace Dragon.Security.Hmac.Module.Tests.Services
             {
                 UserRepository = new Mock<IUserRepository>().Object,
                 AppRepository = mockAppRepository.Object,
-                HmacService = signatureParameterKey == DefaultSignatureParameterKey ? new HmacSha256Service() : new HmacSha256Service { SignatureParameterKey = signatureParameterKey }
+                HmacService = signatureParameterKey == DefaultSignatureParameterKey ? 
+                    new HmacSha256Service { UseHexEncoding = useHexEncoding} : 
+                    new HmacSha256Service { SignatureParameterKey = signatureParameterKey, UseHexEncoding = useHexEncoding }
             };
         }
 
@@ -359,7 +374,7 @@ namespace Dragon.Security.Hmac.Module.Tests.Services
             };
         }
 
-        private static NameValueCollection CreateValidQueryString(string signatureParameterKey = DefaultSignatureParameterKey)
+        private static NameValueCollection CreateValidQueryString(string signatureParameterKey = DefaultSignatureParameterKey, bool useHexEncoding = false)
         {
             var queryString = new NameValueCollection
             {
@@ -369,7 +384,9 @@ namespace Dragon.Security.Hmac.Module.Tests.Services
                 { "userid", UserId.ToString() },
                 { "expiry", DateTime.Now.AddDays(+1).Ticks.ToString() }, 
             };
-            var hmacService = signatureParameterKey == DefaultSignatureParameterKey ? new HmacSha256Service() : new HmacSha256Service { SignatureParameterKey = signatureParameterKey };
+            var hmacService = signatureParameterKey == DefaultSignatureParameterKey ?
+                new HmacSha256Service { UseHexEncoding = useHexEncoding } :
+                new HmacSha256Service { SignatureParameterKey = signatureParameterKey, UseHexEncoding = useHexEncoding };
             queryString.Add(signatureParameterKey, hmacService.CalculateHash(hmacService.CreateSortedQueryString(queryString), Secret));
             return queryString;
         }
