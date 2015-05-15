@@ -28,11 +28,18 @@ namespace Dragon.Security.Hmac.Module.Tests.Repositories
             var connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
             Connection = new SqlConnection(connectionString);
             Connection.Open();
+            DropIfExists();
             QueryFromFile(CreateDbScriptFilename, new Dictionary<string, string> { { "dbPath", _dbPath } });
             Connection.Close();
             Connection.Open();
             Connection.ChangeDatabase(TempDbName);
             QueryFromFile(CreateTablesScriptFilename);
+        }
+
+        private void DropIfExists()
+        {
+            if (!File.Exists(_dbPath)) return;
+            QueryFromFile(DropDbScriptFilename, new Dictionary<string, string> { { "dbPath", TempDbName } });
         }
 
         [TestCleanup()]

@@ -15,4 +15,5 @@ CREATE TABLE [dbo].[Apps]
     [Secret]    NVARCHAR(100)    NULL,
     [Enabled]   BIT              NULL,
     [CreatedAt] DATETIME         NULL,
+    [Name]      NVARCHAR(50)     NULL,
 );

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using Dapper;
@@ -24,16 +25,66 @@ namespace Dragon.Security.Hmac.Module.Repositories
                 new {UserId = userId, ServiceId = serviceId}).FirstOrDefault();
         }
 
-        public void Insert(UserModel user)
+        public UserModel Get(long id)
         {
-            _connection.Execute(String.Format("INSERT INTO {0} VALUES (@UserId, @AppId, @ServiceId, @Enabled, @CreatedAt)", _tableName), new
+            return _connection.Query<UserModel>(
+                String.Format("SELECT * FROM {0} WHERE Id = @Id ORDER BY CreatedAt DESC", _tableName),
+                new { Id = id }).FirstOrDefault();
+        }
+
+        public long Insert(UserModel user)
+        {
+            return _connection.Query<long>(String.Format(@"
+                DECLARE @InsertedRows AS TABLE (Id int);
+                INSERT INTO {0} OUTPUT Inserted.Id INTO @InsertedRows VALUES (@UserId, @AppId, @ServiceId, @Enabled, @CreatedAt);
+                SELECT Id FROM @InsertedRows;", _tableName), new
             {
                 user.UserId,
                 user.ServiceId,
                 user.AppId,
                 user.Enabled,
                 user.CreatedAt
-            });
+            }).Single();
+        }
+
+        public IEnumerable<UserModel> GetAll()
+        {
+            return _connection.Query<UserModel>(
+                String.Format("SELECT * FROM {0} ", _tableName));
+        }
+
+        public void Delete(long id)
+        {
+            _connection.Query(
+                String.Format("DELETE FROM {0} WHERE Id = @Id", _tableName),
+                new { Id = id });
+        }
+
+        public void Update(long id, UserModel user)
+        {
+            if (Get(id) == null)
+            {
+                throw new ArgumentException("User not found: " + id);
+            }
+            _connection.Query(
+                String.Format(@"
+                    UPDATE {0} SET
+                    UserId = @UserId, 
+                    AppId = @AppId, 
+                    ServiceId = 
+                    @ServiceId, 
+                    Enabled = @Enabled, 
+                    CreatedAt = @CreatedAt 
+                    WHERE id = @id", _tableName),
+                new
+                {
+                    id,
+                    user.UserId,
+                    user.ServiceId,
+                    user.AppId,
+                    user.Enabled,
+                    user.CreatedAt
+                });
         }
     }
 }

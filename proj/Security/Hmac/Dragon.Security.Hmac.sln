@@ -26,6 +26,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "migrations", "migrations", 
 		sql\migrations\hmac_v1.0.1.sql = sql\migrations\hmac_v1.0.1.sql
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ManagementService", "src\ManagementService\ManagementService.csproj", "{6BF9C97C-0258-4AF6-9334-7407FA72B5DF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ManagementService.Tests", "test\ManagementService.Tests\ManagementService.Tests.csproj", "{B6A707AF-3B7B-4871-BD35-B27498F12627}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -52,6 +56,14 @@ Global
 		{8B1CD7B1-4FC7-4A08-9F7C-31F325648FB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8B1CD7B1-4FC7-4A08-9F7C-31F325648FB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8B1CD7B1-4FC7-4A08-9F7C-31F325648FB9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6BF9C97C-0258-4AF6-9334-7407FA72B5DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6BF9C97C-0258-4AF6-9334-7407FA72B5DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6BF9C97C-0258-4AF6-9334-7407FA72B5DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6BF9C97C-0258-4AF6-9334-7407FA72B5DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B6A707AF-3B7B-4871-BD35-B27498F12627}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6A707AF-3B7B-4871-BD35-B27498F12627}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B6A707AF-3B7B-4871-BD35-B27498F12627}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B6A707AF-3B7B-4871-BD35-B27498F12627}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
