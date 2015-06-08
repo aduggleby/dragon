@@ -114,7 +114,17 @@ HowTo
     in the service set the dragon.security.hmac.useHexEncoding property to true.
 
 
-To be done
+Components
 ----------
 
-* Provide an API for user/service management
+* Core
+
+  A library for apps to generate HMAC signatures for GET requests.
+
+* Module
+
+  A HTTP Module for authorizing HMAC signed GET requests.
+
+* ManagementService
+
+  A REST API which allows managing users and apps.

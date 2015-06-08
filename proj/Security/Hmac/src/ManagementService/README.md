@@ -15,6 +15,7 @@ Setup
 -----
 
 * Create a database and adapt the Web.config as described in the Solution's README.md file.
+* Prevent unauthorized access to the service.
 
 
 Usage
