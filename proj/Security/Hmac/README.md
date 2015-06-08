@@ -5,6 +5,7 @@ The aim of the Hmac module is to allow quickly setting up HMAC-based authorizati
 for GET requests from client applications (apps) to web services (services).
 
 Following parameter are used:
+
 * appId: A unique id of a client application, each app shares a secret with each service
 * serviceId: A unique id of a web service, each service shares a secret with each app
 * userId: A unique id of an user of a client application
@@ -16,6 +17,7 @@ The service checks for each requests in the config if authorization is necessary
 and uses it to validate the signature. New users are added to the database for the requested app/service combination.
 
 To grant access to restricted paths, following conditions need to be met:
+
 * The signature is valid
 * The user is not disabled
 * The expiry is in the future

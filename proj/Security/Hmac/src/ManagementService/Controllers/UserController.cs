@@ -11,32 +11,32 @@ namespace ManagementService.Controllers
         [Import]
         public IUserRepository UserRepository { get; set; }
 
-        // GET: api/App
+        // GET: api/User
         public IEnumerable<UserModel> Get()
         {
             return UserRepository.GetAll();
         }
 
-        // GET: api/App/5
+        // GET: api/User/5
         public UserModel Get(long id)
         {
             return UserRepository.Get(id);
         }
 
-        // POST: api/App
+        // POST: api/User
         [HttpPost]
         public long Post([FromBody]UserModel value)
         {
             return UserRepository.Insert(value);
         }
 
-        // PUT: api/App/5
+        // PUT: api/User/5
         public void Put(long id, [FromBody]UserModel value)
         {
             UserRepository.Update(id, value);
         }
 
-        // DELETE: api/App/5
+        // DELETE: api/User/5
         public void Delete(long id)
         {
             UserRepository.Delete(id);
