@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
@@ -8,6 +9,7 @@ using Dragon.Security.Hmac.Core.Service;
 using Dragon.Security.Hmac.Module.Configuration;
 using Dragon.Security.Hmac.Module.Repositories;
 using Dragon.Security.Hmac.Module.Services;
+using Dragon.Security.Hmac.Module.Services.Validators;
 
 namespace Dragon.Security.Hmac.Module.Modules
 {
@@ -64,11 +66,64 @@ namespace Dragon.Security.Hmac.Module.Modules
             _connection = new SqlConnection(connectionString);
             _connection.Open();
 
-            return new HmacHttpService(serviceId, settings.Paths, signatureParameterKey)
+            var hmacHttpService = new HmacHttpService(settings.Paths, signatureParameterKey)
             {
-                UserRepository = new DapperUserRepository(_connection, userTableName),
-                AppRepository = new DapperAppRepository(_connection, applicationTableName),
-                HmacService = new HmacSha256Service { SignatureParameterKey = signatureParameterKey, UseHexEncoding = useHexEncoding}
+                Validators =
+                    CreateValidatorMap(serviceId, signatureParameterKey,
+                        new DapperAppRepository(_connection, applicationTableName),
+                        new DapperUserRepository(_connection, userTableName),
+                        new HmacSha256Service
+                        {
+                            SignatureParameterKey = signatureParameterKey,
+                            UseHexEncoding = useHexEncoding
+                        }),
+                 StatusCodes = CreateStatusCodeMap(signatureParameterKey)
+            };
+            return hmacHttpService;
+        }
+
+        public Dictionary<string, IValidator> CreateValidatorMap(string serviceId, string signatureParameterKey, IAppRepository appRepository,
+            IUserRepository userRepository, IHmacService hmacService)
+        {
+            var expiryValidator = new ExpiryValidator();
+            var serviceValidator = new ServiceValidator(serviceId);
+            var appValidator = new AppValidator
+            {
+                AppRepository = appRepository,
+                ServiceValidator = serviceValidator
+            };
+            var hmacValidator = new HmacValidator
+            {
+                AppRepository = appRepository,
+                AppValidator = appValidator,
+                ServiceValidator = serviceValidator,
+                HmacService = hmacService
+            };
+            var userValidator = new UserValidator
+            {
+                UserRepository = userRepository,
+                AppValidator = appValidator,
+                ServiceValidator = serviceValidator
+            };
+
+            return new Dictionary<string, IValidator>
+            {
+                {"expiry", expiryValidator},
+                {"appid", appValidator},
+                {"serviceid", serviceValidator},
+                {"userid", userValidator},
+                {signatureParameterKey, hmacValidator}
+            };
+        }
+
+        public Dictionary<string, StatusCode> CreateStatusCodeMap(string signatureParameterKey) {
+            return new Dictionary<string, StatusCode>
+            {
+                {"expiry", StatusCode.InvalidExpiryOrExpired},
+                {"appid", StatusCode.InvalidOrDisabledAppId},
+                {"serviceid", StatusCode.InvalidOrDisabledServiceId},
+                {"userid", StatusCode.InvalidOrDisabledUserId},
+                {signatureParameterKey, StatusCode.InvalidSignature}
             };
         }
 

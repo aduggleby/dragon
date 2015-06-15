@@ -89,6 +89,15 @@
     <Compile Include="Repositories\IUserRepository.cs" />
     <Compile Include="Services\HmacHttpService.cs" />
     <Compile Include="Services\IHmacHttpService.cs" />
+    <Compile Include="Services\Validators\DependencyMissingException.cs" />
+    <Compile Include="Services\Validators\HmacValidator.cs" />
+    <Compile Include="Services\Validators\NotYetParsedException.cs" />
+    <Compile Include="Services\Validators\ServiceValidator.cs" />
+    <Compile Include="Services\Validators\UserValidator.cs" />
+    <Compile Include="Services\Validators\AppValidator.cs" />
+    <Compile Include="Services\Validators\ExpiryValidator.cs" />
+    <Compile Include="Services\Validators\IValidator.cs" />
+    <Compile Include="Services\Validators\ValidatorBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Content\Web.config.transform">
