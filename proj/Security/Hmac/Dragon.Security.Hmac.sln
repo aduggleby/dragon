@@ -30,6 +30,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ManagementService", "src\Ma
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ManagementService.Tests", "test\ManagementService.Tests\ManagementService.Tests.csproj", "{B6A707AF-3B7B-4871-BD35-B27498F12627}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{3F92241A-BB15-415B-8E51-B78F011A223B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ManagementWeb", "src\ManagementWeb\ManagementWeb.csproj", "{389F6553-91E1-49F7-BD2D-C33A3B03A33D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ManagementWeb.Tests", "test\ManagementWeb.Tests\ManagementWeb.Tests.csproj", "{6B82A93D-4B9F-4406-A38F-22779E38109C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -64,6 +70,14 @@ Global
 		{B6A707AF-3B7B-4871-BD35-B27498F12627}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B6A707AF-3B7B-4871-BD35-B27498F12627}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B6A707AF-3B7B-4871-BD35-B27498F12627}.Release|Any CPU.Build.0 = Release|Any CPU
+		{389F6553-91E1-49F7-BD2D-C33A3B03A33D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{389F6553-91E1-49F7-BD2D-C33A3B03A33D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{389F6553-91E1-49F7-BD2D-C33A3B03A33D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{389F6553-91E1-49F7-BD2D-C33A3B03A33D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6B82A93D-4B9F-4406-A38F-22779E38109C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B82A93D-4B9F-4406-A38F-22779E38109C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B82A93D-4B9F-4406-A38F-22779E38109C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B82A93D-4B9F-4406-A38F-22779E38109C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
