@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+    <metadata>
+        <id>Dragon.Security.Hmac.ManagementWeb</id>
+        <version>1.0.1</version>
+        <title>Dragon.Security.Hmac.ManagementWeb</title>
+        <authors>Dragon Project</authors>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>Adds an ASP.NET MVC area that allows managing users and apps.</description>
+        <dependencies>
+            <group targetFramework=".NETFramework4.5">
+                <dependency id="Microsoft.AspNet.Mvc" version="5.2.3" />
+				<dependency id="Newtonsoft.Json" version="6.0.4" />
+				<dependency id="Microsoft.AspNet.WebApi.Client" version="5.2.3" />
+            </group>
+        </dependencies>
+        <frameworkAssemblies>
+            <frameworkAssembly assemblyName="Microsoft.CSharp" targetFramework="" />
+            <frameworkAssembly assemblyName="System" targetFramework="" />
+            <frameworkAssembly assemblyName="System.Core" targetFramework="" />
+            <frameworkAssembly assemblyName="System.Data" targetFramework="" />
+            <frameworkAssembly assemblyName="System.Web" targetFramework="" />
+			<frameworkAssembly assemblyName="System.ComponentModel.Composition" targetFramework="" />
+        </frameworkAssemblies>
+    </metadata>
+    <files>
+		<file src="..\proj\Security\Hmac\src\ManagementWeb\Areas\Hmac\**\*.*" target="content\Areas\Hmac" /> 
+    </files>
+</package>

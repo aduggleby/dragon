@@ -25,11 +25,11 @@ Setup
   - Controllers: inject repositories
   - Repositories: setup service URLs
 
-  e.g. SimpleInject:
+  e.g. SimpleInject (using the ImportPropertySelectionBehavior):
 
         private const string HmacManagementApiUrlSettingName = "MediaServer.Management.HmacManagementApiUrl";
 
-		...
+        ...
 
         private static void InitializeContainer(Container container)
         {

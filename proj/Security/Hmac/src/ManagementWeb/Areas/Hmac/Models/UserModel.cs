@@ -15,7 +15,8 @@ namespace ManagementWeb.Areas.Hmac.Models
         public Guid ServiceId { get; set; }
         public Boolean Enabled { get; set; }
         [DataType(DataType.DateTime)]
-        [Required(ErrorMessage = "Provide a date in the format: dd.mm.yyyy hh:mm:ss, e.g. 01.12.2001 23:34:42")]
+        [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy hh:mm:ss}", ApplyFormatInEditMode = true)]
+        [Required(ErrorMessage = "Provide a date in the format: [day].[month].[year] [hour]:[minutes]:[seconds], e.g. 01.12.2001 23:34:42")]
         public DateTime CreatedAt { get; set; }
 
         protected bool Equals(UserModel other)
