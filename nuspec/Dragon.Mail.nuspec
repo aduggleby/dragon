@@ -1,17 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
     <metadata>
-        <id>Dragon.Data</id>
-        <version>1.1.0</version>
-        <title>Dragon.Data</title>
+        <id>Dragon.Mail</id>
+        <version>1.4.0</version>
+        <title>Dragon.Mail</title>
         <authors>Dragon Project</authors>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
-        <description>A library of data helpers built on top of Dapper. Provides Repository, Table Setup, Information Query and Fluent SQL Builder.</description>
+        <description>Dragon Mail Framework</description>
         <dependencies>
-            <group targetFramework=".NETFramework4.5">
-                <dependency id="Common.Logging" version="3.0.0" />
-                <dependency id="Dapper" version="1.38" />
-            </group>
+            <dependency id="Common.Logging" version="3.1.0" />
+            <dependency id="Common.Logging.Core" version="3.1.0" />
+            <dependency id="Handlebars.Net" version="1.3.3" />
+            <dependency id="Newtonsoft.Json" version="7.0.1" />
+            <dependency id="Microsoft.AspNet.WebApi.Client" version="5.2.3" />
         </dependencies>
         <frameworkAssemblies>
             <frameworkAssembly assemblyName="Microsoft.CSharp" targetFramework="" />
@@ -22,9 +23,12 @@
             <frameworkAssembly assemblyName="System.Data.DataSetExtensions" targetFramework="" />
             <frameworkAssembly assemblyName="System.Xml" targetFramework="" />
             <frameworkAssembly assemblyName="System.Xml.Linq" targetFramework="" />
+            <frameworkAssembly assemblyName="System.Net.Http" targetFramework="" />
+            <frameworkAssembly assemblyName="System.Net.Http.Formatting" targetFramework="" />
+            <frameworkAssembly assemblyName="System.Web" targetFramework="" />
         </frameworkAssemblies>
     </metadata>
     <files>
-        <file src="..\release\Dragon.Data.dll" target="lib\Dragon.Data.dll" />
+        <file src="..\release\Dragon.Mail.dll" target="lib\Dragon.Mail.dll" />
     </files>
 </package>
