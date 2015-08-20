@@ -184,6 +184,14 @@ namespace Dragon.Data.Repositories
             }
         }
 
+        public IEnumerable<TView> QueryView<TView>(string sql, dynamic param = null) where TView : class
+        {
+            using (var c = OpenConnection())
+            {
+                return c.Query<TView>(PreprocessSQLString<T>(sql), (object)param);
+            }
+        }
+
         public TReturn ExecuteScalar<TReturn>(string sql, dynamic param = null)
         {
             using (var c = OpenConnection())

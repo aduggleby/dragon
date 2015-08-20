@@ -38,7 +38,7 @@ namespace Dragon.Data.Interfaces
         IEnumerable<T> GetAll();
 
         /// <summary>
-        /// Executes an abitary parametrized SQL query ({TABLE} token will be replaced by the repositories table) and returns the results set.
+        /// Executes an arbitary parametrized SQL query ({TABLE} token will be replaced by the repositories table) and returns the results set.
         /// </summary>
         /// <param name="sql">A parametrized SQL Query (i.e. SELECT {cols} FROM {TABLE} WHERE COL1 = @col1value)</param>
         /// <param name="param">The parameter values (i.e. new {col1value="abc"})</param>
@@ -47,6 +47,15 @@ namespace Dragon.Data.Interfaces
 
         [Obsolete("You don't need the generic type parameter")]
         IEnumerable<T> Query<TObsolete>(string sql, dynamic param = null) where TObsolete : class;
+
+        /// <summary>
+        /// Executes an arbitary parametrized SQL query but projects into a view ({TABLE} token will be replaced by the repositories table) and returns the results set.
+        /// </summary>
+        /// <typeparam name="TView">The view class to project into</typeparam>
+        /// <param name="sql">A parametrized SQL Query (i.e. SELECT {cols} FROM {TABLE} WHERE COL1 = @col1value)</param>
+        /// <param name="param">The parameter values (i.e. new {col1value="abc"})</param>
+        /// <returns></returns>
+        IEnumerable<TView> QueryView<TView>(string sql, dynamic param = null) where TView : class;
 
         /// <summary>
         /// Executes an arbitary parametrized SQL query ({TABLE} token will be replaced by the repositories table) and returns the first record value. Used for scalar queries such as "SELECT COUNT(1) FROM {TABLE}".

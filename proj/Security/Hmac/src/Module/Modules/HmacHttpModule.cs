@@ -27,14 +27,15 @@ namespace Dragon.Security.Hmac.Module.Modules
         {
             var application = (HttpApplication)sender;
             var applicationContext = application.Context;
-
+            
             var statusCode = HmacHttpService.IsRequestAuthorized(application.Request.RawUrl,
                 applicationContext.Request.QueryString);
             if (statusCode == StatusCode.Authorized)
             {
                 return;
             }
-            Trace.WriteLine(String.Format("Request to '{1}' denied, reason: {0}", statusCode, application.Request.RawUrl));
+
+            Trace.WriteLine(String.Format("[" + GetSetting().ServiceId + "] Request to '{1}' denied, reason: {0}", statusCode, application.Request.RawUrl));
             Trace.Flush();
             application.Context.Response.StatusCode = 401;
             application.Context.Response.SuppressContent = true;
@@ -43,12 +44,7 @@ namespace Dragon.Security.Hmac.Module.Modules
 
         private HmacHttpService CreateDefaultHmacService()
         {
-            const string hmacSectionName = "dragon/security/hmac";
-            var settings = (DragonSecurityHmacSection)ConfigurationManager.GetSection(hmacSectionName);
-            if (settings == null)
-            {
-                throw new HmacInvalidConfigException(String.Format("Section {0} is missing.", hmacSectionName));
-            }
+            var settings = GetSetting();
             var connectionStringName = settings.ConnectionStringName;
             if (ConfigurationManager.ConnectionStrings[connectionStringName] == null)
             {
@@ -70,6 +66,17 @@ namespace Dragon.Security.Hmac.Module.Modules
                 AppRepository = new DapperAppRepository(_connection, applicationTableName),
                 HmacService = new HmacSha256Service { SignatureParameterKey = signatureParameterKey, UseHexEncoding = useHexEncoding}
             };
+        }
+
+        private static DragonSecurityHmacSection GetSetting()
+        {
+            const string hmacSectionName = "dragon/security/hmac";
+            var settings = (DragonSecurityHmacSection) ConfigurationManager.GetSection(hmacSectionName);
+            if (settings == null)
+            {
+                throw new HmacInvalidConfigException(String.Format("Section {0} is missing.", hmacSectionName));
+            }
+            return settings;
         }
 
         public void Dispose()

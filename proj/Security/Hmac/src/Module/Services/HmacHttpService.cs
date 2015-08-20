@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web.WebPages;
@@ -66,7 +67,7 @@ namespace Dragon.Security.Hmac.Module.Services
                 return StatusCode.InvalidExpiryOrExpired;
             }
 
-            if (serviceId.ToString() != _serviceId)
+            if (!serviceId.ToString().Equals(_serviceId, StringComparison.OrdinalIgnoreCase))
             {
                 return StatusCode.InvalidOrDisabledServiceId;
             }
@@ -92,7 +93,7 @@ namespace Dragon.Security.Hmac.Module.Services
                     ServiceId = serviceId, 
                     Enabled = true, 
                     UserId = userId, 
-                    CreatedAt = DateTime.Now
+                    CreatedAt = DateTime.UtcNow
                 });
             }
             if (user != null && !user.Enabled)
@@ -108,7 +109,7 @@ namespace Dragon.Security.Hmac.Module.Services
             try
             {
                 var expiry = long.Parse(expiryString);
-                if (expiry > DateTime.Now.Ticks)
+                if (expiry > DateTime.UtcNow.Ticks)
                 {
                     return true;
                 }

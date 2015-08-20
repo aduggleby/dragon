@@ -93,7 +93,7 @@ For the client that accesses the service:
     queryString["appid"] = "00000001-0001-0001-0003-000000000001";
     queryString["serviceid"] = "00000001-0001-0001-0001-000000000001";
     queryString["userid"] = "00000001-0002-0001-0002-000000000001";
-    queryString["expiry"] = DateTime.Now.AddDays(+1).Ticks.ToString();
+    queryString["expiry"] = DateTime.UtcNow.AddDays(+1).Ticks.ToString();
     var hmacService = new HmacSha256Service();
     queryString["signature"] = hmacService.CalculateHash(hmacService.CreateSortedQueryValuesString(queryString), "secret");
     var hmacQueryString = queryString.ToString();
