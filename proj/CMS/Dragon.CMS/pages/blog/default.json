@@ -1,0 +1,10 @@
+﻿{
+    page: "../_blog.cshtml",
+    articles: [
+        { title: "Mein erster artikel", file: "blog1.md" },
+        { title: "Mein zweiter artikel", file: "blog2.md" },
+        { title: "Mein dritter artikel", file: "blog3.md" },
+        { title: "Mein vierter artikel", file: "blog4.md" },
+        { title: "Mein fünfter artikel", file: "blog5.md" }
+    ]
+}

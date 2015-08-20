@@ -1,0 +1,29 @@
+﻿@using System.Web.Optimization
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="author" content="">
+
+    <title>@ViewBag.Title</title>
+    
+    <!-- BUNDLES -->
+    @Styles.Render("~/bundles/styles")
+
+</head>
+    <body>
+        <a id="skippy" class="sr-only sr-only-focusable" href="#content"><div class="container"><span class="skiplink-text">Skip to main content</span></div></a>
+
+        @Html.Action("nav","module")
+
+        @RenderBody()
+
+        @Scripts.Render("~/bundles/scripts")
+
+    </body>
+</html>
