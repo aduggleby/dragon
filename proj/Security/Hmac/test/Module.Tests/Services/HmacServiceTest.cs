@@ -156,7 +156,7 @@ namespace Dragon.Security.Hmac.Module.Tests.Services
             // Arrange
             var service = CreateHmacService();
             var queryString = CreateValidQueryString();
-            queryString["expiry"] = DateTime.Now.AddDays(-1).Ticks.ToString();
+            queryString["expiry"] = DateTime.UtcNow.AddDays(-1).Ticks.ToString();
 
             // Act
             var actual = service.IsRequestAuthorized(GetValidRawUrl(), queryString);
@@ -171,7 +171,7 @@ namespace Dragon.Security.Hmac.Module.Tests.Services
             // Arrange
             var service = CreateHmacService();
             var queryString = CreateValidQueryString();
-            queryString["expiry"] = DateTime.Now.AddDays(-1).ToString(CultureInfo.InvariantCulture);
+            queryString["expiry"] = DateTime.UtcNow.AddDays(-1).ToString(CultureInfo.InvariantCulture);
 
             // Act
             var actual = service.IsRequestAuthorized(GetValidRawUrl(), queryString);
@@ -248,7 +248,7 @@ namespace Dragon.Security.Hmac.Module.Tests.Services
 
             // Assert
             mockUserRepository.Verify(x => x.Insert(It.Is<UserModel>(
-                y => y.AppId == AppId && y.ServiceId == ServiceId && y.UserId == UserId && y.Enabled && y.CreatedAt.Date == DateTime.Now.Date
+                y => y.AppId == AppId && y.ServiceId == ServiceId && y.UserId == UserId && y.Enabled && y.CreatedAt.Date == DateTime.UtcNow.Date
                 )), Times.Once);
         }
 
@@ -382,7 +382,7 @@ namespace Dragon.Security.Hmac.Module.Tests.Services
                 { "appid", AppId.ToString() },
                 { "serviceid", ServiceId.ToString() },
                 { "userid", UserId.ToString() },
-                { "expiry", DateTime.Now.AddDays(+1).Ticks.ToString() }, 
+                { "expiry", DateTime.UtcNow.AddDays(+1).Ticks.ToString() }, 
             };
             var hmacService = signatureParameterKey == DefaultSignatureParameterKey ?
                 new HmacSha256Service { UseHexEncoding = useHexEncoding } :

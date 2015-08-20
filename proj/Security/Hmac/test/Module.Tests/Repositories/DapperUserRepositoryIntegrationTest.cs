@@ -25,7 +25,7 @@ namespace Dragon.Security.Hmac.Module.Tests.Repositories
             var userId = Guid.NewGuid();
             var appId = Guid.NewGuid();
             var serviceId = Guid.NewGuid();
-            var createdAt = DateTime.Now;
+            var createdAt = DateTime.UtcNow;
             QueryFromFile(InsertUserScriptFilename, new Dictionary<string, string>
             {
                 {"UserId", userId.ToString()},
@@ -117,7 +117,7 @@ namespace Dragon.Security.Hmac.Module.Tests.Repositories
             var userId = Guid.NewGuid();
             var appId = Guid.NewGuid();
             var serviceId = Guid.NewGuid();
-            var createdAt = DateTime.Now;
+            var createdAt = DateTime.UtcNow;
             QueryFromFile(InsertUserScriptFilename, new Dictionary<string, string>
             {
                 {"UserId", userId.ToString()},
@@ -142,7 +142,7 @@ namespace Dragon.Security.Hmac.Module.Tests.Repositories
             var userId = Guid.NewGuid();
             var appId = Guid.NewGuid();
             var serviceId = Guid.NewGuid();
-            var createdAt = DateTime.Now;
+            var createdAt = DateTime.UtcNow;
             QueryFromFile(InsertUserScriptFilename, new Dictionary<string, string>
             {
                 {"UserId", userId.ToString()},
@@ -164,7 +164,9 @@ namespace Dragon.Security.Hmac.Module.Tests.Repositories
         {
             // Arrange
             var repository = new DapperUserRepository(Connection, UsersTableName);
+
             var userModel = CreateUser();
+
 
             // Act
             var id = repository.Insert(userModel);
