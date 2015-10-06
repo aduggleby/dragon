@@ -30,15 +30,25 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Common.Logging">
-      <HintPath>packages\Common.Logging.3.1.0\lib\net40\Common.Logging.dll</HintPath>
+    <Reference Include="Common.Logging, Version=3.3.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
+      <HintPath>packages\Common.Logging.3.3.0\lib\net40\Common.Logging.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Common.Logging.Core">
-      <HintPath>packages\Common.Logging.Core.3.1.0\lib\net40\Common.Logging.Core.dll</HintPath>
+    <Reference Include="Common.Logging.Core, Version=3.3.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
+      <HintPath>packages\Common.Logging.Core.3.3.0\lib\net40\Common.Logging.Core.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Handlebars, Version=1.0.5615.36670, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>packages\Handlebars.Net.1.3.3\lib\Handlebars.dll</HintPath>
+    <Reference Include="CsQuery, Version=1.3.3.249, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\CsQuery.1.3.4\lib\net40\CsQuery.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Handlebars, Version=1.0.0.0, Culture=neutral, PublicKeyToken=22225d0bf33cd661, processorArchitecture=MSIL">
+      <HintPath>packages\Handlebars.Net.1.4.4\lib\Handlebars.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="HtmlSanitizer, Version=2.0.5735.24296, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\HtmlSanitizer.2.0.5735.24296\lib\net40\HtmlSanitizer.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -65,6 +75,7 @@
     <Compile Include="Impl\DefaultFileSystemEnumerator.cs" />
     <Compile Include="Impl\DefaultReceiverMapper.cs" />
     <Compile Include="Impl\DefaultSenderConfiguration.cs" />
+    <Compile Include="Impl\DefaultSmtpClient.cs" />
     <Compile Include="Impl\DynamicDictionary.cs" />
     <Compile Include="Impl\FastFileSystemEnumerator.cs" />
     <Compile Include="Impl\InMemoryMailQueue.cs" />
@@ -76,6 +87,7 @@
     <Compile Include="Interfaces\IFileSystem.cs" />
     <Compile Include="Interfaces\IFileSystemEnumerator.cs" />
     <Compile Include="Interfaces\IMailSenderService.cs" />
+    <Compile Include="Interfaces\ISmtpClient.cs" />
     <Compile Include="MailGeneratorService.cs" />
     <Compile Include="Impl\RestResolvingDecorator.cs" />
     <Compile Include="Interfaces\IConfiguration.cs" />

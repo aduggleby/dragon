@@ -44,8 +44,7 @@ namespace Dragon.Mail.Test
             Assert.AreEqual(expected, mail.SummaryTextFooter);
             Assert.AreEqual(expected, mail.SummaryTextHeader);
         }
-
-
+        
 
         [TestMethod]
         public void Renders_Complex()
@@ -70,5 +69,28 @@ namespace Dragon.Mail.Test
             // ASSERT
             Assert.AreEqual(expected, mail.Body);
         }
+
+        [TestMethod]
+        public void Sanitized_correctly()
+        {
+            // ARRANGE
+            var expectedBody = "<strong>&lt;b&gt;o&lt;/b&gt;</strong>";
+            var expectedText = "<b>o</b>";
+            var t = new Template();
+            t.Content.Body = "<strong>{{name}}</strong>";
+            t.Content.TextBody = "{{{name}}}";
+          
+
+            var r = new HandlebarsRenderer(t);
+
+            // ACT
+            var mail = new Models.Mail();
+            r.Render(mail, new { name = "<b>o</b>" });
+
+            // ASSERT
+            Assert.AreEqual(expectedBody, mail.Body);
+            Assert.AreEqual(expectedText, mail.TextBody);
+        }
+        
     }
 }

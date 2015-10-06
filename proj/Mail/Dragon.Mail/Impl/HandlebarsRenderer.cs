@@ -42,19 +42,23 @@ namespace Dragon.Mail.Impl
 
         public void Render(Models.Mail mail, dynamic data)
         {
-            mail.Subject = m_compiledTemplateSubject(data);
-            mail.Body = m_compiledTemplateBody(data);
-            mail.TextBody = m_compiledTemplateTextBody(data);
+            var sanitizedHtml = data;
 
-            mail.SummarySubject = m_compiledTemplateSummarySubject(data);
-            mail.SummaryBody= m_compiledTemplateSummaryBody(data);
-            mail.SummaryHeader = m_compiledTemplateSummaryHeader(data);
-            mail.SummaryFooter = m_compiledTemplateSummaryFooter(data);
+            mail.Subject = m_compiledTemplateSubject(sanitizedHtml);
+            mail.Body = m_compiledTemplateBody(sanitizedHtml);
+            mail.TextBody = m_compiledTemplateTextBody(sanitizedHtml);
 
+            mail.SummaryBody = m_compiledTemplateSummaryBody(sanitizedHtml);
+            mail.SummaryHeader = m_compiledTemplateSummaryHeader(sanitizedHtml);
+            mail.SummaryFooter = m_compiledTemplateSummaryFooter(sanitizedHtml);
 
-            mail.SummaryTextBody = m_compiledTemplateSummaryTextBody(data);
-            mail.SummaryTextHeader = m_compiledTemplateSummaryTextHeader(data);
-            mail.SummaryTextFooter = m_compiledTemplateSummaryTextFooter(data);
+            var strippedText = data;
+
+            mail.SummarySubject = m_compiledTemplateSummarySubject(strippedText);
+
+            mail.SummaryTextBody = m_compiledTemplateSummaryTextBody(strippedText);
+            mail.SummaryTextHeader = m_compiledTemplateSummaryTextHeader(strippedText);
+            mail.SummaryTextFooter = m_compiledTemplateSummaryTextFooter(strippedText);
         }
     }
 }

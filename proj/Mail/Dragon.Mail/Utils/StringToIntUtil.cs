@@ -25,5 +25,20 @@ namespace Dragon.Mail.Utils
 
             return i;
         }
+
+        public static int? InterpretNullable(string s, int? defaultValue)
+        {
+            if (string.IsNullOrWhiteSpace(s)) return defaultValue;
+
+            int i;
+            if (!Int32.TryParse(s, out i))
+            {
+                s_log.Warn("Configuration value '" + s +
+                           "' expected integer, but could not interpret. Using default value: " + defaultValue);
+                return defaultValue;
+            }
+
+            return i;
+        }
     }
 }

@@ -20,5 +20,18 @@ namespace Dragon.Mail.Utils
 
             return (s == "1" || s == "t");
         }
+
+        public static bool? InterpretNullable(string s, bool? defaultValue)
+        {
+            if (string.IsNullOrWhiteSpace(s)) return defaultValue;
+
+            s = s.ToLower();
+
+            if (s == "on") return true;
+
+            if (s.Length > 0) s = s.Substring(0, 1);
+
+            return (s == "1" || s == "t");
+        }
     }
 }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Net.Mail;
 using System.Net.Mime;
+using System.Security.Cryptography.X509Certificates;
 using Dragon.Mail.Impl;
 using Dragon.Mail.Interfaces;
 using Dragon.Mail.Models;
@@ -105,5 +106,139 @@ namespace Dragon.Mail.Test
             Assert.AreEqual("textbody", new StreamReader(text.ContentStream).ReadToEnd());
         }
 
+
+        [TestMethod]
+        public void Recipient_is_overridden_if_set()
+        {
+            // ARRANGE
+            var queueMock = new Mock<IMailQueue>();
+            queueMock.Setup(m => m.Enqueue(It.IsAny<Models.Mail>(), It.IsAny<object>()));
+
+            var configMock = new Mock<IConfiguration>();
+            configMock.Setup(m => m.GetValue(MailSenderService.APP_KEY_OVERRIDE_RECIPIENT))
+                .Returns("override@example.org");
+
+            var smtpMock = new Mock<ISmtpClient>();
+
+            var subject = new MailSenderService(queueMock.Object, configMock.Object);
+
+            var renderedMail = new RenderedMail();
+            renderedMail.Sender = new MailAddress("bob@example.org");
+            renderedMail.Receiver = new MailAddress("bob@example.org");
+            renderedMail.Subject = "foo";
+            renderedMail.Body = "htmlbody";
+            renderedMail.TextBody = "textbody";
+
+            // ACT
+            var mailMessage = subject.ProcessInternal(renderedMail, smtpMock.Object);
+
+
+            // ASSERT
+            smtpMock.Verify(c => c.Send(
+                It.Is<MailMessage>(m =>
+                    m.To.Count == 1
+                    && m.To.First().Address == "override@example.org")),
+                Times.Once);
+        }
+
+        [TestMethod]
+        public void Smtp_Host_IsOverwritten_ButNoOther_WhenSet()
+        {
+            // ARRANGE
+            var queueMock = new Mock<IMailQueue>();
+            queueMock.Setup(m => m.Enqueue(It.IsAny<Models.Mail>(), It.IsAny<object>()));
+
+            var configMock = new Mock<IConfiguration>();
+            configMock.Setup(m => m.GetValue(MailSenderService.APP_KEY_OVERRIDE_SMTP_HOST))
+                .Returns("example.org");
+
+            var smtpMock = new Mock<ISmtpClient>();
+
+            var subject = new MailSenderService(queueMock.Object, configMock.Object);
+
+            var renderedMail = new RenderedMail();
+            renderedMail.Sender = new MailAddress("bob@example.org");
+            renderedMail.Receiver = new MailAddress("bob@example.org");
+            renderedMail.Subject = "foo";
+            renderedMail.Body = "htmlbody";
+            renderedMail.TextBody = "textbody";
+
+            // ACT
+            var mailMessage = subject.ProcessInternal(renderedMail, smtpMock.Object);
+
+            // ASSERT
+            smtpMock.Verify(c => c.SetHost("example.org"), Times.Once);
+            smtpMock.Verify(c => c.SetPort(It.IsAny<int>()), Times.Never);
+            smtpMock.Verify(c => c.SetCredentials(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            smtpMock.Verify(c => c.SetEnableSsl(It.IsAny<bool>()), Times.Never);
+        }
+
+        [TestMethod]
+        public void Smtp_Host_And_Port_IsOverwritten_ButNoOther_WhenSet()
+        {
+            // ARRANGE
+            var queueMock = new Mock<IMailQueue>();
+            queueMock.Setup(m => m.Enqueue(It.IsAny<Models.Mail>(), It.IsAny<object>()));
+
+            var configMock = new Mock<IConfiguration>();
+            configMock.Setup(m => m.GetValue(MailSenderService.APP_KEY_OVERRIDE_SMTP_HOST))
+                .Returns("example.org");
+            configMock.Setup(m => m.GetValue(MailSenderService.APP_KEY_OVERRIDE_SMTP_PORT))
+                .Returns("1234");
+
+            var smtpMock = new Mock<ISmtpClient>();
+
+            var subject = new MailSenderService(queueMock.Object, configMock.Object);
+
+            var renderedMail = new RenderedMail();
+            renderedMail.Sender = new MailAddress("bob@example.org");
+            renderedMail.Receiver = new MailAddress("bob@example.org");
+            renderedMail.Subject = "foo";
+            renderedMail.Body = "htmlbody";
+            renderedMail.TextBody = "textbody";
+
+            // ACT
+            var mailMessage = subject.ProcessInternal(renderedMail, smtpMock.Object);
+
+            // ASSERT
+            smtpMock.Verify(c => c.SetHost("example.org"), Times.Once);
+            smtpMock.Verify(c => c.SetPort(1234), Times.Once);
+            smtpMock.Verify(c => c.SetCredentials(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            smtpMock.Verify(c => c.SetEnableSsl(It.IsAny<bool>()), Times.Never);
+        }
+
+        [TestMethod]
+        public void Smtp_All_Credentials_IsOverwritten_ButNoOther_WhenSet()
+        {
+            // ARRANGE
+            var queueMock = new Mock<IMailQueue>();
+            queueMock.Setup(m => m.Enqueue(It.IsAny<Models.Mail>(), It.IsAny<object>()));
+
+            var configMock = new Mock<IConfiguration>();
+            configMock.Setup(m => m.GetValue(MailSenderService.APP_KEY_OVERRIDE_SMTP_USER))
+                .Returns("a");
+            configMock.Setup(m => m.GetValue(MailSenderService.APP_KEY_OVERRIDE_SMTP_PASSWORD))
+                .Returns("c");
+
+            var smtpMock = new Mock<ISmtpClient>();
+
+            var subject = new MailSenderService(queueMock.Object, configMock.Object);
+
+            var renderedMail = new RenderedMail();
+            renderedMail.Sender = new MailAddress("bob@example.org");
+            renderedMail.Receiver = new MailAddress("bob@example.org");
+            renderedMail.Subject = "foo";
+            renderedMail.Body = "htmlbody";
+            renderedMail.TextBody = "textbody";
+
+            // ACT
+            var mailMessage = subject.ProcessInternal(renderedMail, smtpMock.Object);
+
+            // ASSERT
+            smtpMock.Verify(c => c.SetHost("example.org"), Times.Never);
+            smtpMock.Verify(c => c.SetPort(1234), Times.Never);
+            smtpMock.Verify(c => c.SetCredentials(null, "a", "c"), Times.Once);
+            smtpMock.Verify(c => c.SetEnableSsl(It.IsAny<bool>()), Times.Never);
+        }
     }
 }

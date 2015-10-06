@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Mail;
 using System.Net.Mime;
 using System.Text;
@@ -19,6 +21,14 @@ namespace Dragon.Mail
         public const string APP_KEY_WAIT_ERROR = "Dragon.Mail.Async.WaitAfterError";
         public const string APP_KEY_WAIT_NOWORK = "Dragon.Mail.Async.WaitAfterNoWork";
 
+        public const string APP_KEY_OVERRIDE_RECIPIENT = "Dragon.Mail.Override.Recipient";
+        public const string APP_KEY_OVERRIDE_SMTP_HOST = "Dragon.Mail.Override.Smtp.Host";
+        public const string APP_KEY_OVERRIDE_SMTP_PORT = "Dragon.Mail.Override.Smtp.Port";
+        public const string APP_KEY_OVERRIDE_SMTP_SSL = "Dragon.Mail.Override.Smtp.SSL";
+        public const string APP_KEY_OVERRIDE_SMTP_USER = "Dragon.Mail.Override.Smtp.User";
+        public const string APP_KEY_OVERRIDE_SMTP_PASSWORD = "Dragon.Mail.Override.Smtp.Password";
+        public const string APP_KEY_OVERRIDE_SMTP_DOMAIN = "Dragon.Mail.Override.Smtp.Domain";
+
         private IMailQueue m_queue;
         private IConfiguration m_configuration;
 
@@ -26,6 +36,15 @@ namespace Dragon.Mail
         private static int s_sleepAfterOnNoWork = 5000;
 
         private static bool m_continue = false;
+
+        private static string s_overrideRecipient = "";
+        private static string s_overrideSmtpHost = "";
+        private static int? s_overrideSmtpPort = null;
+        private static bool? s_overrideSmtpSSL = null;
+        private static string s_overrideSmtpUser = "";
+        private static string s_overrideSmtpPassword = "";
+        private static string s_overrideSmtpDomain = "";
+
         private static Thread m_thread;
 
         private static ILog s_log = LogManager.GetCurrentClassLogger();
@@ -39,6 +58,15 @@ namespace Dragon.Mail
 
             s_sleepAfterException = StringToIntUtil.Interpret(m_configuration.GetValue(APP_KEY_WAIT_ERROR), s_sleepAfterException);
             s_sleepAfterOnNoWork = StringToIntUtil.Interpret(m_configuration.GetValue(APP_KEY_WAIT_NOWORK), s_sleepAfterOnNoWork);
+
+            s_overrideRecipient = m_configuration.GetValue(APP_KEY_OVERRIDE_RECIPIENT);
+            s_overrideSmtpHost = m_configuration.GetValue(APP_KEY_OVERRIDE_SMTP_HOST);
+            s_overrideSmtpPort = StringToIntUtil.InterpretNullable(m_configuration.GetValue(APP_KEY_OVERRIDE_SMTP_PORT), null);
+            s_overrideSmtpSSL = StringToBoolUtil.InterpretNullable(m_configuration.GetValue(APP_KEY_OVERRIDE_SMTP_SSL), null);
+            s_overrideSmtpUser = m_configuration.GetValue(APP_KEY_OVERRIDE_SMTP_USER);
+            s_overrideSmtpPassword = m_configuration.GetValue(APP_KEY_OVERRIDE_SMTP_PASSWORD);
+            s_overrideSmtpDomain = m_configuration.GetValue(APP_KEY_OVERRIDE_SMTP_DOMAIN);
+
         }
 
         public void Start()
@@ -99,13 +127,50 @@ namespace Dragon.Mail
 
         public bool Process(Models.RenderedMail mail)
         {
+            return ProcessInternal(mail, null);
+        }
+
+
+
+        public bool ProcessInternal(Models.RenderedMail mail, ISmtpClient smtpClient = null)
+        {
             try
             {
                 s_log.Debug("Processing mail item.");
 
-                var smtp = new SmtpClient();
+                var smtp = smtpClient ?? new DefaultSmtpClient();
 
-                smtp.Send(CreateMailMessage(mail));
+                if (!string.IsNullOrWhiteSpace(s_overrideSmtpHost))
+                {
+                    smtp.SetHost(s_overrideSmtpHost);
+                }
+                if (s_overrideSmtpPort.HasValue)
+                {
+                    smtp.SetPort(s_overrideSmtpPort.Value);
+                }
+                if (s_overrideSmtpSSL.HasValue)
+                {
+                    smtp.SetEnableSsl(s_overrideSmtpSSL.Value);
+                }
+                if (!string.IsNullOrWhiteSpace(s_overrideSmtpUser) ||
+                    !string.IsNullOrWhiteSpace(s_overrideSmtpPassword) ||
+                    !string.IsNullOrWhiteSpace(s_overrideSmtpDomain))
+                {
+                    smtp.SetCredentials(
+                        s_overrideSmtpDomain,
+                        s_overrideSmtpUser,
+                        s_overrideSmtpPassword);
+                }
+
+                var msg = CreateMailMessage(mail);
+
+                if (!string.IsNullOrWhiteSpace(s_overrideRecipient))
+                {
+                    msg.To.Clear();
+                    msg.To.Add(s_overrideRecipient);
+                }
+
+                smtp.Send(msg);
 
                 return true;
             }
