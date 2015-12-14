@@ -1,0 +1,13 @@
+﻿@{
+    ViewBag.Title = "Restricted";
+}
+
+<h2>Restricted area</h2>
+<h3>General</h3>
+<p>Name: @ViewBag.Name</p>
+<p>AuthenticationType: @ViewBag.AuthenticationType</p>
+<h3>Claims</h3>
+@foreach (var claim in ViewBag.Claims)
+{
+    <p>@claim.Type: @claim.Value</p>
+}

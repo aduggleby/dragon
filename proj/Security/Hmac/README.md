@@ -73,6 +73,7 @@ For the web application that exposes the service:
     where 
     connectionStringName refers to a name of an existing connection string, 
     Paths specifies a lists of regular expressions which define for which paths the authorization is skipped/necessary (type Exclude/Include respectively), defaults to necessary authorization
+    The first matching path will be applied.
 
 
 * Prepare the database, i.e. import the sql/migration scripts.
