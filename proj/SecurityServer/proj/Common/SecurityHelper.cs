@@ -10,8 +10,10 @@ namespace Dragon.SecurityServer.Common
     {
         public static X509SigningCredentials CreateSignupCredentialsFromConfig()
         {
-            return new X509SigningCredentials(new X509Certificate2(X509Certificate.CreateFromCertFile(
-                    Path.Combine(HostingEnvironment.ApplicationPhysicalPath, ConfigurationManager.AppSettings["SigningCertificateName"]))));
+            var certificateFilePath = Path.Combine(HostingEnvironment.ApplicationPhysicalPath, ConfigurationManager.AppSettings["SigningCertificateName"]);
+            var data = File.ReadAllBytes(certificateFilePath);
+            var certificate = new X509Certificate2(data, string.Empty, X509KeyStorageFlags.MachineKeySet);
+            return new X509SigningCredentials(certificate);
         }
     }
 }
