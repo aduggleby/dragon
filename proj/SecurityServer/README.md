@@ -24,7 +24,31 @@ Setup
 For each STS service:
 * Generate a signing certificate
 * Configure federation (see appSettings in web.config)
+
+        Mandatory app settings:
+        <!-- Address of this STS -->
+        <add key="SecurityTokenServiceEndpointUrl" value="http://localhost:51387" />
+        <!-- Federation Realm -->
+        <add key="WtRealm" value="http://WSFedTest/" />
+        <!-- Address of the next STS in the chain -->
+        <add key="WsFederationEndpointUrl" value="http://thispc.com:51385" />
+        <!-- Address of the root STS, i.e. the last STS in the chain (e.g. Account STS) -->
+        <add key="ValidIssuer" value="http://thispc.com:51385" />
+        <!-- Federation metadata, address of this STS -->
+        <add key="FederationHost" value="http://localhost:51387" />
+        <!-- Federation metadata, address of the next STS in the chain -->
+        <add key="FederationEndpoint" value="http://thispc.com:51385" />
+
+        Optional app settings:
+        <!-- Signing certificate filename -->
+        <add key="SigningCertificateName" value="securityserver.pfx" />
+        <!-- Identification of the login provider -->
+        <add key="LoginProviderName" value="Dragon" />
+        <!-- Federation metadata -->
+        <add key="FederationNamespace" value="http://docs.oasis-open.org/wsfed/federation/200706" />
+
 * Initialize the database
+    * Use the connection string "Dragon"
     * Release
         * Adapt the HMAC data (insert into [AppModel] in v1.0.0.0) according to [1]
         * Import the sql/migrations scripts
@@ -37,6 +61,18 @@ For each STS service:
     * Configure the SimpleInjectorInitializer, add as first store to the ChainedIdentity UserStore the following:
 
             new Identity.Redis.UserStore<AppMember>(new RedisUserStore<Identity.Redis.IdentityUser>(connectionMultiplexer), connectionMultiplexer),
+
+* Follow the README's in the respective projects for additional specific insructions
+
+
+Usage
+-----
+
+An example web application that uses the SecurityServer for authentication can be found in the Demo project.
+
+To integrate the SecurityServer:
+* Configure Windows Identity Foundation (see system.identityModel in the Web.config of the Demo project).
+* Specify the service for which the user should be authenticated: The Service ID needs to be added to all federation requests (see Demo.CustomAuthenticationModule and Demo.Controllers.HomeController::SignIn for custom requests).
 
 
 Tests
