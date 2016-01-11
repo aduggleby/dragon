@@ -20,7 +20,7 @@
     </system.diagnostics>
   <system.identityModel.services>
     <federationConfiguration>
-      <wsFederation issuer="http://localhost:51386/" realm="http://WSFedTest/" reply="http://localhost:62564/" passiveRedirectEnabled="true" requireHttps="false" />
+      <wsFederation issuer="http://localhost:51387/" realm="http://WSFedTest/" reply="http://localhost:62564/" passiveRedirectEnabled="true" requireHttps="false" />
       <cookieHandler requireSsl="false" />
       <!-- uncomment if token is encrypted by the STS
       <serviceCertificate>
@@ -40,7 +40,7 @@
       </audienceUris>
       <issuerNameRegistry type="System.IdentityModel.Tokens.ConfigurationBasedIssuerNameRegistry, System.IdentityModel, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
         <trustedIssuers>
-          <add thumbprint="AE61A09EF120B2D80EAF79A97731C307D9392C3A" name="http://localhost:51386" />
+          <add thumbprint="AE61A09EF120B2D80EAF79A97731C307D9392C3A" name="http://localhost:51387" />
         </trustedIssuers>
       </issuerNameRegistry>
       <certificateValidation certificateValidationMode="None" />

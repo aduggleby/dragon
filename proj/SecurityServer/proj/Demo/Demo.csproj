@@ -186,6 +186,7 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\Restricted\Index.cshtml" />
+    <Content Include="Web.config.default" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -240,7 +241,9 @@
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>
-    <PreBuildEvent>echo f | xcopy "$(ProjectDir)Web.config.default" "$(ProjectDir)Web.config" /D</PreBuildEvent>
+    <PreBuildEvent>if not exist "$(ProjectDir)Web.config.default" (
+  echo f | xcopy "$(ProjectDir)Web.config.default" "$(ProjectDir)Web.config" /D
+)</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.

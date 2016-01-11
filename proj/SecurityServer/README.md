@@ -36,8 +36,8 @@ For each STS service:
         <add key="ValidIssuer" value="http://thispc.com:51385" />
         <!-- Federation metadata, address of this STS -->
         <add key="FederationHost" value="http://localhost:51387" />
-        <!-- Federation metadata, address of the next STS in the chain -->
-        <add key="FederationEndpoint" value="http://thispc.com:51385" />
+        <!-- Federation metadata, address of this STS -->
+        <add key="FederationEndpoint" value="http://localhost:51387" />
 
         Optional app settings:
         <!-- Signing certificate filename -->
