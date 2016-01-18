@@ -76,3 +76,6 @@ packages/
 
 # Test data files
 App_Data
+
+# Temp Files
+*.tmp
