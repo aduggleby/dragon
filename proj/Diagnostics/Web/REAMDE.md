@@ -8,3 +8,4 @@ Requirements
 ------------
 
 * Visual Studio 2013
+* WebSocket support enabled

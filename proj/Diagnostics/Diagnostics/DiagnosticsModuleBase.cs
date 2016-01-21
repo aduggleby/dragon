@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 
 namespace Dragon.Diagnostics
 {
@@ -22,7 +21,7 @@ namespace Dragon.Diagnostics
 
         protected void DebugMessage(string message)
         {
-            Debug.WriteLine(message);
+            Console.WriteLine(message);
             Log += message + Environment.NewLine;
         }
 

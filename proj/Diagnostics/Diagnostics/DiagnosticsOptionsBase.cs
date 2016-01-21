@@ -1,15 +1,13 @@
-﻿using CommandLine;
+﻿using System.Collections.Generic;
+using CommandLine;
 using CommandLine.Text;
+using Division42.NetworkTools.Extensions;
 
 namespace Dragon.Diagnostics
 {
     public abstract class DiagnosticsOptionsBase
     {
-        [Option('v', "verbose", DefaultValue = true,
-            HelpText = "Prints debug messages to standard output.")]
-        public bool Verbose { get; set; }
-
-        [Option('h', "host", DefaultValue = "my.whataventure.com",
+        [Option('h', "host", DefaultValue = "diagnostics.whataventure.com",
             HelpText = "The webservice to test against.")]
         public string Host { get; set; }
 

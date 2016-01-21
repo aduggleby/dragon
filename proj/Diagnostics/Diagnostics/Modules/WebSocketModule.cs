@@ -10,7 +10,7 @@ namespace Dragon.Diagnostics.Modules
 
         protected override void ExecuteImpl(WebSocketOptions options)
         {
-            var urls = new List<string> {"ws://localhost:57703/api/test/websocket?message=short", "ws://localhost:57703/api/test/websocket?message=long"};
+            var urls = new List<string> { string.Format("ws://{0}/api/test/websocket?message=short", options.Host), string.Format("ws://{0}/api/test/websocket?message=long", options.Host)};
             urls.ForEach(TestWebsocketConnection);
         }
 

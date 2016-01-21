@@ -32,7 +32,8 @@ namespace Dragon.Diagnostics
             var modules = GetModuleRunner();
             if (!parser.ParseArguments(args, options))
             {
-                throw new Exception("Unable to parse arguments.");
+                DebugMessage("Unable to parse arguments.");
+                return;
             }
             DebugMessage("Dragon.Diagnostics " + Assembly.GetExecutingAssembly().GetName().Version);
             foreach (var module in modules)
@@ -54,6 +55,21 @@ namespace Dragon.Diagnostics
             File.WriteAllText(fileName, _log);
             Process.Start("notepad.exe", fileName);
             Debug.Write("The information has been written to: " + fileName);
+        }
+
+        public static List<DiagnosticsOptionsBase> GetOptions()
+        {
+            return new List<DiagnosticsOptionsBase>
+            {
+                new TraceRouteOptions(),
+                new BrowserOptions(),
+                new HttpOptions(),
+                new NetworkInterfaceOptions(),
+                new OperatingSystemOptions(),
+                new PingOptions(),
+                new SslCertificateOptions(),
+                new WebSocketOptions()
+            };
         }
 
         public static Dictionary<string, Func<string[], Parser, string>> GetModuleRunner()
@@ -126,7 +142,7 @@ namespace Dragon.Diagnostics
 
         private void DebugMessage(string message)
         {
-            Debug.WriteLine(message);
+            Console.WriteLine(message);
             _log += message + Environment.NewLine;
         }
 

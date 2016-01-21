@@ -8,7 +8,7 @@ namespace Dragon.Diagnostics.Modules
     {
         protected override void ExecuteImpl(HttpOptions options)
         {
-            var urls = new List<string> { "http://localhost:57703/api/test/fastget", "http://localhost:57703/api/test/slowget" };
+            var urls = new List<string> { string.Format("http://{0}/api/test/fastget", options.Host), string.Format("http://{0}/api/test/slowget", options.Host) };
             urls.ForEach(TestWebsocketConnection);
         }
 
