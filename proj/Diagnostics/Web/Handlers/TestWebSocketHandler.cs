@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using Microsoft.Web.WebSockets;
 
-namespace Web.Handlers
+namespace Dragon.Diagnostics.Web.Handlers
 {
     public class TestWebSocketHandler : WebSocketHandler
     {

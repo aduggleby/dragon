@@ -3,10 +3,10 @@ using System.Net.Http;
 using System.Threading;
 using System.Web;
 using System.Web.Http;
+using Dragon.Diagnostics.Web.Handlers;
 using Microsoft.Web.WebSockets;
-using Web.Handlers;
 
-namespace Web.Controllers
+namespace Dragon.Diagnostics.Web.Controllers
 {
     public class TestController : ApiController
     {
