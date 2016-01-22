@@ -6,7 +6,7 @@ using System.Web.Mvc;
 using Dragon.Common.Extensions;
 using Dragon.Context.Configuration;
 using StructureMap;
-using Dragon.Common.Util;
+using Dragon.Context.Util;
 
 namespace Dragon.Context.Attributes
 {

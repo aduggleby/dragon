@@ -2,7 +2,7 @@
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Dragon.Common.Util
+namespace Dragon.Context.Util
 {
     /// <summary>
     /// Utility for hashing strings with salt using SHA512
