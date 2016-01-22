@@ -25,7 +25,7 @@ namespace Dragon.Diagnostics.Modules
         private void TestWebsocketConnection(string url, int timeout)
         {
             DebugMessage(string.Format("{0} - Connecting to: {1}", GetCurrentTime(), url));
-            DebugMessage(string.Format("Wait for {0} seconds...", timeout));
+            DebugMessage(string.Format("Waiting for {0} seconds...", timeout));
             using (var client = new WebClient())
             {
                 try
