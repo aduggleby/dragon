@@ -21,7 +21,7 @@ namespace Dragon.Diagnostics.Web.Handlers
 
         private void Broadcast(string message)
         {
-            var timeOut = _message == "long" ? 30000 : _message == "short" ? 2000 : 0;
+            var timeOut = _message == "long" ? 30000 : _message == "medium" ? 10000 : _message == "short" ? 1000 : 0;
             Thread.Sleep(timeOut);
             ChatClients.Broadcast(message);
         }

@@ -20,13 +20,21 @@ namespace Dragon.Diagnostics.Web.Controllers
         [AcceptVerbs("GET")]
         public HttpResponseMessage FastGet()
         {
+            Thread.Sleep(1 * 1000);
+            return Request.CreateResponse(HttpStatusCode.OK);
+        }
+
+        [AcceptVerbs("GET")]
+        public HttpResponseMessage MediumGet()
+        {
+            Thread.Sleep(10 * 1000);
             return Request.CreateResponse(HttpStatusCode.OK);
         }
 
         [AcceptVerbs("GET")]
         public HttpResponseMessage SlowGet()
         {
-            Thread.Sleep(10 * 1000);
+            Thread.Sleep(30 * 1000);
             return Request.CreateResponse(HttpStatusCode.OK);
         }
     }

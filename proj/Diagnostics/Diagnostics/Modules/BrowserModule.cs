@@ -36,7 +36,8 @@ namespace Dragon.Diagnostics.Modules
             {
                 {"FIREFOX.EXE", LogFirefoxVersion},
                 {"IEXPLORE.EXE", LogInternetExplorerVersion},
-                {"CHROME.EXE", LogChromeVersion}
+                {"CHROME.EXE", LogChromeVersion},
+                {"Google Chrome", LogChromeVersion}
             };
         }
 

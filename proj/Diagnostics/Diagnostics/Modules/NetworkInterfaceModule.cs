@@ -8,16 +8,14 @@ namespace Dragon.Diagnostics.Modules
     {
         protected override void ExecuteImpl(NetworkInterfaceOptions options)
         {
+            DebugMessage("Available network interfaces:");
             foreach (var ifs in NetworkInterface.GetAllNetworkInterfaces())
             {
-                DebugMessage(ifs.Name);
+                DebugMessage(string.Format("- {0}: {1}", ifs.Name, ifs.OperationalStatus));
             }
-
+            DebugMessage("\nConfigured proxy:");
             var proxy = WebRequest.DefaultWebProxy.GetProxy(new Uri("http://" + options.Host));
-            if (proxy.Host != "0.0.0.1")
-            {
-                DebugMessage(proxy.OriginalString);
-            }
+            DebugMessage(proxy.Host != options.Host ? proxy.OriginalString : "none.");
         }
     }
 }

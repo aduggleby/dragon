@@ -8,7 +8,7 @@ namespace Dragon.Diagnostics.Modules
             HelpText = "DISABLE: Checks for basic HTTP/HTTPS connectivity.")]
         public override bool Disabled { get; set; }
 
-        [Option('i', "pinghost", DefaultValue = "whataventure.com",
+        [Option('i', "pinghosts", DefaultValue = "8.8.8.8, example.org",
             HelpText = "The webservice to test against.")]
         public string PingHost { get; set; }
     }

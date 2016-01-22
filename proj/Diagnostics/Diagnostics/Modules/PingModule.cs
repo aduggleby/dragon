@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.NetworkInformation;
 
 namespace Dragon.Diagnostics.Modules
@@ -8,7 +9,7 @@ namespace Dragon.Diagnostics.Modules
     {
         protected override void ExecuteImpl(PingOptions options)
         {
-            var hostsToCheck = new List<string> {options.Host, options.PingHost};
+            var hostsToCheck = options.PingHost.Split(',').Select(x => x.Trim());
             
             foreach (var host in hostsToCheck)
             {

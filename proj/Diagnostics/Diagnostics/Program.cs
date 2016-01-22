@@ -23,6 +23,7 @@ namespace Dragon.Diagnostics
             {
                 Console.WriteLine(e);
             }
+            Console.ReadLine();
         }
 
         private void Run(string[] args)
@@ -54,7 +55,7 @@ namespace Dragon.Diagnostics
             var fileName = Path.GetTempFileName();
             File.WriteAllText(fileName, _log);
             Process.Start("notepad.exe", fileName);
-            Debug.Write("The information has been written to: " + fileName);
+            Console.WriteLine("The information has been written to: " + fileName);
         }
 
         public static List<DiagnosticsOptionsBase> GetOptions()
