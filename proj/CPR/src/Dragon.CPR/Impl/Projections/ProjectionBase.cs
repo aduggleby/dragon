@@ -7,6 +7,7 @@ using Dragon.CPR.Interfaces;
 using Dragon.Data.Interfaces;
 using Dragon.Context;
 using StructureMap;
+using IContext = Dragon.Context.IContext;
 
 namespace Dragon.CPR.Impl.Projections
 {
@@ -15,7 +16,7 @@ namespace Dragon.CPR.Impl.Projections
     {
         public IProfileStore ProfileStore { get; set; }
         public IContainer Container { get; set; }
-        public DragonContext Ctx { get; set; }
+        public IContext Ctx { get; set; }
         
         public abstract void Project(T t);
 

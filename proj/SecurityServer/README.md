@@ -71,7 +71,8 @@ Usage
 An example web application that uses the SecurityServer for authentication can be found in the Demo project.
 
 To integrate the SecurityServer:
-* Configure Windows Identity Foundation (see system.identityModel in the Web.config of the Demo project).
+* Add the Microsoft.Owin.Security.WsFederation package to the project.
+* Configure Windows Identity Foundation (see system.identityModel and system.identityModel.services in the Web.config of the Demo project, reference System.IdentityModel and System.IdentityModel.Services).
 * Specify the service for which the user should be authenticated: The Service ID needs to be added to all federation requests (see Demo.CustomAuthenticationModule and Demo.Controllers.HomeController::SignIn for custom requests).
 
 

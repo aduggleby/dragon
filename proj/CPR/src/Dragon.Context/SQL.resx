@@ -61,7 +61,7 @@
     -->
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
-    <xsd:element name="root" msdata:IsDataSet="true">
+    <xsd:element name="root" msdata:IsDataAdd="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
           <xsd:element name="metadata">
@@ -207,11 +207,11 @@ WHERE [ParentID] = @ParentID</value>
     <value>SELECT * FROM  {TABLE} WHERE NodeID=@NodeID</value>
   </data>
   <data name="SqlSessionStore_Delete" xml:space="preserve">
-    <value>DELETE FROM  {TABLE} WHERE [SessionID] =@SessionID</value>
+    <value>DELETE FROM  {TABLE} WHERE [SessionID] =@CurrentUserId</value>
   </data>
   <data name="SqlSessionStore_Get" xml:space="preserve">
     <value>SELECT * FROM  {TABLE}
-WHERE [SessionID] =@SessionID</value>
+WHERE [SessionID] =@CurrentUserId</value>
   </data>
   <data name="SqlSessionStore_Insert" xml:space="preserve">
     <value>INSERT INTO  {TABLE} ([SessionID],[Hash],[Location],[UserID],[Expires])
@@ -223,7 +223,7 @@ VALUES			   (@SessionID,@Hash,@Location,@UserID, @Expires)</value>
 [Expires]	= @Expires,
 [Location]	= @Location,
 [UserID]	= @UserID
-WHERE [SessionID] = @SessionID</value>
+WHERE [SessionID] = @CurrentUserId</value>
   </data>
   <data name="SqlProfileStore_Get" xml:space="preserve">
     <value>SELECT * FROM  {TABLE} WHERE UserID = @UserID AND [Key] = @Key</value>

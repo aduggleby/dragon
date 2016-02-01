@@ -10,6 +10,7 @@ using Dragon.Data.Interfaces;
 using Dragon.Context;
 using Newtonsoft.Json;
 using StructureMap;
+using IContext = Dragon.Context.IContext;
 
 namespace Dragon.CPR
 {
@@ -23,7 +24,7 @@ namespace Dragon.CPR
         private readonly IRepository<Command> m_commandRepository;
         private readonly JsonSerializerSettings m_jsonSerializerSettings;
 
-        public DragonContext Ctx { get; set; }
+        public IContext Ctx { get; set; }
 
         public CommandDispatcher(IRepository<Command> r, IContainer container)
         {

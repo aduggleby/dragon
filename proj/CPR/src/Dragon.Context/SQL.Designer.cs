@@ -191,7 +191,7 @@ namespace Dragon.Context {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to DELETE FROM  {TABLE} WHERE [SessionID] =@SessionID.
+        ///   Looks up a localized string similar to DELETE FROM  {TABLE} WHERE [SessionID] =@CurrentUserId.
         /// </summary>
         internal static string SqlSessionStore_Delete {
             get {
@@ -201,7 +201,7 @@ namespace Dragon.Context {
         
         /// <summary>
         ///   Looks up a localized string similar to SELECT * FROM  {TABLE}
-        ///WHERE [SessionID] =@SessionID.
+        ///WHERE [SessionID] =@CurrentUserId.
         /// </summary>
         internal static string SqlSessionStore_Get {
             get {
@@ -225,7 +225,7 @@ namespace Dragon.Context {
         ///[Expires]	= @Expires,
         ///[Location]	= @Location,
         ///[UserID]	= @UserID
-        ///WHERE [SessionID] = @SessionID.
+        ///WHERE [SessionID] = @CurrentUserId.
         /// </summary>
         internal static string SqlSessionStore_Update {
             get {

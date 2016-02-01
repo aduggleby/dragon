@@ -8,7 +8,7 @@ namespace Dragon.Context.Sessions
 {
     public class DragonIdentity : GenericIdentity
     {
-        public DragonIdentity(DragonContext context):base(context.CurrentUserID.ToString(), "Dragon")
+        public DragonIdentity(IContext context):base(context.CurrentUserID.ToString(), "Dragon")
         {
         }
     }

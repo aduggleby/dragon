@@ -10,7 +10,7 @@ namespace Dragon.Context.Embedded
     {
         public static byte[] FacebookJS()
         {
-            var filename = string.Concat(typeof(DragonContext).Namespace, ".Embedded.facebook.js");
+            var filename = string.Concat(typeof(IContext).Namespace, ".Embedded.facebook.js");
             return EmbeddedUtil.GetFileContents<Files>(filename);
         }
     }

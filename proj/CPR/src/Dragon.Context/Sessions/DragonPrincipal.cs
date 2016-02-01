@@ -8,7 +8,7 @@ namespace Dragon.Context.Sessions
 {
     public class DragonPrincipal : GenericPrincipal
     {
-        public DragonPrincipal(DragonContext ctx, string[] roles):base(new DragonIdentity(ctx), roles)
+        public DragonPrincipal(IContext ctx, string[] roles):base(new DragonIdentity(ctx), roles)
         {
             
         }

@@ -21,7 +21,7 @@ namespace Dragon.CPR.MVC
 
         public IConfiguration Configuration { get; set; }
 
-        public DragonContext Ctx { get; set; }
+        public IContext Ctx { get; set; }
 
         public CPRControllerBase()
         {
