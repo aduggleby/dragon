@@ -43,7 +43,7 @@ namespace Dragon.Context.Sessions
         {
             using (var conn = ConnectionHelper.Open())
             {
-                return conn.QueryFor<DragonSession>(SQL.SqlSessionStore_Get, new { SessionID = sessionID }).FirstOrDefault();
+                return conn.QueryFor<DragonSession>(SQL.SqlSessionStore_Get, new { CurrentUserId = sessionID }).FirstOrDefault();
             }
         }
 
@@ -56,7 +56,7 @@ namespace Dragon.Context.Sessions
                 var p = new
                     {
                         Hash = sessionRecord.Hash,
-                        SessionID = sessionRecord.SessionID,
+                        CurrentUserId = sessionRecord.SessionID,
                         Expires = sessionRecord.Expires,
                         Location = sessionRecord.Location,
                         UserID = sessionRecord.UserID

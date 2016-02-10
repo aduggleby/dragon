@@ -4,6 +4,9 @@ using Dragon.Context.Helpers;
 
 namespace Dragon.Context
 {
+    /// <summary>
+    /// Use the CookieContextAuthorizationFilter to autoload the context.
+    /// </summary>
     public class CookieContext : IContext
     {
         private const string CookieName = "Dragon.Context.Session.Cookie";
@@ -16,10 +19,15 @@ namespace Dragon.Context
             CurrentUserID = Guid.Empty;
             try
             {
-                var sessionIDString = CookieHelper.Get(CookieName);
-                if (sessionIDString == null) return;
+                var userIDStr = CookieHelper.Get(CookieName);
+                if (userIDStr == null)
+                {
+                    Debug.WriteLine("Unable to read cookie!");
+                    Save(CurrentUserID);
+                    return;
+                }
                 Guid temp;
-                if (Guid.TryParse(sessionIDString, out temp))
+                if (Guid.TryParse(userIDStr, out temp))
                 {
                     CurrentUserID = temp;
                 }
@@ -32,9 +40,10 @@ namespace Dragon.Context
             }
         }
 
-        public void Save(Guid sessionID)
+        public void Save(Guid userID)
         {
-            CookieHelper.Add(CookieName, sessionID.ToString());
+            CookieHelper.Add(CookieName, userID.ToString());
+            CurrentUserID = userID;
         }
 
         public bool IsAuthenticated()

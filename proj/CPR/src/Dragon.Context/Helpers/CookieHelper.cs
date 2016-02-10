@@ -10,7 +10,7 @@ namespace Dragon.Context.Helpers
 {
     public class CookieHelper : ICookieHelper
     {
-        public HttpContext HttpContext { get; set; }
+        public IHttpContextHelper HttpContextHelper { get; set; }
 
         private readonly bool _sslOnly;
         private static readonly UTF8Encoding Encoding = new UTF8Encoding();
@@ -31,12 +31,17 @@ namespace Dragon.Context.Helpers
                 Value = CryptUtil.Encrypt(value + "|" + expires.ToBinary())
             };
             Debug.WriteLine("Adding cookie '{0}' with value '{1}'", key, cookie.Value);
-            HttpContext.Response.Cookies.Add(cookie);
+            HttpContextHelper.Get().Response.Cookies.Remove(cookie.Name);
+            HttpContextHelper.Get().Response.Cookies.Add(cookie);
         }
 
         public string Get(string key)
         {
-            var cookie = HttpContext.Request.Cookies[key];
+            if (HttpContextHelper == null)
+            {
+                return null;
+            }
+            var cookie = HttpContextHelper.Get().Request.Cookies[key];
             if (cookie == null)
             {
                 return null;

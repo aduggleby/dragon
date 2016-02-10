@@ -6,7 +6,7 @@ namespace Dragon.Context
     {
         Guid CurrentUserID { get; }
         void Load();
-        void Save(Guid currentUserId);
+        void Save(Guid userID);
         bool IsAuthenticated();
     }
 }

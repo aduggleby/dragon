@@ -12,13 +12,14 @@ namespace Dragon.Context.Users
     public abstract class UserStoreBase : IUserStore
     {
         private ISessionStore m_sessionStore;
+        private IContext m_ctx;
 
         private static readonly ILog s_log = LogManager.GetCurrentClassLogger();
 
-        public UserStoreBase(ISessionStore sessionStore)
+        public UserStoreBase(ISessionStore sessionStore, IContext ctx)
         {
             m_sessionStore = sessionStore;
-
+            m_ctx = ctx;
         }
 
         protected void Init()
@@ -52,7 +53,7 @@ namespace Dragon.Context.Users
 
         public bool Impersonate(Guid userID)
         {
-            m_sessionStore.ConnectedUserID = Guid.Empty;
+            SetConnectedUserID(Guid.Empty);
 
             var user = LoadUser(userID);
 
@@ -61,9 +62,9 @@ namespace Dragon.Context.Users
                 return false;
             }
 
-            m_sessionStore.ConnectedUserID = userID;
+            SetConnectedUserID(userID);
 
-            return !m_sessionStore.ConnectedUserID.Equals(Guid.Empty);
+            return IsUserConnected();
         }
 
 
@@ -81,7 +82,7 @@ namespace Dragon.Context.Users
 
             EnsureArgumentsMeetLengthConstraints(service, key, string.Empty);
 
-            m_sessionStore.ConnectedUserID = Guid.Empty;
+            SetConnectedUserID(Guid.Empty);
 
             var user = LoadRegistration(service, key);
 
@@ -92,10 +93,10 @@ namespace Dragon.Context.Users
 
             if (secretVerification(user.Secret))
             {
-                m_sessionStore.ConnectedUserID = user.UserID;
+                SetConnectedUserID(user.UserID);
             }
 
-            return !m_sessionStore.ConnectedUserID.Equals(Guid.Empty);
+            return IsUserConnected();
         }
 
         public void UpdateKey(string service, string oldkey, string newkey)
@@ -160,7 +161,7 @@ namespace Dragon.Context.Users
                     var service = user.Service;
 
                     // Reset token is not logged-in
-                    //if (!user.UserID.Equals(m_sessionStore.ConnectedUserID))
+                    //if (!user.UserID.Equals(GetConnectedUserID())
                     //{
                     //    throw new InvalidOperationException("Cannot update another users secret");
                     //}
@@ -187,12 +188,12 @@ namespace Dragon.Context.Users
         {
             EnsureArgumentsMeetLengthConstraints(service, key, secret);
 
-            var userID = m_sessionStore.ConnectedUserID;
+            var userID = GetConnectedUserID();
             if (userID.Equals(Guid.Empty))
             {
                 // new user
                 userID = Guid.NewGuid();
-                m_sessionStore.ConnectedUserID = userID;
+                SetConnectedUserID(userID);
             }
 
             var existingUser = LoadRegistration(service, key) ?? LoadUser(userID).FirstOrDefault();
@@ -215,5 +216,25 @@ namespace Dragon.Context.Users
         {
             get { throw new NotImplementedException(); }
         }
+
+        #region helpers
+
+        private void SetConnectedUserID(Guid userID)
+        {
+            m_sessionStore.ConnectedUserID = userID;
+            m_ctx.Save(userID);
+        }
+
+        private Guid GetConnectedUserID()
+        {
+            return m_ctx.CurrentUserID;
+        }
+
+        private bool IsUserConnected()
+        {
+            return m_ctx.IsAuthenticated();
+        }
+
+        #endregion
     }
 }

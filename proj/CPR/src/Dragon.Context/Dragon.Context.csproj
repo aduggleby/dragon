@@ -105,7 +105,10 @@
     <Compile Include="Exceptions\UserKeyAlreadyExistsForThisServiceException.cs" />
     <Compile Include="Exceptions\UserKeyDoesNotExistException.cs" />
     <Compile Include="Extensions\Groups\GroupPermissionExtension.cs" />
+    <Compile Include="Filters\CookieContextAuthorizationFilter.cs" />
     <Compile Include="Helpers\CookieHelper.cs" />
+    <Compile Include="Helpers\HttpContextHelper.cs" />
+    <Compile Include="Helpers\IHttpContextHelper.cs" />
     <Compile Include="IContext.cs" />
     <Compile Include="Interfaces\IDragonTable.cs" />
     <Compile Include="Interfaces\IPermissionNode.cs" />

@@ -14,8 +14,8 @@ namespace Dragon.Context.Users
     {
         private string m_connStr;
 
-        public SqlUserStore(ISessionStore sessionStore)
-            : base(sessionStore)
+        public SqlUserStore(ISessionStore sessionStore, IContext ctx)
+            : base(sessionStore, ctx)
         {
             Init();
         }

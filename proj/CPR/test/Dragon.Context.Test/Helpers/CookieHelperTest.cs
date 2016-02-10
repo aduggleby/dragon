@@ -6,6 +6,7 @@ using Dragon.Common.Util;
 using Dragon.Context.Configuration;
 using Dragon.Context.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 
 namespace Dragon.Context.Test.Helpers
 {
@@ -23,9 +24,12 @@ namespace Dragon.Context.Test.Helpers
         {
             var httpRequest = new HttpRequest("", "http://localhost/", "");
             var httpResponse = new HttpResponse(new StringWriter());
+            var mockHttpContextHelper = new Mock<IHttpContextHelper>();
+            mockHttpContextHelper.Setup(x => x.Get())
+                .Returns(new HttpContextWrapper(new HttpContext(httpRequest, httpResponse)));
             var cookieHelper = new CookieHelper(false)
             {
-                HttpContext = new HttpContext(httpRequest, httpResponse)
+                HttpContextHelper = mockHttpContextHelper.Object
             };
             var value = Guid.NewGuid().ToString();
             cookieHelper.Add("test", value);
@@ -39,14 +43,17 @@ namespace Dragon.Context.Test.Helpers
         {
             var httpRequest = new HttpRequest("", "http://localhost/", "");
             var httpResponse = new HttpResponse(new StringWriter());
+            var mockHttpContextHelper = new Mock<IHttpContextHelper>();
+            mockHttpContextHelper.Setup(x => x.Get())
+                .Returns(new HttpContextWrapper(new HttpContext(httpRequest, httpResponse)));
             var cookieHelper = new CookieHelper(false)
             {
-                HttpContext = new HttpContext(httpRequest, httpResponse)
+                HttpContextHelper = mockHttpContextHelper.Object
             };
             var value = Guid.NewGuid().ToString();
             cookieHelper.Add("test", value);
             // ReSharper disable once AssignNullToNotNullAttribute
-            cookieHelper.HttpContext.Request.Cookies.Add(cookieHelper.HttpContext.Response.Cookies[0]);
+            cookieHelper.HttpContextHelper.Get().Request.Cookies.Add(cookieHelper.HttpContextHelper.Get().Response.Cookies[0]);
 
             var actual = cookieHelper.Get("test");
 
