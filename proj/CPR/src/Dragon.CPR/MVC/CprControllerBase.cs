@@ -7,7 +7,6 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Dragon.Context.Configuration;
-using Dragon.Context.Interfaces;
 using Dragon.Data.Interfaces;
 using Dragon.Context;
 
@@ -17,8 +16,6 @@ namespace Dragon.CPR.MVC
     public abstract class CPRControllerBase : 
         ControllerBase
     {
-        public IProfileStore ProfileStore { get; set; }
-
         public IConfiguration Configuration { get; set; }
 
         public IContext Ctx { get; set; }

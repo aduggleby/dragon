@@ -97,66 +97,26 @@
     <Compile Include="Configuration\IConfigurationExtensions.cs" />
     <Compile Include="Configuration\InMemoryConfiguration.cs" />
     <Compile Include="CookieContext.cs" />
-    <Compile Include="Embedded\Files.cs" />
     <Compile Include="Exceptions\InvalidOldSecretException.cs" />
     <Compile Include="Exceptions\NodeDoesNotExistException.cs" />
     <Compile Include="Exceptions\RightDoesNotExistException.cs" />
     <Compile Include="Exceptions\ServiceAlreadyConnectedToUserException.cs" />
     <Compile Include="Exceptions\UserKeyAlreadyExistsForThisServiceException.cs" />
     <Compile Include="Exceptions\UserKeyDoesNotExistException.cs" />
-    <Compile Include="Extensions\Groups\GroupPermissionExtension.cs" />
     <Compile Include="Filters\CookieContextAuthorizationFilter.cs" />
     <Compile Include="Helpers\CookieHelper.cs" />
     <Compile Include="Helpers\HttpContextHelper.cs" />
     <Compile Include="Helpers\IHttpContextHelper.cs" />
     <Compile Include="IContext.cs" />
-    <Compile Include="Interfaces\IDragonTable.cs" />
-    <Compile Include="Interfaces\IPermissionNode.cs" />
-    <Compile Include="Interfaces\IPermissionRight.cs" />
-    <Compile Include="Interfaces\IPermissionStore.cs" />
-    <Compile Include="Interfaces\IProfileStore.cs" />
-    <Compile Include="Interfaces\IRegistration.cs" />
-    <Compile Include="Interfaces\ISession.cs" />
-    <Compile Include="Interfaces\ISessionStore.cs" />
-    <Compile Include="Interfaces\ITreeNode.cs" />
-    <Compile Include="Interfaces\IUser.cs" />
-    <Compile Include="Interfaces\IUserStore.cs" />
-    <Compile Include="IReverseIPLookupService.cs" />
-    <Compile Include="Profile\DragonProfile.cs" />
-    <Compile Include="Profile\ProfileStoreBase.cs" />
-    <Compile Include="Profile\SqlProfileStore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Sessions\CookieSession.cs" />
-    <Compile Include="Sessions\DragonIdentity.cs" />
-    <Compile Include="Sessions\DragonPrincipal.cs" />
-    <Compile Include="Sessions\DragonSession.cs" />
-    <Compile Include="Sessions\InMemorySession.cs" />
-    <Compile Include="Sessions\InMemorySessionStore.cs" />
-    <Compile Include="Sessions\ReverseIPLookup\HostIPReverseLookupService.cs" />
-    <Compile Include="Sessions\SessionStoreBase.cs" />
-    <Compile Include="Sessions\SqlSessionStore.cs" />
-    <Compile Include="SQL.Designer.cs" />
-    <Compile Include="StoreBase.cs" />
-    <Compile Include="Users\DragonRegistration.cs" />
-    <Compile Include="Users\InMemoryUserStore.cs" />
-    <Compile Include="Users\SqlUserStore.cs" />
-    <Compile Include="Users\User.cs" />
-    <Compile Include="Users\UserStoreBase.cs" />
     <Compile Include="Util\CryptUtil.cs" />
-    <Compile Include="Util\EmbeddedUtil.cs" />
     <Compile Include="Util\HashUtil.cs" />
     <Compile Include="Helpers\ICookieHelper.cs" />
     <Compile Include="Util\RandomUtil.cs" />
     <Compile Include="Util\ResourceUtil.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Embedded\facebook.js" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="SQL.resx" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
