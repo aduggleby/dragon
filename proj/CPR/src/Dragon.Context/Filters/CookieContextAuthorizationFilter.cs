@@ -1,14 +1,23 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Web.Mvc.Filters;
 
 namespace Dragon.Context.Filters
 {
-    public class CookieContextAuthorizationFilter : IAuthorizationFilter
+    public class CookieContextAuthorizationFilter : IAuthenticationFilter
     {
-        public IContext Ctx { get; set; }
+        /// <summary>
+        /// The same context as the controller is needed, therefore always retrieve an up to date context.
+        /// </summary>
+        public Func<IContext> CtxRetriever { get; set; }
 
-        public void OnAuthorization(AuthorizationContext filterContext)
+        public void OnAuthentication(AuthenticationContext filterContext)
         {
-            Ctx.Load();
+            CtxRetriever().Load();
+        }
+
+        public void OnAuthenticationChallenge(AuthenticationChallengeContext filterContext)
+        {
+            // nothing to be done
         }
     }
 }
