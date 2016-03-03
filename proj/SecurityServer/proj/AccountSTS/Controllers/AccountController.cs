@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.ComponentModel.Composition;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Configuration;
@@ -7,6 +9,7 @@ using System.Web.Routing;
 using Common;
 using Dragon.SecurityServer.AccountSTS.Helpers;
 using Dragon.SecurityServer.AccountSTS.Models;
+using Dragon.SecurityServer.AccountSTS.Services.CheckPasswortServices;
 using Dragon.SecurityServer.Common;
 using Dragon.SecurityServer.Identity.Stores;
 using Microsoft.AspNet.Identity;
@@ -19,6 +22,9 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
     [Authorize]
     public class AccountController : Controller
     {
+        [Import]
+        public ICheckPasswordService<AppMember> LegacyPasswordService { get; set; }
+
         private readonly IDragonUserStore<AppMember> _userStore;
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
@@ -97,6 +103,19 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
             // To enable password failures to trigger account lockout, change to shouldLockout: true
             var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
 
+            if (result == SignInStatus.Failure)
+            {
+                // Try to authenticate the user using a legacy login service
+                var user = await _userStore.FindByEmailAsync(model.Email);
+                if (user != null && string.IsNullOrWhiteSpace(user.PasswordHash) && !string.IsNullOrWhiteSpace(model.Email))
+                {
+                    if (LegacyPasswordService != null && await LegacyPasswordService.CheckPasswordAsync(user, model.Password))
+                    {
+                        return await RequestPasswordReset(new ForgotPasswordViewModel { Email = user.Email});
+                    }
+                }
+            }
+
             switch (result)
             {
                 case SignInStatus.Success:
@@ -121,6 +140,7 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
                             RequestHelper.GetCurrentServiceId());
                         ModelState.AddModelError("", await GenerateLoginWithServiceErrorMessage(model));
                     }
+                    AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
                     return View(model);
             }
         }
@@ -272,25 +292,33 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = await UserManager.FindByNameAsync(model.Email);
-                if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
-                {
-                    Logger.Trace("Forgot password failed: user {0} not found", model.Email);
-                    // Don't reveal that the user does not exist or is not confirmed
-                    return View("ForgotPasswordConfirmation");
-                }
-
-                // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
-                // Send an email with this link
-                string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
-                var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);		
-                await UserManager.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
-                return RedirectToAction("ForgotPasswordConfirmation", "Account");
+                return await RequestPasswordReset(model);
             }
             Logger.Trace("Forgot password failed: invalid model state");
 
             // If we got this far, something failed, redisplay form
             return View(model);
+        }
+
+        private async Task<ActionResult> RequestPasswordReset(ForgotPasswordViewModel model)
+        {
+            var user = await UserManager.FindByNameAsync(model.Email);
+            if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
+            {
+                Logger.Trace("Forgot password failed: user {0} not found", model.Email);
+                // Don't reveal that the user does not exist or is not confirmed
+                return View("ForgotPasswordConfirmation");
+            }
+
+            // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
+            // Send an email with this link
+            string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
+            var callbackUrl = Url.Action("ResetPassword", "Account", new {userId = user.Id, code = code},
+                protocol: Request.Url.Scheme);
+            await
+                UserManager.SendEmailAsync(user.Id, "Reset Password",
+                    "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
+            return RedirectToAction("ForgotPasswordConfirmation", "Account");
         }
 
         //

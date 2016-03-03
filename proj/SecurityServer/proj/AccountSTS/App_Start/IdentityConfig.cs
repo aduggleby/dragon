@@ -2,9 +2,7 @@
 using System.Net.Mail;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Configuration;
-using Common;
 using Dragon.SecurityServer.AccountSTS.Helpers;
 using Dragon.SecurityServer.AccountSTS.Models;
 using Dragon.SecurityServer.Identity.Stores;

@@ -1,4 +1,7 @@
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
+using System.Linq;
 using System.Reflection;
 using System.Web;
 using System.Web.Configuration;
@@ -7,6 +10,7 @@ using System.Web.Mvc;
 using Dragon.Data.Interfaces;
 using Dragon.Data.Repositories;
 using Dragon.SecurityServer.AccountSTS.Models;
+using Dragon.SecurityServer.AccountSTS.Services.CheckPasswortServices;
 using Dragon.SecurityServer.Identity.Models;
 using Dragon.SecurityServer.Identity.Stores;
 using Microsoft.Owin;
@@ -23,6 +27,14 @@ using IdentityUser = Dragon.SecurityServer.Identity.Models.IdentityUser;
 
 namespace Dragon.SecurityServer.AccountSTS
 {
+    internal class ImportPropertySelectionBehavior : IPropertySelectionBehavior
+    {
+        public bool SelectProperty(Type type, PropertyInfo prop)
+        {
+            return prop.GetCustomAttributes(typeof(ImportAttribute)).Any();
+        }
+    }
+
     public static class SimpleInjectorInitializer
     {
         private const string RedisConnectionStringName = "Redis";
@@ -57,10 +69,13 @@ namespace Dragon.SecurityServer.AccountSTS
                   IAppBuilder app)
         {
             var container = new Container();
+            container.Options.PropertySelectionBehavior = new ImportPropertySelectionBehavior(); // Enable ImportAttribute for property injection
  
             container.RegisterSingleton(app);
  
             container.RegisterConditional(typeof(IRepository<>), typeof(Repository<>), c => !c.Handled);
+
+            container.Register<ICheckPasswordService<AppMember>, LegacyCheckPasswordService<AppMember>>(Lifestyle.Transient);
  
             container.RegisterPerWebRequest<IDragonUserStore<AppMember>>(() =>
             {
