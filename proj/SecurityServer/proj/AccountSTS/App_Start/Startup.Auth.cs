@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Linq;
 using System.Web.Configuration;
 using Dragon.SecurityServer.AccountSTS.Models;
 using Microsoft.AspNet.Identity;
@@ -6,8 +9,10 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.DataProtection;
+using Microsoft.Owin.Security.Google;
 using Owin;
 using SimpleInjector;
+using WebGrease.Css.Extensions;
 
 namespace Dragon.SecurityServer.AccountSTS
 {
@@ -56,24 +61,65 @@ namespace Dragon.SecurityServer.AccountSTS
             // This is similar to the RememberMe option when you log in.
             app.UseTwoFactorRememberBrowserCookie(DefaultAuthenticationTypes.TwoFactorRememberBrowserCookie);
 
-            // Uncomment the following lines to enable logging in with third party login providers
-            app.UseMicrosoftAccountAuthentication(
-                clientId: WebConfigurationManager.AppSettings["AuthenticationProvider.Microsoft.ClientID"],
-                clientSecret: WebConfigurationManager.AppSettings["AuthenticationProvider.Microsoft.ClientSecret"]);
+            EnableAuthenticationProviders(app);
+        }
 
-            //app.UseTwitterAuthentication(
-            //   consumerKey: "",
-            //   consumerSecret: "");
+        private static void EnableAuthenticationProviders(IAppBuilder app)
+        {
+            var enabledProviders =
+                WebConfigurationManager.AppSettings["AuthenticationProviders"].Split(',')
+                    .Select(x => x.Trim())
+                    .Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
+            if (IsEnabled("Microsoft", enabledProviders))
+            {
+                app.UseMicrosoftAccountAuthentication(
+                    clientId: GetClientID("Microsoft"),
+                    clientSecret: GetClientSecret("Microsoft"));
+            }
+            if (IsEnabled("Twitter", enabledProviders))
+            {
+                app.UseTwitterAuthentication(
+                    consumerKey: GetClientID("Twitter"),
+                    consumerSecret: GetClientSecret("Twitter"));
+            }
+            if (IsEnabled("Facebook", enabledProviders))
+            {
+                app.UseFacebookAuthentication(
+                    appId: GetClientID("Facebook"),
+                    appSecret: GetClientSecret("Facebook"));
+            }
+            if (IsEnabled("Google", enabledProviders))
+            {
+                app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
+                {
+                    ClientId = GetClientID("Google"),
+                    ClientSecret = GetClientSecret("Google")
+                });
+            }
+        }
 
-            //app.UseFacebookAuthentication(
-            //   appId: "",
-            //   appSecret: "");
+        private static string GetClientSecret(string providerName)
+        {
+            return WebConfigurationManager.AppSettings["AuthenticationProvider." + providerName + ".ClientSecret"];
+        }
 
-            //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
-            //{
-            //    ClientId = "",
-            //    ClientSecret = ""
-            //});
+        private static string GetClientID(string providerName)
+        {
+            return WebConfigurationManager.AppSettings["AuthenticationProvider." + providerName + ".ClientID"];
+        }
+
+        private static bool IsEnabled(string providerName, IEnumerable<string> enabledProviders)
+        {
+            var isEnabled = enabledProviders.Contains(providerName);
+            if (isEnabled)
+            {
+                if (string.IsNullOrWhiteSpace(GetClientID(providerName)) ||
+                    string.IsNullOrWhiteSpace(GetClientSecret(providerName)))
+                {
+                    throw new ConfigurationErrorsException("Configuration for AuthenticationProvider " + providerName + " not found!");
+                }
+            }
+            return isEnabled;
         }
     }
 }
