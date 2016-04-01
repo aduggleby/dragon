@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
     <metadata>
         <id>Dragon.Mail</id>
-        <version>1.6.0</version>
+        <version>1.7.1</version>
         <title>Dragon.Mail</title>
         <authors>Dragon Project</authors>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -13,12 +13,12 @@
             <dependency id="CsQuery" version="1.3.4" />
             <dependency id="Dapper" version="1.42" />
             <dependency id="Dragon.Data" version="1.1.0" />
-            <dependency id="Handlebars.Net" version="1.4.4" />
             <dependency id="HtmlSanitizer" version="2.0.5735.24296" />
-            <dependency id="Newtonsoft.Json" version="7.0.1" />
             <dependency id="Microsoft.AspNet.WebApi.Client" version="5.2.3" />
             <dependency id="Moq" version="4.2.1507.0118" />
-            <dependency id="Topshelf" version="3.2.0" />
+            <dependency id="Handlebars.Net" version="1.5.3" />
+            <dependency id="Topshelf" version="3.3.1" />
+            <dependency id="Newtonsoft.Json" version="8.0.2" />
         </dependencies>
         <frameworkAssemblies>
             <frameworkAssembly assemblyName="Microsoft.CSharp" targetFramework="" />
