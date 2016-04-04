@@ -37,7 +37,7 @@
   </system.diagnostics>
   <connectionStrings>
     <add name="Dragon" connectionString="Data Source=(LocalDb)\v11.0;AttachDbFilename=|DataDirectory|\aspnet-AccountSTS-Dragon.mdf;Initial Catalog=aspnet-AccountSTS-Dragon;Integrated Security=True" providerName="System.Data.SqlClient" />
-    <!-- <add name="Redis" connectionString="localhost" /> -->
+    <add name="RedisTODO" connectionString="localhost" />
   </connectionStrings>
   <appSettings>
     <add key="webpages:Version" value="3.0.0.0" />
@@ -47,19 +47,25 @@
     <!-- Signing certificate filename -->
     <add key="SigningCertificateName" value="securityserver.pfx" />
     <!-- Identification of the login provider -->
-    <add key="IssuerName" value="http://thispc.com:51385" />
+    <add key="IssuerName" value="http://localhost:51385" />
     <!-- Federation authentication providers -->
-    <add key="AuthenticationProviders" value="Microsoft, Facebook, Twitter" />
+    <add key="AuthenticationProviders" value="Microsoft, Google" />
     <add key="AuthenticationProvider.Microsoft.ClientID" value="0000000000000000" />
     <add key="AuthenticationProvider.Microsoft.ClientSecret" value="00000000000000000000000000000000" />
+    <add key="AuthenticationProvider.Google.ClientID" value="000000000000000000000000000000000000000000000000000000000000000000000000" />
+    <add key="AuthenticationProvider.Google.ClientSecret" value="000000000000000000000000" />
+    <add key="AuthenticationProvider.Google.OpenId2.ValidAudience" value="000000000000000000000000000000000000000000000000000000000000000000000000" />
+    <add key="AuthenticationProvider.Google.OpenId2.ValidIssuer" value="accounts.google.com" />
     <!-- Account management address -->
     <add key="MailSenderEmail" value="noreply@thispc.com" />
     <!-- Account management name -->
     <add key="MailSenderName" value="ThisPC" />
     <!-- Federation metadata -->
-    <add key="FederationHost" value="http://thispc.com:51385" />
+    <add key="FederationHost" value="http://localhost:51385" />
     <!-- Federation metadata -->
     <add key="FederationNamespace" value="http://docs.oasis-open.org/wsfed/federation/200706" />
+    <!-- Federation metadata -->
+    <add key="FederationEndpoint" value="http://localhost:51385" /> 
     <!-- Where to redirect on logout -->
     <add key="SignOutPath" value="/Home/SignOut" />
 
@@ -85,7 +91,7 @@
       <forms loginUrl="~/Account/Login" timeout="2880" />
     </authentication>
     <compilation debug="true" targetFramework="4.5" />
-    <httpRuntime targetFramework="4.5" />
+    <httpRuntime targetFramework="4.5" maxQueryStringLength="32768" maxUrlLength="65536" />
     <customErrors mode="Off" />
   </system.web>
   <system.webServer>
@@ -93,6 +99,11 @@
       <remove name="FormsAuthentication" />
       <add name="ErrorStore" type="StackExchange.Exceptional.ExceptionalModule, StackExchange.Exceptional" />
     </modules>
+    <security>
+      <requestFiltering>
+        <requestLimits maxQueryString="32768" />
+      </requestFiltering>
+    </security>
     <handlers>
       <remove name="ExtensionlessUrlHandler-Integrated-4.0" />
       <remove name="OPTIONSVerbHandler" />
@@ -122,19 +133,19 @@
     <assemblyBinding xmlns="urn:schemas-microsoft-com:asm.v1">
       <dependentAssembly>
         <assemblyIdentity name="Microsoft.Owin" publicKeyToken="31bf3856ad364e35" />
-        <bindingRedirect oldVersion="0.0.0.0-3.0.0.0" newVersion="3.0.0.0" />
+        <bindingRedirect oldVersion="0.0.0.0-3.0.1.0" newVersion="3.0.1.0" />
       </dependentAssembly>
       <dependentAssembly>
         <assemblyIdentity name="Microsoft.Owin.Security.OAuth" publicKeyToken="31bf3856ad364e35" />
-        <bindingRedirect oldVersion="0.0.0.0-3.0.0.0" newVersion="3.0.0.0" />
+        <bindingRedirect oldVersion="0.0.0.0-3.0.1.0" newVersion="3.0.1.0" />
       </dependentAssembly>
       <dependentAssembly>
         <assemblyIdentity name="Microsoft.Owin.Security.Cookies" publicKeyToken="31bf3856ad364e35" />
-        <bindingRedirect oldVersion="0.0.0.0-3.0.0.0" newVersion="3.0.0.0" />
+        <bindingRedirect oldVersion="0.0.0.0-3.0.1.0" newVersion="3.0.1.0" />
       </dependentAssembly>
       <dependentAssembly>
         <assemblyIdentity name="Microsoft.Owin.Security" publicKeyToken="31bf3856ad364e35" />
-        <bindingRedirect oldVersion="0.0.0.0-3.0.0.0" newVersion="3.0.0.0" />
+        <bindingRedirect oldVersion="0.0.0.0-3.0.1.0" newVersion="3.0.1.0" />
       </dependentAssembly>
       <dependentAssembly>
         <assemblyIdentity name="Newtonsoft.Json" culture="neutral" publicKeyToken="30ad4fe6b2a6aeed" />

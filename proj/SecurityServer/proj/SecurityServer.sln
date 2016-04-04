@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.40629.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccountSTS", "AccountSTS\AccountSTS.csproj", "{B9111BFA-8989-4770-A219-481DDAF94A1C}"
 EndProject
@@ -52,6 +52,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "migrations", "migrations", 
 		..\sql\migrations\permissionsts-v1.0.0.0.sql = ..\sql\migrations\permissionsts-v1.0.0.0.sql
 		..\sql\migrations\profilests-v1.0.0.0.sql = ..\sql\migrations\profilests-v1.0.0.0.sql
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserMigration", "UserMigration\UserMigration.csproj", "{63AD3570-180A-4B0B-954E-311E471FF474}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserMigrationTest", "UserMigrationTest\UserMigrationTest.csproj", "{D133C138-EA7B-4319-8C30-A18624DB575C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -131,6 +135,14 @@ Global
 		{B0FCB210-71B6-46D9-AB03-E18E2D02916D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B0FCB210-71B6-46D9-AB03-E18E2D02916D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B0FCB210-71B6-46D9-AB03-E18E2D02916D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{63AD3570-180A-4B0B-954E-311E471FF474}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63AD3570-180A-4B0B-954E-311E471FF474}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63AD3570-180A-4B0B-954E-311E471FF474}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63AD3570-180A-4B0B-954E-311E471FF474}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D133C138-EA7B-4319-8C30-A18624DB575C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D133C138-EA7B-4319-8C30-A18624DB575C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D133C138-EA7B-4319-8C30-A18624DB575C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D133C138-EA7B-4319-8C30-A18624DB575C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

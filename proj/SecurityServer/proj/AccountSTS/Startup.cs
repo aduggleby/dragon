@@ -1,5 +1,6 @@
 ﻿using Microsoft.Owin;
 using Owin;
+using static Dragon.SecurityServer.AccountSTS.SimpleInjectorInitializer;
 
 [assembly: OwinStartup(typeof(Dragon.SecurityServer.AccountSTS.Startup))]
 namespace Dragon.SecurityServer.AccountSTS
@@ -8,7 +9,7 @@ namespace Dragon.SecurityServer.AccountSTS
     {
         public void Configuration(IAppBuilder app)
         {
-            var container = SimpleInjectorInitializer.Initialize(app);
+            var container = Initialize(app);
             ConfigureAuth(app, container);
         }
     }

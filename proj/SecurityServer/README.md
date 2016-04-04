@@ -13,7 +13,7 @@ Each service offers an API for which a client is offered. The API is secured usi
 Requirements
 ------------
 
-* Visual Studio 2013
+* Visual Studio 2015
 * SQL Server 2014
 * Redis 3.0
 

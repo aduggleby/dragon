@@ -2,17 +2,19 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Configuration;
+using Dragon.SecurityServer.AccountSTS.App_Start;
 using Dragon.SecurityServer.AccountSTS.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
+using Microsoft.Owin.Infrastructure;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.DataProtection;
 using Microsoft.Owin.Security.Google;
 using Owin;
 using SimpleInjector;
-using WebGrease.Css.Extensions;
 
 namespace Dragon.SecurityServer.AccountSTS
 {
@@ -90,11 +92,45 @@ namespace Dragon.SecurityServer.AccountSTS
             }
             if (IsEnabled("Google", enabledProviders))
             {
-                app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
+                var options = new GoogleOAuth2AuthenticationOptions
                 {
                     ClientId = GetClientID("Google"),
-                    ClientSecret = GetClientSecret("Google")
-                });
+                    ClientSecret = GetClientSecret("Google"),
+                    
+                    Provider = new GoogleOAuth2AuthenticationProvider
+                    {
+                        OnAuthenticated = context =>
+                        {
+                            context.Identity.AddClaim(new System.Security.Claims.Claim("Google_AccessToken", context.AccessToken));
+                            /*
+                            // TODO: remove, see OnApplyRedirect below...
+                            var token = context.TokenResponse.Value<string>("id_token");
+                            var jwt = new JwtSecurityToken(token);
+                            var identifier = jwt.Claims.FirstOrDefault(
+                                    claim => string.Equals(claim.Type, "openid_id", StringComparison.InvariantCulture));
+                            */
+
+                            return Task.FromResult(0);
+                        },
+                        OnApplyRedirect = context =>
+                        {
+                            var dictionary = new Dictionary<string, string>
+                            {
+                                { "openid.realm", new Uri("http://localhost:51385/").GetComponents(UriComponents.SchemeAndServer, UriFormat.Unescaped)},
+                            };
+                            var redirect = context.RedirectUri;
+                            //var redirect = context.RedirectUri.Replace("response_type=code", "response_type=code id_token"); // TODO: this causes invalid an invalid return url that contains an anchor
+                            var redirectUri = WebUtilities.AddQueryString(redirect, dictionary);
+                            context.Response.Redirect(redirectUri);
+                        },
+                    },
+                    BackchannelHttpHandler = new CustomWebRequestHandler()
+                };
+                options.Scope.Add("openid");
+                options.Scope.Add("profile");
+                options.Scope.Add("email");
+                options.Scope.Add("https://www.googleapis.com/auth/userinfo.profile");
+                app.UseGoogleAuthentication(options);
             }
         }
 

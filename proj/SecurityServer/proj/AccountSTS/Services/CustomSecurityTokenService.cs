@@ -5,7 +5,6 @@ using System.IdentityModel.Configuration;
 using System.IdentityModel.Protocols.WSTrust;
 using System.Linq;
 using System.Security.Claims;
-using Common;
 using Dragon.SecurityServer.AccountSTS.Models;
 using Dragon.SecurityServer.Common;
 using Dragon.SecurityServer.Identity.Stores;
