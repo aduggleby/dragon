@@ -54,8 +54,10 @@
     <add key="AuthenticationProvider.Microsoft.ClientSecret" value="00000000000000000000000000000000" />
     <add key="AuthenticationProvider.Google.ClientID" value="000000000000000000000000000000000000000000000000000000000000000000000000" />
     <add key="AuthenticationProvider.Google.ClientSecret" value="000000000000000000000000" />
+    <!-- Migration from OpenID 2.0 to OpenID Connect -->
     <add key="AuthenticationProvider.Google.OpenId2.ValidAudience" value="000000000000000000000000000000000000000000000000000000000000000000000000" />
     <add key="AuthenticationProvider.Google.OpenId2.ValidIssuer" value="accounts.google.com" />
+    <add key="AuthenticationProvider.Google.OpenId2.Realm" value="http://localhost:51385" />
     <!-- Account management address -->
     <add key="MailSenderEmail" value="noreply@thispc.com" />
     <!-- Account management name -->

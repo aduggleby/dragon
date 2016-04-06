@@ -11,6 +11,7 @@ using Dragon.Data.Interfaces;
 using Dragon.Data.Repositories;
 using Dragon.SecurityServer.AccountSTS.Models;
 using Dragon.SecurityServer.AccountSTS.Services.CheckPasswortServices;
+using Dragon.SecurityServer.AccountSTS.WebRequestHandler;
 using Dragon.SecurityServer.Identity.Models;
 using Dragon.SecurityServer.Identity.Stores;
 using Microsoft.Owin;
@@ -90,7 +91,9 @@ namespace Dragon.SecurityServer.AccountSTS
                     connectionMultiplexer.PreserveAsyncOrder = false;
                     dragonUserStores.Insert(0, new Identity.Redis.UserStore<AppMember>(new RedisUserStore<Identity.Redis.IdentityUser>(connectionMultiplexer), connectionMultiplexer));
                 }
-                return new ChainedIdentity.Stores.UserStore<AppMember>(dragonUserStores);
+                var userStore = new ChainedIdentity.Stores.UserStore<AppMember>(dragonUserStores);
+                Startup.OpenIdMigrationWebrequestHandler = new OpenIdMigrationWebRequestHandler(userStore);
+                return userStore;
             });
 
             container.RegisterPerWebRequest(() => ApplicationUserManager.Create(container, Startup.DataProtectionProvider));
