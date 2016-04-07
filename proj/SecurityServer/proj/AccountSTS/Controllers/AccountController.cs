@@ -111,7 +111,13 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
                 {
                     if (LegacyPasswordService != null && await LegacyPasswordService.CheckPasswordAsync(user, model.Password))
                     {
-                        return await RequestPasswordReset(new ForgotPasswordViewModel { Email = user.Email});
+                        // set the password
+                        _userManager.RemovePassword(user.Id);
+                        _userManager.AddPassword(user.Id, model.Password);
+                        // and login
+                        result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+                        // or force a password reset
+                        //return await RequestPasswordReset(new ForgotPasswordViewModel { Email = user.Email});
                     }
                 }
             }
