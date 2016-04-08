@@ -16,7 +16,7 @@ namespace UserMigrationTest
         {
             var service = new LegacyWavUserMigration<AppMember>(
                 new UserStore<AppMember>(new Repository<AppMember>(), new Repository<IdentityUserClaim>(), new Repository<IdentityUserLogin>(), new Repository<IdentityService>()));
-            await service.Migrate(data => new AppMember { Id = data.UserID.ToString(), Email = data.Email, PasswordHash = data.Secret });
+            await service.Migrate(data => new AppMember { Id = data.UserID.ToString(), UserName = data.Email, Email = data.Email }); // password will be read from legacy password resolver
         }
     }
 }
