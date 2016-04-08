@@ -278,7 +278,6 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\AppMember.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
-    <Compile Include="Models\LegacyRegistrationModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\CheckPasswortServices\HashUtil.cs" />
     <Compile Include="Services\CheckPasswortServices\LegacyCheckPasswordService.cs" />

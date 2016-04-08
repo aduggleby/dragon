@@ -17,7 +17,6 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
             repositorySetup.EnsureTableExists<IdentityUserClaim>();
             repositorySetup.EnsureTableExists<IdentityUserLogin>();
             repositorySetup.EnsureTableExists<IdentityService>();
-            repositorySetup.EnsureTableExists<LegacyRegistrationModel>();
             return Content("Setup complete.");
         }
     }

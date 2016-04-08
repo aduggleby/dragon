@@ -11,12 +11,20 @@ namespace UserMigrationTest
     [TestClass]
     public class LegacyWavUserMigrationTest
     {
+        private const string LegacyPasswordPrefix = "OLD:";
+
         [TestMethod]
         public async Task Migrate_validDbs_shouldMigrateUsers()
         {
             var service = new LegacyWavUserMigration<AppMember>(
                 new UserStore<AppMember>(new Repository<AppMember>(), new Repository<IdentityUserClaim>(), new Repository<IdentityUserLogin>(), new Repository<IdentityService>()));
-            await service.Migrate(data => new AppMember { Id = data.UserID.ToString(), UserName = data.Email, Email = data.Email }); // password will be read from legacy password resolver
+            await service.Migrate(data => new AppMember
+            {
+                Id = data.UserID.ToString(),
+                PasswordHash = string.IsNullOrWhiteSpace(data.Secret) ? "" : LegacyPasswordPrefix + data.Secret,
+                UserName = data.Email,
+                Email = data.Email
+            });
         }
     }
 }

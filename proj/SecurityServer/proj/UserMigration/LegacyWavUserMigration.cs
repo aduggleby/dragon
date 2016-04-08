@@ -54,7 +54,7 @@ namespace UserMigration
             var isLocalAccount = service == "LOCALACCOUNT";
             userData.Email = !isLocalAccount ? userData.Email : userData.Key;
             var user = convertUser(userData);
-            Logger.Info("\"{0}\", \"{1}\"", user.Email, userData.Secret);
+            Logger.Trace("\"{0}\", \"{1}\"", user.Email, userData.Secret);
 
             var store = (UserStore<AppMember>) _userStore; // avoid RuntimeBinderException: does not contain a definition, TODO: remove
             await store.CreateAsync(user);
@@ -63,7 +63,7 @@ namespace UserMigration
             if (!isLocalAccount)
             {
                 var key = userData.Key;
-                var externalServiceName = service.Replace("EXTERNAL_", "");
+                string externalServiceName = service.Replace("EXTERNAL_", "");
                 externalServiceName = externalServiceName.First().ToString().ToUpper() +
                                       externalServiceName.Substring(1).ToLower();
                 store.AddLoginAsync(user, new UserLoginInfo(externalServiceName, key));

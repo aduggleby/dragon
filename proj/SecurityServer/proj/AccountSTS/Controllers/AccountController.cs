@@ -22,6 +22,8 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
     [Authorize]
     public class AccountController : Controller
     {
+        private const string LegacyPasswordPrefix = "OLD:";
+
         [Import]
         public ICheckPasswordService<AppMember> LegacyPasswordService { get; set; }
 
@@ -107,7 +109,7 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
             {
                 // Try to authenticate the user using a legacy login service
                 var user = await _userStore.FindByEmailAsync(model.Email);
-                if (user != null && string.IsNullOrWhiteSpace(user.PasswordHash) && !string.IsNullOrWhiteSpace(model.Email))
+                if (!string.IsNullOrWhiteSpace(user?.PasswordHash) && user.PasswordHash.StartsWith(LegacyPasswordPrefix) && !string.IsNullOrWhiteSpace(model.Email))
                 {
                     if (LegacyPasswordService != null && await LegacyPasswordService.CheckPasswordAsync(user, model.Password))
                     {
