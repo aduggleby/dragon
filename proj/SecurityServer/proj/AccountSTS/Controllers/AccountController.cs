@@ -7,6 +7,7 @@ using System.Web.Configuration;
 using System.Web.Mvc;
 using System.Web.Routing;
 using Common;
+using Dragon.SecurityServer.AccountSTS.App_Start;
 using Dragon.SecurityServer.AccountSTS.Helpers;
 using Dragon.SecurityServer.AccountSTS.Models;
 using Dragon.SecurityServer.AccountSTS.Services.CheckPasswortServices;
@@ -103,7 +104,16 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
 
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+            SignInStatus result;
+            try
+            {
+                result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
+            }
+            catch (NotRegisteredForServiceException)
+            {
+                HandleUserNotRegisteredForService(model.Email);
+                return View();
+            }
 
             if (result == SignInStatus.Failure)
             {
@@ -117,7 +127,15 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
                         _userManager.RemovePassword(user.Id);
                         _userManager.AddPassword(user.Id, model.Password);
                         // and login
-                        result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+                        try
+                        {
+                            result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
+                        }
+                        catch (NotRegisteredForServiceException)
+                        {
+                            HandleUserNotRegisteredForService(model.Email);
+                            return View();
+                        }
                         // or force a password reset
                         //return await RequestPasswordReset(new ForgotPasswordViewModel { Email = user.Email});
                     }
@@ -136,27 +154,22 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
                     return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
                 case SignInStatus.Failure:
                 default:
-                    if (!IsUserLoggedIn())
-                    {
-                        Logger.Trace("Login failed: user {0}", model.Email);
-                        ModelState.AddModelError("", "Invalid login attempt.");
-                    }
-                    else
-                    {
-                        HandleUserNotRegisteredForService();
-                        Logger.Trace("Login failed: user {0} not registered for service {1}", model.Email,
-                            RequestHelper.GetCurrentServiceId());
-                        ModelState.AddModelError("", await GenerateLoginWithServiceErrorMessage(model));
-                    }
-                    AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+                    await HandleLoginFailure(model);
                     return View(model);
             }
         }
 
-        private async Task<string> GenerateLoginWithServiceErrorMessage(LoginViewModel model)
+        private async Task HandleLoginFailure(LoginViewModel model)
+        {
+            Logger.Trace("Login failed: user {0}", model.Email);
+            ModelState.AddModelError("", await GenerateTryLoginWithFederationProviderErrorMessage(model.Email));
+            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+        }
+
+        private async Task<string> GenerateTryLoginWithFederationProviderErrorMessage(string email)
         {
             var message = "Invalid login attempt.";
-            var user = await _userStore.FindByEmailAsync(model.Email);
+            var user = await _userStore.FindByEmailAsync(email);
             if (user != null)
             {
                 var availableLogins = await _userStore.GetLoginsAsync(user);
@@ -167,6 +180,11 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
                 }
             }
             return message;
+        }
+
+        private string GenerateNotRegisteredForServiceErrorMessage()
+        {
+            return "Invalid login attempt. You do not have permissions to access the requested service.";
         }
 
         //
@@ -442,9 +460,22 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
                 Logger.Trace("External login failed: external login info is null");
                 return RedirectToAction("Login");
             }
+            
+            // TODO: handle users that are not registered for the requested service
 
             // Sign in the user with this external login provider if the user already has a login
-            var result = await SignInManager.ExternalSignInAsync(loginInfo, isPersistent: false);
+            SignInStatus result;
+            try
+            {
+                result = await SignInManager.ExternalSignInAsync(loginInfo, isPersistent: false);
+            }
+            catch (NotRegisteredForServiceException)
+            {
+                HandleUserNotRegisteredForService(loginInfo.Email);
+                ViewBag.RouteValues["ReturnUrl"] = returnUrl;
+                return RedirectToAction("Login", ViewBag.RouteValues);
+            }
+
             switch (result)
             {
                 case SignInStatus.Success:
@@ -457,13 +488,6 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
                     return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = false });
                 case SignInStatus.Failure:
                 default:
-                    if (IsUserLoggedIn())
-                    {
-                        HandleUserNotRegisteredForService();
-                        ViewBag.RouteValues.ReturnUrl = returnUrl;
-                        ViewBag.RouteValues.RememberMe = false;
-                        return RedirectToAction("Login", ViewBag.RouteValues);
-                    }
                     Logger.Trace("External login: user {0} does not have an account", loginInfo.Email);
                     // If the user does not have an account, then prompt the user to create an account
                     ViewBag.ReturnUrl = returnUrl;
@@ -526,7 +550,17 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
                     Logger.Trace("External login confirmation: model state invalid");
                     return View(model);
                 }
-                var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, false, shouldLockout: false);
+                SignInStatus result;
+                try
+                {
+                    result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, false, false);
+                }
+                catch (NotRegisteredForServiceException)
+                {
+                    HandleUserNotRegisteredForService(model.Email);
+                    return View(model);
+                }
+
                 switch (result)
                 {
                     case SignInStatus.Success:
@@ -540,15 +574,7 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
                     case SignInStatus.Failure:
                     default:
                         ModelState.AddModelError("", "Invalid login attempt.");
-                        if (!IsUserLoggedIn())
-                        {
-                            Logger.Trace("External login confirmation failed: user {0}, status {1}", model.Email, result);
-                        }
-                        else
-                        {
-                            HandleUserNotRegisteredForService();
-                            Logger.Trace("External login confirmation failed: user {0} is not registered for service {1}", model.Email, RequestHelper.GetCurrentServiceId());
-                        }
+                        Logger.Trace("External login confirmation failed: user {0}, status {1}", model.Email, result);
                         return View(model);
                 }
             }
@@ -563,7 +589,7 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
             {
                 await _userStore.AddLoginAsync(user, info.Login);
             }
-            await AddServiceToUser(user, RequestHelper.GetCurrentServiceId());
+            await AddServiceToUser(user, RequestHelper.GetCurrentServiceId()); // TODO: check if this is safe
             await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
             return RedirectToLocal(returnUrl);
         }
@@ -571,10 +597,11 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
         /// <summary>
         /// Logout user if not registered for current service, adds error.
         /// </summary>
-        private void HandleUserNotRegisteredForService()
+        private void HandleUserNotRegisteredForService(string email)
         {
-            ModelState.AddModelError("", " Not registered for this service!");
-            // On service id mismatch user is logged in, but should not
+            Logger.Trace("Login failed: user {0} not registered for service {1}", email, RequestHelper.GetCurrentServiceId());
+            ModelState.AddModelError("", GenerateNotRegisteredForServiceErrorMessage());
+            // On service id mismatch user might be logged in, but should not
             // Using ApplicationCookie because of https://aspnetidentity.codeplex.com/workitem/2347
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
         }

@@ -3,6 +3,7 @@ using System.Net.Mail;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web.Configuration;
+using Dragon.SecurityServer.AccountSTS.App_Start;
 using Dragon.SecurityServer.AccountSTS.Helpers;
 using Dragon.SecurityServer.AccountSTS.Models;
 using Dragon.SecurityServer.Identity.Stores;
@@ -122,9 +123,10 @@ namespace Dragon.SecurityServer.AccountSTS
         public new async Task<SignInStatus> ExternalSignInAsync(ExternalLoginInfo loginInfo, bool isPersistent)
         {
             var user = await UserManager.FindAsync(loginInfo.Login);
-            if (await IsUserRegisteredForService(user, RequestHelper.GetCurrentServiceId()))
+            if (!await IsUserRegisteredForService(user, RequestHelper.GetCurrentServiceId()))
             {
-                return SignInStatus.Failure; // TODO: custom status: not registered for service
+                // throw until using Identity where the status is more flexible, see https://github.com/aspnet/Identity/issues/176
+                throw new NotRegisteredForServiceException();
             }
 
             return await base.ExternalSignInAsync(loginInfo, isPersistent);
@@ -132,7 +134,7 @@ namespace Dragon.SecurityServer.AccountSTS
 
         private async Task<bool> IsUserRegisteredForService(AppMember user, string currentServiceId)
         {
-            return user != null && !(await _userStore.IsUserRegisteredForServiceAsync(user, currentServiceId)); // user == null on regstration
+            return user == null || await _userStore.IsUserRegisteredForServiceAsync(user, currentServiceId); // user == null on regstration
         }
 
         // Customized to make the method service aware
@@ -141,10 +143,10 @@ namespace Dragon.SecurityServer.AccountSTS
             var status = await base.PasswordSignInAsync(userName, password, isPersistent, shouldLockout);
             if (status == SignInStatus.Success)
             {
-                if (await IsUserRegisteredForService(await UserManager.FindByNameAsync(userName), RequestHelper.GetCurrentServiceId()))
+                if (!await IsUserRegisteredForService(await UserManager.FindByNameAsync(userName), RequestHelper.GetCurrentServiceId()))
                 {
-                    // TODO: report no access instead simply failure
-                    return SignInStatus.Failure;
+                    // throw until using Identity where the status is more flexible, see https://github.com/aspnet/Identity/issues/176
+                    throw new NotRegisteredForServiceException();
                 }
             }
             return status;
