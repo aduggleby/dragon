@@ -7,6 +7,7 @@ using System.Web.Configuration;
 using System.Web.Mvc;
 using System.Web.Routing;
 using Common;
+using Dragon.SecurityServer.AccountSTS.ActionFilters;
 using Dragon.SecurityServer.AccountSTS.App_Start;
 using Dragon.SecurityServer.AccountSTS.Helpers;
 using Dragon.SecurityServer.AccountSTS.Models;
@@ -82,7 +83,7 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
 
         //
         // GET: /Account/Login
-        [AllowAnonymous]
+        [AllowAnonymous, ImportModelStateFromTempData]
         public ActionResult Login(string returnUrl)
         {
             ViewBag.ReturnUrl = returnUrl;
@@ -451,7 +452,7 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
 
         //
         // GET: /Account/ExternalLoginCallback
-        [AllowAnonymous]
+        [AllowAnonymous, ExportModelStateToTempData]
         public async Task<ActionResult> ExternalLoginCallback(string returnUrl)
         {
             var loginInfo = await AuthenticationManager.GetExternalLoginInfoAsync();

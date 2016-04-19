@@ -256,6 +256,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActionFilters\ExportModelStateToTempData.cs" />
+    <Compile Include="ActionFilters\ImportModelStateFromTempData.cs" />
+    <Compile Include="ActionFilters\ModelStateTempDataTransfer.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\NotRegisteredForServiceException.cs" />
     <Compile Include="WebRequestHandler\OpenIdMigrationWebRequestHandler.cs" />
