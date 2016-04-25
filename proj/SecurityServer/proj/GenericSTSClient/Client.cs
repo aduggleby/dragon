@@ -5,6 +5,7 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web;
 using Dragon.Security.Hmac.Core.Service;
+using Dragon.SecurityServer.Common.Models;
 
 namespace Dragon.SecurityServer.GenericSTSClient
 {
@@ -95,8 +96,7 @@ namespace Dragon.SecurityServer.GenericSTSClient
 
         private string GenerateUrl(string action, Dictionary<string, string> parameters)
         {
-            return string.Format("{0}{1}{2}", _serviceUrl, action,
-                CreateHmacAwareParametersDictionary(parameters));
+            return $"{_serviceUrl}{action}{CreateHmacAwareParametersDictionary(parameters)}";
         }
 
         private static void InitClient(HttpClient client)
@@ -109,20 +109,20 @@ namespace Dragon.SecurityServer.GenericSTSClient
         private string CreateHmacAwareParametersDictionary(Dictionary<string, string> parameters)
         {
             var queryString = HttpUtility.ParseQueryString(string.Empty);
-            if (HmacSettings != null)
-            {
-                queryString["appid"] = HmacSettings.AppId;
-                queryString["serviceid"] = HmacSettings.ServiceId;
-                queryString["userid"] = HmacSettings.UserId;
-                queryString["expiry"] = DateTime.UtcNow.AddDays(+1).Ticks.ToString();
-                var hmacService = new HmacSha256Service();
-                queryString["signature"] = hmacService.CalculateHash(hmacService.CreateSortedQueryString(queryString), HmacSettings.Secret);
-            }
             foreach (var parameter in parameters)
             {
                 queryString[parameter.Key] = parameter.Value;
             }
             if (queryString.Count < 1) return "";
+            if (HmacSettings != null)
+            {
+                queryString["appid"] = queryString["appid"] ?? HmacSettings.AppId;
+                queryString["serviceid"] = queryString["serviceid"] ?? HmacSettings.ServiceId;
+                queryString["userid"] = queryString["userid"] ?? HmacSettings.UserId;
+                queryString["expiry"] = queryString["expiry"] ?? DateTime.UtcNow.AddDays(+1).Ticks.ToString();
+                var hmacService = new HmacSha256Service();
+                queryString["signature"] = queryString["signature"] ?? hmacService.CalculateHash(hmacService.CreateSortedQueryString(queryString), HmacSettings.Secret);
+            }
             return "?" + queryString;
         }
 

@@ -34,6 +34,10 @@
       <HintPath>..\packages\AsynchronousBridge.1.2.2\lib\Net45\AsyncBridge.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Dragon.Security.Hmac.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dragon.Security.Hmac.Core.1.2.0\lib\Dragon.Security.Hmac.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
       <Private>True</Private>
@@ -54,6 +58,8 @@
     <Compile Include="Consts.cs" />
     <Compile Include="CustomSecurityTokenService.cs" />
     <Compile Include="Handlers\FederationMetadataHandler.cs" />
+    <Compile Include="HmacHelper.cs" />
+    <Compile Include="Models\HmacSettings.cs" />
     <Compile Include="NoSynchronizationContextScope.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SecurityHelper.cs" />

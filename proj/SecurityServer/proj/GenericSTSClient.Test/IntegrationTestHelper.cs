@@ -1,4 +1,5 @@
-﻿using System.Configuration;
+﻿using Dragon.SecurityServer.Common;
+using Dragon.SecurityServer.Common.Models;
 
 namespace Dragon.SecurityServer.GenericSTSClient.Test
 {
@@ -6,13 +7,7 @@ namespace Dragon.SecurityServer.GenericSTSClient.Test
     {
         public static HmacSettings ReadHmacSettings()
         {
-            return new HmacSettings
-            {
-                UserId = ConfigurationManager.AppSettings["Dragon.Security.Hmac.UserId"],
-                AppId = ConfigurationManager.AppSettings["Dragon.Security.Hmac.AppId"],
-                ServiceId = ConfigurationManager.AppSettings["Dragon.Security.Hmac.ServiceId"],
-                Secret = ConfigurationManager.AppSettings["Dragon.Security.Hmac.Secret"]
-            };
+            return HmacHelper.ReadHmacSettings();
         }
     }
 }

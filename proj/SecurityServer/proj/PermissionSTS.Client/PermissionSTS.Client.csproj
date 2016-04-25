@@ -50,6 +50,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{D79ED90B-B8B8-4F01-B9C9-021A8A6163AD}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GenericSTSClient\GenericSTSClient.csproj">
       <Project>{e6064e38-13c3-4f5f-8bb5-8c77d61e2ad8}</Project>
       <Name>GenericSTSClient</Name>

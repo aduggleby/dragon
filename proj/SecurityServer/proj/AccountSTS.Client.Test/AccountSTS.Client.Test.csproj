@@ -93,6 +93,10 @@
       <Project>{B9111BFA-8989-4770-A219-481DDAF94A1C}</Project>
       <Name>AccountSTS</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{D79ED90B-B8B8-4F01-B9C9-021A8A6163AD}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GenericSTSClient.Test\GenericSTSClient.Test.csproj">
       <Project>{D22D334C-1F72-4C54-A1F2-ED6B053DE69B}</Project>
       <Name>GenericSTSClient.Test</Name>

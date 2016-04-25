@@ -2,7 +2,7 @@
 using System.IdentityModel.Services;
 using System.Threading.Tasks;
 using System.Web;
-using Dragon.SecurityServer.GenericSTSClient;
+using Dragon.SecurityServer.Common.Models;
 
 namespace Dragon.SecurityServer.AccountSTS.Client
 {
@@ -37,7 +37,7 @@ namespace Dragon.SecurityServer.AccountSTS.Client
         {
             var rst = new SignInRequestMessage(new Uri(_serviceUrl), _realm, replyUrl);
             var encodedReplyUrl = HttpUtility.UrlEncode(replyUrl);
-            rst.Context = string.Format("rm=0&id=passive&ru={0}", encodedReplyUrl);
+            rst.Context = $"rm=0&id=passive&ru={encodedReplyUrl}";
             rst.CurrentTime = DateTime.Now.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ssK");
             rst.Parameters.Add("action", action);
             var requestUrl = rst.RequestUrl;

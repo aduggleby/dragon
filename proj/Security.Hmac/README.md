@@ -38,8 +38,7 @@ Setup
 
 For the web application that exposes the service:
 
-* Build the Module project
-* Copy the resulting binaries to the bin directory of the service
+* Install the Dragon.Security.Hmac.Module package or build the Module project and copy the resulting binaries to the bin directory of the service.
 * Configure the module (Web.config, it is assumed a connection string exists), e.g.:
 
     <configuration>
@@ -86,7 +85,7 @@ For the web application that exposes the service:
 
 For the client that accesses the service:
 
-* Reference the Core dll
+* Install the Dragon.Security.Hmac.Core package or reference the Core library.
 * Add the appid, userid, expiry, signature parameters to your requests to the service, e.g.
 
     var queryString = HttpUtility.ParseQueryString(string.Empty);

@@ -80,7 +80,7 @@ namespace Dragon.SecurityServer.ProfileSTS
                                 ctx.HandleResponse();
                             }
                             // forward parameters from the client or previous STS'e
-                            var parameters = new[]{"action", "data", "serviceid"};
+                            var parameters = new[]{"action", "data", "serviceid", "signature", "expiry", "userid", "appid"};
                             foreach (var parameter in parameters)
                             {
                                 ctx.ProtocolMessage.SetParameter(parameter, ctx.Request.Query[parameter]);

@@ -260,6 +260,7 @@
     <Compile Include="ActionFilters\ImportModelStateFromTempData.cs" />
     <Compile Include="ActionFilters\ModelStateTempDataTransfer.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\InvalidSignatureException.cs" />
     <Compile Include="App_Start\NotRegisteredForServiceException.cs" />
     <Compile Include="WebRequestHandler\OpenIdMigrationWebRequestHandler.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -274,7 +275,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\SetupController.cs" />
-    <Compile Include="Controllers\UnknownServiceException.cs" />
+    <Compile Include="Controllers\InvalidParameterException.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

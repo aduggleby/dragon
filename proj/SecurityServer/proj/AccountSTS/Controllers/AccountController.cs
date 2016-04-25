@@ -1,12 +1,10 @@
-﻿using System;
-using System.ComponentModel.Composition;
+﻿using System.ComponentModel.Composition;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Configuration;
 using System.Web.Mvc;
 using System.Web.Routing;
-using Common;
 using Dragon.SecurityServer.AccountSTS.ActionFilters;
 using Dragon.SecurityServer.AccountSTS.App_Start;
 using Dragon.SecurityServer.AccountSTS.Helpers;
@@ -115,6 +113,11 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
                 HandleUserNotRegisteredForService(model.Email);
                 return View();
             }
+            catch (InvalidSignatureException)
+            {
+                HandleInvalidSignature(model.Email);
+                return View();
+            }
 
             if (result == SignInStatus.Failure)
             {
@@ -135,6 +138,11 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
                         catch (NotRegisteredForServiceException)
                         {
                             HandleUserNotRegisteredForService(model.Email);
+                            return View();
+                        }
+                        catch (InvalidSignatureException)
+                        {
+                            HandleInvalidSignature(model.Email);
                             return View();
                         }
                         // or force a password reset
@@ -181,11 +189,6 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
                 }
             }
             return message;
-        }
-
-        private string GenerateNotRegisteredForServiceErrorMessage()
-        {
-            return "Invalid login attempt. You do not have permissions to access the requested service.";
         }
 
         //
@@ -476,6 +479,12 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
                 ViewBag.RouteValues["ReturnUrl"] = returnUrl;
                 return RedirectToAction("Login", ViewBag.RouteValues);
             }
+            catch (InvalidSignatureException)
+            {
+                HandleInvalidSignature(loginInfo.Email);
+                ViewBag.RouteValues["ReturnUrl"] = returnUrl;
+                return RedirectToAction("Login", ViewBag.RouteValues);
+            }
 
             switch (result)
             {
@@ -561,6 +570,11 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
                     HandleUserNotRegisteredForService(model.Email);
                     return View(model);
                 }
+                catch (InvalidSignatureException)
+                {
+                    HandleInvalidSignature(model.Email);
+                    return View(model);
+                }
 
                 switch (result)
                 {
@@ -601,9 +615,19 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
         private void HandleUserNotRegisteredForService(string email)
         {
             Logger.Trace("Login failed: user {0} not registered for service {1}", email, RequestHelper.GetCurrentServiceId());
-            ModelState.AddModelError("", GenerateNotRegisteredForServiceErrorMessage());
+            ModelState.AddModelError("", "Invalid login attempt. You do not have permissions to access the requested service.");
             // On service id mismatch user might be logged in, but should not
             // Using ApplicationCookie because of https://aspnetidentity.codeplex.com/workitem/2347
+            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+        }
+
+        /// <summary>
+        /// Logout user if signature is invalid, adds error.
+        /// </summary>
+        private void HandleInvalidSignature(string email)
+        {
+            Logger.Trace("Invalid signature: user {0} not registered for service {1}", email, RequestHelper.GetCurrentServiceId());
+            ModelState.AddModelError("", "Invalid login attempt, please try again.");
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
         }
 

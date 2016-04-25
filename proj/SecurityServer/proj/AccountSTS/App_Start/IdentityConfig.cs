@@ -1,11 +1,16 @@
 ﻿using System;
+using System.Collections.Specialized;
+using System.Data;
 using System.Net.Mail;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web.Configuration;
+using Dragon.Data.Repositories;
+using Dragon.Security.Hmac.Module.Services;
 using Dragon.SecurityServer.AccountSTS.App_Start;
 using Dragon.SecurityServer.AccountSTS.Helpers;
 using Dragon.SecurityServer.AccountSTS.Models;
+using Dragon.SecurityServer.Common;
 using Dragon.SecurityServer.Identity.Stores;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
@@ -107,11 +112,13 @@ namespace Dragon.SecurityServer.AccountSTS
     public class ApplicationSignInManager : SignInManager<AppMember, string>
     {
         private readonly IDragonUserStore<AppMember> _userStore;
+        private readonly Func<IDbConnection, HmacHttpService> _hmacServiceFactory;
 
-        public ApplicationSignInManager(ApplicationUserManager userManager, IAuthenticationManager authenticationManager, IDragonUserStore<AppMember> userStore )
+        public ApplicationSignInManager(ApplicationUserManager userManager, IAuthenticationManager authenticationManager, IDragonUserStore<AppMember> userStore, Func<IDbConnection, HmacHttpService> hmacServiceFactory)
             : base(userManager, authenticationManager)
         {
             _userStore = userStore;
+            _hmacServiceFactory = hmacServiceFactory;
         }
 
         public override Task<ClaimsIdentity> CreateUserIdentityAsync(AppMember user)
@@ -122,24 +129,21 @@ namespace Dragon.SecurityServer.AccountSTS
         // Customized to make the method service aware
         public new async Task<SignInStatus> ExternalSignInAsync(ExternalLoginInfo loginInfo, bool isPersistent)
         {
+            ValidateSignature();
             var user = await UserManager.FindAsync(loginInfo.Login);
-            if (!await IsUserRegisteredForService(user, RequestHelper.GetCurrentServiceId()))
+            var currentServiceId = RequestHelper.GetCurrentServiceId();
+            // This is needed for initial registration, but should not be harmful in consecutive signin requests.
+            if (!await IsUserRegisteredForService(user, currentServiceId))
             {
-                // throw until using Identity where the status is more flexible, see https://github.com/aspnet/Identity/issues/176
-                throw new NotRegisteredForServiceException();
+                await _userStore.AddServiceToUserAsync(user, currentServiceId);
             }
-
             return await base.ExternalSignInAsync(loginInfo, isPersistent);
-        }
-
-        private async Task<bool> IsUserRegisteredForService(AppMember user, string currentServiceId)
-        {
-            return user == null || await _userStore.IsUserRegisteredForServiceAsync(user, currentServiceId); // user == null on regstration
         }
 
         // Customized to make the method service aware
         public override async Task<SignInStatus> PasswordSignInAsync(string userName, string password, bool isPersistent, bool shouldLockout)
         {
+            ValidateSignature();
             var status = await base.PasswordSignInAsync(userName, password, isPersistent, shouldLockout);
             if (status == SignInStatus.Success)
             {
@@ -150,6 +154,25 @@ namespace Dragon.SecurityServer.AccountSTS
                 }
             }
             return status;
+        }
+
+        private void ValidateSignature()
+        {
+            using (var connection = ConnectionHelper.Open())
+            {
+                var queryData = new NameValueCollection();
+                HmacHelper.ParameterKeys.ForEach(x => queryData.Add(x, RequestHelper.GetParameterFromReturnUrl(x)));
+                const string hmacSecuredPath = "/api/validate"; // see dragon.security.hmac.Paths in the app.config
+                if (_hmacServiceFactory(connection).IsRequestAuthorized(hmacSecuredPath, queryData) != StatusCode.Authorized)
+                {
+                    throw new InvalidSignatureException();
+                }
+            }
+        }
+
+        private async Task<bool> IsUserRegisteredForService(AppMember user, string currentServiceId)
+        {
+            return user == null || await _userStore.IsUserRegisteredForServiceAsync(user, currentServiceId); // user == null on regstration
         }
     }
 }

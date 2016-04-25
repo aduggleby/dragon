@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reflection;
 using System.Web;
 using System.Web.Routing;
-using Common;
 using Dragon.SecurityServer.AccountSTS.Controllers;
 using Dragon.SecurityServer.Common;
 using NameValueCollection = System.Collections.Specialized.NameValueCollection;
@@ -15,11 +14,16 @@ namespace Dragon.SecurityServer.AccountSTS.Helpers
     {
         public static string GetCurrentServiceId()
         {
+            return GetParameterFromReturnUrl(Consts.QueryStringParameterNameServiceId);
+        }
+
+        public static string GetParameterFromReturnUrl(string parameter)
+        {
             var returnUrl = new Uri(
                 HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority) +
                 HttpContext.Current.GetOwinContext().Request.Query[Consts.QueryStringParameterNameReturnUrl]);
-            var currentServiceId = HttpUtility.ParseQueryString(returnUrl.Query).Get(Consts.QueryStringParameterNameServiceId);
-            if (string.IsNullOrEmpty(currentServiceId)) throw new UnknownServiceException();
+            var currentServiceId = HttpUtility.ParseQueryString(returnUrl.Query).Get(parameter);
+            if (string.IsNullOrEmpty(currentServiceId)) throw new InvalidParameterException();
             return currentServiceId;
         }
 
@@ -35,7 +39,7 @@ namespace Dragon.SecurityServer.AccountSTS.Helpers
 
         public static RouteValueDictionary ReturnUrlToRouteValues(NameValueCollection source)
         {
-            return ToRouteValueDictionary(source, new List<string> {"returnUrl"});
+            return ToRouteValueDictionary(source, new List<string> {Consts.QueryStringParameterNameReturnUrl});
         }
 
         public static RouteValueDictionary ToRouteValues(NameValueCollection source)

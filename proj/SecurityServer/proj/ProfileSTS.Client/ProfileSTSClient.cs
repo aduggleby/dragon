@@ -1,20 +1,20 @@
 ﻿using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Dragon.SecurityServer.GenericSTSClient;
+using Dragon.SecurityServer.Common.Models;
 
 namespace Dragon.SecurityServer.ProfileSTS.Client
 {
     public class ProfileSTSClient
     {
-        private readonly Dragon.SecurityServer.GenericSTSClient.Client _client;
+        private readonly GenericSTSClient.Client _client;
         private const string ClearCacheAction = "ClearCache";
         private const string AddClaimAction = "AddClaim";
         private const string GetClaimsAction = "GetClaims";
 
         public ProfileSTSClient(string serviceUrl, string realm)
         {
-            _client = new Dragon.SecurityServer.GenericSTSClient.Client(serviceUrl);
+            _client = new GenericSTSClient.Client(serviceUrl);
         }
 
         public void SetHmacSettings(HmacSettings settings)
