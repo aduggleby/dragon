@@ -15,6 +15,7 @@ namespace UserMigration
     public class LegacyWavUserMigration<T> where T : class, IUser, new()
     {
         private readonly IDragonUserStore<T> _userStore;
+
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         public LegacyWavUserMigration(IDragonUserStore<T> userStore)
@@ -29,8 +30,12 @@ namespace UserMigration
             using (var connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                var usersData = connection.Query("SELECT u.UserID, Service, Email, [Key], Secret FROM [DragonRegistration] dr JOIN [User] u ON dr.UserID = u.UserID").ToList();
-                Logger.Info("Found {0} users, migrating...", usersData.Count);
+                var usersData = connection.Query(@"
+                    SELECT u.UserID, Service, Email, [Key], Secret
+                    FROM [DragonRegistration] dr JOIN [User] u ON dr.UserID = u.UserID
+                    WHERE Email like 'whataventure.test%' -- TODO: test, remove
+                    ").ToList();
+                Logger.Info($"Found {usersData.Count} users, migrating...");
                 foreach (var userData in usersData)
                 {
                     try
@@ -58,6 +63,7 @@ namespace UserMigration
 
             var store = (UserStore<AppMember>) _userStore; // avoid RuntimeBinderException: does not contain a definition, TODO: remove
             await store.CreateAsync(user);
+            await store.SetSecurityStampAsync(user, Guid.NewGuid().ToString()); // required for token verification
             user = await store.FindByIdAsync(userId);
 
             if (!isLocalAccount)

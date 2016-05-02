@@ -16,8 +16,8 @@ namespace UserMigrationTest
         [TestMethod]
         public async Task Migrate_validDbs_shouldMigrateUsers()
         {
-            var service = new LegacyWavUserMigration<AppMember>(
-                new UserStore<AppMember>(new Repository<AppMember>(), new Repository<IdentityUserClaim>(), new Repository<IdentityUserLogin>(), new Repository<IdentityService>()));
+            var userStore = new UserStore<AppMember>(new Repository<AppMember>(), new Repository<IdentityUserClaim>(), new Repository<IdentityUserLogin>(), new Repository<IdentityService>());
+            var service = new LegacyWavUserMigration<AppMember>(userStore);
             await service.Migrate(data => new AppMember
             {
                 Id = data.UserID.ToString(),

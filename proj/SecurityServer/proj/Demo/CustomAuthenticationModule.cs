@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IdentityModel.Services;
-using System.Web;
+﻿using System.IdentityModel.Services;
 using Dragon.Security.Hmac.Core.Service;
 using Dragon.SecurityServer.Common;
 using WebGrease.Css.Extensions;
@@ -12,23 +9,11 @@ namespace Dragon.SecurityServer.Demo
     // Registering to the RedirectingToIdentityProvider event did not seem to work.
     public class CustomAuthenticationModule : WSFederationAuthenticationModule
     {
+        private static readonly HmacHelper HmacHelper = new HmacHelper { HmacService = new HmacSha256Service() };
+
         protected override void OnRedirectingToIdentityProvider(RedirectingToIdentityProviderEventArgs e)
         {
-            var hmacHelper = new HmacHelper
-            {
-                HmacService = new HmacSha256Service(),
-            };
-            var hmacSettings = HmacHelper.ReadHmacSettings();
-
-            e.SignInRequestMessage.Reply = HttpContext.Current.Request.Url.ToString();
-            var parameters = new Dictionary<string, string>
-            {
-                { "expiry", DateTime.UtcNow.AddMinutes(+15).Ticks.ToString() },
-                { "serviceid", hmacSettings.ServiceId },
-                { "appid", hmacSettings.AppId },
-                { "userid", hmacSettings.UserId },
-            };
-            parameters.Add("signature", hmacHelper.CalculateHash(parameters, hmacSettings.Secret));
+            var parameters = HmacHelper.CreateHmacRequestParametersFromConfig();
             parameters.ForEach(e.SignInRequestMessage.Parameters.Add);
             base.OnRedirectingToIdentityProvider(e);
         }

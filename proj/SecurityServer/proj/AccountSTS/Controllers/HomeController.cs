@@ -2,14 +2,9 @@
 using System.Configuration;
 using System.IdentityModel.Configuration;
 using System.IdentityModel.Services;
-using System.IdentityModel.Tokens;
-using System.IO;
 using System.Security.Claims;
-using System.Security.Cryptography.X509Certificates;
 using System.Web;
-using System.Web.Hosting;
 using System.Web.Mvc;
-using Common;
 using Dragon.SecurityServer.AccountSTS.Models;
 using Dragon.SecurityServer.AccountSTS.Services;
 using Dragon.SecurityServer.Common;
