@@ -59,6 +59,7 @@
     <Compile Include="CustomSecurityTokenService.cs" />
     <Compile Include="Handlers\FederationMetadataHandler.cs" />
     <Compile Include="HmacHelper.cs" />
+    <Compile Include="IHmacHelper.cs" />
     <Compile Include="Models\HmacSettings.cs" />
     <Compile Include="NoSynchronizationContextScope.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

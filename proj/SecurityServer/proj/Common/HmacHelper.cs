@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Web;
 using Dragon.Security.Hmac.Core.Service;
@@ -6,7 +7,7 @@ using Dragon.SecurityServer.Common.Models;
 
 namespace Dragon.SecurityServer.Common
 {
-    public class HmacHelper
+    public class HmacHelper : IHmacHelper
     {
         public const string HmacSectionName = "dragon/security/hmac";
         public static string[] ParameterKeys = { "appid", "serviceid", "userid", "expiry", "signature" };
@@ -32,6 +33,23 @@ namespace Dragon.SecurityServer.Common
                 ServiceId = ConfigurationManager.AppSettings["Dragon.Security.Hmac.ServiceId"],
                 Secret = ConfigurationManager.AppSettings["Dragon.Security.Hmac.Secret"]
             };
+        }
+        
+        public Dictionary<string, string> CreateHmacRequestParametersFromConfig()
+        {
+            var hmacSettings = ReadHmacSettings();
+
+            var parameters = new Dictionary<string, string>
+            {
+                { "expiry", DateTime.UtcNow.AddMinutes(+15).Ticks.ToString() },
+                { "serviceid", hmacSettings.ServiceId },
+                { "appid", hmacSettings.AppId },
+                { "userid", hmacSettings.UserId },
+            };
+
+            parameters.Add("signature", CalculateHash(parameters, hmacSettings.Secret));
+
+            return parameters;
         }
     }
 }
