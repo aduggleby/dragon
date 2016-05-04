@@ -502,7 +502,21 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
                 case SignInStatus.Failure:
                 default:
                     Logger.Trace("External login: user {0} does not have an account", loginInfo.Email);
-                    // If the user does not have an account, then prompt the user to create an account
+                    var user = await _userStore.FindByEmailAsync(loginInfo.Email);
+                    // For new users silently create an account and return
+                    if (user == null)
+                    {
+                        user = await CreateUser(loginInfo.Email, loginInfo);
+                        if (user == null)
+                        {
+                            ModelState.AddModelError("", "Internal error, please try again.");
+                            Logger.Log(LogLevel.Error, "Unable to create the user.");
+                            return RedirectToAction("Login", ViewBag.RouteValues);
+                        }
+                        await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                        return RedirectToLocal(returnUrl);
+                    }
+                    // If the email address is already used, allow changing the email address or adding the external login to an existing account
                     ViewBag.ReturnUrl = returnUrl;
                     ViewBag.RouteValues["ReturnUrl"] = returnUrl;
                     ViewBag.LoginProvider = loginInfo.Login.LoginProvider;
@@ -599,7 +613,12 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
             else
             {
                 user = await CreateUser(model.Email, info);
-                if (user == null) return View(model);
+                if (user == null)
+                {
+                    ModelState.AddModelError("", "Internal error, please try again.");
+                    Logger.Log(LogLevel.Error, "Unable to create the user.");
+                    return View(model);
+                }
             }
             if (!(await _userStore.GetLoginsAsync(user)).Any(x =>
                             info.Login.LoginProvider == x.LoginProvider &&
@@ -607,7 +626,10 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
             {
                 await _userStore.AddLoginAsync(user, info.Login);
             }
-            await AddServiceToUser(user, RequestHelper.GetCurrentServiceId()); // TODO: check if this is safe
+            if (!(await _userStore.GetServicesAsync(user)).Contains(RequestHelper.GetCurrentServiceId()))
+            {
+                await AddServiceToUser(user, RequestHelper.GetCurrentServiceId());
+            }
             await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
             return RedirectToLocal(returnUrl);
         }
@@ -663,6 +685,8 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
                 result = await UserManager.AddLoginAsync(user.Id, info.Login);
                 if (result.Succeeded)
                 {
+                    await _userStore.AddServiceToUserAsync(user, RequestHelper.GetCurrentServiceId());
+
                     return await Task.FromResult(user);
                 }
                 else
