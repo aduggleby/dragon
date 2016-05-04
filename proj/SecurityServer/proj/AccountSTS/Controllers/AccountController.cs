@@ -411,6 +411,8 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ExternalLogin(string provider, string returnUrl)
         {
+            ControllerContext.HttpContext.Session.RemoveAll();
+
             // Request a redirect to the external login provider
             return new ChallengeResult(provider, Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl }));
         }
@@ -462,6 +464,7 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
             if (loginInfo == null)
             {
                 Logger.Trace("External login failed: external login info is null");
+                ModelState.AddModelError("", "Unable to process login, please try again.");
                 return RedirectToAction("Login");
             }
             
