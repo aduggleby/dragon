@@ -129,10 +129,10 @@ namespace Dragon.SecurityServer.AccountSTS
 
         private static DragonSecurityHmacSection GetHmacSettings()
         {
-            var settings = (DragonSecurityHmacSection) ConfigurationManager.GetSection(HmacHelper.HmacSectionName);
+            var settings = (DragonSecurityHmacSection) ConfigurationManager.GetSection(Consts.HmacSectionName);
             if (settings == null)
             {
-                throw new HmacInvalidConfigException($"Section {HmacHelper.HmacSectionName} is missing.");
+                throw new HmacInvalidConfigException($"Section {Consts.HmacSectionName} is missing.");
             }
             return settings;
         }

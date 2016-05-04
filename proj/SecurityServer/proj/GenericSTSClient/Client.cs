@@ -5,7 +5,7 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web;
 using Dragon.Security.Hmac.Core.Service;
-using Dragon.SecurityServer.Common.Models;
+using Dragon.SecurityServer.GenericSTSClient.Models;
 
 namespace Dragon.SecurityServer.GenericSTSClient
 {

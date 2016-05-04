@@ -1,4 +1,4 @@
-﻿namespace Dragon.SecurityServer.Common.Models
+﻿namespace Dragon.SecurityServer.GenericSTSClient.Models
 {
     public class HmacSettings
     {

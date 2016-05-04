@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Dragon.SecurityServer.Common
+namespace Dragon.SecurityServer.GenericSTSClient
 {
     public interface IHmacHelper
     {

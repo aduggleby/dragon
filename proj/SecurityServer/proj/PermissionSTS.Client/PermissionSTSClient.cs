@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Dragon.SecurityServer.Common.Models;
+using Dragon.SecurityServer.GenericSTSClient.Models;
 
 namespace Dragon.SecurityServer.PermissionSTS.Client
 {

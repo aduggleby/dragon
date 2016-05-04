@@ -161,7 +161,7 @@ namespace Dragon.SecurityServer.AccountSTS
             using (var connection = ConnectionHelper.Open())
             {
                 var queryData = new NameValueCollection();
-                HmacHelper.ParameterKeys.ForEach(x => queryData.Add(x, RequestHelper.GetParameterFromReturnUrl(x)));
+                Consts.QueryStringHmacParameterNames.ForEach(x => queryData.Add(x, RequestHelper.GetParameterFromReturnUrl(x)));
                 const string hmacSecuredPath = "/api/validate"; // see dragon.security.hmac.Paths in the app.config
                 if (_hmacServiceFactory(connection).IsRequestAuthorized(hmacSecuredPath, queryData) != StatusCode.Authorized)
                 {

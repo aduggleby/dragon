@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Web;
 using Dragon.Security.Hmac.Core.Service;
-using Dragon.SecurityServer.Common.Models;
+using Dragon.SecurityServer.GenericSTSClient.Models;
 
-namespace Dragon.SecurityServer.Common
+namespace Dragon.SecurityServer.GenericSTSClient
 {
     public class HmacHelper : IHmacHelper
     {
-        public const string HmacSectionName = "dragon/security/hmac";
-        public static string[] ParameterKeys = { "appid", "serviceid", "userid", "expiry", "signature" };
 
         public IHmacService HmacService { get; set; }
 

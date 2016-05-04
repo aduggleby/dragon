@@ -10,5 +10,7 @@
         public const string QueryStringParameterNameServiceId = "serviceid";
         public const string QueryStringParameterNameReturnUrl = "ReturnUrl";
 
+        public static string[] QueryStringHmacParameterNames = { "appid", "serviceid", "userid", "expiry", "signature" };
+        public const string HmacSectionName = "dragon/security/hmac";
     }
 }

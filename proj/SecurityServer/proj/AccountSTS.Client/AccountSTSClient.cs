@@ -2,7 +2,7 @@
 using System.IdentityModel.Services;
 using System.Threading.Tasks;
 using System.Web;
-using Dragon.SecurityServer.Common.Models;
+using Dragon.SecurityServer.GenericSTSClient.Models;
 
 namespace Dragon.SecurityServer.AccountSTS.Client
 {

@@ -1,6 +1,6 @@
 ﻿using System.IdentityModel.Services;
 using Dragon.Security.Hmac.Core.Service;
-using Dragon.SecurityServer.Common;
+using Dragon.SecurityServer.GenericSTSClient;
 using WebGrease.Css.Extensions;
 
 namespace Dragon.SecurityServer.Demo

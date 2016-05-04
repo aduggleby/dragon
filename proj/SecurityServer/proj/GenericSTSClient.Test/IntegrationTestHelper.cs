@@ -1,5 +1,5 @@
 ﻿using Dragon.SecurityServer.Common;
-using Dragon.SecurityServer.Common.Models;
+using Dragon.SecurityServer.GenericSTSClient.Models;
 
 namespace Dragon.SecurityServer.GenericSTSClient.Test
 {
