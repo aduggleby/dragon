@@ -304,6 +304,7 @@ namespace Dragon.SecurityServer.Identity.Stores
         public Task SetSecurityStampAsync(TUser user, string stamp)
         {
             user.SecurityStamp = stamp;
+            UserRepository.Update(user);
 
             return Task.FromResult(0);
         }

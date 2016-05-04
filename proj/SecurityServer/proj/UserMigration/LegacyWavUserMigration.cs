@@ -17,10 +17,12 @@ namespace UserMigration
         private readonly IDragonUserStore<T> _userStore;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private readonly string _serviceId;
 
         public LegacyWavUserMigration(IDragonUserStore<T> userStore)
         {
             _userStore = userStore;
+            _serviceId = ConfigurationManager.AppSettings["ServiceId"];
         }
 
         public async Task Migrate(Func<dynamic, T> convertUser)
@@ -64,6 +66,10 @@ namespace UserMigration
             var store = (UserStore<AppMember>) _userStore; // avoid RuntimeBinderException: does not contain a definition, TODO: remove
             await store.CreateAsync(user);
             await store.SetSecurityStampAsync(user, Guid.NewGuid().ToString()); // required for token verification
+            if (!string.IsNullOrEmpty(_serviceId))
+            {
+                await store.AddServiceToUserAsync(user, _serviceId);
+            }
             user = await store.FindByIdAsync(userId);
 
             if (!isLocalAccount)

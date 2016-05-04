@@ -4,4 +4,7 @@
     <add name="Dragon" connectionString="Data Source=(LocalDb)\v11.0;AttachDbFilename=|DataDirectory|\aspnet-AccountSTS-Dragon.mdf;Initial Catalog=aspnet-AccountSTS-Dragon;Integrated Security=True" providerName="System.Data.SqlClient" />
     <add name="WAV" connectionString="Data Source=(LocalDb)\v11.0;AttachDbFilename=|DataDirectory|\wav.mdf;Initial Catalog=wav;Integrated Security=True" providerName="System.Data.SqlClient" />
   </connectionStrings>
+  <appSettings>
+    <add key="ServiceId" value="00000001-0001-0003-0003-000000000001"/>
+  </appSettings>
 </configuration>
