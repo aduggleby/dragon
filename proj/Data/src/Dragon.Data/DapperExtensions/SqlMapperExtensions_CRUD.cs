@@ -10,12 +10,18 @@ using System.Threading;
 using Dapper;
 using Dragon.Data.Attributes;
 using Dragon.Data;
+using Common.Logging;
+using System.Dynamic;
 
 namespace Dapper
 {
     // Heavily adapted from: https://raw.github.com/SamSaffron/dapper-dot-net/master/Dapper.Contrib/SqlMapperExtensions.cs
-     public  static partial class SqlMapperExtensions
+    public static partial class SqlMapperExtensions
     {
+        private static readonly Jil.Options s_jilOptions = new Jil.Options(false, false, false, Jil.DateTimeFormat.ISO8601, true, Jil.UnspecifiedDateTimeKindBehavior.IsUTC);
+
+        private static readonly ILog s_log = LogManager.GetLogger(typeof(SqlMapperExtensions));
+
         private static readonly ConcurrentDictionary<RuntimeTypeHandle, TableMetadata> s_metadata =
             new ConcurrentDictionary<RuntimeTypeHandle, TableMetadata>();
 
@@ -24,7 +30,7 @@ namespace Dapper
 
         private static readonly ConcurrentDictionary<RuntimeTypeHandle, string> s_selectListQueries =
             new ConcurrentDictionary<RuntimeTypeHandle, string>();
-         
+
         private static readonly ConcurrentDictionary<RuntimeTypeHandle, string> s_selectQueries =
             new ConcurrentDictionary<RuntimeTypeHandle, string>();
 
@@ -39,7 +45,7 @@ namespace Dapper
 
         private static readonly ConcurrentDictionary<RuntimeTypeHandle, string> s_existsQueries =
             new ConcurrentDictionary<RuntimeTypeHandle, string>();
-        
+
         private static TableMetadata MetadataFor(Type type)
         {
             TableMetadata metadata;
@@ -54,10 +60,36 @@ namespace Dapper
             return metadata;
         }
 
+        private static void Log(string sql, object o)
+        {
+            if (s_log.IsTraceEnabled)
+            {
+                StringBuilder sb = new StringBuilder();
+                if (o != null)
+                {
+                    if (o is IDynamicMetaObjectProvider)
+                    {
+                        foreach (var kv in (IDictionary<string,object>)o)
+                        {
+                            sb.AppendFormat("{0}={1},", kv.Key, kv.Value);
+                        }
+                    } else
+                    {
+                        foreach (var prop in o.GetType().GetProperties())
+                        {
+                            sb.AppendFormat("{0}={1},", prop.Name, prop.GetValue(o));
+                        }
+                    }
+                }
+                s_log.TraceFormat("{0} - Params: {1}{2}", sql, o == null ? "<none>" : sb.ToString().TrimEnd(','), Environment.NewLine);
+            }
+        }
+
+
         public static T Get<T>(this IDbConnection connection, dynamic id, IDbTransaction transaction = null, int? commandTimeout = null) where T : class
         {
             var type = typeof(T);
-            var parameters= new Dictionary<string, object>();
+            var parameters = new Dictionary<string, object>();
 
             var values = new Dictionary<string, object>();
             var metadata = MetadataFor(type);
@@ -83,9 +115,11 @@ namespace Dapper
             var dynParms = new DynamicParameters(parameters);
 
             T obj = null;
+            Log(sql, dynParms);
             obj = connection.Query<T>(sql, dynParms, transaction: transaction, commandTimeout: commandTimeout).FirstOrDefault();
             return obj;
         }
+
 
         public static IEnumerable<T> GetList<T>(this IDbConnection connection, IEnumerable<dynamic> ids, IDbTransaction transaction = null, int? commandTimeout = null) where T : class
         {
@@ -101,7 +135,7 @@ namespace Dapper
             if (keys.Count() > 1)
                 throw new Exception("This only support entites with a single key property at the moment.");
 
-            values.Add(keys.First().PropertyName, ids.Select(x=>(object)x));
+            values.Add(keys.First().PropertyName, ids.Select(x => (object)x));
 
             string sql;
             if (!s_selectListQueries.TryGetValue(type.TypeHandle, out sql))
@@ -114,6 +148,8 @@ namespace Dapper
             }
 
             var dynParms = new DynamicParameters(parameters);
+
+            Log(sql, dynParms);
 
             IEnumerable<T> objs = connection.Query<T>(sql, dynParms, transaction: transaction, commandTimeout: commandTimeout);
             return objs;
@@ -128,6 +164,8 @@ namespace Dapper
                 var metadata = MetadataFor(type);
                 s_selectAllQueries[type.TypeHandle] = sql = TSQLGenerator.BuildSelect(metadata);
             }
+
+            Log(sql, null);
 
             return connection.Query<T>(sql, transaction: transaction, commandTimeout: commandTimeout);
         }
@@ -153,10 +191,12 @@ namespace Dapper
                 s_insertQueries[type.TypeHandle] = sql = TSQLGenerator.BuildInsert(metadata, withoutKeys: letDbGenerateKey);
             }
 
+            Log(sql, entityToInsert);
+
             connection.Execute(
                 sql,
-                entityToInsert, 
-                transaction: transaction, 
+                entityToInsert,
+                transaction: transaction,
                 commandTimeout: commandTimeout);
 
             if (letDbGenerateKey)
@@ -186,6 +226,10 @@ namespace Dapper
                 s_insertQueries[type.TypeHandle] = sql = TSQLGenerator.BuildInsert(metadata, withoutKeys: false);
             }
 
+
+            Log(sql, entityToInsert);
+
+
             connection.Execute(
                 sql,
                 entityToInsert,
@@ -204,13 +248,16 @@ namespace Dapper
                 s_updateQueries[type.TypeHandle] = sql = TSQLGenerator.BuildUpdate(metadata);
             }
 
+
+            Log(sql, entityToUpdate);
+
             var updated = connection.Execute(sql, entityToUpdate, commandTimeout: commandTimeout, transaction: transaction);
             return updated > 0;
         }
 
         public static TKey UpdateOrInsert<T, TKey>(
-            this IDbConnection connection, 
-            T entityToUpdate, 
+            this IDbConnection connection,
+            T entityToUpdate,
             IDbTransaction transaction = null,
             int? commandTimeout = null,
             bool letDbGenerateKey = true) where T : class
@@ -246,6 +293,8 @@ namespace Dapper
                 s_deleteQueries[type.TypeHandle] = sql = TSQLGenerator.BuildDelete(metadata);
             }
 
+            Log(sql, entityToDelete);
+
             var deleted = connection.Execute(sql, entityToDelete, transaction: transaction, commandTimeout: commandTimeout);
             return deleted > 0;
         }
@@ -267,10 +316,12 @@ namespace Dapper
                 s_existsQueries[type.TypeHandle] = sql = TSQLGenerator.BuildDelete(metadata);
             }
 
+            Log(sql, entity);
+
             var noOfRowsMatching = connection.Execute(
-                sql, 
-                entity, 
-                transaction: transaction, 
+                sql,
+                entity,
+                transaction: transaction,
                 commandTimeout: commandTimeout);
 
             return noOfRowsMatching > 0;
