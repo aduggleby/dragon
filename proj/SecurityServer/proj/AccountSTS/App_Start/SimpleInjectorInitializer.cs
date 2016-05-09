@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Configuration;
-using System.Data;
 using System.Linq;
 using System.Reflection;
 using System.Web;
@@ -11,15 +9,10 @@ using System.Web.Http;
 using System.Web.Mvc;
 using Dragon.Data.Interfaces;
 using Dragon.Data.Repositories;
-using Dragon.Security.Hmac.Core.Service;
-using Dragon.Security.Hmac.Module.Configuration;
-using Dragon.Security.Hmac.Module.Modules;
-using Dragon.Security.Hmac.Module.Repositories;
-using Dragon.Security.Hmac.Module.Services;
 using Dragon.SecurityServer.AccountSTS.Models;
+using Dragon.SecurityServer.AccountSTS.Services;
 using Dragon.SecurityServer.AccountSTS.Services.CheckPasswortServices;
 using Dragon.SecurityServer.AccountSTS.WebRequestHandler;
-using Dragon.SecurityServer.Common;
 using Dragon.SecurityServer.Identity.Models;
 using Dragon.SecurityServer.Identity.Stores;
 using Microsoft.Owin;
@@ -82,18 +75,7 @@ namespace Dragon.SecurityServer.AccountSTS
  
             container.RegisterSingleton(app);
 
-            container.RegisterSingleton(GetHmacSettings);
-
-            container.RegisterSingleton<Func<IDbConnection, HmacHttpService>>(connection =>
-            {
-                var hmacSettings = GetHmacSettings();
-                return new HmacHttpService(hmacSettings.ServiceId, hmacSettings.Paths, hmacSettings.SignatureParameterKey)
-                {
-                    HmacService = new HmacSha256Service(),
-                    UserRepository = new DapperUserRepository(connection, hmacSettings.UsersTableName),
-                    AppRepository = new DapperAppRepository(connection, hmacSettings.AppsTableName),
-                };
-            });
+            container.Register<IFederationService, FederationService>(Lifestyle.Singleton);
  
             container.RegisterConditional(typeof(IRepository<>), typeof(Repository<>), c => !c.Handled);
 
@@ -125,16 +107,6 @@ namespace Dragon.SecurityServer.AccountSTS
                     Assembly.GetExecutingAssembly());
             
             return container;
-        }
-
-        private static DragonSecurityHmacSection GetHmacSettings()
-        {
-            var settings = (DragonSecurityHmacSection) ConfigurationManager.GetSection(Consts.HmacSectionName);
-            if (settings == null)
-            {
-                throw new HmacInvalidConfigException($"Section {Consts.HmacSectionName} is missing.");
-            }
-            return settings;
         }
 
         public static IOwinContext GetOwinContext(this Container container)

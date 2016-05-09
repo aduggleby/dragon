@@ -14,7 +14,15 @@
         </div>
     }
     else {
-        using (Html.BeginForm("ExternalLogin", "Account", new { ReturnUrl = Model.ReturnUrl })) {
+        using (Html.BeginForm("ExternalLogin", "Account", new
+        {
+            ReturnUrl = ViewBag.RouteValues["ReturnUrl"],
+            appid = ViewBag.RouteValues["appid"],
+            serviceid = ViewBag.RouteValues["serviceid"],
+            userid = ViewBag.RouteValues["userid"],
+            expiry = ViewBag.RouteValues["expiry"],
+            signature = ViewBag.RouteValues["signature"]
+        })) {
             @Html.AntiForgeryToken()
             <div id="socialLoginList">
                 <p>

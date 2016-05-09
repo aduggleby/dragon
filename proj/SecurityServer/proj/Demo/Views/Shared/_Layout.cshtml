@@ -34,7 +34,7 @@
                     <li>@Html.ActionLink("SignOut", "SignOut", "Home")</li>
                     @if (User.Identity.IsAuthenticated)
                     {
-                        <li><a href="@WebConfigurationManager.AppSettings["AccountStsUrl"]/Manage/?returnUrl=@Request.Url.AbsoluteUri">Hello @email!</a></li>
+                        <li><a href="@WebConfigurationManager.AppSettings["AccountStsUrl"]/Manage/?returnUrl=@Url.Encode(Request.Url.AbsoluteUri)">Hello @email!</a></li>
                     }
                     else
                     {

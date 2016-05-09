@@ -1,14 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
+using System.Diagnostics;
 using System.IdentityModel.Configuration;
 using System.IdentityModel.Services;
 using System.Security.Claims;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Routing;
 using Dragon.SecurityServer.AccountSTS.Models;
 using Dragon.SecurityServer.AccountSTS.Services;
 using Dragon.SecurityServer.Common;
 using Dragon.SecurityServer.Identity.Stores;
+using Microsoft.AspNet.Identity;
 
 namespace Dragon.SecurityServer.AccountSTS.Controllers
 {
@@ -20,26 +25,48 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
         public const string SignOut = "wsignout1.0";
 
         private readonly IDragonUserStore<AppMember> _userStore;
+        private readonly IFederationService _federationService;
+        private readonly ApplicationSignInManager _signInManager;
+        private readonly ApplicationUserManager _userManager;
 
-        public HomeController(IDragonUserStore<AppMember> userStore)
+        public HomeController(IDragonUserStore<AppMember> userStore, IFederationService federationService, ApplicationSignInManager signInManager, ApplicationUserManager userManager)
         {
             _userStore = userStore;
+            _federationService = federationService;
+            _signInManager = signInManager;
+            _userManager = userManager;
         }
 
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
+            Debug.Assert(Request.Url != null, "Request.Url != null");
+            var routeValues = new Dictionary<string, object>
+            {
+                {"returnUrl", Request.Url.GetComponents(UriComponents.PathAndQuery, UriFormat.SafeUnescaped)},
+            };
+            Consts.QueryStringHmacParameterNames.ForEach(x => routeValues.Add(x, HttpContext.Request.QueryString[x]));
+
             // TODO: handle other actions: disconnect, refresh, logout, send password
             if (User.Identity.IsAuthenticated)
             {
                 switch (Request.QueryString["action"])
                 {
                     case "connect":
-                        // just show the login page for now
-                        return new HttpUnauthorizedResult();
+                        routeValues.Remove("returnUrl");
+                        routeValues.Add("returnUrl", Request.QueryString[Reply]);
+                        return _federationService.PerformExternalLogin(
+                            ControllerContext.HttpContext,
+                            Request.QueryString["data"],
+                            Url.Action("ExternalLoginCallbackAddLogin", "Account", new RouteValueDictionary(routeValues)));
                     case "disconnect":
-                        return RedirectToAction("ManageLogins", "Manage");
+                        return await _federationService.Disconnect(
+                            _signInManager, 
+                            _userManager, 
+                            Request.QueryString["data"], 
+                            User.Identity.GetUserId(), 
+                            Request.QueryString[Reply]);
                     case "forgotPassword":
-                        return RedirectToAction("ForgotPassword", "Account");
+                        return RedirectToAction("ForgotPassword", "Account", new RouteValueDictionary(routeValues));
                     default:
                         // nothing to be done
                         break;
@@ -69,7 +96,9 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
                     return Redirect(Request.QueryString[Reply]);
                 }
                 // ... else show login page
-                return new HttpUnauthorizedResult();
+                // return new HttpUnauthorizedResult(); // we need the hmac parameters, so use a custom redirect
+                Debug.Assert(HttpContext.Request.Url != null, "HttpContext.Request.Url != null");
+                return RedirectToAction("Login", "Account", new RouteValueDictionary(routeValues));
             }
             return View();
         }

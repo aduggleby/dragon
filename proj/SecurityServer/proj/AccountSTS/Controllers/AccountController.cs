@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.Composition;
+﻿using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -9,6 +10,7 @@ using Dragon.SecurityServer.AccountSTS.ActionFilters;
 using Dragon.SecurityServer.AccountSTS.App_Start;
 using Dragon.SecurityServer.AccountSTS.Helpers;
 using Dragon.SecurityServer.AccountSTS.Models;
+using Dragon.SecurityServer.AccountSTS.Services;
 using Dragon.SecurityServer.AccountSTS.Services.CheckPasswortServices;
 using Dragon.SecurityServer.Common;
 using Dragon.SecurityServer.Identity.Stores;
@@ -30,12 +32,14 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
         private readonly IDragonUserStore<AppMember> _userStore;
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private readonly IFederationService _federationService;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager, IDragonUserStore<AppMember> userStore)
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager, IDragonUserStore<AppMember> userStore, IFederationService federationService)
         {
             _userStore = userStore;
+            _federationService = federationService;
             UserManager = userManager;
             SignInManager = signInManager;
         }
@@ -84,8 +88,6 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
         [AllowAnonymous, ImportModelStateFromTempData]
         public ActionResult Login(string returnUrl)
         {
-            ViewBag.ReturnUrl = returnUrl;
-            ViewBag.RouteValues["ReturnUrl"] = returnUrl;
             return View();
         }
 
@@ -113,11 +115,6 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
                 HandleUserNotRegisteredForService(model.Email);
                 return View();
             }
-            catch (InvalidSignatureException)
-            {
-                HandleInvalidSignature(model.Email);
-                return View();
-            }
 
             if (result == SignInStatus.Failure)
             {
@@ -138,11 +135,6 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
                         catch (NotRegisteredForServiceException)
                         {
                             HandleUserNotRegisteredForService(model.Email);
-                            return View();
-                        }
-                        catch (InvalidSignatureException)
-                        {
-                            HandleInvalidSignature(model.Email);
                             return View();
                         }
                         // or force a password reset
@@ -411,10 +403,14 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ExternalLogin(string provider, string returnUrl)
         {
-            ControllerContext.HttpContext.Session.RemoveAll();
+            var routeValues = new Dictionary<string, object>
+            {
+                {"wreply", RequestHelper.GetParameterFromReturnUrl("wreply")},
+                {"ReturnUrl", returnUrl},
+            };
+            Consts.QueryStringHmacParameterNames.ForEach(x => routeValues.Add(x, HttpContext.Request.QueryString[x]));
 
-            // Request a redirect to the external login provider
-            return new ChallengeResult(provider, Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl }));
+            return _federationService.PerformExternalLogin(ControllerContext.HttpContext, provider, Url.Action("ExternalLoginCallback", "Account", new RouteValueDictionary(routeValues)));
         }
 
         //
@@ -455,6 +451,32 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
             return RedirectToAction("VerifyCode", new { Provider = model.SelectedProvider, ReturnUrl = model.ReturnUrl, RememberMe = model.RememberMe });
         }
 
+        [ExportModelStateToTempData]
+        public async Task<ActionResult> ExternalLoginCallbackAddLogin(string returnUrl)
+        {
+            var loginInfo = await AuthenticationManager.GetExternalLoginInfoAsync();
+            if (loginInfo == null)
+            {
+                Logger.Trace("External login failed: external login info is null");
+                ModelState.AddModelError("", "Unable to process login, please try again.");
+                return RedirectToAction("Login");
+            }
+            var user = await _userStore.FindByEmailAsync(loginInfo.Email);
+            if (!User.Identity.IsAuthenticated)
+            {
+                Logger.Trace("External add login failed: User is not logged in.");
+                ModelState.AddModelError("", "Please log in and try again.");
+                return RedirectToAction("Login");
+            }
+            if (!(await _userStore.GetLoginsAsync(user)).Any(x =>
+                    loginInfo.Login.LoginProvider == x.LoginProvider &&
+                    loginInfo.Login.ProviderKey == x.ProviderKey))
+            {
+                await _userStore.AddLoginAsync(user, loginInfo.Login);
+            }
+            return Redirect(returnUrl);
+        }
+
         //
         // GET: /Account/ExternalLoginCallback
         [AllowAnonymous, ExportModelStateToTempData]
@@ -467,8 +489,6 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
                 ModelState.AddModelError("", "Unable to process login, please try again.");
                 return RedirectToAction("Login");
             }
-            
-            // TODO: handle users that are not registered for the requested service
 
             // Sign in the user with this external login provider if the user already has a login
             SignInStatus result;
@@ -479,12 +499,6 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
             catch (NotRegisteredForServiceException)
             {
                 HandleUserNotRegisteredForService(loginInfo.Email);
-                ViewBag.RouteValues["ReturnUrl"] = returnUrl;
-                return RedirectToAction("Login", ViewBag.RouteValues);
-            }
-            catch (InvalidSignatureException)
-            {
-                HandleInvalidSignature(loginInfo.Email);
                 ViewBag.RouteValues["ReturnUrl"] = returnUrl;
                 return RedirectToAction("Login", ViewBag.RouteValues);
             }
@@ -513,14 +527,23 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
                             Logger.Log(LogLevel.Error, "Unable to create the user.");
                             return RedirectToAction("Login", ViewBag.RouteValues);
                         }
-                        await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-                        return RedirectToLocal(returnUrl);
                     }
+                    // For existing users add the external login
+                    if (!(await _userStore.GetLoginsAsync(user)).Any(x =>
+                        loginInfo.Login.LoginProvider == x.LoginProvider &&
+                        loginInfo.Login.ProviderKey == x.ProviderKey))
+                    {
+                        await _userStore.AddLoginAsync(user, loginInfo.Login);
+                    }
+                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                    return RedirectToLocal(returnUrl);
+                    /* Minimize user interaction on the AccountSTS, so don't show the login confirmation
                     // If the email address is already used, allow changing the email address or adding the external login to an existing account
                     ViewBag.ReturnUrl = returnUrl;
                     ViewBag.RouteValues["ReturnUrl"] = returnUrl;
                     ViewBag.LoginProvider = loginInfo.Login.LoginProvider;
                     return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel { Email = loginInfo.Email });
+                    */
             }
         }
 
@@ -587,11 +610,6 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
                     HandleUserNotRegisteredForService(model.Email);
                     return View(model);
                 }
-                catch (InvalidSignatureException)
-                {
-                    HandleInvalidSignature(model.Email);
-                    return View(model);
-                }
 
                 switch (result)
                 {
@@ -644,21 +662,6 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
             // On service id mismatch user might be logged in, but should not
             // Using ApplicationCookie because of https://aspnetidentity.codeplex.com/workitem/2347
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-        }
-
-        /// <summary>
-        /// Logout user if signature is invalid, adds error.
-        /// </summary>
-        private void HandleInvalidSignature(string email)
-        {
-            Logger.Trace("Invalid signature: user {0} not registered for service {1}", email, RequestHelper.GetCurrentServiceId());
-            ModelState.AddModelError("", "Invalid login attempt, please try again.");
-            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-        }
-
-        private bool IsUserLoggedIn()
-        {
-            return AuthenticationManager.User != null && AuthenticationManager.User.Identity.IsAuthenticated;
         }
 
         private async Task AddServiceToUser(AppMember user, string serviceId)
@@ -743,8 +746,6 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
         }
 
         #region Helpers
-        // Used for XSRF protection when adding external logins
-        private const string XsrfKey = "XsrfId";
 
         private IAuthenticationManager AuthenticationManager
         {
@@ -771,34 +772,7 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        internal class ChallengeResult : HttpUnauthorizedResult
-        {
-            public ChallengeResult(string provider, string redirectUri)
-                : this(provider, redirectUri, null)
-            {
-            }
 
-            public ChallengeResult(string provider, string redirectUri, string userId)
-            {
-                LoginProvider = provider;
-                RedirectUri = redirectUri;
-                UserId = userId;
-            }
-
-            public string LoginProvider { get; set; }
-            public string RedirectUri { get; set; }
-            public string UserId { get; set; }
-
-            public override void ExecuteResult(ControllerContext context)
-            {
-                var properties = new AuthenticationProperties { RedirectUri = RedirectUri };
-                if (UserId != null)
-                {
-                    properties.Dictionary[XsrfKey] = UserId;
-                }
-                context.HttpContext.GetOwinContext().Authentication.Challenge(properties, LoginProvider);
-            }
-        }
         #endregion
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
 using System.Web;
 using Dragon.Security.Hmac.Core.Service;
 using Dragon.SecurityServer.GenericSTSClient.Models;
@@ -32,7 +33,26 @@ namespace Dragon.SecurityServer.GenericSTSClient
                 Secret = ConfigurationManager.AppSettings["Dragon.Security.Hmac.Secret"]
             };
         }
-        
+
+        public Dictionary<string, string> CreateHmacRequestParametersFromConfig(Dictionary<string, string> parameters)
+        {
+            var hmacSettings = ReadHmacSettings();
+
+            var hmacParameters = new Dictionary<string, string>
+            {
+                { "expiry", DateTime.UtcNow.AddMinutes(+15).Ticks.ToString() },
+                { "serviceid", hmacSettings.ServiceId },
+                { "appid", hmacSettings.AppId },
+                { "userid", hmacSettings.UserId },
+            };
+
+            var allParameters = hmacParameters.Concat(parameters).ToDictionary(x => x.Key, x => x.Value);
+
+            allParameters.Add("signature", CalculateHash(allParameters, hmacSettings.Secret));
+
+            return allParameters;
+        }
+
         public Dictionary<string, string> CreateHmacRequestParametersFromConfig()
         {
             var hmacSettings = ReadHmacSettings();

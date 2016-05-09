@@ -11,3 +11,13 @@
 {
     <p>@claim.Type: @claim.Value</p>
 }
+<h3>Connect</h3>
+@foreach (var connect in ViewBag.ConnectUrls)
+{
+    <p><a href="@connect.Value">@connect.Key</a></p>
+}
+<h3>Disconnect</h3>
+@foreach (var disconnect in ViewBag.DisconnectUrls)
+{
+    <p><a href="@disconnect.Value">@disconnect.Key</a></p>
+}

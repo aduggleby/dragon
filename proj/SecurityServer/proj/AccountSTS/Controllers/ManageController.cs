@@ -4,6 +4,7 @@ using System.Web;
 using System.Web.Mvc;
 using Dragon.SecurityServer.AccountSTS.Helpers;
 using Dragon.SecurityServer.AccountSTS.Models;
+using Dragon.SecurityServer.AccountSTS.Services;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
@@ -15,11 +16,13 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private readonly IFederationService _federationService;
 
-        public ManageController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
+        public ManageController(ApplicationUserManager userManager, ApplicationSignInManager signInManager, IFederationService federationService)
         {
             UserManager = userManager;
             SignInManager = signInManager;
+            _federationService = federationService;
         }
 
         public ApplicationSignInManager SignInManager
@@ -304,7 +307,7 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
         public ActionResult LinkLogin(string provider)
         {
             // Request a redirect to the external login provider to link a login for the current user
-            return new AccountController.ChallengeResult(provider, Url.Action("LinkLoginCallback", "Manage", RequestHelper.ReturnUrlToRouteValues(Request.QueryString)), User.Identity.GetUserId());
+            return _federationService.PerformExternalLogin(ControllerContext.HttpContext, provider, Url.Action("LinkLoginCallback", "Manage", RequestHelper.ReturnUrlToRouteValues(Request.QueryString)), User.Identity.GetUserId());
         }
 
         //

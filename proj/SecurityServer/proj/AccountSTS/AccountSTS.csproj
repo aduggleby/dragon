@@ -260,8 +260,9 @@
     <Compile Include="ActionFilters\ImportModelStateFromTempData.cs" />
     <Compile Include="ActionFilters\ModelStateTempDataTransfer.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
-    <Compile Include="App_Start\InvalidSignatureException.cs" />
     <Compile Include="App_Start\NotRegisteredForServiceException.cs" />
+    <Compile Include="Services\FederationService.cs" />
+    <Compile Include="Services\IFederationService.cs" />
     <Compile Include="WebRequestHandler\OpenIdMigrationWebRequestHandler.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />

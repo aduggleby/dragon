@@ -14,17 +14,17 @@ namespace Dragon.SecurityServer.AccountSTS.Helpers
     {
         public static string GetCurrentServiceId()
         {
-            return GetParameterFromReturnUrl(Consts.QueryStringParameterNameServiceId);
+            return HttpContext.Current.Request.QueryString[Consts.QueryStringParameterNameServiceId];
         }
 
-        public static string GetParameterFromReturnUrl(string parameter)
+        public static string GetParameterFromReturnUrl(string parameterName)
         {
             var returnUrl = new Uri(
                 HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority) +
                 HttpContext.Current.GetOwinContext().Request.Query[Consts.QueryStringParameterNameReturnUrl]);
-            var currentServiceId = HttpUtility.ParseQueryString(returnUrl.Query).Get(parameter);
-            if (string.IsNullOrEmpty(currentServiceId)) throw new InvalidParameterException();
-            return currentServiceId;
+            var parameterValue = HttpUtility.ParseQueryString(returnUrl.Query).Get(parameterName);
+            if (string.IsNullOrEmpty(parameterValue)) throw new InvalidParameterException();
+            return parameterValue;
         }
 
         public static RouteValueDictionary ReturnUrlToRouteValues(NameValueCollection source, object additionalProperties)
