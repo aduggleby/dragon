@@ -82,6 +82,19 @@ namespace Dragon.Security.Hmac.Module.Configuration
             }
         }
 
+        [ConfigurationProperty("validateSignatureUsingHmacParametersOnly", DefaultValue = false, IsRequired = false)]
+        public bool ValidateSignatureUsingHmacParametersOnly
+        {
+            get
+            {
+                return (bool)this["validateSignatureUsingHmacParametersOnly"];
+            }
+            set
+            {
+                this["validateSignatureUsingHmacParametersOnly"] = value;
+            }
+        }
+
         [ConfigurationProperty("Paths", IsDefaultCollection = false)]
         [ConfigurationCollection(typeof(PathCollection),
             AddItemName = "add",

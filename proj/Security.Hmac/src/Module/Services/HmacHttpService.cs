@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web.WebPages;
@@ -22,11 +21,13 @@ namespace Dragon.Security.Hmac.Module.Services
 
         private readonly string _serviceId;
         private readonly string _signatureParameterKey;
+        private readonly bool _validateSignatureUsingHmacParametersOnly;
 
-        public HmacHttpService(string serviceId, IEnumerable<PathConfig> paths, string signatureParameterKey)
+        public HmacHttpService(string serviceId, IEnumerable<PathConfig> paths, string signatureParameterKey, bool validateSignatureUsingHmacParametersOnly)
         {
             _serviceId = serviceId;
             _signatureParameterKey = signatureParameterKey;
+            _validateSignatureUsingHmacParametersOnly = validateSignatureUsingHmacParametersOnly;
             PathsRegex = paths.Select(x => new PathInfo
                 {
                     Regex = new Regex(x.Path, RegexOptions.Singleline | RegexOptions.Compiled | RegexOptions.IgnoreCase),
@@ -78,7 +79,13 @@ namespace Dragon.Security.Hmac.Module.Services
                 return StatusCode.InvalidOrDisabledAppId;
             }
 
-            var actual = HmacService.CalculateHash(HmacService.CreateSortedQueryString(queryString), app.Secret);
+            var filteredQueryString = queryString;
+            if (_validateSignatureUsingHmacParametersOnly)
+            {
+                filteredQueryString = new NameValueCollection();
+                mandatoryParameterNames.ToList().ForEach(x => filteredQueryString.Add(x, queryString.Get(x)));
+            }
+            var actual = HmacService.CalculateHash(HmacService.CreateSortedQueryString(filteredQueryString), app.Secret);
             if (actual.ToLower() != signature.ToLower())
             {
                 return StatusCode.InvalidSignature;
