@@ -151,6 +151,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\FederationController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\RestrictedController.cs" />
     <Compile Include="CustomAuthenticationModule.cs" />
@@ -210,6 +211,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
+    <Folder Include="Views\Federation\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Project_Readme.html" />

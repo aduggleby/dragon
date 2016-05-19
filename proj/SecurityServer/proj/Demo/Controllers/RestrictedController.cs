@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Configuration;
+using System.Diagnostics;
 using System.IdentityModel.Services;
 using System.Security.Claims;
 using System.Web.Mvc;
 using Dragon.SecurityServer.AccountSTS.Client;
 using System.Linq;
+using System.Web.Routing;
 
 namespace Dragon.SecurityServer.Demo.Controllers
 {
@@ -47,12 +47,14 @@ namespace Dragon.SecurityServer.Demo.Controllers
 
         private Dictionary<string, string> GetFederationManagementUrls(IEnumerable<Claim> claims, string accountType, string action)
         {
+            var routeValues = new Dictionary<string, object> { { "returnUrl", System.Web.HttpContext.Current.Request.Url.AbsoluteUri } };
             var types = claims.Where(x => x.Type == accountType).ToList();
+            Debug.Assert(Request.Url != null, "Request.Url != null");
             return types.Any()
                 ? types.ToDictionary(
                     x => x.Value,
-                    x => _client.GetManagementUrl(action, x.Value, System.Web.HttpContext.Current.Request.Url.AbsoluteUri)
-                    )
+                    x => _client.GetManagementUrl(action, x.Value,
+                        Url.Action("OnExternalFederationChanged", "Federation", new RouteValueDictionary(routeValues), Request.Url.Scheme)))
                 : new Dictionary<string, string>();
         }
 
