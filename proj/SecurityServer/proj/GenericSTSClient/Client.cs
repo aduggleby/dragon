@@ -68,7 +68,7 @@ namespace Dragon.SecurityServer.GenericSTSClient
                 var response = await client.PostAsJsonAsync(GenerateUrl(action), model).ConfigureAwait(false);
                 if (!response.IsSuccessStatusCode)
                 {
-                    throw new Exception(await response.Content.ReadAsStringAsync());
+                    throw new ApiException(await response.Content.ReadAsStringAsync());
                 }
             }
         }
@@ -81,7 +81,7 @@ namespace Dragon.SecurityServer.GenericSTSClient
                 var response = await client.PostAsJsonAsync(GenerateUrl(action), model).ConfigureAwait(false);
                 if (!response.IsSuccessStatusCode)
                 {
-                    throw new Exception(await response.Content.ReadAsStringAsync());
+                    throw new ApiException(await response.Content.ReadAsStringAsync());
                 }
                 return await response.Content.ReadAsAsync<TU>();
             }
@@ -96,7 +96,7 @@ namespace Dragon.SecurityServer.GenericSTSClient
 
         private string GenerateUrl(string action, Dictionary<string, string> parameters)
         {
-            return $"{_serviceUrl}{action}{CreateHmacAwareParametersDictionary(parameters)}";
+            return $"{_serviceUrl}/{action}/{CreateHmacAwareParametersDictionary(parameters)}";
         }
 
         private static void InitClient(HttpClient client)
@@ -109,11 +109,6 @@ namespace Dragon.SecurityServer.GenericSTSClient
         private string CreateHmacAwareParametersDictionary(Dictionary<string, string> parameters)
         {
             var queryString = HttpUtility.ParseQueryString(string.Empty);
-            foreach (var parameter in parameters)
-            {
-                queryString[parameter.Key] = parameter.Value;
-            }
-            if (queryString.Count < 1) return "";
             if (HmacSettings != null)
             {
                 queryString["appid"] = queryString["appid"] ?? HmacSettings.AppId;
@@ -123,6 +118,11 @@ namespace Dragon.SecurityServer.GenericSTSClient
                 var hmacService = new HmacSha256Service();
                 queryString["signature"] = queryString["signature"] ?? hmacService.CalculateHash(hmacService.CreateSortedQueryString(queryString), HmacSettings.Secret);
             }
+            foreach (var parameter in parameters)
+            {
+                queryString[parameter.Key] = parameter.Value;
+            }
+            if (queryString.Count < 1) return "";
             return "?" + queryString;
         }
 

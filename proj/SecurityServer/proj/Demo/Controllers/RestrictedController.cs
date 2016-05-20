@@ -6,7 +6,12 @@ using System.Security.Claims;
 using System.Web.Mvc;
 using Dragon.SecurityServer.AccountSTS.Client;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Routing;
+using Dragon.SecurityServer.AccountSTS.Client.Models;
+using Dragon.SecurityServer.Demo.ActionFilters;
+using Dragon.SecurityServer.Demo.Models;
+using Dragon.SecurityServer.GenericSTSClient;
 
 namespace Dragon.SecurityServer.Demo.Controllers
 {
@@ -20,7 +25,8 @@ namespace Dragon.SecurityServer.Demo.Controllers
         {
             var fam = FederatedAuthentication.WSFederationAuthenticationModule;
             var accountStsUrl = ConfigurationManager.AppSettings["AccountStsUrl"];
-            _client = new AccountSTSClient(string.IsNullOrEmpty(accountStsUrl) ? fam.Issuer : accountStsUrl, fam.Realm);
+            _client = new AccountSTSClient((string.IsNullOrEmpty(accountStsUrl) ? fam.Issuer : accountStsUrl) + "/api", fam.Realm);
+            _client.SetHmacSettings(HmacHelper.ReadHmacSettings());
         }
 
         public RestrictedController(IClient client)
@@ -29,6 +35,7 @@ namespace Dragon.SecurityServer.Demo.Controllers
         }
 
         // GET: Restricted
+        [ImportModelStateFromTempData]
         public ActionResult Index()
         {
             if (!User.Identity.IsAuthenticated)
@@ -36,13 +43,18 @@ namespace Dragon.SecurityServer.Demo.Controllers
                 return new HttpUnauthorizedResult();
                 //CustomSignIn(); // custom signin
             }
+            InitViewBag();
+            return View();
+        }
+
+        private void InitViewBag()
+        {
             ViewBag.Name = User.Identity.Name;
             ViewBag.AuthenticationType = User.Identity.AuthenticationType;
             var claims = ((ClaimsIdentity) User.Identity).Claims.ToList();
             ViewBag.Claims = claims;
             ViewBag.ConnectUrls = GetFederationManagementUrls(claims, ManagementDisconnectedAccountType, "connect");
             ViewBag.DisconnectUrls = GetFederationManagementUrls(claims, ManagementConnectedAccountType, "disconnect");
-            return View();
         }
 
         private Dictionary<string, string> GetFederationManagementUrls(IEnumerable<Claim> claims, string accountType, string action)
@@ -62,6 +74,44 @@ namespace Dragon.SecurityServer.Demo.Controllers
         {
             System.Web.HttpContext.Current.Response.Redirect(_client.GetManagementUrl("connect", System.Web.HttpContext.Current.Request.Url.AbsoluteUri), false);
             System.Web.HttpContext.Current.Response.End();
+        }
+
+        [HttpPost]
+        [ExportModelStateToTempData]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ChangeAccountData(ChangeAccountDataViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("Index", model);
+            }
+            var id = ((ClaimsIdentity)User.Identity).Claims.ToList().First(x => x.Type == ClaimTypes.NameIdentifier).Value;
+            var updateViewModel = new UpdateViewModel
+            {
+                Id = id,
+            };
+            if (!string.IsNullOrWhiteSpace(model.EmailAddress))
+            {
+                updateViewModel.Email = model.EmailAddress;
+            }
+            // TODO: validate pw
+            // TODO: old pw? what if non exists?
+            if (!string.IsNullOrEmpty(model.NewPassword))
+            {
+                updateViewModel.Password = model.NewPassword;
+                updateViewModel.ConfirmPassword = model.ConfirmPassword;
+            }
+
+            try
+            {
+                await _client.Update(updateViewModel);
+            }
+            catch (ApiException e)
+            {
+                ModelState.AddModelError("", e.Message);
+            }
+
+            return RedirectToAction("Index", model);
         }
     }
 }

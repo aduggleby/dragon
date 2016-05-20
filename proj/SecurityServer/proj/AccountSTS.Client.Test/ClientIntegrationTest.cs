@@ -9,7 +9,7 @@ namespace Dragon.SecurityServer.AccountSTS.Client.Test
     [TestClass]
     public class ClientIntegrationTest
     {
-        private const string ServiceUrl = "http://thispc.com:51385/api/AccountApi/";
+        private const string ServiceUrl = "http://localhost:51385/Api/";
         private const string Realm = "http://WSFedTest/";
 
         [TestMethod]

@@ -1,4 +1,5 @@
-﻿@{
+﻿@model Dragon.SecurityServer.Demo.Models.ChangeAccountDataViewModel
+@{
     ViewBag.Title = "Restricted";
 }
 
@@ -20,4 +21,37 @@
 @foreach (var disconnect in ViewBag.DisconnectUrls)
 {
     <p><a href="@disconnect.Value">@disconnect.Key</a></p>
+}
+<h3>Settings</h3>
+
+@using (Html.BeginForm("ChangeAccountData", "Restricted"))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(m => m.EmailAddress, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.EmailAddress, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.NewPassword, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.PasswordFor(m => m.NewPassword, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Update" class="btn btn-default" />
+        </div>
+    </div>
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
 }
