@@ -25,7 +25,8 @@ namespace Dragon.SecurityServer.Demo.Controllers
         {
             var fam = FederatedAuthentication.WSFederationAuthenticationModule;
             var accountStsUrl = ConfigurationManager.AppSettings["AccountStsUrl"];
-            _client = new AccountSTSClient((string.IsNullOrEmpty(accountStsUrl) ? fam.Issuer : accountStsUrl) + "/api", fam.Realm);
+            accountStsUrl = (string.IsNullOrEmpty(accountStsUrl) ? fam.Issuer : accountStsUrl);
+            _client = new AccountSTSClient(accountStsUrl + "/Api", accountStsUrl, fam.Realm);
             _client.SetHmacSettings(HmacHelper.ReadHmacSettings());
         }
 
@@ -65,14 +66,14 @@ namespace Dragon.SecurityServer.Demo.Controllers
             return types.Any()
                 ? types.ToDictionary(
                     x => x.Value,
-                    x => _client.GetManagementUrl(action, x.Value,
+                    x => _client.GetFederationUrl(action, x.Value,
                         Url.Action("OnExternalFederationChanged", "Federation", new RouteValueDictionary(routeValues), Request.Url.Scheme)))
                 : new Dictionary<string, string>();
         }
 
         private void CustomSignIn()
         {
-            System.Web.HttpContext.Current.Response.Redirect(_client.GetManagementUrl("connect", System.Web.HttpContext.Current.Request.Url.AbsoluteUri), false);
+            System.Web.HttpContext.Current.Response.Redirect(_client.GetApiUrl("connect", System.Web.HttpContext.Current.Request.Url.AbsoluteUri), false);
             System.Web.HttpContext.Current.Response.End();
         }
 

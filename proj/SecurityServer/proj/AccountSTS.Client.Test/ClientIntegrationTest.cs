@@ -9,7 +9,8 @@ namespace Dragon.SecurityServer.AccountSTS.Client.Test
     [TestClass]
     public class ClientIntegrationTest
     {
-        private const string ServiceUrl = "http://localhost:51385/Api/";
+        private const string ApiUrl = "http://localhost:51385/Api/";
+        private const string FederationUrl = "http://localhost:51385/";
         private const string Realm = "http://WSFedTest/";
 
         [TestMethod]
@@ -59,7 +60,7 @@ namespace Dragon.SecurityServer.AccountSTS.Client.Test
 
         private static AccountSTSClient CreateClient()
         {
-            var client = new AccountSTSClient(ServiceUrl, Realm);
+            var client = new AccountSTSClient(ApiUrl, FederationUrl, Realm);
             client.SetHmacSettings(IntegrationTestHelper.ReadHmacSettings());
             return client;
         }
