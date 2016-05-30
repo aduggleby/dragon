@@ -7,11 +7,13 @@ using System.Web.Mvc;
 using Dragon.SecurityServer.AccountSTS.Client;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Routing;
 using Dragon.SecurityServer.AccountSTS.Client.Models;
 using Dragon.SecurityServer.Demo.ActionFilters;
 using Dragon.SecurityServer.Demo.Models;
 using Dragon.SecurityServer.GenericSTSClient;
+using Microsoft.AspNet.Identity;
 
 namespace Dragon.SecurityServer.Demo.Controllers
 {
@@ -73,7 +75,7 @@ namespace Dragon.SecurityServer.Demo.Controllers
 
         private void CustomSignIn()
         {
-            System.Web.HttpContext.Current.Response.Redirect(_client.GetApiUrl("connect", System.Web.HttpContext.Current.Request.Url.AbsoluteUri), false);
+            System.Web.HttpContext.Current.Response.Redirect(_client.GetFederationUrl("connect", System.Web.HttpContext.Current.Request.Url.AbsoluteUri), false);
             System.Web.HttpContext.Current.Response.End();
         }
 
@@ -106,8 +108,18 @@ namespace Dragon.SecurityServer.Demo.Controllers
             try
             {
                 await _client.Update(updateViewModel);
-                Debug.Assert(HttpContext.Request.Url != null, "HttpContext.Request.Url != null");
-                return Redirect(_client.GetFederationUrl("reconnect", Url.Action("Index", "Restricted", null, HttpContext.Request.Url.Scheme)));
+
+                // update claims to provide the user up-to-date data
+                var identity = (ClaimsIdentity)User.Identity;
+                var context = Request.GetOwinContext();
+                var claim = identity.FindFirst(ClaimTypes.Email);
+                if (!string.IsNullOrWhiteSpace(model.EmailAddress) && claim.Value != model.EmailAddress)
+                {
+                    identity.RemoveClaim(claim);
+                    identity.AddClaim(new Claim(ClaimTypes.Email, updateViewModel.Email));
+                }
+                context.Authentication.SignOut(DefaultAuthenticationTypes.ExternalCookie);
+                context.Authentication.SignIn(identity);
             }
             catch (ApiException e)
             {
