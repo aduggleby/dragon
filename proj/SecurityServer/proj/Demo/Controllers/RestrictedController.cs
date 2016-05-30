@@ -106,6 +106,8 @@ namespace Dragon.SecurityServer.Demo.Controllers
             try
             {
                 await _client.Update(updateViewModel);
+                Debug.Assert(HttpContext.Request.Url != null, "HttpContext.Request.Url != null");
+                return Redirect(_client.GetFederationUrl("reconnect", Url.Action("Index", "Restricted", null, HttpContext.Request.Url.Scheme)));
             }
             catch (ApiException e)
             {

@@ -51,6 +51,9 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
             {
                 switch (Request.QueryString["action"])
                 {
+                    case "reconnect":
+                        var formData = ProcessSignIn(Request.Url, (ClaimsPrincipal)User);
+                        return new ContentResult() { Content = formData, ContentType = "text/html" };
                     case "connect":
                         routeValues.Remove("returnUrl");
                         routeValues.Add("returnUrl", Request.QueryString[Reply]);

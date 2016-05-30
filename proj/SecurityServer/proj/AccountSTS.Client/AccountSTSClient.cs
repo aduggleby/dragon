@@ -40,6 +40,15 @@ namespace Dragon.SecurityServer.AccountSTS.Client
             await _client.GetRequest(ClearCacheAction);
         }
 
+        public string GetFederationUrl(string action, string replyUrl)
+        {
+            var parameters = new Dictionary<string, string>
+            {
+                { "action", action },
+            };
+            return CreateSignedUrl(_federationUrl, parameters, replyUrl); ;
+        }
+
         public string GetFederationUrl(string action, string data, string replyUrl)
         {
             var parameters = new Dictionary<string, string>

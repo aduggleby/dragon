@@ -7,6 +7,7 @@ namespace Dragon.SecurityServer.AccountSTS.Client
     {
         void SetHmacSettings(HmacSettings settings);
         Task ClearCache();
+        string GetFederationUrl(string action, string replyUrl);
         string GetFederationUrl(string action, string data, string replyUrl);
         string GetApiUrl(string action, string replyUrl);
         string GetApiUrl(string action, string data, string replyUrl);
