@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dragon.Mail", "Dragon.Mail.csproj", "{A573CAFD-218A-4D88-BE07-B099D99773BA}"
 EndProject
@@ -12,6 +12,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dragon.Mail.SenderTest", "Dragon.Mail.SenderTest\Dragon.Mail.SenderTest.csproj", "{BFD69C59-F7F3-413B-8328-58B86D006B5B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dragon.Mail.SqlQueue", "Dragon.Mail.SqlQueue\Dragon.Mail.SqlQueue.csproj", "{254794EF-5EF6-4D16-BAC0-62DB7201072E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dragon.Mail.IdentityMessageService", "..\Dragon.Mail.IdentityMessageService\Dragon.Mail.IdentityMessageService.csproj", "{59FFA37D-C273-4F59-A2BD-8CE6DDB6D6A9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{254794EF-5EF6-4D16-BAC0-62DB7201072E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{254794EF-5EF6-4D16-BAC0-62DB7201072E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{254794EF-5EF6-4D16-BAC0-62DB7201072E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59FFA37D-C273-4F59-A2BD-8CE6DDB6D6A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59FFA37D-C273-4F59-A2BD-8CE6DDB6D6A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59FFA37D-C273-4F59-A2BD-8CE6DDB6D6A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59FFA37D-C273-4F59-A2BD-8CE6DDB6D6A9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
