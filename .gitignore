@@ -4,6 +4,7 @@ release/
 
 app.config
 db.config
+*.pubxml
 
 #OS junk files
 [Tt]humbs.db
@@ -37,6 +38,7 @@ ipch/
 [Dd]ebug*/
 [Rr]elease*/
 Ankh.NoLoad
+.vs
 
 #MonoDevelop
 *.pidb

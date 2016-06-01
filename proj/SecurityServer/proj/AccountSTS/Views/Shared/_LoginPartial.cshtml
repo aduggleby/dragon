@@ -1,0 +1,27 @@
+﻿@using Dragon.SecurityServer.AccountSTS.Helpers
+@using Microsoft.AspNet.Identity
+@if (Request.IsAuthenticated)
+{
+    using (Html.BeginForm("LogOff", "Account", RequestHelper.ToRouteValues(Request.QueryString), FormMethod.Post, new Dictionary<string, object>{{"id", "logoutForm"}, {"class", "navbar-right"}}))
+    {
+    @Html.AntiForgeryToken()
+
+    <ul class="nav navbar-nav navbar-right">
+        @if (!string.IsNullOrEmpty(Request.Params["returnUrl"]))
+        {
+            <li><a href="@Request.Params["returnUrl"]">Return</a></li>
+        }
+        <li>
+            <a href="#">Hello @User.Identity.GetUserName() !</a><!--@Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })-->
+        </li>
+        <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+    </ul>
+    }
+}
+else
+{
+    <ul class="nav navbar-nav navbar-right">
+        <li>@Html.ActionLink("Register", "Register", "Account", routeValues: RequestHelper.ToRouteValues(Request.QueryString), htmlAttributes: new Dictionary<string, object>{{ "id", "registerLink" }})</li>
+        <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: RequestHelper.ToRouteValues(Request.QueryString), htmlAttributes: new Dictionary<string, object>{{ "id", "loginLink" }})</li>
+    </ul>
+}
