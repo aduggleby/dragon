@@ -3,60 +3,127 @@
 @{
     ViewBag.Title = "Log in";
 }
+@{ 
+    var parameters = new RouteValueDictionary(HttpContext.Current.Request.QueryString.Keys.Cast<string>()
+                .ToDictionary(k => k, v => (object)HttpContext.Current.Request.QueryString[v]));
 
-<h2>@ViewBag.Title.</h2>
-<div class="row">
-    <div class="col-md-8">
-        <section id="loginForm">
-            @using (Html.BeginForm("Login", "Account",  (RouteValueDictionary)ViewBag.RouteValues, FormMethod.Post, new Dictionary<string, object> {{ "@class", "form-horizontal"}, {"role", "form" }}))
-            {
-                @Html.AntiForgeryToken()
-                <h4>Use a local account to log in.</h4>
-                <hr />
-                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                <div class="form-group">
-                    @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
-                    <div class="col-md-10">
-                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-                <div class="form-group">
-                    @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
-                    <div class="col-md-10">
-                        @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <div class="checkbox">
-                            @Html.CheckBoxFor(m => m.RememberMe)
-                            @Html.LabelFor(m => m.RememberMe)
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <input type="submit" value="Log in" class="btn btn-default" />
-                    </div>
-                </div>
-                <p>
-                    @Html.ActionLink("Register as a new user", "Register", (RouteValueDictionary)ViewBag.RouteValues)
-                </p>
-                <p>
-                    @Html.ActionLink("Forgot your password?", "ForgotPassword", (RouteValueDictionary)ViewBag.RouteValues)
-                </p>
-            }
-        </section>
-    </div>
-    <div class="col-md-4">
-        <section id="socialLoginForm">
-            @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
-        </section>
-    </div>
-</div>
-
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
 }
+
+<!-- START Template Main -->
+<section id="main" role="main" class="wav-login">
+    <!-- START Template Container -->
+    <section class="container" id="wav-home">
+
+
+        <!-- START row -->
+        <div class="row">
+            <div class="wav-login-wrapper">
+
+                <!-- Brand -->
+                <div class="row wav-login-brand">
+                    <img src="//wav-prod-cdn-main.azureedge.net/assets/images/intro/logo-signup-small.png">
+                </div>
+                <div class="row wav-login-notebook">
+                    <img src="//wav-prod-cdn-main.azureedge.net/assets/images/intro/laptop-signup.png">
+                </div>
+
+
+                <div class="flip-container">
+                    <!-- START flipper -->
+                    <div class="flipper">
+                        <!-- START sign in -->
+                        <div class="front wav-login-signin">
+                            <div class="panel">
+                                <div class="panel-heading">
+                                    <h1>Welcome to WhatAVenture</h1>
+                                    <p class="subtext">Let‘s turn your business ideas into success.</p>
+
+                                </div>
+                                <div class="panel-body">
+                                    @using (Html.BeginForm("Login", "Account", parameters, FormMethod.Post, new Dictionary<string, object> { { "@class", "form-horizontal" }, { "role", "form" } }))
+                                    {
+                                        @Html.AntiForgeryToken()
+                                        <div class="row">
+                                            <div class="col-sm-12">
+
+                                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                                <div class="form-group ">
+                                                    <div class="row">
+                                                        <div class="col-sm-12">
+                                                            @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Email" })
+                                                            @Html.ValidationMessageFor(m => m.Email, "", new { @class = "help-block mt10" })
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-12">
+                                                            @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Password" })
+                                                            @Html.ValidationMessageFor(m => m.Password, "", new { @class = "help-block mt10" })
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-12 mt10">
+                                                            <input type="submit" class="btn btn-lg btn-block btn-success signup" value="Sign in" />
+                                                        </div>
+                                                    </div>
+
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+                                    }
+                                </div>
+
+                                <div class="wav-login-or-register">
+                                    <p>Don't have an account yet?</p>
+                                    @Html.ActionLink("Register here", "Register", null, parameters, new Dictionary<string, object>() {
+                                        { "class" , "btn btn-success btn-outline wav-login-or-register-button toggle-register" } })
+
+                                    <!--<a class="btn btn-success btn-outline wav-login-or-register-button toggle-register" href="#">Register here</a>-->
+                                </div>
+
+
+                                <div class="panel-footer">
+                                    <div class="col-sm-12 text-center">
+                                        <span class="orsignin">or sign in with &nbsp;</span>
+                                        @using (Html.BeginForm("ExternalLogin", "Account", new
+                                        {
+                                            ReturnUrl = ViewBag.RouteValues["ReturnUrl"],
+                                            appid = ViewBag.RouteValues["appid"],
+                                            serviceid = ViewBag.RouteValues["serviceid"],
+                                            userid = ViewBag.RouteValues["userid"],
+                                            expiry = ViewBag.RouteValues["expiry"],
+                                            signature = ViewBag.RouteValues["signature"]
+                                        }))
+                                        {
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" style="border: none; background-color: transparent" class="" id="Facebook" name="provider" value="Facebook"><img title="Facebook" src="//wav-prod-cdn-main.azureedge.net/assets/images/intro/signin_facebook.png"></button>
+                                            <button type="submit" style="border: none; background-color: transparent" class="" id="Google" name="provider" value="Google"><img title="Google" src="//wav-prod-cdn-main.azureedge.net/assets/images/intro/signin_google.png"></button>
+                                            <button type="submit" style="border: none; background-color: transparent" class="" id="Twitter" name="provider" value="Twitter"><img title="Twitter" src="//wav-prod-cdn-main.azureedge.net/assets/images/intro/signin_twitter.png"></button>
+                                            <button type="submit" style="border: none; background-color: transparent" class="" id="Microsoft" name="provider" value="Microsoft"><img title="Microsoft" src="//wav-prod-cdn-main.azureedge.net/assets/images/intro/signin_windows.png"></button>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row wav-login-forgot">
+                                @Html.ActionLink("Forgot your password?", "ForgotPassword", null, parameters, new Dictionary<string, object>() {
+                                        { "class" , "toggle-password" } })
+                            </div>
+                        </div>
+
+                    </div>
+                    <!--/ END flipper  -->
+                </div>
+            </div>
+        </div>
+        <!--/ END row -->
+
+    </section>
+    <!-- END Template Container -->
+</section>
+<!--/ END Template Main -->
+
+@*@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}*@

@@ -1,46 +1,40 @@
 ﻿<!DOCTYPE html>
-<html>
+<html class="backend">
 <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=9999">
     <meta charset="utf-8" />
+    <title>WhatAVenture - Guiding business ideas to success.</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - AccountSTS</title>
-    @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
+    <meta name="description" content="Turn your business idea into success. You have a business idea? The difference is to know how to turn a business idea into sucess. Our web tool guides you to success, step-by-step.">
+    <meta name="author" content="WhatAVenture Team">
+    <link rel="apple-touch-icon" sizes="114&#10006;114" href="//wav-prod-cdn-main.azureedge.net/assets/favicons/apple-touch-icon-114x114.png" />
+    <link rel="apple-touch-icon" sizes="72&#10006;72" href="//wav-prod-cdn-main.azureedge.net/assets/favicons/apple-touch-icon-72x72.png" />
+    <link rel="apple-touch-icon" href="//wav-prod-cdn-main.azureedge.net/assets/favicons/touch-icon-iphone.png" />
+    <link rel="shortcut icon" type="image/x-icon" href="//wav-prod-cdn-main.azureedge.net/assets/favicons/favicon.ico">
+
+    <link href='//fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans+Condensed:300,300italic,700' rel='stylesheet' type='text/css'>
+
+    <meta property="og:description" content="Turn your business idea into success. You have a business idea? The difference is to know how to turn a business idea into sucess. Our web tool guides you to success, step-by-step." />
+    <meta property="og:image" content="//wav-prod-cdn-main.azureedge.net/assets/img/ci/logo_191px_90px.png?v=9.0.5996.11673" />
+
+    <!-- BUNDLES -->
+    <!--[if IE]>
+        <link href="/bundles/styles/ie1?v=UT9lW57xZOtYS0InziPHaVhI3jCdX82q2SldREs7t5w1" rel="stylesheet"/>
+        <link href="/bundles/styles/ie2?v=2MWkh24O89KAHpcxyikeNOGB3f802qeHtnCHxsJ47_41" rel="stylesheet"/>
+        <link href="/bundles/styles/ie3?v=6D7iishq7SUrk9NtAtpWK2maBVTP1OYN7NI9D3n_Bo81" rel="stylesheet"/>
+        <link href="/bundles/styles/ie4?v=Uj7WUDR2Vq7KolfGzxewfOK140N2AOzxaUCQWKDh9wo1" rel="stylesheet"/>
+    <![endif]-->
+    <!--[if !IE]><!-->
+    <link href="//wav-prod-cdn-main.azureedge.net/bundles/styles?v=9.0.5996.11673?v=dJxvUAFhpVnS20LvlGJ6Q1HtQWB0Vf0kH8S4C9k7eZI1" rel="stylesheet" />
+    <!--<![endif]-->
 
 </head>
-<body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <!--@Html.ActionLink("AccountSTS", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })-->
-            </div>
-            <div class="navbar-collapse collapse">
-                <!--
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                </ul>
-                -->
-                @Html.Partial("_LoginPartial")
-            </div>
-        </div>
-    </div>
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-        </footer>
-    </div>
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("scripts", required: false)
+<body id="login" class="">
+
+    @RenderBody()
+
 </body>
 </html>
