@@ -312,6 +312,7 @@
     <Compile Include="Helpers\MailService.cs" />
     <Compile Include="Helpers\NonEmptyValidationSummaryHtmlExtension.cs" />
     <Compile Include="Helpers\UserModel.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Services\FederationService.cs" />
     <Compile Include="Services\IFederationService.cs" />
     <Compile Include="WebRequestHandler\OpenIdMigrationWebRequestHandler.cs" />
@@ -424,6 +425,10 @@
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Scripts\jquery-2.2.3.min.map" />
+    <Content Include="Views\Error\Unauthorized.cshtml" />
+    <None Include="Web.config.default">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
