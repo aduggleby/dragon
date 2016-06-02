@@ -1,0 +1,16 @@
+@inc(..\_Includes\_Header.txt)
+Hello {{{recipient.fullname}}}!
+
+{{{post.sender.fullname}}} just posted a new task.
+
+---------------------------------------------
+
+{{{post.title}}}
+
+{{{post.description}}}
+
+---------------------------------------------
+
+See task here:
+{{post.url}}
+@inc(..\_Includes\_Footer.txt)

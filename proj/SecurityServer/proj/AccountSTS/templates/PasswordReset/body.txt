@@ -1,0 +1,12 @@
+@inc(..\_Includes\_Header.txt)
+Hello {{{recipient.fullname}}}!
+
+We know that an entrepeneur has a lot on his plate and even more online services to work with ;) So we can totally revive your password request for your account on WhatAVenture.
+
+-----------------------------------------------
+
+Simply click this link to set a new password:
+{{{url}}}
+
+-----------------------------------------------
+@inc(..\_Includes\_Footer.txt)

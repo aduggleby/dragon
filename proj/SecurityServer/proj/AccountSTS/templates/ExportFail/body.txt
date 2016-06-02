@@ -1,0 +1,8 @@
+@inc(..\_Includes\_Header.txt)
+Hello {{{recipient.fullname}}}!
+
+There was a problem exporting your project {{project.name}}. This email is also being sent to help@whataventure.com and we will take a look at the problem.
+
+---------------------------------------------
+
+@inc(..\_Includes\_Footer.txt)

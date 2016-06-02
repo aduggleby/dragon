@@ -18,6 +18,13 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using NLog;
+using Dragon.SecurityServer.AccountSTS.Client;
+using Dragon.SecurityServer.GenericSTSClient;
+using Microsoft.IdentityModel.Protocols;
+using System.Configuration;
+using System.IdentityModel.Services;
+using Dragon.SecurityServer.GenericSTSClient.Models;
+using System;
 
 namespace Dragon.SecurityServer.AccountSTS.Controllers
 {
@@ -33,6 +40,7 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
         private readonly IFederationService _federationService;
+        private MailService _mailService;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
@@ -40,6 +48,7 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
         {
             _userStore = userStore;
             _federationService = federationService;
+            _mailService = new MailService();
             UserManager = userManager;
             SignInManager = signInManager;
         }
@@ -245,7 +254,7 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new AppMember { UserName = model.Email, Email = model.Email };
+                var user = new AppMember { UserName = model.Email, Email = model.Email,EmailConfirmed=true };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -256,9 +265,10 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
                     
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
-                    string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                    // AD: WAV does not send confirmation emails for accounts... -> see EmailConfirmed=true above
+                    // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                    // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                    // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
                     var returnUrl = Request.QueryString["ReturnUrl"];
                     return string.IsNullOrEmpty(returnUrl) ? RedirectToAction("Index", "Home") : RedirectToLocal(returnUrl);
@@ -337,9 +347,12 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
             string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
             var callbackUrl = Url.Action("ResetPassword", "Account", new {userId = user.Id, code = code},
                 protocol: Request.Url.Scheme);
-            await
-                UserManager.SendEmailAsync(user.Id, "Reset Password",
-                    "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
+
+            _mailService.SendPasswordReset(UserModel.FromEmail(user.Email), callbackUrl);
+            //await
+            //    UserManager.SendEmailAsync(user.Id, "Reset Password",
+            //        "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
+
             return RedirectToAction("ForgotPasswordConfirmation", "Account");
         }
 
@@ -716,8 +729,8 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
 
         //
         // POST: /Account/LogOff
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
         public ActionResult LogOff()
         {
             AuthenticationManager.SignOut();

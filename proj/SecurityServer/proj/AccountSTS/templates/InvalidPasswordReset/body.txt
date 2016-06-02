@@ -1,0 +1,9 @@
+@inc(..\_Includes\_Header.txt)
+Hello {{{recipient.fullname}}}!
+
+A password reset was issued for this email address, but it's not registered with us.
+Maybe you used an external service to authenticate (like Google, Facebook, Microsoft or Twitter)?
+
+Please try to login with one of these external services. 
+Still does not work? Please let us know at help@whataventure.com
+@inc(..\_Includes\_Footer.txt)

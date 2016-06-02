@@ -1,0 +1,16 @@
+@inc(..\_Includes\_Header.txt)
+Hello {{{recipient.fullname}}}!
+
+
+{{{conversation.sender.fullname}}} sent you a new message:
+-----------------------------------------------
+
+{{{conversation.subject}}}
+
+{{{conversation.message}}}
+
+-----------------------------------------------
+
+Read and respond here:
+{{conversation.url}}
+@inc(..\_Includes\_Footer.txt)

@@ -1,0 +1,45 @@
+@inc(..\_Includes\_Header.html)
+@inc(..\_Includes\_TableHeader.html)
+<tr>
+    <td valign="top" class="bodyContainer" id="templateBody">
+        <table border="0" cellpadding="0" cellspacing="0" width="100%" class="wavDividerBlock">
+            <tbody class="wavDividerBlockOuter">
+                <tr>
+                    <td class="wavDividerBlockInner">
+                        &nbsp;
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- START TEXT BLOCK -->
+        <table border="0" cellpadding="0" cellspacing="0" width="100%" class="wavTextBlock">
+            <tbody class="wavTextBlockOuter">
+                <tr>
+                    <td valign="top" class="wavTextBlockInner">
+                        <table align="left" border="0" cellpadding="0" cellspacing="0" width="600" class="wavTextContentContainer">
+                            <tbody>
+                                <tr>
+                                    <td valign="top" class="wavTextContent">
+                                        <p>Hello {{recipient.fullname}}!</p>
+                                        <p class="mb40">There was a problem exporting your project {{project.name}}. This email is also being sent to <a href="mailto:help@whataventure.com">help@whataventure.com</a> and we will take a look at the problem.</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <!-- END TEXT BLOCK -->
+      
+        <!-- START FOOTER->
+
+        <!-- START DIVIDER BLOCK -->
+       
+        <!-- // END BODY -->
+    </td>
+</tr>
+@inc(..\_Includes\_TableFooter.html)
+@inc(..\_Includes\_Footer.html)

@@ -1,0 +1,999 @@
+ #outlook a {
+            padding: 0;
+        }
+        
+        .ReadMsgBody {
+            width: 100%;
+        }
+        
+        .ExternalClass {
+            width: 100%;
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        
+        a {
+            word-wrap: break-word !important;
+        }
+        
+        img {
+            border: 0;
+            height: auto !important;
+            line-height: 100%;
+            outline: none;
+            text-decoration: none;
+        }
+        
+        table,
+        td {
+            border-collapse: collapse;
+            mso-table-lspace: 0pt;
+            mso-table-rspace: 0pt;
+        }
+        
+        #bodyTable,
+        #bodyCell {
+            height: 100% !important;
+            margin: 0;
+            padding: 0;
+            width: 100% !important;
+        }
+        
+        #bodyCell {
+            padding: 10px 20px 20px 20px;
+        }
+        
+        .wavImage {
+            vertical-align: bottom;
+        }
+        
+        .wavTextContent img {
+            height: auto !important;
+        }
+        /*
+	@tab Page
+	@section background style
+	@tip Set the background color and top border for your email. You may want to choose colors that match your company's branding.
+	*/
+        
+        body,
+        #bodyTable {
+            background-color: #ecf0f1;
+        }
+        /*
+	@tab Page
+	@section background style
+	@tip Set the background color and top border for your email. You may want to choose colors that match your company's branding.
+	*/
+        
+        #bodyCell {
+            border-top: 0;
+        }
+        /*
+	@tab Page
+	@section email border
+	@tip Set the border for your email.
+	*/
+        
+        #templateContainer {
+            border: 0;
+        }
+        /*
+	@tab Page
+	@section heading 1
+	@tip Set the styling for all first-level headings in your emails. These should be the largest of your headings.
+	@style heading 1
+	*/
+        
+        h1 {
+            color: #606060 !important;
+            display: block;
+            font-family: Helvetica, Arial, sans-serif;
+            font-size: 40px;
+            font-style: normal;
+            font-weight: bold;
+            line-height: 125%;
+            letter-spacing: -1px;
+            margin: 0;
+            text-align: left;
+        }
+        /*
+	@tab Page
+	@section heading 2
+	@tip Set the styling for all second-level headings in your emails.
+	@style heading 2
+	*/
+        
+        h2 {
+            color: #404040 !important;
+            display: block;
+            font-family: Helvetica, Arial, sans-serif;
+            font-size: 26px;
+            font-style: normal;
+            font-weight: bold;
+            line-height: 125%;
+            letter-spacing: -.75px;
+            margin: 0;
+            text-align: left;
+        }
+        /*
+	@tab Page
+	@section heading 3
+	@tip Set the styling for all third-level headings in your emails.
+	@style heading 3
+	*/
+        
+        h3 {
+            color: #606060 !important;
+            display: block;
+            font-family: Helvetica, Arial, sans-serif;
+            font-size: 18px;
+            font-style: normal;
+            font-weight: bold;
+            line-height: 125%;
+            letter-spacing: -.5px;
+            margin: 0;
+            text-align: left;
+        }
+        /*
+	@tab Page
+	@section heading 4
+	@tip Set the styling for all fourth-level headings in your emails. These should be the smallest of your headings.
+	@style heading 4
+	*/
+        
+        h4 {
+            color: #808080 !important;
+            display: block;
+            font-family: Helvetica, Arial, sans-serif;
+            font-size: 16px;
+            font-style: normal;
+            font-weight: bold;
+            line-height: 125%;
+            letter-spacing: normal;
+            margin: 0;
+            text-align: left;
+        }
+        /*
+	@tab Page
+	@section heading link
+	@tip Set the styling for all linked headings in your emails. Choose a color that helps them stand out from your text.
+	*/
+        
+        h1 a,
+        h2 a,
+        h3 a,
+        h4 a {
+            color: #6ab8cc;
+            font-weight: bold;
+            text-decoration: none;
+        }
+        /*
+	@tab Preheader
+	@section preheader style
+	@tip Set the background color and borders for your email's preheader area.
+	*/
+        
+        #templatePreheader {
+            background-color: #ecf0f1;
+            border-top: 0;
+            border: 0px;
+            margin-bottom: 20px;
+        }
+        /*
+	@tab Preheader
+	@section preheader text
+	@tip Set the styling for your email's preheader text. Choose a size and color that is easy to read.
+	*/
+        
+        .preheaderContainer .wavTextContent,
+        .preheaderContainer .wavTextContent p {
+            color: #7f9498;
+            font-family: Helvetica, Arial, sans-serif;
+            font-size: 11px;
+            line-height: 125%;
+            text-align: left;
+        }
+        /*
+	@tab Preheader
+	@section preheader link
+	@tip Set the styling for your email's header links. Choose a color that helps them stand out from your text.
+	*/
+        
+        .preheaderContainer .wavTextContent a {
+            color: #7f9498;
+            font-weight: normal;
+            text-decoration: none;
+        }
+        /*
+	@tab Header
+	@section header style
+	@tip Set the background color and borders for your email's header area.
+	*/
+        
+        #templateHeader {
+            background-color: #FFFFFF;
+            border-top: 0;
+        }
+        /*
+	@tab Header
+	@section header text
+	@tip Set the styling for your email's header text. Choose a size and color that is easy to read.
+	*/
+        
+        .headerContainer .wavTextContent,
+        .headerContainer .wavTextContent p {
+            color: #606060;
+            font-family: Helvetica, Arial, sans-serif;
+            font-size: 15px;
+            line-height: 150%;
+            text-align: left;
+	    
+        }
+        /*
+	@tab Header
+	@section header link
+	@tip Set the styling for your email's header links. Choose a color that helps them stand out from your text.
+	*/
+        
+        .headerContainer .wavTextContent a {
+            color: #6DC6DD;
+            font-weight: normal;
+            text-decoration: underline;
+        }
+        /*
+	@tab Body
+	@section body style
+	@tip Set the background color and borders for your email's body area.
+	*/
+        
+        #templateBody {
+            background-color: #FFFFFF;
+            border-top: 0;
+            border-bottom: 2px solid #F2F2F2;
+        }
+        /*
+	@tab Body
+	@section body text
+	@tip Set the styling for your email's body text. Choose a size and color that is easy to read.
+	*/
+        
+        .bodyContainer .wavTextContent
+        {
+            padding-top:9px;
+            padding-right: 40px;
+            padding-bottom: 9px;
+            padding-left: 29px;
+        }
+        
+
+        
+        .bodyContainer .wavTextContent,
+        .bodyContainer .wavTextContent p {
+            color: #606060;
+            font-family: Helvetica, Arial, sans-serif;
+            font-size: 15px;
+            line-height: 150%;
+            text-align: left;
+           
+        }
+        
+        .bodyContainer .wavTextContent-Center,
+        .bodyContainer .wavTextContent-Center p
+        {
+            color: #606060;
+            font-family: Helvetica, Arial, sans-serif;
+            font-size: 15px;
+            line-height: 150%;
+            text-align: center;    
+            
+        }
+
+
+	.bodyContainer .wavTextContentContainer.wavTextContentContainerMessages
+{
+		/*white-space: pre !important;*/
+}
+
+
+	
+        /*
+	@tab Body
+	@section body link
+	@tip Set the styling for your email's body links. Choose a color that helps them stand out from your text.
+	*/
+        
+        .bodyContainer .wavTextContent a {
+            color: #85b7ec;
+            font-weight: normal;
+            text-decoration: none;
+        }
+        /*
+	@tab Footer
+	@section footer style
+	@tip Set the background color and borders for your email's footer area.
+	*/
+        
+        #templateFooter {
+            background-color: #FFFFFF;
+            border-top: 0;
+            border-bottom: 0;
+        }
+        /*
+	
+	@tab Footer
+	@section footer text
+	@tip Set the styling for your email's footer text. Choose a size and color that is easy to read.
+	
+        .footerContainer .footerContainer-small,
+        .footerContainer .footerContainer-small p.
+        .footerContainer-small,
+        .footerContainer-small p
+        
+        {
+            color: #606060 !important;
+            font-family: Helvetica, Arial, sans-serif !important;
+            font-size: 11px !important;
+            padding: 9px 0px 9px 18px !important;
+            line-height: 160% !important;
+            text-align: center !important;
+            color: #b1b1b1 !important;
+        }
+        /*
+	@tab Footer
+	@section footer link
+	@tip Set the styling for your email's footer links. Choose a color that helps them stand out from your text.
+	
+        
+        .footerContainer .footerContainer-small a
+			.footerContainer-small p a
+			{
+            font-weight: normal !important;
+            text-decoration: none !important;
+            line-height: 160% !important;
+            text-align: center !important;
+            color: #b1b1b1 !important;
+		
+        }*/
+        
+        @media only screen and (max-width: 480px) {
+            body,
+            table,
+            td,
+            p,
+            a,
+            li,
+            blockquote {
+                -webkit-text-size-adjust: none !important;
+            }
+        }
+        
+        @media only screen and (max-width: 480px) {
+            body {
+                width: 100% !important;
+                min-width: 100% !important;
+            }
+        }
+        
+        @media only screen and (max-width: 480px) {
+            td[id=bodyCell] {
+                padding: 10px !important;
+            }
+        }
+        
+        @media only screen and (max-width: 480px) {
+            table[class=wavTextContentContainer] {
+                width: 100% !important;
+            }
+        }
+        
+        @media only screen and (max-width: 480px) {
+            table[class=wavBoxedTextContentContainer] {
+                width: 100% !important;
+            }
+        }
+        
+        @media only screen and (max-width: 480px) {
+            table[class=mcpreview-image-uploader] {
+                width: 100% !important;
+                display: none !important;
+            }
+        }
+        
+        @media only screen and (max-width: 480px) {
+            img[class=wavImage] {
+                width: 100% !important;
+            }
+        }
+        
+        @media only screen and (max-width: 480px) {
+            table[class=wavImageGroupContentContainer] {
+                width: 100% !important;
+            }
+        }
+        
+        @media only screen and (max-width: 480px) {
+            td[class=wavImageGroupContent] {
+                padding: 9px !important;
+            }
+        }
+        
+        @media only screen and (max-width: 480px) {
+            td[class=wavImageGroupBlockInner] {
+                padding-bottom: 0 !important;
+                padding-top: 0 !important;
+            }
+        }
+        
+        @media only screen and (max-width: 480px) {
+            tbody[class=wavImageGroupBlockOuter] {
+                padding-bottom: 9px !important;
+                padding-top: 9px !important;
+            }
+        }
+        
+        @media only screen and (max-width: 480px) {
+            table[class=wavCaptionTopContent],
+            table[class=wavCaptionBottomContent] {
+                width: 100% !important;
+            }
+        }
+        
+        @media only screen and (max-width: 480px) {
+            table[class=wavCaptionLeftTextContentContainer],
+            table[class=wavCaptionRightTextContentContainer],
+            table[class=wavCaptionLeftImageContentContainer],
+            table[class=wavCaptionRightImageContentContainer],
+            table[class=wavImageCardLeftTextContentContainer],
+            table[class=wavImageCardRightTextContentContainer] {
+                width: 100% !important;
+            }
+        }
+        
+        @media only screen and (max-width: 480px) {
+            td[class=wavImageCardLeftImageContent],
+            td[class=wavImageCardRightImageContent] {
+                padding-right: 18px !important;
+                padding-left: 18px !important;
+                padding-bottom: 0 !important;
+            }
+        }
+        
+        @media only screen and (max-width: 480px) {
+            td[class=wavImageCardBottomImageContent] {
+                padding-bottom: 9px !important;
+            }
+        }
+        
+        @media only screen and (max-width: 480px) {
+            td[class=wavImageCardTopImageContent] {
+                padding-top: 18px !important;
+            }
+        }
+        
+        @media only screen and (max-width: 480px) {
+            td[class=wavImageCardLeftImageContent],
+            td[class=wavImageCardRightImageContent] {
+                padding-right: 18px !important;
+                padding-left: 18px !important;
+                padding-bottom: 0 !important;
+            }
+        }
+        
+        @media only screen and (max-width: 480px) {
+            td[class=wavImageCardBottomImageContent] {
+                padding-bottom: 9px !important;
+            }
+        }
+        
+        @media only screen and (max-width: 480px) {
+            td[class=wavImageCardTopImageContent] {
+                padding-top: 18px !important;
+            }
+        }
+        
+        @media only screen and (max-width: 480px) {
+            table[class=wavCaptionLeftContentOuter] td[class=wavTextContent],
+            table[class=wavCaptionRightContentOuter] td[class=wavTextContent] {
+                padding-top: 9px !important;
+            }
+        }
+        
+        @media only screen and (max-width: 480px) {
+            td[class=wavCaptionBlockInner] table[class=wavCaptionTopContent]:last-child td[class=wavTextContent] {
+                padding-top: 18px !important;
+            }
+        }
+        
+        @media only screen and (max-width: 480px) {
+            td[class=wavBoxedTextContentColumn] {
+                padding-left: 18px !important;
+                padding-right: 18px !important;
+            }
+        }
+        
+        @media only screen and (max-width: 480px) {
+            /*
+	@tab Mobile Styles
+	@section template width
+	@tip Make the template fluid for portrait or landscape view adaptability. If a fluid layout doesn't work for you, set the width to 300px instead.
+	*/
+            
+            table[id=templateContainer],
+            table[id=templatePreheader],
+            table[id=templateHeader],
+            table[id=templateBody],
+            table[id=templateFooter] {
+                /*@tab Mobile Styles
+@section template width
+@tip Make the template fluid for portrait or landscape view adaptability. If a fluid layout doesn't work for you, set the width to 300px instead.*/
+                
+                max-width: 600px !important;
+                width: 100% !important;
+            }
+        }
+        
+        @media only screen and (max-width: 480px) {
+            /*
+	@tab Mobile Styles
+	@section heading 1
+	@tip Make the first-level headings larger in size for better readability on small screens.
+	*/
+            
+            h1 {
+                font-size: 24px !important;
+                line-height: 125% !important;
+            }
+        }
+        
+        @media only screen and (max-width: 480px) {
+            /*
+	@tab Mobile Styles
+	@section heading 2
+	@tip Make the second-level headings larger in size for better readability on small screens.
+	*/
+            
+            h2 {
+                font-size: 20px !important;
+                line-height: 125% !important;
+            }
+        }
+        
+        @media only screen and (max-width: 480px) {
+            /*
+	@tab Mobile Styles
+	@section heading 3
+	@tip Make the third-level headings larger in size for better readability on small screens.
+	*/
+            
+            h3 {
+                font-size: 18px !important;
+                line-height: 125% !important;
+            }
+        }
+        
+        @media only screen and (max-width: 480px) {
+            /*
+	@tab Mobile Styles
+	@section heading 4
+	@tip Make the fourth-level headings larger in size for better readability on small screens.
+	*/
+            
+            h4 {
+                font-size: 16px !important;
+                line-height: 125% !important;
+            }
+        }
+        
+        @media only screen and (max-width: 480px) {
+            /*
+	@tab Mobile Styles
+	@section Boxed Text
+	@tip Make the boxed text larger in size for better readability on small screens. We recommend a font size of at least 16px.
+	*/
+            
+            table[class=wavBoxedTextContentContainer] td[class=wavTextContent] {
+                font-size: 18px !important;
+                line-height: 125% !important;
+            }
+        }
+        
+        @media only screen and (max-width: 480px) {
+            /*
+	@tab Mobile Styles
+	@section Preheader Visibility
+	@tip Set the visibility of the email's preheader on small screens. You can hide it to save space.
+	*/
+            
+            table[id=templatePreheader] {
+                display: block !important;
+            }
+        }
+        
+        @media only screen and (max-width: 480px) {
+            /*
+	@tab Mobile Styles
+	@section Preheader Text
+	@tip Make the preheader text larger in size for better readability on small screens.
+	*/
+            
+            td[class=preheaderContainer] td[class=wavTextContent] {
+                font-size: 14px !important;
+                line-height: 115% !important;
+                padding-right: 18px !important;
+                padding-left: 18px !important;
+            }
+        }
+        
+        @media only screen and (max-width: 480px) {
+            /*
+	@tab Mobile Styles
+	@section Header Text
+	@tip Make the header text larger in size for better readability on small screens.
+	*/
+            
+            td[class=headerContainer] td[class=wavTextContent] {
+                font-size: 18px !important;
+                line-height: 125% !important;
+                padding-right: 18px !important;
+                padding-left: 18px !important;
+            }
+        }
+        
+        @media only screen and (max-width: 480px) {
+            /*
+	@tab Mobile Styles
+	@section Body Text
+	@tip Make the body text larger in size for better readability on small screens. We recommend a font size of at least 16px.
+	*/
+            
+            td[class=bodyContainer] td[class=wavTextContent] {
+                font-size: 18px !important;
+                line-height: 125% !important;
+                padding-right: 18px !important;
+                padding-left: 18px !important;
+            }
+        }
+        
+        @media only screen and (max-width: 480px) {
+            /*
+	@tab Mobile Styles
+	@section footer text
+	@tip Make the body content text larger in size for better readability on small screens.
+	*/
+            
+            td[class=footerContainer] td[class=wavTextContent] {
+                font-size: 14px !important;
+                line-height: 115% !important;
+                padding-right: 18px !important;
+                padding-left: 18px !important;
+            }
+        }
+        
+        @media only screen and (max-width: 480px) {
+            td[class=footerContainer] a[class=utilityLink] {
+                display: block !important;
+            }
+        }
+        
+        .bodyContainer .wavTextContent p.wavInfoArea,
+        .bodyContainer .wavTextContent-Center p.wavInfoArea
+        {
+            color: #7f9498;
+            font-size: 17px;
+            line-height: 1.5;
+            font-style: italic;
+            padding: 10px 15px 10px 0px;
+            width: auto;
+            display: inline-block;
+        }
+
+ 
+        .bodyContainer .wavTextContent p.wavInfoAreaSmall,
+        .bodyContainer .wavTextContent-Center p.wavInfoAreaSmall
+        {
+            color: #b5b5b5; /* text color */
+            font-family: "Arial";
+            font-size: 12px;
+        }
+
+        .bodyContainer .wavTextContent p.wavInfoAreaBig,
+        .bodyContainer .wavTextContent-Center p.wavInfoAreaBig
+        {
+            font-size: 24px;
+            font-weight: bold;
+            color: #7f9397;
+        }
+
+         .bodyContainer .wavTextContent p.wavInfoAreaMedium,
+        .bodyContainer .wavTextContent-Center p.wavInfoAreaMedium
+        {
+            font-size: 20px;
+            font-weight: regular;
+            color: #7f9397;
+        }
+
+
+        .bodyContainer .wavTextContent p.wavInfoAreaBig .wavInfoAreaBigWithImage,
+        .bodyContainer .wavTextContent-Center p.wavInfoAreaBig .wavInfoAreaBigWithImage
+        {
+           line-height: 40px;
+        }
+
+        .green
+            {
+                    color: #97DB13 !important;
+            }
+                  
+        .orange
+            {
+                    color: #f7a400 !important;
+            }
+              
+        .blue
+        {
+            color: #3b9ec6 !important;
+        }
+
+        .nomargin
+        {
+            margin: 0 !important;   
+        }
+
+        
+        .wavTextBlockNarrow .wavTextContent-Center
+        {
+                padding: 0px 90px 0px 90px !important;
+        }
+
+
+        
+         .bodyContainer .wavTextContent p.wavInfoArea.nomargin,
+         .bodyContainer .wavTextContent-Center p.wavInfoArea.nomargin
+        {
+            margin-top: 0px;
+            margin-bottom: 0px;
+            padding: 0px;
+        }
+
+        .bodyContainer .wavTextContent p.wavInfoAreaBig.nomargin,
+        .bodyContainer .wavTextContent-Center p.wavInfoAreaBig.nomargin
+        {
+            margin-top: 0px;
+            margin-bottom: 0px;
+            padding: 0px;
+        }
+        
+        .bodyContainer .wavTextContent p.wavGoodBye,
+        .bodyContainer .wavTextContent p.wavGoodBye {
+            margin-top: 20px;
+        }
+
+        .bodyContainer .wavTextContent p.wavGoodBye.wavGoodByeBottom,
+        .bodyContainer .wavTextContent-Center p.wavGoodBye.wavGoodByeBottom {
+            margin-top: 20px;
+            margin-bottom: 0px;
+        }
+        
+        .wavTextBlockBrighter
+        {
+            background: #f6f8f8;
+            border-top: 1px solid #dee5e7;
+            border-bottom: 1px solid #dee5e7;
+        }
+       
+        .wavTextBlockBrighter .wavTextContent-Center
+        {
+            padding: 20px;
+        }
+
+        .BlockBackground {
+            background-color: #ECF0F1;
+        }
+        
+        .wavFollowBlock
+        {
+            margin-top: 30px;
+            margin-bottom: 30px;   
+        }
+        
+        .wavFollowTextContent
+        {
+            padding-left: 5px;
+        }
+        
+        .wavFollowTextContent a
+        {
+            font-family: Arial;
+            font-size: 11px;
+            text-decoration: none;
+            color: #777;
+            font-weight: normal;
+            line-height: 32px;
+            text-align: center;
+        }
+        
+        .headerContainer
+        {
+            border-bottom: 1px solid #e2f2f5;       
+        }
+        
+        .wavButtonBlockInner
+        {
+            padding-top:0;
+            padding-right:18px;
+            padding-bottom:18px;
+            padding-left:18px;
+        }
+
+		
+		.wavButtonBlock
+		{
+			margin-top: 20px;
+		}
+        .wavButtonContentContainer
+        {
+            border-collapse: separate !important;border-radius: 4px;background-color: #97DB13;
+        }
+
+        .wavButtonContent
+        {
+            font-family: Verdana, Geneva, sans-serif;
+            font-size: 16px;
+            padding: 15px;
+        }
+
+        .wavButton
+        {
+            font-weight: bold;
+            letter-spacing: normal;
+            line-height: 100%;
+            text-align: center;
+            text-decoration: none;
+            color: #FFFFFF;
+        }
+
+        .wav-cta-button-green
+        {
+            border-radius: 4px;
+            background-color: #97DB13;
+            font-weight: bold;
+            letter-spacing: normal;
+            line-height: 100%;
+            text-align: center;
+            text-decoration: none;
+            color: #FFFFFF !important;
+            padding: 13px 13px;
+            font-size: 17px;
+            
+        }
+        
+        .wavImageContent
+        {
+            padding-right: 0px;
+            padding-left: 0px;
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+        
+        .wavimage
+        {
+            max-width:600px;
+            padding-bottom: 0;
+            display: inline !important;
+            vertical-align: bottom;
+        }
+        
+        .wavDividerBlockInner-30px
+        {
+            padding-top: 30px;   
+        }
+
+        .wavDividerBlockInner-60px
+        {
+            padding-top: 30px;   
+        }
+
+        .noaccount-question
+        {
+            color: #5f5f5f; /* text color */
+            font-family: "Arial";
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+    
+        .noaccount-register a
+        {
+            color: #7f9397; /* text color */
+            font-family: "Arial";
+            font-size: 16px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .noaccount-url
+        {
+            color: #b5b5b5; /* text color */
+            font-family: "Arial";
+            font-size: 13px;
+
+        }
+
+        .mb10
+        {
+            margin-bottom: 10px;   
+        }
+
+        .mt10
+        {
+            margin-top: 10px;   
+        }
+
+        .mb0
+        {
+            margin-bottom: 0px;   
+        }
+
+        .mt0
+        {
+            margin-top: 0px;   
+        }
+
+
+        .mb20
+        {
+            margin-bottom: 20px;   
+        }
+
+        .mt20
+        {
+            margin-top: 20px;   
+        }
+
+
+        .mb40
+        {
+            margin-bottom: 40px;   
+        }
+
+
+        .mt40
+        {
+            margin-top: 40px;   
+        }
+
+        .wavTextContentContainerMessages
+        {   
+            margin-top: 20px;
+            padding: 20px;   
+            background: #f6fafb;
+            margin-bottom: 20px;
+        }
+
+        .wavTextContentContainerMessages .wavTextContent p
+        {
+            text-algin: left;   
+            font-size: 14px;
+        }
+
+        .bordercolor
+        {
+                background: #dedede;
+                padding: 0px;
+        }
+		
+		.wavTextContentContainerMessages img {
+  max-width: 500px;
+}
+
+.invitation-url
+    {
+	word-break: break-all;
+	}
+
+
+        

@@ -1,0 +1,14 @@
+@inc(..\_Includes\_Header.txt)
+Hello {{{recipient.fullname}}}!
+
+{{{post.sender.fullname}}} just posted in {{{group.name}}}:
+
+---------------------------------------------
+
+{{{post.description}}}
+
+---------------------------------------------
+
+See post here:
+{{post.url}}
+@inc(..\_Includes\_Footer.txt)

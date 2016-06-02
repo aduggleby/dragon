@@ -1,0 +1,106 @@
+@inc(..\_Includes\_Header.html)
+@inc(..\_Includes\_TableHeader.html)
+ <tr>
+    <td valign="top" class="bodyContainer" id="templateBody">
+        <table border="0" cellpadding="0" cellspacing="0" width="100%" class="wavDividerBlock">
+            <tbody class="wavDividerBlockOuter">
+                <tr>
+                    <td class="wavDividerBlockInner wavDividerBlockInner-60px">
+                       &nbsp;
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- START TEXT BLOCK -->
+        <table border="0" cellpadding="0" cellspacing="0" width="100%" class="wavTextBlock">
+            <tbody class="wavTextBlockOuter">
+                <tr>
+                    <td valign="top" class="wavTextBlockInner">
+                        <table align="left" border="0" cellpadding="0" cellspacing="0" width="600" class="wavTextContentContainer">
+                            <tbody>
+                                <tr>
+                                     <td align="center" valign="top" class="wavTextContent-Center">
+                                        <p class="wavInfoArea nomargin">{{invitation.sender.fullname}} invited you as a mentor on project</p>
+                                        <p class="wavInfoAreaBig nomargin">{{project.name}}</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <!-- END TEXT BLOCK -->
+        
+        <!-- START DIVIDER BLOCK -->
+        <table border="0" cellpadding="0" cellspacing="0" width="100%" class="wavDividerBlock">
+            <tbody class="wavDividerBlockOuter">
+                <tr>
+                    <td class="wavDividerBlockInner wavDividerBlockInner-60px">
+                        &nbsp;
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <!-- END DIVIDER BLOCK -->
+
+        <!-- START BUTTON BLOCK -->
+        <table border="0" cellpadding="0" cellspacing="0" width="100%" class="wavButtonBlock">
+            <tbody class="wavButtonBlockOuter">
+                <tr>
+                    <td valign="top" align="center" class="wavButtonBlockInner">
+                        <table border="0" cellpadding="0" cellspacing="0" class="wavButtonContentContainer">
+                            <tbody>
+                                <tr>
+                                    <td align="center" valign="middle" class="wavButtonContent">
+                                        <a class="wavButton " title="Accept invitation" href="{{invitation.url}}" target="_blank">Accept Invitation</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <!-- END BUTTON BLOCK -->
+        
+         <!-- START TEXT BLOCK -->
+        <table border="0" cellpadding="0" cellspacing="0" width="100%" class="wavTextBlock">
+            <tbody class="wavTextBlockOuter">
+                <tr>
+                    <td valign="top" class="wavTextBlockInner">
+                        <table align="left" border="0" cellpadding="0" cellspacing="0" width="600" class="wavTextContentContainer">
+                            <tbody>
+                                <tr>
+                                     <td align="center" valign="top" class="wavTextContent-Center">
+                                        <p class="wavInfoAreaSmall nomargin">Button doesn't work? Please open the link by copying it in your browser:
+										 <br><span class="invitation-url">{{invitation.url}}</span></p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <!-- END TEXT BLOCK -->
+        
+    
+        <!-- START DIVIDER BLOCK -->
+        <table border="0" cellpadding="0" cellspacing="0" width="100%" class="wavDividerBlock">
+            <tbody class="wavDividerBlockOuter">
+                <tr>
+                    <td class="wavDividerBlockInner wavDividerBlockInner-60px">
+                        &nbsp;
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <!-- END DIVIDER BLOCK -->
+    </td>
+</tr>
+@inc(..\_Includes\_TableFooter.html)
+@inc(..\_Includes\_Footer.html)

@@ -1,0 +1,11 @@
+@inc(..\_Includes\_Header.txt)
+Hello {{{recipient.fullname}}}!
+
+Your project {{project.name}} has been exported.
+
+---------------------------------------------
+
+Download the file here:
+{{url}}
+
+@inc(..\_Includes\_Footer.txt)

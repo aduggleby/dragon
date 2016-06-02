@@ -1,0 +1,1 @@
+New task in "{{group.name}}"

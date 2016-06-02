@@ -1,0 +1,15 @@
+@inc(..\_Includes\_Header.txt)
+Hello {{{recipient.fullname}}}!
+
+{{{invitation.sender.fullname}}} commented on a version of your project {{project.name}}.
+
+---------------------------------------------
+
+Version {{{projectversion.number}}} ({{{projectversion.created}}})
+{{{comment.description}}}
+
+---------------------------------------------
+
+See project &amp; respond:
+{{projectversion.url}}
+@inc(..\_Includes\_Footer.txt)

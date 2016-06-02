@@ -1,0 +1,16 @@
+@inc(..\_Includes\_Header.txt)
+Hello {{{recipient.fullname}}}!
+
+{{{invitation.sender.fullname}}} invited you to the group {{{group.name}}}.
+
+---------------------------------------------
+
+{{{invitation.subject}}}
+
+{{{invitation.body}}}
+
+---------------------------------------------
+
+Accept invitation here:
+{{invitation.url}}
+@inc(..\_Includes\_Footer.txt)

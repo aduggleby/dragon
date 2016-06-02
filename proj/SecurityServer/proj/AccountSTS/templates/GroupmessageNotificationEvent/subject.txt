@@ -1,0 +1,1 @@
+New event in "{{group.name}}"

@@ -1,0 +1,17 @@
+@inc(..\_Includes\_Header.txt)
+Hello {{{recipient.fullname}}}!
+
+your feedback must be very valuable.
+
+---------------------------------------------
+
+{{{invitation.sender.fullname}}} invited you as a mentor for the project:
+{{{project.name}}}
+
+{{{invitation.message}}}
+
+---------------------------------------------
+
+See project & give feedback here:
+{{invitation.url}}
+@inc(..\_Includes\_Footer.txt)

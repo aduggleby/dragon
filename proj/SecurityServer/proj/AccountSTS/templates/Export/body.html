@@ -1,0 +1,90 @@
+@inc(..\_Includes\_Header.html)
+@inc(..\_Includes\_TableHeader.html)
+<tr>
+    <td valign="top" class="bodyContainer" id="templateBody">
+        <table border="0" cellpadding="0" cellspacing="0" width="100%" class="wavDividerBlock">
+            <tbody class="wavDividerBlockOuter">
+                <tr>
+                    <td class="wavDividerBlockInner">
+                        &nbsp;
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- START TEXT BLOCK -->
+        <table border="0" cellpadding="0" cellspacing="0" width="100%" class="wavTextBlock">
+            <tbody class="wavTextBlockOuter">
+                <tr>
+                    <td valign="top" class="wavTextBlockInner">
+                        <table align="left" border="0" cellpadding="0" cellspacing="0" width="600" class="wavTextContentContainer">
+                            <tbody>
+                                <tr>
+                                    <td valign="top" class="wavTextContent">
+                                        <p>Hello {{recipient.fullname}}!</p>
+                                        <p class="mb40">Your project {{project.name}} has been exported.</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <!-- END TEXT BLOCK -->
+        
+        <!-- START BUTTON BLOCK -->
+        <table border="0" cellpadding="0" cellspacing="0" width="100%" class="wavButtonBlock">
+            <tbody class="wavButtonBlockOuter">
+                <tr>
+                    <td valign="top" align="center" class="wavButtonBlockInner">
+                        <table border="0" cellpadding="0" cellspacing="0" class="wavButtonContentContainer">
+                            <tbody>
+                                <tr>
+                                    <td align="center" valign="middle" class="wavButtonContent">
+                                        <a class="wavButton " title="Download file" href="{{url}}" target="_blank">Download file</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <!-- END BUTTON BLOCK -->
+        
+        <!-- START TEXT BLOCK -->
+        <table border="0" cellpadding="0" cellspacing="0" width="100%" class="wavTextBlock">
+            <tbody class="wavTextBlockOuter">
+                <tr>
+                    <td valign="top" class="wavTextBlockInner">
+                        <table align="left" border="0" cellpadding="0" cellspacing="0" width="600" class="wavTextContentContainer">
+                            <tbody>
+                                <tr>
+                                    <td align="center" valign="top" class="wavTextContent-Center">
+                                        <p class="wavInfoAreaSmall nomargin">
+                                            Button doesn't work? Please open the link by copying it in your browser:
+                                            <br><span class="invitation-url">{{url}}</span>
+                                        </p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <!-- END TEXT BLOCK -->
+
+
+        <!-- START FOOTER->
+
+        <!-- START DIVIDER BLOCK -->
+       
+        <!-- // END BODY -->
+    </td>
+</tr>
+@inc(..\_Includes\_TableFooter.html)
+@inc(..\_Includes\_Footer.html)

@@ -1,0 +1,17 @@
+@inc(..\_Includes\_Header.txt)
+Hello {{{recipient.fullname}}}!
+
+your feedback must be very valuable.
+
+{{{invitation.sender.fullname}}} has invited you to see a version of his project.
+
+---------------------------------------------
+
+Version {{{projectversion.number}}} ({{{projectversion.created}}})
+{{{project.name}}}
+
+---------------------------------------------
+
+See project &amp; give feedback here:
+{{projectversion.url}}
+@inc(..\_Includes\_Footer.txt)

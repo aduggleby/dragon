@@ -1,0 +1,14 @@
+@inc(..\_Includes\_Header.txt)
+Hello {{{recipient.fullname}}}!
+
+The email address associated with your account has been changed from:
+
+---------------------------------------------
+
+{{{oldaddress}}} to {{{newaddress}}}
+
+---------------------------------------------
+
+If this change was not intended please let us know
+by simply replying to this email.
+@inc(..\_Includes\_Footer.txt)

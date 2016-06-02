@@ -1,0 +1,17 @@
+@inc(..\_Includes\_Header.txt)
+Hello {{{recipient.fullname}}}!
+
+{{{post.sender.fullname}}} just posted a new event.
+
+---------------------------------------------
+
+{{{post.title}}}
+{{post.date}}
+
+{{{post.description}}}
+
+---------------------------------------------
+
+See event here:
+{{post.url}}
+@inc(..\_Includes\_Footer.txt)

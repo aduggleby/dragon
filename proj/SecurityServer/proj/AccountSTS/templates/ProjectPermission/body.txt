@@ -1,0 +1,11 @@
+@inc(..\_Includes\_Header.txt)
+Hello {{{recipient.fullname}}}!
+
+This is to inform you that {{{permissions.sender.fullname}}} has changed your permissions on project {{{project.name}}}.
+
+Your new permissions are: 
+{{{permissions.list}}}
+
+Visit project:
+{{project.url}}
+@inc(..\_Includes\_Footer.txt)
