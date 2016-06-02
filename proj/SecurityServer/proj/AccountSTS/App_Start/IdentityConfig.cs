@@ -123,13 +123,8 @@ namespace Dragon.SecurityServer.AccountSTS
         public new async Task<SignInStatus> ExternalSignInAsync(ExternalLoginInfo loginInfo, bool isPersistent)
         {
             var user = await UserManager.FindAsync(loginInfo.Login);
-            var currentServiceId = RequestHelper.GetCurrentServiceId();
             // This is needed for initial registration, but should not be harmful in consecutive signin requests.
-            if (!await IsUserRegisteredForService(user, currentServiceId))
-            {
-                // the serviceId is validated by Dragon.Security.Hmac
-                await _userStore.AddServiceToUserAsync(user, currentServiceId);
-            }
+            await AddCurrentServiceIdToUserIfNotAlreadyAdded(user);
             return await base.ExternalSignInAsync(loginInfo, isPersistent);
         }
 
@@ -139,13 +134,25 @@ namespace Dragon.SecurityServer.AccountSTS
             var status = await base.PasswordSignInAsync(userName, password, isPersistent, shouldLockout);
             if (status == SignInStatus.Success)
             {
-                if (!await IsUserRegisteredForService(await UserManager.FindByNameAsync(userName), RequestHelper.GetCurrentServiceId()))
-                {
-                    // throw until using Identity where the status is more flexible, see https://github.com/aspnet/Identity/issues/176
-                    throw new NotRegisteredForServiceException();
-                }
+                var user = await UserManager.FindAsync(userName, password);
+                await AddCurrentServiceIdToUserIfNotAlreadyAdded(user);
+                // At the moment all requests to all services are allowed
+                /*
+                // throw until using Identity where the status is more flexible, see https://github.com/aspnet/Identity/issues/176
+                throw new NotRegisteredForServiceException();
+                */
             }
             return status;
+        }
+
+        private async Task AddCurrentServiceIdToUserIfNotAlreadyAdded(AppMember user)
+        {
+            var currentServiceId = RequestHelper.GetCurrentServiceId();
+            if (!await IsUserRegisteredForService(user, currentServiceId))
+            {
+                // the serviceId is validated by Dragon.Security.Hmac
+                await _userStore.AddServiceToUserAsync(user, currentServiceId);
+            }
         }
 
         private async Task<bool> IsUserRegisteredForService(AppMember user, string currentServiceId)
