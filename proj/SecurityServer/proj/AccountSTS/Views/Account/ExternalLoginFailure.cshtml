@@ -1,8 +1,60 @@
 ﻿@{
-    ViewBag.Title = "Login Failure";
+    var parameters = new RouteValueDictionary(HttpContext.Current.Request.QueryString.Keys.Cast<string>()
+                .ToDictionary(k => k, v => (object)HttpContext.Current.Request.QueryString[v]));
 }
+<!-- START Template Main -->
+<section id="main" role="main" class="wav-login">
+    <!-- START Template Container -->
+    <section class="container" id="wav-home">
 
-<hgroup>
-    <h2>@ViewBag.Title.</h2>
-    <h3 class="text-danger">Unsuccessful login with service.</h3>
-</hgroup>
+
+        <!-- START row -->
+        <div class="row">
+            <div class="wav-login-wrapper">
+
+                <!-- Brand -->
+                <div class="row wav-login-brand">
+                    <img src="//wav-prod-cdn-main.azureedge.net/assets/images/intro/logo-signup-small.png">
+                </div>
+                <div class="row wav-login-notebook">
+                    <img src="//wav-prod-cdn-main.azureedge.net/assets/images/intro/laptop-signup.png">
+                </div>
+
+
+                <div class="flip-container">
+                    <!-- START flipper -->
+                    <div class="flipper">
+                        <!-- START sign in -->
+                        <div class="front wav-login-signin">
+                            <div class="panel">
+                                <div class="panel-heading">
+                                    <h1>Authentication failed.</h1>
+
+                                    <p class="subtext">Sorry the authentication with your provider failed. Please try again.</p>
+                                </div>
+                                <div class="panel-body">
+
+                                    <div class="row">
+                                        <div class="col-sm-12 mt10">
+                                            @Html.ActionLink("Return to Sign in here", "Login", null, parameters, new Dictionary<string, object>() {
+                                        { "class" , "btn btn-success  wav-login-or-register-button toggle-register" } })
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <!--/ END flipper  -->
+                </div>
+            </div>
+        </div>
+        <!--/ END row -->
+
+    </section>
+    <!-- END Template Container -->
+</section>
+<!--/ END Template Main -->

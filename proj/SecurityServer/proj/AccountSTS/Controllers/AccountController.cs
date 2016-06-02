@@ -396,6 +396,14 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
             return View();
         }
 
+
+        [AllowAnonymous]
+        public ActionResult ExternalLoginFailure()
+        {
+            return View();
+        }
+        
+
         //
         // POST: /Account/ExternalLogin
         [HttpPost]
@@ -715,14 +723,6 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
             AuthenticationManager.SignOut();
             var returnUrl = Request.QueryString["returnUrl"] + WebConfigurationManager.AppSettings["SignOutPath"];
             return string.IsNullOrEmpty(returnUrl) ? (ActionResult) RedirectToAction("Index", "Home") : Redirect(returnUrl);
-        }
-
-        //
-        // GET: /Account/ExternalLoginFailure
-        [AllowAnonymous]
-        public ActionResult ExternalLoginFailure()
-        {
-            return View();
         }
 
         protected override void Dispose(bool disposing)
