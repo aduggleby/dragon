@@ -4,9 +4,7 @@ using System.Linq;
 using System.Text;
 using Dragon.CPR.Interfaces;
 using Dragon.Data.Interfaces;
-using Dragon.Context;
 using StructureMap;
-using IContext = Dragon.Context.IContext;
 
 namespace Dragon.CPR.Impl.Projections
 {
@@ -14,7 +12,6 @@ namespace Dragon.CPR.Impl.Projections
         where T : class
     {
         public IContainer Container { get; set; }
-        public IContext Ctx { get; set; }
         
         public abstract void Project(T t);
 

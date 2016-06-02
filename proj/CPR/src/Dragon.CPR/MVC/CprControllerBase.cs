@@ -6,20 +6,13 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using Dragon.Context.Configuration;
 using Dragon.Data.Interfaces;
-using Dragon.Context;
-
 
 namespace Dragon.CPR.MVC
 {
     public abstract class CPRControllerBase : 
         ControllerBase
     {
-        public IConfiguration Configuration { get; set; }
-
-        public IContext Ctx { get; set; }
-
         public CPRControllerBase()
         {
 
@@ -86,27 +79,5 @@ namespace Dragon.CPR.MVC
             ViewBag.JS_CUSTOM_CONTROLLER = Url.Content(string.Format("{0}.js", currentController).ToLower());
         }
 
-        //public void SendMail(Guid organisationID, Guid userID, string to, string template, object model)
-        //{
-        //    var overrider = ConfigurationManager.AppSettings["Email.Override"] ?? String.Empty;
-
-        //    if (!string.IsNullOrWhiteSpace(overrider.Trim()))
-        //    {
-        //        to = to.Replace("@", "_");
-        //        to = string.Format(overrider, to);
-        //    }
-
-        //    var e = new MailEvent(template, model);
-        //    e.To.Add(new System.Net.Mail.MailAddress(to));
-        //    e.OrganisationID = organisationID;
-        //    e.UserID = userID;
-        //    Bus.Send(e);
-        //}
-
-        //public void SendAdminMail(string template, object model)
-        //{
-        //    var e = new AdminMailEvent(template, model);
-        //    Bus.Send(e);
-        //}
     }
 }

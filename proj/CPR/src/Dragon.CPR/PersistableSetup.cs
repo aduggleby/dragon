@@ -4,9 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Diagnostics;
-using Dragon.Context.Configuration;
 using Dragon.Data.Interfaces;
-
 
 namespace Dragon.CPR
 {
@@ -50,7 +48,9 @@ namespace Dragon.CPR
 
         private IEnumerable<Type> GetTypesForDerivingFrom<TBase>()
         {
-            return AssemblyConfig.Assemblies.ToList().SelectMany(x=>x.GetTypes())
+            return Assembly.GetExecutingAssembly().GetReferencedAssemblies()
+                .Select(a=>Assembly.Load(a))
+                .SelectMany(x=>x.GetTypes())
                 .Where(t =>
                     t.IsClass && !t.IsAbstract && !t.IsNestedPublic &&
                     !(t.IsAbstract && t.IsSealed) /* => IsStatic */&&

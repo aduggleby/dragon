@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using Dragon.CPR.Interfaces;
 using Dragon.Data.Interfaces;
-using Dragon.Context;
 using StructureMap;
 
 namespace Dragon.CPR.Impl.Projections

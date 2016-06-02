@@ -7,10 +7,8 @@ using Dragon.CPR.Errors;
 using Dragon.CPR.Impl.Projections;
 using Dragon.CPR.Interfaces;
 using Dragon.Data.Interfaces;
-using Dragon.Context;
 using Newtonsoft.Json;
 using StructureMap;
-using IContext = Dragon.Context.IContext;
 
 namespace Dragon.CPR
 {
@@ -24,7 +22,6 @@ namespace Dragon.CPR
         private readonly IRepository<Command> m_commandRepository;
         private readonly JsonSerializerSettings m_jsonSerializerSettings;
 
-        public IContext Ctx { get; set; }
 
         public CommandDispatcher(IRepository<Command> r, IContainer container)
         {
@@ -83,10 +80,7 @@ namespace Dragon.CPR
             var cmd = new Command();
             cmd.CommandID = o.CommandID;
             cmd.Executed = DateTime.UtcNow;
-            if (Ctx != null)
-            {
-                cmd.UserID = o.ExecutingUserID;
-            }
+            cmd.UserID = o.ExecutingUserID;
             cmd.Type = o.GetType().ToString();
             cmd.JSON = JsonConvert.SerializeObject(o, m_jsonSerializerSettings);
 
