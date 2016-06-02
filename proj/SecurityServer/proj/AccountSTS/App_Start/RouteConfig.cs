@@ -9,7 +9,11 @@ namespace Dragon.SecurityServer.AccountSTS
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
             routes.IgnoreRoute("{*url}", new { url = @"FederationMetadata/2007-06/FederationMetadata.xml" });
-
+            routes.MapRoute(
+                "ErrorHandler",
+                "Error/{action}/{errMsg}",
+                new { controller = "Error", action = "Unauthorized", errMsg = UrlParameter.Optional }
+            );
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",

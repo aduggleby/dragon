@@ -198,9 +198,13 @@
   <dragon>
     <security>
       <!-- The connection and tables that contain users and apps -->
-      <hmac serviceId="00000001-0001-0003-0003-000000000001" connectionStringName="Dragon" usersTableName="UserModel" appsTableName="AppModel">
+      <hmac serviceId="00000001-0001-0003-0003-000000000011" connectionStringName="Dragon" usersTableName="UserModel" appsTableName="AppModel" validateSignatureUsingHmacParametersOnly="true">
         <Paths>
           <add name="api" path="^/api/.*$" type="Include" />
+          <add name="account" path="^/Account/.*" type="Include" />
+          <add name="manage" path="^/Manage/.*" type="Include" />
+          <add name="FederationMetaData" path="^/FederationMetadata/.*" type="Exclude" />
+          <add name="FederationSignin" path="^/signin-.*" type="Exclude" />
           <add name="default" path="^/.*$" type="Exclude" />
         </Paths>
       </hmac>
