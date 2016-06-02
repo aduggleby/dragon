@@ -27,7 +27,7 @@
 @using (Html.BeginForm("ChangeAccountData", "Restricted"))
 {
     @Html.AntiForgeryToken()
-    @Html.ValidationSummary("", new { @class = "text-danger" })
+    @Html.CustomValidationSummary("", new { @class = "text-danger" })
     <div class="form-group">
         @Html.LabelFor(m => m.EmailAddress, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">

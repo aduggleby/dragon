@@ -1,9 +1,64 @@
 ﻿@model System.Web.Mvc.HandleErrorInfo
 
+
 @{
-    ViewBag.Title = "Error";
+    var parameters = new RouteValueDictionary(HttpContext.Current.Request.QueryString.Keys.Cast<string>()
+                .ToDictionary(k => k, v => (object)HttpContext.Current.Request.QueryString[v]));
+
 }
+<!-- START Template Main -->
+<section id="main" role="main" class="wav-login">
+    <!-- START Template Container -->
+    <section class="container" id="wav-home">
 
-<h1 class="text-danger">Error.</h1>
-<h2 class="text-danger">An error occurred while processing your request.</h2>
 
+        <!-- START row -->
+        <div class="row">
+            <div class="wav-login-wrapper">
+
+                <!-- Brand -->
+                <div class="row wav-login-brand">
+                    <img src="//wav-prod-cdn-main.azureedge.net/assets/images/intro/logo-signup-small.png">
+                </div>
+                <div class="row wav-login-notebook">
+                    <img src="//wav-prod-cdn-main.azureedge.net/assets/images/intro/laptop-signup.png">
+                </div>
+
+
+                <div class="flip-container">
+                    <!-- START flipper -->
+                    <div class="flipper">
+                        <!-- START sign in -->
+                        <div class="front wav-login-signin">
+                            <div class="panel">
+                                <div class="panel-heading">
+                                    <h1>Error</h1>
+
+                                    <p class="subtext">An error occurred while processing your request.</p>
+                                </div>
+                                <div class="panel-body">
+
+                                    <div class="row">
+                                        <div class="col-sm-12 mt10">
+                                            @Html.ActionLink("Return to sign in here", "Login", null, parameters, new Dictionary<string, object>() {
+                                        { "class" , "btn btn-success  wav-login-or-register-button toggle-register" } })
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <!--/ END flipper  -->
+                </div>
+            </div>
+        </div>
+        <!--/ END row -->
+
+    </section>
+    <!-- END Template Container -->
+</section>
+<!--/ END Template Main -->
