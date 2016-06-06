@@ -46,6 +46,8 @@
     <add key="UnobtrusiveJavaScriptEnabled" value="true" />
     <!-- Signing certificate filename -->
     <add key="SigningCertificateName" value="securityserver.pfx" />
+    <!-- Signing certificate password -->
+    <add key="SigningCertificatePassword" value="" />
     <!-- Identification of the login provider -->
     <add key="IssuerName" value="http://localhost:51385" />
     <!-- Federation authentication providers -->

@@ -22,7 +22,11 @@ Setup
 -----
 
 For each STS service:
+
 * Generate a signing certificate
+    * Create certificate [2]: New-SelfSignedCertificateEx -Subject "[X500 distinguished name, e.g. CN=Test Cert, OU=Sandbox]" -Exportable
+    * Export certificate using certmgr.msc (Personal/Certificates) as PFX include private key, and set the SigningCertificatePassword in the appSettings  (see below) to the private key password
+    * Place the certificate somewhere readable by the web server, and set SigningCertificateName in the appSettings (see below) to its path
 * Configure federation (see appSettings in web.config)
 
         Mandatory app settings:
@@ -42,6 +46,8 @@ For each STS service:
         Optional app settings:
         <!-- Signing certificate filename -->
         <add key="SigningCertificateName" value="securityserver.pfx" />
+        <!-- Signing certificate password -->
+        <add key="SigningCertificatePassword" value="" />
         <!-- Identification of the login provider -->
         <add key="LoginProviderName" value="Dragon" />
         <!-- Federation metadata -->
@@ -91,3 +97,4 @@ References
 ----------
 
 [1] https://github.com/aduggleby/dragon/tree/restructuring/proj/Security/Hmac
+[2] https://gallery.technet.microsoft.com/scriptcenter/Self-signed-certificate-5920a7c6

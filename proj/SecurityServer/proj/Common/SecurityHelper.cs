@@ -12,7 +12,7 @@ namespace Dragon.SecurityServer.Common
         {
             var certificateFilePath = Path.Combine(HostingEnvironment.ApplicationPhysicalPath, ConfigurationManager.AppSettings["SigningCertificateName"]);
             var data = File.ReadAllBytes(certificateFilePath);
-            var certificate = new X509Certificate2(data, string.Empty, X509KeyStorageFlags.MachineKeySet);
+            var certificate = new X509Certificate2(data, ConfigurationManager.AppSettings["SigningCertificatePassword"], X509KeyStorageFlags.MachineKeySet);
             return new X509SigningCredentials(certificate);
         }
     }

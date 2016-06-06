@@ -1,6 +1,9 @@
 ﻿Demo
 ====
 
+An example that uses federation to restrict access. It uses the AccountSTS client / OWIN to allow updating user data.
+
+
 Setup
 -----
 
