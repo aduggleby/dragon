@@ -1,4 +1,6 @@
-﻿using System.IdentityModel.Services;
+﻿using System.Configuration;
+using System.IdentityModel.Services;
+using System.IdentityModel.Tokens;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
@@ -24,6 +26,11 @@ namespace Dragon.SecurityServer.Demo
                 {
                     MetadataAddress = FederatedAuthentication.WSFederationAuthenticationModule.Issuer + "federationmetadata/2007-06/federationmetadata.xml",
                     Wtrealm = FederatedAuthentication.WSFederationAuthenticationModule.Realm,
+                    TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidAudiences = new[] { ConfigurationManager.AppSettings["WtRealm"], ConfigurationManager.AppSettings["WtRealm"].ToLower() },
+                        ValidIssuer = ConfigurationManager.AppSettings["ValidIssuer"],
+                    }
                 });
         }
     }

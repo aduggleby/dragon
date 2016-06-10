@@ -48,6 +48,10 @@ For each STS service:
         <add key="SigningCertificateName" value="securityserver.pfx" />
         <!-- Signing certificate password -->
         <add key="SigningCertificatePassword" value="" />
+        <!-- Token encryption certificate filename -->
+        <add key="EncryptingCertificateName" value="securityserver.pfx" />
+        <!-- Token encryption certificate password -->
+        <add key="EncryptingCertificatePassword" value="" />
         <!-- Identification of the login provider -->
         <add key="LoginProviderName" value="Dragon" />
         <!-- Federation metadata -->

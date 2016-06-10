@@ -44,10 +44,11 @@
     <add key="webpages:Enabled" value="false" />
     <add key="ClientValidationEnabled" value="true" />
     <add key="UnobtrusiveJavaScriptEnabled" value="true" />
-    <!-- Signing certificate filename -->
+    <!-- Certificates -->
     <add key="SigningCertificateName" value="securityserver.pfx" />
-    <!-- Signing certificate password -->
     <add key="SigningCertificatePassword" value="" />
+    <add key="EncryptingCertificateName" value="securityserver.pfx" />
+    <add key="EncryptingCertificatePassword" value="" />
     <!-- Identification of the login provider -->
     <add key="IssuerName" value="http://localhost:51385" />
     <!-- Federation authentication providers -->

@@ -57,9 +57,17 @@
     <add key="webpages:Enabled" value="false" />
     <add key="ClientValidationEnabled" value="true" />
     <add key="UnobtrusiveJavaScriptEnabled" value="true" />
-    <add key="owin:AutomaticAppStartup" value="false" />
-    <add key="ServiceId" value="00000000-0000-0000-0000-000000000000" />
-    <add key="AccountStsUrl" value="http://thispc.com:51385" />
+    <add key="owin:AppStartup" value="Dragon.SecurityServer.Demo.Startup, Dragon.SecurityServer.Demo" />
+    <add key="owin:AutomaticAppStartup " value="false" />
+    <add key="AccountStsUrl" value="http://localhost:51385" />
+    <add key="Dragon.Security.Hmac.AppId" value="00000001-0001-0003-0003-200000000001" />
+    <add key="Dragon.Security.Hmac.ServiceId" value="00000001-0001-0003-0003-000000000011" />
+    <add key="Dragon.Security.Hmac.GuestUserId" value="00000001-0001-0001-0003-100000000001" />
+    <add key="Dragon.Security.Hmac.Secret" value="secret_accountSTS" />
+    <add key="Dragon.SecurityServer.EncryptingCertificateName" value="securityserver.pfx" />
+    <add key="Dragon.SecurityServer.EncryptingCertificatePassword" value="" />
+    <add key="WtRealm" value="http://WSFedTest/" />
+    <add key="ValidIssuer" value="http://localhost:51385" />
   </appSettings>
   <system.web>
     <compilation debug="true" targetFramework="4.5" />
