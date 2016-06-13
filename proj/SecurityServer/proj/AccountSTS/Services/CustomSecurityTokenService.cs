@@ -50,7 +50,9 @@ namespace Dragon.SecurityServer.AccountSTS.Services
             var user = AsyncRunner.RunNoSynchronizationContext(() => _userStore.FindByIdAsync(id));
             var connectedProviders = AsyncRunner.RunNoSynchronizationContext(() => _userStore.GetLoginsAsync(user)).Select(x => x.LoginProvider).ToList();
             var loginClaims = connectedProviders.Select(x => new Claim(Consts.ManagementConnectedAccountType, x)).Concat(
-                availableProviders.Except(connectedProviders).Select(x => new Claim(Consts.ManagementDisconnectedAccountType, x)));
+                availableProviders.Except(connectedProviders).Select(x => new Claim(Consts.ManagementDisconnectedAccountType, x))).ToList();
+            var hasLocalAccount = !string.IsNullOrWhiteSpace(user.PasswordHash);
+            loginClaims.Add(new Claim(hasLocalAccount ? Consts.ManagementConnectedAccountType : Consts.ManagementDisconnectedAccountType, "Local"));
             var serviceClaims = AsyncRunner.RunNoSynchronizationContext(() => _userStore.GetServicesAsync(user)).Select(x => new Claim(Consts.RegisteredServiceType, x));
             var claims = new[]
             {
