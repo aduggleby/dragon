@@ -95,7 +95,6 @@ namespace Dragon.SecurityServer.ProfileSTS
                                 ctx.OwinContext.Authentication.SignOut("ExternalCookie");
                                 var claims = result.Identity.Claims.ToList();
                                 claims.Add(new Claim(ClaimTypes.AuthenticationMethod, "External Account"));
-                                var email = Enumerable.SingleOrDefault(claims, x => x.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
                                 var ci = new ClaimsIdentity(claims, DefaultAuthenticationTypes.ApplicationCookie);
                                 ctx.OwinContext.Authentication.SignIn(ci);
                             }

@@ -8,12 +8,29 @@ namespace Dragon.SecurityServer.Common
 {
     public class SecurityHelper
     {
+        private const string EncryptionCertificateName = "EncryptingCertificate";
+        private const string SigningCertificateName = "SigningCertificate";
+
         public static X509SigningCredentials CreateSignupCredentialsFromConfig()
         {
-            var certificateFilePath = Path.Combine(HostingEnvironment.ApplicationPhysicalPath, ConfigurationManager.AppSettings["SigningCertificateName"]);
+            return string.IsNullOrWhiteSpace(ConfigurationManager.AppSettings[SigningCertificateName + "Name"]) ?
+                null :
+                new X509SigningCredentials(CreateCertificateFromConfig(SigningCertificateName));
+        }
+
+        public static X509EncryptingCredentials CreateEncryptingCredentialsFromConfig()
+        {
+            return string.IsNullOrWhiteSpace(ConfigurationManager.AppSettings[EncryptionCertificateName + "Name"]) ?
+                null :
+                new X509EncryptingCredentials(CreateCertificateFromConfig(EncryptionCertificateName));
+        }
+
+        public static X509Certificate2 CreateCertificateFromConfig(string certificateName)
+        {
+            var certificateFilePath = Path.Combine(HostingEnvironment.ApplicationPhysicalPath, ConfigurationManager.AppSettings[certificateName + "Name"]);
             var data = File.ReadAllBytes(certificateFilePath);
-            var certificate = new X509Certificate2(data, string.Empty, X509KeyStorageFlags.MachineKeySet);
-            return new X509SigningCredentials(certificate);
+            var certificate = new X509Certificate2(data, ConfigurationManager.AppSettings[certificateName + "Password"], X509KeyStorageFlags.MachineKeySet);
+            return certificate;
         }
     }
 }
