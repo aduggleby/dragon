@@ -67,7 +67,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Dragon.Security.Hmac.Module, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Dragon.Security.Hmac.Module.1.2\lib\Dragon.Security.Hmac.Module.dll</HintPath>
+      <HintPath>..\packages\Dragon.Security.Hmac.Module.1.2.1\lib\Dragon.Security.Hmac.Module.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Jil, Version=2.14.3.0, Culture=neutral, processorArchitecture=MSIL">
