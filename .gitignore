@@ -49,6 +49,7 @@ _ReSharper*/
 *.resharper
 [Tt]est[Rr]esult*
 *.sass-cache
+.localhistory
 
 #Project files
 [Bb]uild/

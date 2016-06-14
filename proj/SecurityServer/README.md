@@ -27,6 +27,8 @@ For each STS service:
     * Create certificate [2]: New-SelfSignedCertificateEx -Subject "[X500 distinguished name, e.g. CN=Test Cert, OU=Sandbox]" -Exportable
     * Export certificate using certmgr.msc (Personal/Certificates) as PFX include private key, and set the SigningCertificatePassword in the appSettings  (see below) to the private key password
     * Place the certificate somewhere readable by the web server, and set SigningCertificateName in the appSettings (see below) to its path
+* Generate a encryption certificate
+    * Use the public key of the encryption certificate of the application that uses the SecurityServer (see the previous step, but export without private key as CER)   
 * Configure federation (see appSettings in web.config)
 
         Mandatory app settings:
@@ -48,10 +50,8 @@ For each STS service:
         <add key="SigningCertificateName" value="securityserver.pfx" />
         <!-- Signing certificate password -->
         <add key="SigningCertificatePassword" value="" />
-        <!-- Token encryption certificate filename -->
-        <add key="EncryptingCertificateName" value="securityserver.pfx" />
-        <!-- Token encryption certificate password -->
-        <add key="EncryptingCertificatePassword" value="" />
+        <!-- Token encryption certificate filename (public key) -->
+        <add key="EncryptingCertificateName" value="demo.cer" />
         <!-- Identification of the login provider -->
         <add key="LoginProviderName" value="Dragon" />
         <!-- Federation metadata -->

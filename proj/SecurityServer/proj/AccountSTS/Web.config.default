@@ -45,10 +45,9 @@
     <add key="ClientValidationEnabled" value="true" />
     <add key="UnobtrusiveJavaScriptEnabled" value="true" />
     <!-- Certificates -->
-    <add key="SigningCertificateName" value="securityserver.pfx" />
+    <add key="SigningCertificateName" value="certificates/securityserver.pfx" />
     <add key="SigningCertificatePassword" value="" />
-    <add key="EncryptingCertificateName" value="securityserver.pfx" />
-    <add key="EncryptingCertificatePassword" value="" />
+    <add key="EncryptingCertificateName" value="certificates/demo.cer" />
     <!-- Identification of the login provider -->
     <add key="IssuerName" value="http://localhost:51385" />
     <!-- Federation authentication providers -->
