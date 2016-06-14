@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Dragon.Security.Hmac.Core</id>
-    <version>1.1.0</version>
+    <version>1.2.0</version>
     <title>Dragon.Security.Hmac.Core</title>
     <authors>Dragon Project</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>

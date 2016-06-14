@@ -56,12 +56,11 @@ namespace Dragon.Security.Hmac.Module.Modules
             var serviceId = settings.ServiceId;
             var signatureParameterKey = settings.SignatureParameterKey;
             var useHexEncoding = settings.UseHexEncoding;
-            var validateSignatureUsingHmacParametersOnly = settings.ValidateSignatureUsingHmacParametersOnly;
 
             _connection = new SqlConnection(connectionString);
             _connection.Open();
 
-            return new HmacHttpService(serviceId, settings.Paths, signatureParameterKey, validateSignatureUsingHmacParametersOnly)
+            return new HmacHttpService(serviceId, settings.Paths, signatureParameterKey)
             {
                 UserRepository = new DapperUserRepository(_connection, userTableName),
                 AppRepository = new DapperAppRepository(_connection, applicationTableName),

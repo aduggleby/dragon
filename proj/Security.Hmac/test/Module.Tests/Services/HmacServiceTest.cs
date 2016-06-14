@@ -26,7 +26,7 @@ namespace Dragon.Security.Hmac.Module.Tests.Services
         public void IsRequestAuthorized_rawUrlIsExcluded_shouldAllowAccess()
         {
             // Arrange
-            var service = new HmacHttpService(ServiceId.ToString(), CreatePathCollection(), "signature", false)
+            var service = new HmacHttpService(ServiceId.ToString(), CreatePathCollection(), "signature")
             {
                 UserRepository = new Mock<IUserRepository>().Object,
                 AppRepository = new Mock<IAppRepository>().Object,
@@ -49,7 +49,7 @@ namespace Dragon.Security.Hmac.Module.Tests.Services
                 new PathConfig {Name = "included", Path = ".*", Type = PathConfig.PathType.Include},
                 new PathConfig {Name = "excluded", Path = "/public/.*", Type = PathConfig.PathType.Exclude}
             };
-            var service = new HmacHttpService(ServiceId.ToString(), pathCollection, "signature", false)
+            var service = new HmacHttpService(ServiceId.ToString(), pathCollection, "signature")
             {
                 UserRepository = new Mock<IUserRepository>().Object,
                 AppRepository = new Mock<IAppRepository>().Object,
@@ -67,7 +67,7 @@ namespace Dragon.Security.Hmac.Module.Tests.Services
         public void IsRequestAuthorized_rawUrlIsIncludedInvalidQueryString_shouldDisallowRequest()
         {
             // Arrange
-            var service = new HmacHttpService(ServiceId.ToString(), CreatePathCollection(), "signature", false)
+            var service = new HmacHttpService(ServiceId.ToString(), CreatePathCollection(), "signature")
             {
                 UserRepository = new Mock<IUserRepository>().Object,
                 AppRepository = new Mock<IAppRepository>().Object,
@@ -85,7 +85,7 @@ namespace Dragon.Security.Hmac.Module.Tests.Services
         public void IsRequestAuthorized_mismatchingServiceId_shouldDisallowRequest()
         {
             // Arrange
-            var service = new HmacHttpService(Guid.NewGuid().ToString(), CreatePathCollection(), "signature", false);
+            var service = new HmacHttpService(Guid.NewGuid().ToString(), CreatePathCollection(), "signature");
 
             // Act
             var actual = service.IsRequestAuthorized(GetValidRawUrl(), CreateValidQueryString());
@@ -367,33 +367,68 @@ namespace Dragon.Security.Hmac.Module.Tests.Services
         }
 
         [TestMethod]
-        public void IsRequestAuthorized_includeParameterThatHasNotBeenUsedForSignatureGeneration_validateUsingHmacParametersOnly_shouldAllowRequest()
+        public void IsRequestAuthorized_includeParametersThatHaveNotBeenUsedForSignatureGeneration_ignoreTheseAdditionalParameters_shouldAllowRequest()
         {
             // Arrange
-            var service = CreateHmacService(DefaultSignatureParameterKey, false, true);
+            var pathCollection = new PathCollection
+            {
+                new PathConfig {Name = "included-1", Path = "/public/.*", Type = PathConfig.PathType.Include},
+                new PathConfig {Name = "included-2", Path = ".*", Type = PathConfig.PathType.Include, ExcludeParameters = "p1, p2"}
+            };
+            var service = CreateService(DefaultSignatureParameterKey, false, pathCollection);
 
             // Act
             var queryString = CreateValidQueryString();
             queryString.Add("p1", "v1");
+            queryString.Add("p2", "v2");
+            var actualUrlWithParametersExcluded = service.IsRequestAuthorized(GetValidRawUrl(), queryString);
+            var actualUrlWithParametersNotExcluded = service.IsRequestAuthorized(GetValidRawUrl(false), queryString);
+
+            // Assert
+            Assert.AreEqual(StatusCode.Authorized, actualUrlWithParametersExcluded);
+            Assert.AreEqual(StatusCode.InvalidSignature, actualUrlWithParametersNotExcluded);
+        }
+
+        [TestMethod]
+        public void IsRequestAuthorized_includeParameterThatHasNotBeenUsedForSignatureGeneration_ignoreOtherAdditionalParameters_shouldDisallowRequest()
+        {
+            // Arrange
+            var pathCollection = new PathCollection
+            {
+                new PathConfig {Name = "included-1", Path = "/public/.*", Type = PathConfig.PathType.Include},
+                new PathConfig {Name = "included-2", Path = ".*", Type = PathConfig.PathType.Include, ExcludeParameters = "p1, p2"}
+            };
+            var service = CreateService(DefaultSignatureParameterKey, false, pathCollection);
+
+            // Act
+            var queryString = CreateValidQueryString();
+            queryString.Add("p1", "v1");
+            queryString.Add("p3", "v2");
             var actual = service.IsRequestAuthorized(GetValidRawUrl(), queryString);
 
             // Assert
-            Assert.AreEqual(StatusCode.Authorized, actual);
+            Assert.AreEqual(StatusCode.InvalidSignature, actual);
         }
 
         #region helper
 
-        private static HmacHttpService CreateHmacService(string signatureParameterKey = DefaultSignatureParameterKey, bool useHexEncoding = false, bool validateSignatureUsingHmacParametersOnly = false)
+        private static HmacHttpService CreateHmacService(string signatureParameterKey = DefaultSignatureParameterKey, bool useHexEncoding = false)
+        {
+            var pathCollection = CreatePathCollection();
+            return CreateService(signatureParameterKey, useHexEncoding, pathCollection);
+        }
+
+        private static HmacHttpService CreateService(string signatureParameterKey, bool useHexEncoding, PathCollection pathCollection)
         {
             var mockAppRepository = new Mock<IAppRepository>();
-            mockAppRepository.Setup(x => x.Get(It.IsAny<Guid>(), It.IsAny<Guid>())).Returns(new AppModel { Enabled = true, Secret = Secret });
-            return new HmacHttpService(ServiceId.ToString(), CreatePathCollection(), signatureParameterKey, validateSignatureUsingHmacParametersOnly)
+            mockAppRepository.Setup(x => x.Get(It.IsAny<Guid>(), It.IsAny<Guid>())).Returns(new AppModel {Enabled = true, Secret = Secret});
+            return new HmacHttpService(ServiceId.ToString(), pathCollection, signatureParameterKey)
             {
                 UserRepository = new Mock<IUserRepository>().Object,
                 AppRepository = mockAppRepository.Object,
-                HmacService = signatureParameterKey == DefaultSignatureParameterKey ? 
-                    new HmacSha256Service { UseHexEncoding = useHexEncoding } : 
-                    new HmacSha256Service { SignatureParameterKey = signatureParameterKey, UseHexEncoding = useHexEncoding }
+                HmacService = signatureParameterKey == DefaultSignatureParameterKey
+                    ? new HmacSha256Service {UseHexEncoding = useHexEncoding}
+                    : new HmacSha256Service {SignatureParameterKey = signatureParameterKey, UseHexEncoding = useHexEncoding}
             };
         }
 
