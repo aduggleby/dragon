@@ -180,6 +180,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\FederationController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ControllerBase.cs" />
     <Compile Include="Controllers\RestrictedController.cs" />
     <Compile Include="CustomAuthenticationModule.cs" />
     <Compile Include="Global.asax.cs">

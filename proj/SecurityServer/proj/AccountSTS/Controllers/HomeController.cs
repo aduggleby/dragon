@@ -70,6 +70,8 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
                             Request.QueryString[Reply]);
                     case "forgotPassword":
                         return RedirectToAction("ForgotPassword", "Account", new RouteValueDictionary(routeValues));
+                    case "manage":
+                        return RedirectToAction("Index", "Manage");
                     default:
                         // nothing to be done
                         break;

@@ -34,11 +34,11 @@
                     <li>@Html.ActionLink("SignOut", "SignOut", "Federation", new { returnUrl = Request.Url }, null)</li>
                     @if (User.Identity.IsAuthenticated)
                     {
-                        <li><a href="@WebConfigurationManager.AppSettings["AccountStsUrl"]/Manage/?returnUrl=@Url.Encode(Request.Url.AbsoluteUri)">Hello @email!</a></li>
+                        <li><a href="@ViewBag.ManageUrl">Hello @email!</a></li>
                     }
                     else
                     {
-                        <li><a href="#">Please login.</a></li>
+                        <li><a href="@ViewBag.ManageUrl">Please login.</a></li>
                     }
                 </ul>
             </div>

@@ -72,6 +72,8 @@
     <add key="FederationEndpoint" value="http://localhost:51385" /> 
     <!-- Where to redirect on logout -->
     <add key="SignOutPath" value="/Home/SignOut" />
+    <!-- Admin user id list -->
+    <add key="AdminUserIds" value="" />
 
     <add key="aspNet:identity:redis:db" value="3" />
     <add key="aspNet:identity:redis:userIdKey" value="stackredis:identity:user:id" />

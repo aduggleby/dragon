@@ -1,0 +1,42 @@
+﻿@model Dragon.SecurityServer.AccountSTS.Models.FindUserViewModel
+@{
+    ViewBag.Title = "Users";
+}
+
+<h2>@ViewBag.Title.</h2>
+
+@using (Html.BeginForm("Users", "Admin", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <h4>Find a user by mail</h4>
+    <hr />
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(m => m.SearchTerm, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.SearchTerm, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" class="btn btn-default" value="Search" />
+        </div>
+    </div>
+
+    if (ViewBag.Users != null)
+    {
+        <br/><br/>
+        <h4>Found @ViewBag.Users.Count users</h4>
+        <hr/>
+        <div>
+            @foreach (var user in ViewBag.Users)
+            {
+                <p>@user.Email <a href="@Url.Action("Impersonate", "Admin", new {id = user.Id})">[impersonate]</a></p>
+            }
+        </div>
+    }
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
