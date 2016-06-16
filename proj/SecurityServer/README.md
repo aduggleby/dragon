@@ -78,11 +78,23 @@ For each STS service:
 Usage
 -----
 
+### Integration
+
 An example web application that uses the SecurityServer for authentication can be found in the Demo project.
 
 To integrate the SecurityServer:
+
 * Configure Windows Identity Foundation (see system.identityModel in the Web.config of the Demo project).
 * Specify the service for which the user should be authenticated: The Service ID needs to be added to all federation requests (see Demo.CustomAuthenticationModule and Demo.Controllers.HomeController::SignIn for custom requests).
+
+### Migration
+
+The migration of legacy users can be performed using the UserMigrationTest project. 
+
+Just specify following connection strings in the App.config:
+
+* The legacy source database as WAV
+* The target database as Dragon
 
 
 Tests
@@ -101,4 +113,5 @@ References
 ----------
 
 [1] https://github.com/aduggleby/dragon/tree/restructuring/proj/Security/Hmac
+
 [2] https://gallery.technet.microsoft.com/scriptcenter/Self-signed-certificate-5920a7c6
