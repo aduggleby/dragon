@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Threading.Tasks;
@@ -115,9 +116,11 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
                 HandleUserNotRegisteredForService(model.Email);
                 return View();
             }
-
-            if (result == SignInStatus.Failure)
+            catch (FormatException)
             {
+                // Legacy passwords are not valid Base-64 strings
+                result = SignInStatus.Failure;
+
                 // Try to authenticate the user using a legacy login service
                 var user = await _userStore.FindByEmailAsync(model.Email);
                 if (!string.IsNullOrWhiteSpace(user?.PasswordHash) && user.PasswordHash.StartsWith(LegacyPasswordPrefix) && !string.IsNullOrWhiteSpace(model.Email))
@@ -140,6 +143,11 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
                         // or force a password reset
                         //return await RequestPasswordReset(new ForgotPasswordViewModel { Email = user.Email});
                     }
+                }
+                else
+                {
+                    // Not a legacy password, so rethrow
+                    throw;
                 }
             }
 
