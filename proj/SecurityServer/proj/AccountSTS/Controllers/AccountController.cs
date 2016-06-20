@@ -713,8 +713,8 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
         public ActionResult LogOff()
         {
             AuthenticationManager.SignOut();
-            var returnUrl = Request.QueryString["returnUrl"] + WebConfigurationManager.AppSettings["SignOutPath"];
-            return string.IsNullOrEmpty(returnUrl) ? (ActionResult) RedirectToAction("Index", "Home") : Redirect(returnUrl);
+            var returnUrl = Request.QueryString["returnUrl"];
+            return string.IsNullOrEmpty(returnUrl) ? (ActionResult) RedirectToAction("About", "Home") : Redirect(returnUrl);
         }
 
         //
