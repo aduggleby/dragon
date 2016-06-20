@@ -24,7 +24,7 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
     [Authorize]
     public class AccountController : Controller
     {
-        private const string LegacyPasswordPrefix = "OLD:";
+        private const string LegacyPasswordPrefix = "OLD_";
 
         [Import]
         public ICheckPasswordService<AppMember> LegacyPasswordService { get; set; }

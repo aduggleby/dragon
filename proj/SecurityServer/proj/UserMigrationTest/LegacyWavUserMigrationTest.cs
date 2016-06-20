@@ -11,7 +11,7 @@ namespace UserMigrationTest
     [TestClass]
     public class LegacyWavUserMigrationTest
     {
-        private const string LegacyPasswordPrefix = "OLD:";
+        private const string LegacyPasswordPrefix = "OLD_";
 
         [TestMethod]
         public async Task Migrate_validDbs_shouldMigrateUsers()
