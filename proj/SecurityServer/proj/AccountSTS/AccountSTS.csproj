@@ -312,7 +312,9 @@
     <Compile Include="Helpers\MailService.cs" />
     <Compile Include="Helpers\NonEmptyValidationSummaryHtmlExtension.cs" />
     <Compile Include="Helpers\UserModel.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
+    <Compile Include="Models\AdminViewModels.cs" />
     <Compile Include="Services\FederationService.cs" />
     <Compile Include="Services\IFederationService.cs" />
     <Compile Include="WebRequestHandler\OpenIdMigrationWebRequestHandler.cs" />
@@ -499,6 +501,7 @@
     <Content Include="Views\Error\Unauthorized.cshtml" />
     <Content Include="templates\ExportTemplate.docx" />
     <Content Include="templates\Web.config" />
+    <Content Include="Views\Admin\Users.cshtml" />
     <None Include="Web.config.default">
       <SubType>Designer</SubType>
     </None>

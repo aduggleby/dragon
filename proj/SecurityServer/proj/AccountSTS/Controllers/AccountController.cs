@@ -31,7 +31,7 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
     [Authorize]
     public class AccountController : Controller
     {
-        private const string LegacyPasswordPrefix = "OLD:";
+        private const string LegacyPasswordPrefix = "OLD_";
 
         [Import]
         public ICheckPasswordService<AppMember> LegacyPasswordService { get; set; }
@@ -734,8 +734,8 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
         public ActionResult LogOff()
         {
             AuthenticationManager.SignOut();
-            var returnUrl = Request.QueryString["returnUrl"] + WebConfigurationManager.AppSettings["SignOutPath"];
-            return string.IsNullOrEmpty(returnUrl) ? (ActionResult) RedirectToAction("Index", "Home") : Redirect(returnUrl);
+            var returnUrl = Request.QueryString["returnUrl"];
+            return string.IsNullOrEmpty(returnUrl) ? (ActionResult) RedirectToAction("About", "Home") : Redirect(returnUrl);
         }
 
         protected override void Dispose(bool disposing)

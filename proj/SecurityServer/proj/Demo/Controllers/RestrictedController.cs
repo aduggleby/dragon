@@ -17,25 +17,10 @@ using Microsoft.AspNet.Identity;
 
 namespace Dragon.SecurityServer.Demo.Controllers
 {
-    public class RestrictedController : Controller
+    public class RestrictedController : ControllerBase
     {
-        private readonly IClient _client;
         public const string ManagementConnectedAccountType = "http://whataventure.com/schemas/identity/claims/account/connectedAccountType";
         public const string ManagementDisconnectedAccountType = "http://whataventure.com/schemas/identity/claims/account/disconnectedAccountType";
-
-        public RestrictedController()
-        {
-            var fam = FederatedAuthentication.WSFederationAuthenticationModule;
-            var accountStsUrl = ConfigurationManager.AppSettings["AccountStsUrl"];
-            accountStsUrl = (string.IsNullOrEmpty(accountStsUrl) ? fam.Issuer : accountStsUrl);
-            _client = new AccountSTSClient(accountStsUrl + "/Api", accountStsUrl, fam.Realm);
-            _client.SetHmacSettings(HmacHelper.ReadHmacSettings());
-        }
-
-        public RestrictedController(IClient client)
-        {
-            _client = client;
-        }
 
         // GET: Restricted
         [ImportModelStateFromTempData]
@@ -52,12 +37,8 @@ namespace Dragon.SecurityServer.Demo.Controllers
 
         private void InitViewBag()
         {
-            ViewBag.Name = User.Identity.Name;
-            ViewBag.AuthenticationType = User.Identity.AuthenticationType;
-            var claims = ((ClaimsIdentity) User.Identity).Claims.ToList();
-            ViewBag.Claims = claims;
-            ViewBag.ConnectUrls = GetFederationManagementUrls(claims, ManagementDisconnectedAccountType, "connect");
-            ViewBag.DisconnectUrls = GetFederationManagementUrls(claims, ManagementConnectedAccountType, "disconnect");
+            ViewBag.ConnectUrls = GetFederationManagementUrls(ViewBag.Claims, ManagementDisconnectedAccountType, "connect");
+            ViewBag.DisconnectUrls = GetFederationManagementUrls(ViewBag.Claims, ManagementConnectedAccountType, "disconnect");
         }
 
         private Dictionary<string, string> GetFederationManagementUrls(IEnumerable<Claim> claims, string accountType, string action)
