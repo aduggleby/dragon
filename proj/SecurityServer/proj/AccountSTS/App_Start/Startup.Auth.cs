@@ -1,16 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IdentityModel.Claims;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Configuration;
 using Dragon.SecurityServer.AccountSTS.Models;
 using Dragon.SecurityServer.AccountSTS.WebRequestHandler;
+using Facebook;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Infrastructure;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.DataProtection;
+using Microsoft.Owin.Security.Facebook;
 using Microsoft.Owin.Security.Google;
 using Owin;
 using SimpleInjector;
@@ -86,9 +90,22 @@ namespace Dragon.SecurityServer.AccountSTS
             }
             if (IsEnabled("Facebook", enabledProviders))
             {
-                app.UseFacebookAuthentication(
-                    appId: GetClientID("Facebook"),
-                    appSecret: GetClientSecret("Facebook"));
+                var facebookOptions = new FacebookAuthenticationOptions
+                {
+                    AppId = GetClientID("Facebook"),
+                    AppSecret = GetClientSecret("Facebook"),
+                    Provider = new FacebookAuthenticationProvider
+                    {
+                        OnAuthenticated = (context) =>
+                        {
+                            var client = new FacebookClient(context.AccessToken);
+                            dynamic info = client.Get("me", new { fields = "name,id,email" });
+                            context.Identity.AddClaim(new System.Security.Claims.Claim(ClaimTypes.Email, info.email));
+                            return Task.FromResult(0);
+                        }
+                    }
+                };
+                app.UseFacebookAuthentication(facebookOptions);
             }
             if (IsEnabled("Google", enabledProviders))
             {
