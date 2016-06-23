@@ -523,6 +523,15 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
                     return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = false });
                 case SignInStatus.Failure:
                 default:
+                    // Minimize user interaction on the AccountSTS, so only show login confirmation if no email is present
+                    if (string.IsNullOrWhiteSpace(loginInfo.Email))
+                    {
+                        Logger.Trace("External login: user {0} ({1}) does not have an account and no email is provided", loginInfo.Login.ProviderKey, loginInfo.Login.LoginProvider);
+                        ViewBag.ReturnUrl = returnUrl;
+                        ViewBag.RouteValues["ReturnUrl"] = returnUrl;
+                        ViewBag.LoginProvider = loginInfo.Login.LoginProvider;
+                        return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel { Email = loginInfo.Email });
+                    }
                     Logger.Trace("External login: user {0} does not have an account", loginInfo.Email);
                     var user = await _userStore.FindByEmailAsync(loginInfo.Email);
                     // For new users silently create an account and return
@@ -545,13 +554,6 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
                     }
                     await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                     return RedirectToLocal(returnUrl);
-                    /* Minimize user interaction on the AccountSTS, so don't show the login confirmation
-                    // If the email address is already used, allow changing the email address or adding the external login to an existing account
-                    ViewBag.ReturnUrl = returnUrl;
-                    ViewBag.RouteValues["ReturnUrl"] = returnUrl;
-                    ViewBag.LoginProvider = loginInfo.Login.LoginProvider;
-                    return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel { Email = loginInfo.Email });
-                    */
             }
         }
 
