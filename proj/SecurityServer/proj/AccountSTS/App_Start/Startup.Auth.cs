@@ -8,6 +8,7 @@ using System.Web.Configuration;
 using Dragon.SecurityServer.AccountSTS.Models;
 using Dragon.SecurityServer.AccountSTS.WebRequestHandler;
 using Facebook;
+using LinqToTwitter;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
@@ -17,6 +18,7 @@ using Microsoft.Owin.Security.DataProtection;
 using Microsoft.Owin.Security.Facebook;
 using Microsoft.Owin.Security.Google;
 using Microsoft.Owin.Security.MicrosoftAccount;
+using Microsoft.Owin.Security.Twitter;
 using Owin;
 using SimpleInjector;
 
@@ -105,9 +107,43 @@ namespace Dragon.SecurityServer.AccountSTS
             }
             if (IsEnabled("Twitter", enabledProviders))
             {
-                app.UseTwitterAuthentication(
-                    consumerKey: GetClientID("Twitter"),
-                    consumerSecret: GetClientSecret("Twitter"));
+                var options = new TwitterAuthenticationOptions
+                {
+                    ConsumerKey = GetClientID("Twitter"),
+                    ConsumerSecret = GetClientSecret("Twitter"),
+                    Provider = new TwitterAuthenticationProvider
+                    {
+                        OnAuthenticated = (context) =>
+                        {
+                            var authTwitter = new SingleUserAuthorizer
+                            {
+                                CredentialStore = new SingleUserInMemoryCredentialStore
+                                {
+                                    ConsumerKey = GetClientID("Twitter"),
+                                    ConsumerSecret = GetClientSecret("Twitter"),
+                                    OAuthToken = context.AccessToken,
+                                    OAuthTokenSecret = context.AccessTokenSecret,
+                                    UserID = ulong.Parse(context.UserId),
+                                    ScreenName = context.ScreenName
+                                }
+                            };
+                            var twitterCtx = new TwitterContext(authTwitter);
+                            var verifyResponse = (
+                                from acct
+                                in twitterCtx.Account
+                                where (acct.Type == AccountType.VerifyCredentials) && acct.IncludeEmail
+                                select acct
+                                ).SingleOrDefault();
+                            if (verifyResponse?.User != null)
+                            {
+                                var twitterUser = verifyResponse.User;
+                                context.Identity.AddClaim(new System.Security.Claims.Claim(ClaimTypes.Email, twitterUser.Email));
+                            }
+                            return Task.FromResult(0);
+                        }
+                    }
+                };
+                app.UseTwitterAuthentication(options);
             }
             if (IsEnabled("Facebook", enabledProviders))
             {
