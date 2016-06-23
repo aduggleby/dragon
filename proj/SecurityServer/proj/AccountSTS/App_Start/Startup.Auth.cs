@@ -16,6 +16,7 @@ using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.DataProtection;
 using Microsoft.Owin.Security.Facebook;
 using Microsoft.Owin.Security.Google;
+using Microsoft.Owin.Security.MicrosoftAccount;
 using Owin;
 using SimpleInjector;
 
@@ -78,9 +79,29 @@ namespace Dragon.SecurityServer.AccountSTS
                     .Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
             if (IsEnabled("Microsoft", enabledProviders))
             {
-                app.UseMicrosoftAccountAuthentication(
-                    clientId: GetClientID("Microsoft"),
-                    clientSecret: GetClientSecret("Microsoft"));
+                var options = new MicrosoftAccountAuthenticationOptions
+                {
+                    ClientId = GetClientID("Microsoft"),
+                    ClientSecret = GetClientSecret("Microsoft"),
+                    Provider = new MicrosoftAccountAuthenticationProvider
+                    {
+                        OnAuthenticated = context =>
+                        {
+                            context.Identity.AddClaim(new System.Security.Claims.Claim("urn:microsoftaccount:access_token", context.AccessToken));
+                            foreach (var claim in context.User)
+                            {
+                                var claimType = string.Format("urn:microsoftaccount:{0}", claim.Key);
+                                var claimValue = claim.Value.ToString();
+                                if (!context.Identity.HasClaim(claimType, claimValue))
+                                    context.Identity.AddClaim(new System.Security.Claims.Claim(claimType, claimValue, "XmlSchemaString", "Microsoft"));
+                            }
+                            return Task.FromResult(0);
+                        }
+                    }
+                };
+                options.Scope.Add("wl.emails");
+                options.Scope.Add("wl.basic");
+                app.UseMicrosoftAccountAuthentication(options);
             }
             if (IsEnabled("Twitter", enabledProviders))
             {

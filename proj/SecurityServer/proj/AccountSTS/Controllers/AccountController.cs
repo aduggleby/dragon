@@ -523,6 +523,15 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
                     return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = false });
                 case SignInStatus.Failure:
                 default:
+                    // Microsoft account: Try to find an email address if not already contained in the loginInfo
+                    if (string.IsNullOrWhiteSpace(loginInfo.Email) && loginInfo.Login.LoginProvider == "Microsoft")
+                    {
+                        var externalIdentity = await AuthenticationManager.GetExternalIdentityAsync(DefaultAuthenticationTypes.ExternalCookie);
+                        var emailClaim = externalIdentity.Claims.FirstOrDefault(x => x.Type.Equals(
+                                                                            "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress",
+                                                                            StringComparison.OrdinalIgnoreCase));
+                        loginInfo.Email = emailClaim?.Value;
+                    }
                     // Minimize user interaction on the AccountSTS, so only show login confirmation if no email is present
                     if (string.IsNullOrWhiteSpace(loginInfo.Email))
                     {
