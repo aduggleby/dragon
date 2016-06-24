@@ -24,7 +24,7 @@ namespace UserMigrationTest
                 PasswordHash = string.IsNullOrWhiteSpace(data.Secret) ? "" : LegacyPasswordPrefix + data.Secret,
                 UserName = data.Email,
                 Email = data.Email,
-                EmailConfirmed = true, // required for password reset
+                EmailConfirmed = false, // currently no email confirmation is used
             });
         }
     }
