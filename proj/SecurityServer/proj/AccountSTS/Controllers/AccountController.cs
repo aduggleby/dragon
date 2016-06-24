@@ -335,7 +335,7 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
             var user = await UserManager.FindByNameAsync(model.Email);
             if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
             {
-                Logger.Trace("Forgot password failed: user {0} not found", model.Email);
+                Logger.Trace("Forgot password failed: user {0} not found or email not confirmed", model.Email);
                 // Don't reveal that the user does not exist or is not confirmed
                 return View("ForgotPasswordConfirmation");
             }
@@ -348,7 +348,7 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
             await
                 UserManager.SendEmailAsync(user.Id, "Reset Password",
                     "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
-            return RedirectToAction("ForgotPasswordConfirmation", "Account");
+            return RedirectToAction("ForgotPasswordConfirmation", "Account", ViewBag.RouteValues);
         }
 
         //
