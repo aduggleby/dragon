@@ -24,7 +24,7 @@ Setup
 For each STS service:
 
 * Generate a signing certificate
-    * Create certificate [2]: New-SelfSignedCertificateEx -Subject "[X500 distinguished name, e.g. CN=Test Cert, OU=Sandbox]" -Exportable
+    * Create certificate [2]: New-SelfSignedCertificateEx -Subject "[X500 distinguished name, e.g. CN=Test Cert, OU=Sandbox]" -Exportable (note: import the script as it is not to be used directly, i.e. .".\New-SelfSignedCertificateEx.ps1")
     * Export certificate using certmgr.msc (Personal/Certificates) as PFX include private key, and set the SigningCertificatePassword in the appSettings  (see below) to the private key password
     * Place the certificate somewhere readable by the web server, and set SigningCertificateName in the appSettings (see below) to its path
 * Generate a encryption certificate
@@ -44,6 +44,8 @@ For each STS service:
         <add key="FederationHost" value="http://localhost:51387" />
         <!-- Federation metadata, address of this STS -->
         <add key="FederationEndpoint" value="http://localhost:51387" />
+        <!-- Admin user id list -->
+        <add key="AdminUserIds" value="00000000-0000-0000-0000-000000000001, 00000000-0000-0000-0000-000000000002" />
 
         Optional app settings:
         <!-- Signing certificate filename -->
@@ -78,12 +80,38 @@ For each STS service:
 Usage
 -----
 
+### Integration
+
 An example web application that uses the SecurityServer for authentication can be found in the Demo project.
 
 To integrate the SecurityServer:
+
 * Configure Windows Identity Foundation (see system.identityModel in the Web.config of the Demo project).
 * Specify the service for which the user should be authenticated: The Service ID needs to be added to all federation requests (see Demo.CustomAuthenticationModule and Demo.Controllers.HomeController::SignIn for custom requests).
 
+### Migration
+
+The migration of legacy users can be performed using the UserMigrationTest project. 
+
+Just specify following connection strings in the App.config:
+
+* The legacy source database as WAV
+* The target database as Dragon
+
+### Impersonate users
+
+Configuration:
+
+* In the AccountSTS specify admin user ids (app settings: AdminUserIds).
+* In the application create a management link to the AccountSTS (using the AccountSTS.Client) which does not return do the application, such as
+
+        _client.GetFederationUrl("manage", Request.Url.ToString())
+
+Usage:
+
+* From the application, use the management link to access the AccountSTS and log in as one of the admins.
+* Open /Admin/Users on the AccountSTS to find users and impersonate them.
+* Finally login in the application.
 
 Tests
 -----
@@ -101,4 +129,5 @@ References
 ----------
 
 [1] https://github.com/aduggleby/dragon/tree/restructuring/proj/Security/Hmac
+
 [2] https://gallery.technet.microsoft.com/scriptcenter/Self-signed-certificate-5920a7c6

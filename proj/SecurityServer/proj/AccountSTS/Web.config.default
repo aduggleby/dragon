@@ -70,8 +70,8 @@
     <add key="FederationNamespace" value="http://docs.oasis-open.org/wsfed/federation/200706" />
     <!-- Federation metadata -->
     <add key="FederationEndpoint" value="http://localhost:51385" /> 
-    <!-- Where to redirect on logout -->
-    <add key="SignOutPath" value="/Home/SignOut" />
+    <!-- Admin user id list -->
+    <add key="AdminUserIds" value="" />
 
     <add key="aspNet:identity:redis:db" value="3" />
     <add key="aspNet:identity:redis:userIdKey" value="stackredis:identity:user:id" />
@@ -200,10 +200,11 @@
   <dragon>
     <security>
       <!-- The connection and tables that contain users and apps -->
-      <hmac serviceId="00000001-0001-0003-0003-000000000011" connectionStringName="Dragon" usersTableName="UserModel" appsTableName="AppModel" validateSignatureUsingHmacParametersOnly="true">
+      <hmac serviceId="00000001-0001-0003-0003-000000000011" connectionStringName="Dragon" usersTableName="UserModel" appsTableName="AppModel">
         <Paths>
           <add name="api" path="^/api/.*$" type="Include" />
-          <add name="account" path="^/Account/.*" type="Include" />
+          <add name="account-logoff" path="^/Account/LogOff" type="Exclude" />
+          <add name="account" path="^/Account/.*" type="Include" excludeParameters="returnUrl, wreply" />
           <add name="manage" path="^/Manage/.*" type="Include" />
           <add name="FederationMetaData" path="^/FederationMetadata/.*" type="Exclude" />
           <add name="FederationSignin" path="^/signin-.*" type="Exclude" />

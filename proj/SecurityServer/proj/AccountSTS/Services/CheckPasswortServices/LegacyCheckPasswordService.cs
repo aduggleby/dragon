@@ -5,7 +5,7 @@ namespace Dragon.SecurityServer.AccountSTS.Services.CheckPasswortServices
 {
     public class LegacyCheckPasswordService<TUser> : ICheckPasswordService<TUser> where TUser : IdentityUser
     {
-        private const string LegacyPasswordPrefix = "OLD:";
+        private const string LegacyPasswordPrefix = "OLD_";
 
         public virtual Task<bool> CheckPasswordAsync(TUser user, string password)
         {

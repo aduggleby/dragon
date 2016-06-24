@@ -11,7 +11,7 @@ namespace UserMigrationTest
     [TestClass]
     public class LegacyWavUserMigrationTest
     {
-        private const string LegacyPasswordPrefix = "OLD:";
+        private const string LegacyPasswordPrefix = "OLD_";
 
         [TestMethod]
         public async Task Migrate_validDbs_shouldMigrateUsers()
@@ -23,7 +23,8 @@ namespace UserMigrationTest
                 Id = data.UserID.ToString(),
                 PasswordHash = string.IsNullOrWhiteSpace(data.Secret) ? "" : LegacyPasswordPrefix + data.Secret,
                 UserName = data.Email,
-                Email = data.Email
+                Email = data.Email,
+                EmailConfirmed = true, // required for password reset
             });
         }
     }
