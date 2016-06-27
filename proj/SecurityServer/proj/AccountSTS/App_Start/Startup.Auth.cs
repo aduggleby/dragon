@@ -8,7 +8,6 @@ using System.Web.Configuration;
 using Dragon.SecurityServer.AccountSTS.Models;
 using Dragon.SecurityServer.AccountSTS.WebRequestHandler;
 using Facebook;
-using LinqToTwitter;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
@@ -21,6 +20,7 @@ using Microsoft.Owin.Security.MicrosoftAccount;
 using Microsoft.Owin.Security.Twitter;
 using Owin;
 using SimpleInjector;
+using Tweetinvi;
 
 namespace Dragon.SecurityServer.AccountSTS
 {
@@ -81,119 +81,141 @@ namespace Dragon.SecurityServer.AccountSTS
                     .Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
             if (IsEnabled("Microsoft", enabledProviders))
             {
-                var options = new MicrosoftAccountAuthenticationOptions
-                {
-                    ClientId = GetClientID("Microsoft"),
-                    ClientSecret = GetClientSecret("Microsoft"),
-                    Provider = new MicrosoftAccountAuthenticationProvider
-                    {
-                        OnAuthenticated = context =>
-                        {
-                            context.Identity.AddClaim(new System.Security.Claims.Claim("urn:microsoftaccount:access_token", context.AccessToken));
-                            foreach (var claim in context.User)
-                            {
-                                var claimType = string.Format("urn:microsoftaccount:{0}", claim.Key);
-                                var claimValue = claim.Value.ToString();
-                                if (!context.Identity.HasClaim(claimType, claimValue))
-                                    context.Identity.AddClaim(new System.Security.Claims.Claim(claimType, claimValue, "XmlSchemaString", "Microsoft"));
-                            }
-                            return Task.FromResult(0);
-                        }
-                    }
-                };
-                options.Scope.Add("wl.emails");
-                options.Scope.Add("wl.basic");
-                app.UseMicrosoftAccountAuthentication(options);
+                app.UseMicrosoftAccountAuthentication(GetMicrosoftAuthenticationOptions());
             }
             if (IsEnabled("Twitter", enabledProviders))
             {
-                var options = new TwitterAuthenticationOptions
-                {
-                    ConsumerKey = GetClientID("Twitter"),
-                    ConsumerSecret = GetClientSecret("Twitter"),
-                    Provider = new TwitterAuthenticationProvider
-                    {
-                        OnAuthenticated = (context) =>
-                        {
-                            var authTwitter = new SingleUserAuthorizer
-                            {
-                                CredentialStore = new SingleUserInMemoryCredentialStore
-                                {
-                                    ConsumerKey = GetClientID("Twitter"),
-                                    ConsumerSecret = GetClientSecret("Twitter"),
-                                    OAuthToken = context.AccessToken,
-                                    OAuthTokenSecret = context.AccessTokenSecret,
-                                    UserID = ulong.Parse(context.UserId),
-                                    ScreenName = context.ScreenName
-                                }
-                            };
-                            var twitterCtx = new TwitterContext(authTwitter);
-                            var verifyResponse = (
-                                from acct
-                                in twitterCtx.Account
-                                where (acct.Type == AccountType.VerifyCredentials) && acct.IncludeEmail
-                                select acct
-                                ).SingleOrDefault();
-                            if (verifyResponse?.User != null)
-                            {
-                                var twitterUser = verifyResponse.User;
-                                context.Identity.AddClaim(new System.Security.Claims.Claim(ClaimTypes.Email, twitterUser.Email));
-                            }
-                            return Task.FromResult(0);
-                        }
-                    }
-                };
-                app.UseTwitterAuthentication(options);
+                app.UseTwitterAuthentication(GetTwitterAuthenticationOptions());
             }
             if (IsEnabled("Facebook", enabledProviders))
             {
-                var facebookOptions = new FacebookAuthenticationOptions
-                {
-                    AppId = GetClientID("Facebook"),
-                    AppSecret = GetClientSecret("Facebook"),
-                    Provider = new FacebookAuthenticationProvider
-                    {
-                        OnAuthenticated = (context) =>
-                        {
-                            FacebookClient.DefaultVersion = "v2.6";
-                            var client = new FacebookClient(context.AccessToken);
-                            dynamic info = client.Get("me", new { fields = "name,id,email" });
-                            if (!string.IsNullOrWhiteSpace(info.email))
-                            {
-                                context.Identity.AddClaim(new System.Security.Claims.Claim(ClaimTypes.Email, info.email));
-                            }
-                            return Task.FromResult(0);
-                        }
-                    }
-                };
-                facebookOptions.Scope.Add("email");
-                app.UseFacebookAuthentication(facebookOptions);
+                app.UseFacebookAuthentication(GetFacebookAuthenticationOptions());
             }
             if (IsEnabled("Google", enabledProviders))
             {
-                var options = new GoogleOAuth2AuthenticationOptions
-                {
-                    ClientId = GetClientID("Google"),
-                    ClientSecret = GetClientSecret("Google"),
-                    Provider = new GoogleOAuth2AuthenticationProvider
-                    {
-                        OnApplyRedirect = context =>
-                        {
-                            var dictionary = new Dictionary<string, string>
-                            {
-                                { "openid.realm", new Uri(WebConfigurationManager.AppSettings["AuthenticationProvider.Google.OpenId2.Realm"]).GetComponents(UriComponents.SchemeAndServer, UriFormat.Unescaped)},
-                            };
-                            context.Response.Redirect(WebUtilities.AddQueryString(context.RedirectUri, dictionary));
-                        },
-                    },
-                    BackchannelHttpHandler = OpenIdMigrationWebrequestHandler
-                };
-                options.Scope.Add("openid");
-                options.Scope.Add("profile");
-                options.Scope.Add("email");
-                options.Scope.Add("https://www.googleapis.com/auth/userinfo.profile");
-                app.UseGoogleAuthentication(options);
+                app.UseGoogleAuthentication(GetGoogleAuthenticationOptions());
             }
+        }
+
+        private static GoogleOAuth2AuthenticationOptions GetGoogleAuthenticationOptions()
+        {
+            var options = new GoogleOAuth2AuthenticationOptions
+            {
+                ClientId = GetClientID("Google"),
+                ClientSecret = GetClientSecret("Google"),
+                Provider = new GoogleOAuth2AuthenticationProvider
+                {
+                    OnApplyRedirect = context =>
+                    {
+                        var dictionary = new Dictionary<string, string>
+                        {
+                            {
+                                "openid.realm",
+                                new Uri(WebConfigurationManager.AppSettings["AuthenticationProvider.Google.OpenId2.Realm"]).GetComponents(UriComponents.SchemeAndServer, UriFormat.Unescaped)
+                            },
+                        };
+                        context.Response.Redirect(WebUtilities.AddQueryString(context.RedirectUri, dictionary));
+                    },
+                },
+                BackchannelHttpHandler = OpenIdMigrationWebrequestHandler
+            };
+            options.Scope.Add("openid");
+            options.Scope.Add("profile");
+            options.Scope.Add("email");
+            options.Scope.Add("https://www.googleapis.com/auth/userinfo.profile");
+            return options;
+        }
+
+        private static FacebookAuthenticationOptions GetFacebookAuthenticationOptions()
+        {
+            var facebookOptions = new FacebookAuthenticationOptions
+            {
+                AppId = GetClientID("Facebook"),
+                AppSecret = GetClientSecret("Facebook"),
+                Provider = new FacebookAuthenticationProvider
+                {
+                    OnAuthenticated = (context) =>
+                    {
+                        FacebookClient.DefaultVersion = "v2.6";
+                        var client = new FacebookClient(context.AccessToken);
+                        dynamic info = client.Get("me", new {fields = "name,id,email"});
+                        if (!string.IsNullOrWhiteSpace(info.email))
+                        {
+                            context.Identity.AddClaim(new System.Security.Claims.Claim(ClaimTypes.Email, info.email));
+                        }
+                        return Task.FromResult(0);
+                    }
+                }
+            };
+            facebookOptions.Scope.Add("email");
+            return facebookOptions;
+        }
+
+        private static TwitterAuthenticationOptions GetTwitterAuthenticationOptions()
+        {
+            var options = new TwitterAuthenticationOptions
+            {
+                ConsumerKey = GetClientID("Twitter"),
+                ConsumerSecret = GetClientSecret("Twitter"),
+                Provider = new TwitterAuthenticationProvider
+                {
+                    OnAuthenticated = (context) =>
+                    {
+                        var twitterUser2 = Auth.ExecuteOperationWithCredentials(
+                            Auth.CreateCredentials(GetClientID("Twitter"), GetClientSecret("Twitter"),
+                                context.AccessToken, context.AccessTokenSecret),
+                            () => User.GetAuthenticatedUser(parameters: new Tweetinvi.Core.Parameters.GetAuthenticatedUserParameters()
+                            {
+                                IncludeEmail = true
+                            }));
+                        if (!string.IsNullOrWhiteSpace(twitterUser2?.Email))
+                        {
+                            context.Identity.AddClaim(new System.Security.Claims.Claim(ClaimTypes.Email, twitterUser2.Email));
+                        }
+                        return Task.FromResult(0);
+                    }
+                },
+                // avoid invalid certificate errors, see http://stackoverflow.com/questions/36330675/get-users-email-from-twitter-api-for-external-login-authentication-asp-net-mvc
+                BackchannelCertificateValidator = new Microsoft.Owin.Security.CertificateSubjectKeyIdentifierValidator(new[]
+                {
+                    "A5EF0B11CEC04103A34A659048B21CE0572D7D47", // VeriSign Class 3 Secure Server CA - G2
+                    "0D445C165344C1827E1D20AB25F40163D8BE79A5", // VeriSign Class 3 Secure Server CA - G3
+                    "7FD365A7C2DDECBBF03009F34339FA02AF333133", // VeriSign Class 3 Public Primary Certification Authority - G5
+                    "39A55D933676616E73A761DFA16A7E59CDE66FAD", // Symantec Class 3 Secure Server CA - G4
+                    "‎add53f6680fe66e383cbac3e60922e3b4c412bed", // Symantec Class 3 EV SSL CA - G3
+                    "4eb6d578499b1ccf5f581ead56be3d9b6744a5e5", // VeriSign Class 3 Primary CA - G5
+                    "5168FF90AF0207753CCCD9656462A212B859723B", // DigiCert SHA2 High Assurance Server C‎A 
+                    "B13EC36903F8BF4701D498261A0802EF63642BC3" // DigiCert High Assurance EV Root CA
+                }),
+            };
+            return options;
+        }
+
+        private static MicrosoftAccountAuthenticationOptions GetMicrosoftAuthenticationOptions()
+        {
+            var options = new MicrosoftAccountAuthenticationOptions
+            {
+                ClientId = GetClientID("Microsoft"),
+                ClientSecret = GetClientSecret("Microsoft"),
+                Provider = new MicrosoftAccountAuthenticationProvider
+                {
+                    OnAuthenticated = context =>
+                    {
+                        context.Identity.AddClaim(new System.Security.Claims.Claim("urn:microsoftaccount:access_token", context.AccessToken));
+                        foreach (var claim in context.User)
+                        {
+                            var claimType = string.Format("urn:microsoftaccount:{0}", claim.Key);
+                            var claimValue = claim.Value.ToString();
+                            if (!context.Identity.HasClaim(claimType, claimValue))
+                                context.Identity.AddClaim(new System.Security.Claims.Claim(claimType, claimValue, "XmlSchemaString", "Microsoft"));
+                        }
+                        return Task.FromResult(0);
+                    }
+                }
+            };
+            options.Scope.Add("wl.emails");
+            options.Scope.Add("wl.basic");
+            return options;
         }
 
         private static string GetClientSecret(string providerName)
