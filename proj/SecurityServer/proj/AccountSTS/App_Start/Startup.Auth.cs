@@ -155,13 +155,18 @@ namespace Dragon.SecurityServer.AccountSTS
                     {
                         OnAuthenticated = (context) =>
                         {
+                            FacebookClient.DefaultVersion = "v2.6";
                             var client = new FacebookClient(context.AccessToken);
                             dynamic info = client.Get("me", new { fields = "name,id,email" });
-                            context.Identity.AddClaim(new System.Security.Claims.Claim(ClaimTypes.Email, info.email));
+                            if (!string.IsNullOrWhiteSpace(info.email))
+                            {
+                                context.Identity.AddClaim(new System.Security.Claims.Claim(ClaimTypes.Email, info.email));
+                            }
                             return Task.FromResult(0);
                         }
                     }
                 };
+                facebookOptions.Scope.Add("email");
                 app.UseFacebookAuthentication(facebookOptions);
             }
             if (IsEnabled("Google", enabledProviders))
