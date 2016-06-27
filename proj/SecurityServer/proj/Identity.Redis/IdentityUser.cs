@@ -11,6 +11,8 @@ namespace Dragon.SecurityServer.Identity.Redis
         public bool EmailConfirmed { get; set; }
         public bool TwoFactorEnabled { get; set; }
         public DateTime? LockoutEndDateUtc { get; set; }
+        public DateTime? Created { get; set; }
+        public DateTime? Modified { get; set; }
         public int AccessFailedCount { get; set; }
         public bool LockoutEnabled { get; set; }
         public string PhoneNumber { get; set; }

@@ -35,6 +35,10 @@ namespace Dragon.SecurityServer.ProfileSTS.Models
         [NoColumn]
         public DateTime? LockoutEndDateUtc { get; set; }
         [NoColumn]
+        public DateTime? Created { get; set; }
+        [NoColumn]
+        public DateTime? Modified { get; set; }
+        [NoColumn]
         public int AccessFailedCount { get; set; }
         [NoColumn]
         public bool LockoutEnabled { get; set; }
