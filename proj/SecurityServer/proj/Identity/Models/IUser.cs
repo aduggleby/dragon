@@ -11,6 +11,8 @@ namespace Dragon.SecurityServer.Identity.Models
         bool EmailConfirmed { get; set; }
         bool TwoFactorEnabled { get; set; }
         DateTime? LockoutEndDateUtc { get; set; }
+        DateTime? Created { get; set; }
+        DateTime? Modified { get; set; }
         int AccessFailedCount { get; set; }
         bool LockoutEnabled { get; set; }
     }

@@ -79,6 +79,16 @@ namespace Dragon.SecurityServer.Identity.Models
         public virtual DateTime? LockoutEndDateUtc { get; set; }
 
         /// <summary>
+        ///     Creation date and time in UTC
+        /// </summary>
+        public DateTime? Created { get; set; }
+
+        /// <summary>
+        ///     Last modification date and time in UTC
+        /// </summary>
+        public DateTime? Modified { get; set; }
+
+        /// <summary>
         ///     Is lockout enabled for this user
         /// </summary>
         public virtual bool LockoutEnabled { get; set; }

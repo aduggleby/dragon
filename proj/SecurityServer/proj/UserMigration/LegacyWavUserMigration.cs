@@ -33,7 +33,7 @@ namespace UserMigration
             {
                 connection.Open();
                 var usersData = connection.Query(@"
-                    SELECT u.UserID, Service, Email, [Key], Secret
+                    SELECT u.UserID, Service, Email, [Key], Secret, Created, Modified
                     FROM [DragonRegistration] dr JOIN [User] u ON dr.UserID = u.UserID
                     ").ToList(); // WHERE Email like 'whataventure.test%' -- TODO: test, remove
                 Logger.Info($"Found {usersData.Count} users, migrating...");

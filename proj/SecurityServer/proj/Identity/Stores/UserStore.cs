@@ -53,7 +53,7 @@ namespace Dragon.SecurityServer.Identity.Stores
                 throw new ArgumentNullException("user");
             }
 
-            UserRepository.Insert(user);
+            CreateUser(user);
 
             return Task.FromResult<object>(null);
         }
@@ -65,7 +65,7 @@ namespace Dragon.SecurityServer.Identity.Stores
                 throw new ArgumentNullException("user");
             }
 
-            UserRepository.Update(user);
+            UpdateUser(user);
 
             return Task.FromResult<object>(null);
         }
@@ -304,7 +304,7 @@ namespace Dragon.SecurityServer.Identity.Stores
         public Task SetSecurityStampAsync(TUser user, string stamp)
         {
             user.SecurityStamp = stamp;
-            UserRepository.Update(user);
+            UpdateUser(user);
 
             return Task.FromResult(0);
         }
@@ -323,7 +323,7 @@ namespace Dragon.SecurityServer.Identity.Stores
         public Task SetEmailAsync(TUser user, string email)
         {
             user.Email = email;
-            UserRepository.Update(user);
+            UpdateUser(user);
 
             return Task.FromResult(0);
         }
@@ -341,7 +341,7 @@ namespace Dragon.SecurityServer.Identity.Stores
         public Task SetEmailConfirmedAsync(TUser user, bool confirmed)
         {
             user.EmailConfirmed = confirmed;
-            UserRepository.Update(user);
+            UpdateUser(user);
 
             return Task.FromResult(0);
         }
@@ -360,7 +360,7 @@ namespace Dragon.SecurityServer.Identity.Stores
         //public Task SetPhoneNumberAsync(TUser user, string phoneNumber)
         //{
         //    user.PhoneNumber = phoneNumber;
-        //    UserRepository.Update(user);
+        //    UpdateUser(user);
 
         //    return Task.FromResult(0);
         //}
@@ -378,7 +378,7 @@ namespace Dragon.SecurityServer.Identity.Stores
         //public Task SetPhoneNumberConfirmedAsync(TUser user, bool confirmed)
         //{
         //    user.PhoneNumberConfirmed = confirmed;
-        //    UserRepository.Update(user);
+        //    UpdateUser(user);
 
         //    return Task.FromResult(0);
         //}
@@ -386,7 +386,7 @@ namespace Dragon.SecurityServer.Identity.Stores
         public Task SetTwoFactorEnabledAsync(TUser user, bool enabled)
         {
             user.TwoFactorEnabled = enabled;
-            UserRepository.Update(user);
+            UpdateUser(user);
 
             return Task.FromResult(0);
         }
@@ -407,7 +407,7 @@ namespace Dragon.SecurityServer.Identity.Stores
         public Task SetLockoutEndDateAsync(TUser user, DateTimeOffset lockoutEnd)
         {
             user.LockoutEndDateUtc = lockoutEnd.UtcDateTime;
-            UserRepository.Update(user);
+            UpdateUser(user);
 
             return Task.FromResult(0);
         }
@@ -415,7 +415,7 @@ namespace Dragon.SecurityServer.Identity.Stores
         public Task<int> IncrementAccessFailedCountAsync(TUser user)
         {
             user.AccessFailedCount++;
-            UserRepository.Update(user);
+            UpdateUser(user);
 
             return Task.FromResult(user.AccessFailedCount);
         }
@@ -423,7 +423,7 @@ namespace Dragon.SecurityServer.Identity.Stores
         public Task ResetAccessFailedCountAsync(TUser user)
         {
             user.AccessFailedCount = 0;
-            UserRepository.Update(user);
+            UpdateUser(user);
 
             return Task.FromResult(0);
         }
@@ -441,7 +441,7 @@ namespace Dragon.SecurityServer.Identity.Stores
         public Task SetLockoutEnabledAsync(TUser user, bool enabled)
         {
             user.LockoutEnabled = enabled;
-            UserRepository.Update(user);
+            UpdateUser(user);
 
             return Task.FromResult(0);
         }
@@ -479,6 +479,21 @@ namespace Dragon.SecurityServer.Identity.Stores
         }
 
         #region helper
+
+        private void CreateUser(TUser user)
+        {
+            if (!user.Created.HasValue)
+            {
+                user.Created = DateTime.UtcNow;
+            }
+            UserRepository.Insert(user);
+        }
+
+        private void UpdateUser(TUser user)
+        {
+            user.Modified = DateTime.UtcNow;
+            UserRepository.Update(user);
+        }
 
         public bool IsUserRegisteredForService(TUser user, string serviceId)
         {
