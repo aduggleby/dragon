@@ -25,6 +25,8 @@ namespace UserMigrationTest
                 UserName = data.Email,
                 Email = data.Email,
                 EmailConfirmed = false, // currently no email confirmation is used
+                Created = data.Created,
+                Modified = data.Modified
             });
         }
     }
