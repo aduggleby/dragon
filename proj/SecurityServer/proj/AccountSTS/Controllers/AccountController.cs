@@ -181,14 +181,21 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
             var user = await _userStore.FindByEmailAsync(email);
             if (user != null)
             {
-                var availableLogins = await _userStore.GetLoginsAsync(user);
-                if (availableLogins.Any())
+                var loginSuggestionMessage = await GenerateLoginSuggestionMessage(user);
+                if (!string.IsNullOrWhiteSpace(loginSuggestionMessage))
                 {
-                    message += string.Format(" Try logging in using {0}{1}.", availableLogins.Count > 1 ? "one of " : "",
-                        availableLogins.Select(x => x.LoginProvider).Aggregate((x1, x2) => string.Format("{0}, {1}", x1, x2)));
+                    message += " " + loginSuggestionMessage;
                 }
             }
             return message;
+        }
+
+        private async Task<string> GenerateLoginSuggestionMessage(AppMember user)
+        {
+            var availableLogins = await _userStore.GetLoginsAsync(user);
+            if (!availableLogins.Any()) return "";
+            return string.Format("Try logging in using {0}{1}.", availableLogins.Count > 1 ? "one of " : "",
+                    availableLogins.Select(x => x.LoginProvider).Aggregate((x1, x2) => $"{x1}, {x2}"));
         }
 
         //
@@ -597,7 +604,17 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
             var user = await _userStore.FindByEmailAsync(model.Email);
             if (user != null)
             {
-                // User exists, add external login to existing account
+                // User exists
+
+                // If there is no password set, an external login already should be connected, so just refer to that
+
+                if (string.IsNullOrWhiteSpace(user.PasswordHash))
+                {
+                    ViewBag.Message = await GenerateLoginSuggestionMessage(user);
+                    return View("ExternalLoginInfo");
+                }
+
+                // Add external login to existing account
 
                 ViewBag.RequireLogin = true;
                 // Show Login Form
