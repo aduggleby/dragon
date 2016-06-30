@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.Owin.Security;
+using NLog;
 
 namespace Dragon.SecurityServer.AccountSTS.Services
 {
@@ -10,6 +11,8 @@ namespace Dragon.SecurityServer.AccountSTS.Services
     {
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";
+
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         public ActionResult PerformExternalLogin(HttpContextBase context, string provider, string returnUrl)
         {
@@ -25,7 +28,7 @@ namespace Dragon.SecurityServer.AccountSTS.Services
 
         public async Task<ActionResult> Disconnect(ApplicationSignInManager signInManager, ApplicationUserManager userManager, string provider, string userId, string redirectUri)
         {
-            var userLoginInfo = (await userManager.GetLoginsAsync(userId)).First(x => x.LoginProvider == provider); // TODO: error handling
+            var userLoginInfo = (await userManager.GetLoginsAsync(userId)).First(x => x.LoginProvider == provider);
 
             var result = await userManager.RemoveLoginAsync(userId, userLoginInfo);
             if (result.Succeeded)
@@ -38,7 +41,7 @@ namespace Dragon.SecurityServer.AccountSTS.Services
             }
             else
             {
-                // TODO: error handling
+                Logger.Error($"Unable to disconnect {provider} from user {userId}");
             }
             return new RedirectResult(redirectUri);
         }
