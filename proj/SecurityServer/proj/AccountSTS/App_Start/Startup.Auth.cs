@@ -161,16 +161,16 @@ namespace Dragon.SecurityServer.AccountSTS
                 {
                     OnAuthenticated = (context) =>
                     {
-                        var twitterUser2 = Auth.ExecuteOperationWithCredentials(
+                        var twitterUser = Auth.ExecuteOperationWithCredentials(
                             Auth.CreateCredentials(GetClientID("Twitter"), GetClientSecret("Twitter"),
                                 context.AccessToken, context.AccessTokenSecret),
                             () => User.GetAuthenticatedUser(parameters: new Tweetinvi.Core.Parameters.GetAuthenticatedUserParameters()
                             {
                                 IncludeEmail = true
                             }));
-                        if (!string.IsNullOrWhiteSpace(twitterUser2?.Email))
+                        if (!string.IsNullOrWhiteSpace(twitterUser?.Email))
                         {
-                            context.Identity.AddClaim(new System.Security.Claims.Claim(ClaimTypes.Email, twitterUser2.Email));
+                            context.Identity.AddClaim(new System.Security.Claims.Claim(ClaimTypes.Email, twitterUser.Email));
                         }
                         return Task.FromResult(0);
                     }
