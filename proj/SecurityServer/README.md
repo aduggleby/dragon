@@ -1,7 +1,7 @@
 SecurityServer
 ==============
 
-A federation identity provider based on OWIN that uses a chain of Security Token Services:
+A federation identity provider based on ASP.NET Identity/OWIN that uses a chain of Security Token Services:
 
 * AccountSTS: manages external federation information
 * ProfileSTS: manages information about the user
@@ -15,7 +15,7 @@ Requirements
 
 * Visual Studio 2015
 * SQL Server 2014
-* Redis 3.0
+* Redis 3.0 (optional)
 
 
 Setup
@@ -74,7 +74,7 @@ For each STS service:
 
             new Identity.Redis.UserStore<AppMember>(new RedisUserStore<Identity.Redis.IdentityUser>(connectionMultiplexer), connectionMultiplexer),
 
-* Follow the README's in the respective projects for additional specific insructions
+* Follow the README's in the respective projects for additional specific instructions
 
 
 Usage

@@ -539,14 +539,11 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
                                                                             StringComparison.OrdinalIgnoreCase));
                         loginInfo.Email = emailClaim?.Value;
                     }
-                    // Minimize user interaction on the AccountSTS, so only show login confirmation if no email is present
+                    // Show external login confirmation if no email is present
                     if (string.IsNullOrWhiteSpace(loginInfo.Email))
                     {
                         Logger.Trace("External login: user {0} ({1}) does not have an account and no email is provided", loginInfo.Login.ProviderKey, loginInfo.Login.LoginProvider);
-                        ViewBag.ReturnUrl = returnUrl;
-                        ViewBag.RouteValues["ReturnUrl"] = returnUrl;
-                        ViewBag.LoginProvider = loginInfo.Login.LoginProvider;
-                        return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel { Email = loginInfo.Email });
+                        return RedirectToExternalLoginConfirmation(returnUrl, loginInfo, false);
                     }
                     Logger.Trace("External login: user {0} does not have an account", loginInfo.Email);
                     var user = await _userStore.FindByEmailAsync(loginInfo.Email);
@@ -561,16 +558,26 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
                             return RedirectToAction("Login", ViewBag.RouteValues);
                         }
                     }
-                    // For existing users add the external login
+                    // For existing users that are not connected yet show login confirmation
                     if (!(await _userStore.GetLoginsAsync(user)).Any(x =>
                         loginInfo.Login.LoginProvider == x.LoginProvider &&
                         loginInfo.Login.ProviderKey == x.ProviderKey))
                     {
-                        await _userStore.AddLoginAsync(user, loginInfo.Login);
+                        Logger.Trace("External login: user {0} ({1}) is not yet connected to existing account ({2})", loginInfo.Login.ProviderKey, loginInfo.Login.LoginProvider, loginInfo.Email);
+                        return RedirectToExternalLoginConfirmation(returnUrl, loginInfo, true);
                     }
                     await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                     return RedirectToLocal(returnUrl);
             }
+        }
+
+        private ActionResult RedirectToExternalLoginConfirmation(string returnUrl, ExternalLoginInfo loginInfo, bool requireLogin)
+        {
+            ViewBag.RequireLogin = requireLogin;
+            ViewBag.ReturnUrl = returnUrl;
+            ViewBag.RouteValues["ReturnUrl"] = returnUrl;
+            ViewBag.LoginProvider = loginInfo.Login.LoginProvider;
+            return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel {Email = loginInfo.Email});
         }
 
         //
@@ -617,12 +624,13 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
                 // Add external login to existing account
 
                 ViewBag.RequireLogin = true;
+                ViewBag.LoginProvider = info.Login.LoginProvider;
+
                 // Show Login Form
                 if (model.Password == null)
                 {
                     Logger.Trace("External login confirmation: account {0} exists, link external login {1}", user.Email, info.Login.LoginProvider);
                     ModelState.AddModelError("", string.Format("Please login to link your account with your {0} account.", info.Login.LoginProvider));
-                    ViewBag.LoginProvider = info.Login.LoginProvider;
                     return View(model);
                 }
 
