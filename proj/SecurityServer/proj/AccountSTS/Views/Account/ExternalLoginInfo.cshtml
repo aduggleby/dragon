@@ -1,27 +1,64 @@
 ﻿@model Dragon.SecurityServer.AccountSTS.Models.ExternalLoginConfirmationViewModel
 @{
     ViewBag.Title = "Login";
+    var parameters = new RouteValueDictionary(HttpContext.Current.Request.QueryString.Keys.Cast<string>()
+            .ToDictionary(k => k, v => (object)HttpContext.Current.Request.QueryString[v]));
 }
-<h2>@ViewBag.Title.</h2>
-<h3>Already registered.</h3>
 
-<hr />
+<!-- START Template Main -->
+<section id="main" role="main" class="wav-login">
+    <!-- START Template Container -->
+    <section class="container" id="wav-home">
 
-<p class="text-info">
-    You seem to have registered using another service.<br />
-    @ViewBag.Message
-    <br />
-</p>
 
-<div class="form-group">
-    <div class="col-md-offset-2 col-md-10">
-        <div class="btn btn-default">
-            @Html.ActionLink("Back to login", "Login", "Account", (RouteValueDictionary) ViewBag.RouteValues, new Dictionary<string, object> {{"class", "form-horizontal"}, {"role", "form"}})
+        <!-- START row -->
+        <div class="row">
+            <div class="wav-login-wrapper">
+
+                <!-- Brand -->
+                <div class="row wav-login-brand">
+                    <img src="//wav-prod-cdn-main.azureedge.net/assets/images/intro/logo-signup-small.png">
+                </div>
+                <div class="row wav-login-notebook">
+                    <img src="//wav-prod-cdn-main.azureedge.net/assets/images/intro/laptop-signup.png">
+                </div>
+
+
+                <div class="flip-container">
+                    <!-- START flipper -->
+                    <div class="flipper">
+                        <!-- START sign in -->
+                        <div class="front wav-login-signin">
+                            <div class="panel">
+                                <div class="panel-heading">
+                                    <h1>Already registered.</h1>
+
+                                    <p class="subtext">You seem to have registered using another service.<br />
+                                    @ViewBag.Message</p>
+                                </div>
+                                <div class="panel-body">
+
+                                    <div class="row">
+                                        <div class="col-sm-12 mt10">
+                                            @Html.ActionLink("Return to Sign in here", "Login", null, parameters, new Dictionary<string, object>() {
+                                        { "class" , "btn btn-success  wav-login-or-register-button toggle-register" } })
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <!--/ END flipper  -->
+                </div>
+            </div>
         </div>
-    </div>
-</div>
-<br/>
+        <!--/ END row -->
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}
+    </section>
+    <!-- END Template Container -->
+</section>
+<!--/ END Template Main -->
