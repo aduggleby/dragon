@@ -566,11 +566,12 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
                         Logger.Trace("External login: user {0} ({1}) does not have an account and no email is provided", loginInfo.Login.ProviderKey, loginInfo.Login.LoginProvider);
                         return RedirectToExternalLoginConfirmation(returnUrl, loginInfo, false);
                     }
-                    Logger.Trace("External login: user {0} does not have an account", loginInfo.Email);
+
                     var user = await _userStore.FindByEmailAsync(loginInfo.Email);
                     // For new users silently create an account and return
                     if (user == null)
                     {
+                        Logger.Trace("External login: user {0} does not have an account", loginInfo.Email);
                         user = await CreateUser(loginInfo.Email, loginInfo);
                         if (user == null)
                         {
@@ -578,7 +579,18 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
                             Logger.Log(LogLevel.Error, "Unable to create the user.");
                             return RedirectToAction("Login", ViewBag.RouteValues);
                         }
+                        await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                        return RedirectToLocal(returnUrl);
                     }
+
+                    // For existing users without password show external login info, as they most likely are connected with another external login provider already
+                    if (string.IsNullOrWhiteSpace(user.PasswordHash))
+                    {
+                        Logger.Trace("External login: user {0} ({1}) seems to be connected with another external login provider already ({2})", loginInfo.Login.ProviderKey, loginInfo.Login.LoginProvider, loginInfo.Email);
+                        ViewBag.Message = await GenerateLoginSuggestionMessage(user);
+                        return View("ExternalLoginInfo");
+                    }
+
                     // For existing users that are not connected yet show login confirmation
                     if (!(await _userStore.GetLoginsAsync(user)).Any(x =>
                         loginInfo.Login.LoginProvider == x.LoginProvider &&
@@ -587,8 +599,9 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
                         Logger.Trace("External login: user {0} ({1}) is not yet connected to existing account ({2})", loginInfo.Login.ProviderKey, loginInfo.Login.LoginProvider, loginInfo.Email);
                         return RedirectToExternalLoginConfirmation(returnUrl, loginInfo, true);
                     }
-                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-                    return RedirectToLocal(returnUrl);
+                    // Otherwise show an error
+                    Logger.Trace("External login: unable to login user {2} - {0} ({1})", loginInfo.Login.ProviderKey, loginInfo.Login.LoginProvider, loginInfo.Email);
+                    return View("ExternalLoginFailure");
             }
         }
 
