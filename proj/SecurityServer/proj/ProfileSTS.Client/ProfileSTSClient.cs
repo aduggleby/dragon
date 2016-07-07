@@ -53,7 +53,7 @@ namespace Dragon.SecurityServer.ProfileSTS.Client
 
         public async Task<IList<Claim>> GetClaims(string userId)
         {
-            return await _client.GetRequest<IList<Claim>>(GetClaimsAction, new Dictionary<string, string> {{"userid", userId}});
+            return await _client.GetRequest<IList<Claim>>(GetClaimsAction, new Dictionary<string, string> {{"id", userId}});
         }
     }
 }

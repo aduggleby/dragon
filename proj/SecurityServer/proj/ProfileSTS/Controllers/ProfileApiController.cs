@@ -90,9 +90,9 @@ namespace Dragon.SecurityServer.ProfileSTS.Controllers
         }
 
         [HttpGet]
-        public async Task<IList<Claim>> GetClaims(string userid)
+        public async Task<IList<Claim>> GetClaims(string id)
         {
-            var user  = await _userStore.FindByIdAsync(userid);
+            var user  = await _userStore.FindByIdAsync(id);
             if (user == null) throw new HttpResponseException(HttpStatusCode.NotFound);
             return await _userStore.GetClaimsAsync(user);
         }

@@ -40,8 +40,8 @@ namespace Dragon.SecurityServer.Demo.Controllers
             var claims = await _profileClient.GetClaims(User.Identity.GetUserId());
             var profile = new UpdateProfileClaimsViewModel
             {
-                Name = claims.First(x => x.Type == Consts.DefaultClaimNamespace + "name").Value,
-                Address = claims.First(x => x.Type == Consts.DefaultClaimNamespace + "address").Value
+                Name = claims.FirstOrDefault(x => x.Type == Consts.DefaultClaimNamespace + "name")?.Value ?? "",
+                Address = claims.FirstOrDefault(x => x.Type == Consts.DefaultClaimNamespace + "address")?.Value ?? ""
             };
             ViewBag.Profile = profile;
         }
