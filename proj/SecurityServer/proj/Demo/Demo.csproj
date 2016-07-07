@@ -186,6 +186,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\AddProfileClaimViewModel.cs" />
     <Compile Include="Models\ChangeSettingsViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -246,6 +247,7 @@
     <Content Include="Views\Restricted\Index.cshtml" />
     <Content Include="Web.config.default" />
     <Content Include="Scripts\jquery-2.2.3.min.map" />
+    <Content Include="Views\Restricted\AddProfileClaim.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -269,6 +271,10 @@
     <ProjectReference Include="..\GenericSTSClient\GenericSTSClient.csproj">
       <Project>{E6064E38-13C3-4F5F-8BB5-8C77D61E2AD8}</Project>
       <Name>GenericSTSClient</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ProfileSTS.Client\ProfileSTS.Client.csproj">
+      <Project>{BFD0D841-D3EB-4438-875F-932FF3DC3D02}</Project>
+      <Name>ProfileSTS.Client</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

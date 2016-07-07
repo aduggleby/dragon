@@ -53,6 +53,13 @@ namespace Dragon.SecurityServer.Common
             }
             var claims = AsyncRunner.RunNoSynchronizationContext(() =>(_userStore.GetClaimsAsync(user)));
             identity.AddClaims(claims);
+            // Append default namespace to avoid ID4216: The ClaimType '...' must be of format 'namespace'/'name'.
+            foreach (var claim in identity.Claims.ToList())
+            {
+                if (claim.Type.Contains("/")) continue;
+                identity.RemoveClaim(claim);
+                identity.AddClaim(new Claim(Consts.DefaultClaimNamespace + claim.Type, claim.Value));
+            }
             return identity;
         }
     }

@@ -1,10 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Configuration;
 using System.Diagnostics;
-using System.IdentityModel.Services;
 using System.Security.Claims;
 using System.Web.Mvc;
-using Dragon.SecurityServer.AccountSTS.Client;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -54,11 +51,13 @@ namespace Dragon.SecurityServer.Demo.Controllers
                 : new Dictionary<string, string>();
         }
 
+        /*
         private void CustomSignIn()
         {
             System.Web.HttpContext.Current.Response.Redirect(_client.GetFederationUrl("connect", System.Web.HttpContext.Current.Request.Url.AbsoluteUri), false);
             System.Web.HttpContext.Current.Response.End();
         }
+        */
 
         [HttpPost]
         [ExportModelStateToTempData]
@@ -108,6 +107,23 @@ namespace Dragon.SecurityServer.Demo.Controllers
             }
 
             return RedirectToAction("Index", model);
+        }
+
+        public async Task<ActionResult> AddProfileclaim(AddProfileClaimViewModel model)
+        {
+            var userId = User.Identity.GetUserId();
+            await _profileClient.AddClaim(userId, model.Type, model.Value);
+            var identity = (ClaimsIdentity)User.Identity;
+            var context = Request.GetOwinContext();
+            var claims = await _profileClient.GetClaims(userId);
+            foreach (var claim in identity.Claims.Intersect(claims).ToList())
+            {
+                identity.RemoveClaim(claim);
+            }
+            identity.AddClaims(claims);
+            context.Authentication.SignOut(DefaultAuthenticationTypes.ExternalCookie);
+            context.Authentication.SignIn(identity);
+            return RedirectToAction("Index");
         }
     }
 }

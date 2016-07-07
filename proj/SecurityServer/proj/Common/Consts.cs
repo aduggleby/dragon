@@ -12,5 +12,7 @@
 
         public static string[] QueryStringHmacParameterNames = { "appid", "serviceid", "userid", "expiry", "signature" };
         public const string HmacSectionName = "dragon/security/hmac";
+
+        public const string DefaultClaimNamespace = "http://whataventure.com/schemas/identity/claims/general/";
     }
 }

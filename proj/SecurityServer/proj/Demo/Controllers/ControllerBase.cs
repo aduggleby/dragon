@@ -7,12 +7,15 @@ using Dragon.SecurityServer.AccountSTS.Client;
 using System.Linq;
 using System.Web.Routing;
 using Dragon.SecurityServer.GenericSTSClient;
+using Dragon.SecurityServer.ProfileSTS.Client;
+using IClient = Dragon.SecurityServer.AccountSTS.Client.IClient;
 
 namespace Dragon.SecurityServer.Demo.Controllers
 {
     public abstract class ControllerBase : Controller
     {
         protected readonly IClient _client;
+        protected readonly ProfileSTS.Client.IClient _profileClient;
 
         protected ControllerBase()
         {
@@ -21,6 +24,13 @@ namespace Dragon.SecurityServer.Demo.Controllers
             accountStsUrl = (string.IsNullOrEmpty(accountStsUrl) ? fam.Issuer : accountStsUrl);
             _client = new AccountSTSClient(accountStsUrl + "/Api", accountStsUrl, fam.Realm);
             _client.SetHmacSettings(HmacHelper.ReadHmacSettings());
+            var profileStsUrl = ConfigurationManager.AppSettings["ProfileStsUrl"];
+            if (string.IsNullOrEmpty(profileStsUrl))
+            {
+                throw new ConfigurationErrorsException("App setting 'ProfileStsUrl' is missing.");
+            }
+            _profileClient = new ProfileSTSClient(profileStsUrl + "/Api", fam.Realm);
+            _profileClient.SetHmacSettings(HmacHelper.ReadHmacSettings());
         }
 
         protected ControllerBase(IClient client)

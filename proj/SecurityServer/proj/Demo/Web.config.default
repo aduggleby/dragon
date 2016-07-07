@@ -8,21 +8,22 @@
     <section name="system.identityModel" type="System.IdentityModel.Configuration.SystemIdentityModelSection, System.IdentityModel, Version=4.0.0.0, Culture=neutral, PublicKeyToken=B77A5C561934E089" />
     <section name="system.identityModel.services" type="System.IdentityModel.Services.Configuration.SystemIdentityModelServicesSection, System.IdentityModel.Services, Version=4.0.0.0, Culture=neutral, PublicKeyToken=B77A5C561934E089" />
   </configSections>
-   <system.diagnostics>
-        <sources>
-            <source name="System.IdentityModel" switchValue="Verbose">
-                <listeners>
-                    <add name="xml" type="System.Diagnostics.XmlWriterTraceListener" initializeData="C:\tmp\WIF-c.xml" />
-                </listeners>
-            </source>
-        </sources>
-        <trace autoflush="true" />
-    </system.diagnostics>
+  <system.diagnostics>
+    <sources>
+      <source name="System.IdentityModel" switchValue="Verbose">
+        <listeners>
+          <add name="xml" type="System.Diagnostics.XmlWriterTraceListener" initializeData="C:\tmp\WIF-c.xml" />
+        </listeners>
+      </source>
+    </sources>
+    <trace autoflush="true" />
+  </system.diagnostics>
   <system.identityModel.services>
     <federationConfiguration>
-      <wsFederation issuer="http://localhost:51387/" realm="http://WSFedTest/" reply="http://localhost:62564/" passiveRedirectEnabled="true" requireHttps="false" />
+      <wsFederation issuer="http://localhost:51386/" realm="http://wsfedtest/" reply="http://localhost:62564/" passiveRedirectEnabled="true" requireHttps="false" />
       <cookieHandler requireSsl="false" />
       <!-- uncomment if token is encrypted by the STS
+      TODO: read from file for now, see Global.asax
       <serviceCertificate>
         <certificateReference x509FindType="FindByThumbprint"
                               findValue="XXXXX"
@@ -40,16 +41,19 @@
       </audienceUris>
       <issuerNameRegistry type="System.IdentityModel.Tokens.ConfigurationBasedIssuerNameRegistry, System.IdentityModel, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
         <trustedIssuers>
-          <add thumbprint="AE61A09EF120B2D80EAF79A97731C307D9392C3A" name="http://localhost:51387" />
+          <add thumbprint="AE61A09EF120B2D80EAF79A97731C307D9392C3A" name="http://localhost:51386" />
         </trustedIssuers>
       </issuerNameRegistry>
       <certificateValidation certificateValidationMode="None" />
+      <!-- as the certificate is self-signed -->
+      <!--
       <securityTokenHandlers>
         <add type="System.IdentityModel.Services.Tokens.MachineKeySessionSecurityTokenHandler,  
           System.IdentityModel.Services, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
         <remove type="System.IdentityModel.Tokens.SessionSecurityTokenHandler, 
          System.IdentityModel, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
       </securityTokenHandlers>
+      -->
     </identityConfiguration>
   </system.identityModel>
   <appSettings>
@@ -60,6 +64,7 @@
     <add key="owin:AppStartup" value="Dragon.SecurityServer.Demo.Startup, Dragon.SecurityServer.Demo" />
     <add key="owin:AutomaticAppStartup " value="false" />
     <add key="AccountStsUrl" value="http://localhost:51385" />
+    <add key="ProfileStsUrl" value="http://localhost:51386" />
     <add key="Dragon.Security.Hmac.AppId" value="00000001-0001-0003-0003-200000000001" />
     <add key="Dragon.Security.Hmac.ServiceId" value="00000001-0001-0003-0003-000000000011" />
     <add key="Dragon.Security.Hmac.GuestUserId" value="00000001-0001-0001-0003-100000000001" />
@@ -67,18 +72,27 @@
     <add key="Dragon.SecurityServer.EncryptingCertificateName" value="securityserver.pfx" />
     <add key="Dragon.SecurityServer.EncryptingCertificatePassword" value="" />
     <add key="WtRealm" value="http://WSFedTest/" />
-    <add key="ValidIssuer" value="http://localhost:51385" />
+    <add key="ValidIssuer" value="http://localhost:51386" />
   </appSettings>
   <system.web>
     <compilation debug="true" targetFramework="4.5" />
     <httpRuntime targetFramework="4.5" />
     <customErrors mode="Off" />
+    <authentication mode="None" />
+    <!-- <sessionState timeout="1" /> -->
   </system.web>
   <system.webServer>
     <modules>
+      <remove name="FormsAuthentication" />
       <add name="CustomAuthenticationModule" type="Dragon.SecurityServer.Demo.CustomAuthenticationModule, Dragon.SecurityServer.Demo, Version=1.0.0.0, Culture=neutral" preCondition="managedHandler" />
       <add name="SessionAuthenticationModule" type="System.IdentityModel.Services.SessionAuthenticationModule, System.IdentityModel.Services, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" preCondition="managedHandler" />
     </modules>
+    <handlers>
+      <remove name="ExtensionlessUrlHandler-Integrated-4.0" />
+      <remove name="OPTIONSVerbHandler" />
+      <remove name="TRACEVerbHandler" />
+      <add name="ExtensionlessUrlHandler-Integrated-4.0" path="*." verb="*" type="System.Web.Handlers.TransferRequestHandler" preCondition="integratedMode,runtimeVersionv4.0" />
+    </handlers>
   </system.webServer>
   <runtime>
     <assemblyBinding xmlns="urn:schemas-microsoft-com:asm.v1">
@@ -105,14 +119,6 @@
       <dependentAssembly>
         <assemblyIdentity name="Microsoft.Owin.Security" publicKeyToken="31bf3856ad364e35" culture="neutral" />
         <bindingRedirect oldVersion="0.0.0.0-3.0.1.0" newVersion="3.0.1.0" />
-      </dependentAssembly>
-      <dependentAssembly>
-        <assemblyIdentity name="Microsoft.IdentityModel.Protocol.Extensions" publicKeyToken="31bf3856ad364e35" culture="neutral" />
-        <bindingRedirect oldVersion="0.0.0.0-1.0.2.33" newVersion="1.0.2.33" />
-      </dependentAssembly>
-      <dependentAssembly>
-        <assemblyIdentity name="System.IdentityModel.Tokens.Jwt" publicKeyToken="31bf3856ad364e35" culture="neutral" />
-        <bindingRedirect oldVersion="0.0.0.0-4.0.20622.1351" newVersion="4.0.20622.1351" />
       </dependentAssembly>
       <dependentAssembly>
         <assemblyIdentity name="Microsoft.Owin.Security.OAuth" publicKeyToken="31bf3856ad364e35" culture="neutral" />
@@ -153,6 +159,14 @@
       <dependentAssembly>
         <assemblyIdentity name="Sigil" publicKeyToken="2d06c3494341c8ab" culture="neutral" />
         <bindingRedirect oldVersion="0.0.0.0-4.7.0.0" newVersion="4.7.0.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="System.IdentityModel.Tokens.Jwt" publicKeyToken="31bf3856ad364e35" culture="neutral" />
+        <bindingRedirect oldVersion="0.0.0.0-4.0.20622.1351" newVersion="4.0.20622.1351" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="Microsoft.IdentityModel.Protocol.Extensions" publicKeyToken="31bf3856ad364e35" culture="neutral" />
+        <bindingRedirect oldVersion="0.0.0.0-1.0.2.33" newVersion="1.0.2.33" />
       </dependentAssembly>
     </assemblyBinding>
   </runtime>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -14,10 +15,12 @@ namespace Dragon.SecurityServer.GenericSTSClient
         public HmacSettings HmacSettings { get; set; }
 
         private readonly string _serviceUrl;
+        private readonly IHmacService _hmacService;
 
         public Client(string serviceUrl)
         {
             _serviceUrl = serviceUrl;
+            _hmacService = new HmacSha256Service();
         }
 
         public async Task GetRequest(string action)
@@ -115,12 +118,12 @@ namespace Dragon.SecurityServer.GenericSTSClient
                 queryString["serviceid"] = queryString["serviceid"] ?? HmacSettings.ServiceId;
                 queryString["userid"] = queryString["userid"] ?? HmacSettings.UserId;
                 queryString["expiry"] = queryString["expiry"] ?? DateTime.UtcNow.AddDays(+1).Ticks.ToString();
-                var hmacService = new HmacSha256Service();
-                queryString["signature"] = queryString["signature"] ?? hmacService.CalculateHash(hmacService.CreateSortedQueryString(queryString), HmacSettings.Secret);
+                parameters.ToList().ForEach(x => queryString[x.Key] = x.Value);
+                queryString["signature"] = queryString["signature"] ?? _hmacService.CalculateHash(_hmacService.CreateSortedQueryString(queryString), HmacSettings.Secret);
             }
-            foreach (var parameter in parameters)
+            else
             {
-                queryString[parameter.Key] = parameter.Value;
+                parameters.ToList().ForEach(x => queryString[x.Key] = queryString[x.Value]);
             }
             if (queryString.Count < 1) return "";
             return "?" + queryString;

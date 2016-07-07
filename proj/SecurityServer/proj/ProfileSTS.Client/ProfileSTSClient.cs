@@ -5,7 +5,7 @@ using Dragon.SecurityServer.GenericSTSClient.Models;
 
 namespace Dragon.SecurityServer.ProfileSTS.Client
 {
-    public class ProfileSTSClient
+    public class ProfileSTSClient : IClient
     {
         private readonly GenericSTSClient.Client _client;
         private const string ClearCacheAction = "ClearCache";
