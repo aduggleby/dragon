@@ -376,6 +376,10 @@
       <Project>{BFD0D841-D3EB-4438-875F-932FF3DC3D02}</Project>
       <Name>ProfileSTS.Client</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ProfileSTS.Shared\ProfileSTS.Shared.csproj">
+      <Project>{484bec9d-e57a-47d2-b016-c16722a23387}</Project>
+      <Name>ProfileSTS.Shared</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

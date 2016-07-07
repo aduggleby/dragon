@@ -1,4 +1,4 @@
-﻿namespace Dragon.SecurityServer.ProfileSTS.Client
+﻿namespace Dragon.SecurityServer.ProfileSTS.Shared.Models
 {
     public class AddClaimModel
     {

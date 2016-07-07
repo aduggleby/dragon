@@ -10,6 +10,9 @@ namespace Dragon.SecurityServer.ProfileSTS.Client
         void SetHmacSettings(HmacSettings settings);
         Task ClearCache();
         Task AddClaim(string userId, string type, string value);
+        Task RemoveClaim(string userId, string type);
+        Task UpdateClaim(string userId, string type, string value);
+        Task AddOrUpdateClaims(string userId, IList<Claim> claims);
         Task<IList<Claim>> GetClaims(string userId);
     }
 }
