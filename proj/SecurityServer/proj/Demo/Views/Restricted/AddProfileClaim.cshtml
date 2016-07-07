@@ -2,7 +2,7 @@
 
 <h3>Add profile claim</h3>
 
-@using (Html.BeginForm("AddProfileclaim", "Restricted"))
+@using (Html.BeginForm("AddProfileClaim", "Restricted"))
 {
     @Html.AntiForgeryToken()
     @Html.ValidationSummary("", new { @class = "text-danger" })

@@ -6,7 +6,6 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Dragon.SecurityServer.Identity.Stores;
-using Dragon.SecurityServer.ProfileSTS.Client;
 using Dragon.SecurityServer.ProfileSTS.Models;
 using Dragon.SecurityServer.ProfileSTS.Shared.Models;
 
@@ -68,9 +67,9 @@ namespace Dragon.SecurityServer.ProfileSTS.Controllers
             var claims = (await _userStore.GetClaimsAsync(user)).ToList();
             foreach (var claim in model.Claims)
             {
-                if (claims.Contains(claim))
+                foreach (var existingClaim in claims.Where(x => x.Type == claim.Type).ToList())
                 {
-                    await _userStore.RemoveClaimAsync(user, claims.First());
+                    await _userStore.RemoveClaimAsync(user, existingClaim);
                 }
                 await _userStore.AddClaimAsync(user, claim);
             }

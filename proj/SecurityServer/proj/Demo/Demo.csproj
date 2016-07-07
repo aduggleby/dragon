@@ -186,6 +186,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\UpdpateProfileClaimsViewModel.cs" />
     <Compile Include="Models\AddProfileClaimViewModel.cs" />
     <Compile Include="Models\ChangeSettingsViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -248,6 +249,7 @@
     <Content Include="Web.config.default" />
     <Content Include="Scripts\jquery-2.2.3.min.map" />
     <Content Include="Views\Restricted\AddProfileClaim.cshtml" />
+    <Content Include="Views\Restricted\UpdateProfileClaims.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
