@@ -16,7 +16,7 @@ namespace Dragon.SecurityServer.ProfileSTS.Client
         private const string AddOrUpdateClaimsAction = "AddOrUpdateClaims";
         private const string GetClaimsAction = "GetClaims";
 
-        public ProfileSTSClient(string serviceUrl, string realm)
+        public ProfileSTSClient(string serviceUrl)
         {
             _client = new GenericSTSClient.Client(serviceUrl);
         }

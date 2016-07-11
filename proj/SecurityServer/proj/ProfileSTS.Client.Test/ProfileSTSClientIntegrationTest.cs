@@ -83,7 +83,7 @@ namespace Dragon.SecurityServer.ProfileSTS.Client.Test
 
         private static ProfileSTSClient CreateClient()
         {
-            var client = new ProfileSTSClient(ServiceUrl, Realm);
+            var client = new ProfileSTSClient(ServiceUrl);
             client.SetHmacSettings(IntegrationTestHelper.ReadHmacSettings());
             return client;
         }

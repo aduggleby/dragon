@@ -29,7 +29,7 @@ namespace Dragon.SecurityServer.Demo.Controllers
             {
                 throw new ConfigurationErrorsException("App setting 'ProfileStsUrl' is missing.");
             }
-            _profileClient = new ProfileSTSClient(profileStsUrl + "/Api", fam.Realm);
+            _profileClient = new ProfileSTSClient(profileStsUrl + "/Api");
             _profileClient.SetHmacSettings(HmacHelper.ReadHmacSettings());
         }
 
