@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.IdentityModel.Tokens;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Dragon.Security.Hmac.Core.Service;
+using Dragon.SecurityServer.GenericSTSClient;
 using Dragon.SecurityServer.ProfileSTS.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
@@ -20,6 +23,7 @@ namespace Dragon.SecurityServer.ProfileSTS
     public partial class Startup
     {
         internal static IDataProtectionProvider DataProtectionProvider { get; private set; }
+        private static readonly HmacHelper HmacHelper = new HmacHelper { HmacService = new HmacSha256Service() };
 
         // For more information on configuring authentication, please visit http://go.microsoft.com/fwlink/?LinkId=301864
         public void ConfigureAuth(IAppBuilder app, Container container)
@@ -80,10 +84,19 @@ namespace Dragon.SecurityServer.ProfileSTS
                                 ctx.HandleResponse();
                             }
                             // forward parameters from the client or previous STS'e
-                            var parameters = new[]{"action", "data", "serviceid", "signature", "expiry", "userid", "appid"};
+                            var parameters = new[]{"action", "data"};
+                            var parameterDictionary = new Dictionary<string, string>();
                             foreach (var parameter in parameters)
                             {
-                                ctx.ProtocolMessage.SetParameter(parameter, ctx.Request.Query[parameter]);
+                                var value = ctx.Request.Query[parameter];
+                                if (value == null) continue;
+                                ctx.ProtocolMessage.SetParameter(parameter, value);
+                                parameterDictionary.Add(parameter, value);
+                            }
+                            var hmacParameters = HmacHelper.CreateHmacRequestParametersFromConfig(parameterDictionary);
+                            foreach (var parameter in hmacParameters)
+                            {
+                                ctx.ProtocolMessage.SetParameter(parameter.Key, parameter.Value);
                             }
                             return Task.FromResult(0);
                         },
