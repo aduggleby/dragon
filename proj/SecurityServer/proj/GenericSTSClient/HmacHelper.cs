@@ -10,8 +10,8 @@ namespace Dragon.SecurityServer.GenericSTSClient
 {
     public class HmacHelper : IHmacHelper
     {
-
         public IHmacService HmacService { get; set; }
+        private const string DefaultSettingsPrefix = "Dragon.Security.Hmac";
 
         public string CalculateHash(Dictionary<string, string> parameters, string secret)
         {
@@ -23,20 +23,25 @@ namespace Dragon.SecurityServer.GenericSTSClient
             return HmacService.CalculateHash(HmacService.CreateSortedQueryString(queryString), secret);
         }
 
-        public static HmacSettings ReadHmacSettings()
+        public static HmacSettings ReadHmacSettings(string settingsPrefix)
         {
             return new HmacSettings
             {
-                UserId = ConfigurationManager.AppSettings["Dragon.Security.Hmac.GuestUserId"],
-                AppId = ConfigurationManager.AppSettings["Dragon.Security.Hmac.AppId"],
-                ServiceId = ConfigurationManager.AppSettings["Dragon.Security.Hmac.ServiceId"],
-                Secret = ConfigurationManager.AppSettings["Dragon.Security.Hmac.Secret"]
+                UserId = ConfigurationManager.AppSettings[settingsPrefix + ".GuestUserId"],
+                AppId = ConfigurationManager.AppSettings[settingsPrefix + ".AppId"],
+                ServiceId = ConfigurationManager.AppSettings[settingsPrefix + ".ServiceId"],
+                Secret = ConfigurationManager.AppSettings[settingsPrefix + ".Secret"]
             };
         }
 
-        public Dictionary<string, string> CreateHmacRequestParametersFromConfig(Dictionary<string, string> parameters)
+        public static HmacSettings ReadHmacSettings()
         {
-            var hmacSettings = ReadHmacSettings();
+            return ReadHmacSettings(DefaultSettingsPrefix);
+        }
+
+        public Dictionary<string, string> CreateHmacRequestParametersFromConfig(Dictionary<string, string> parameters, string settingsPrefix)
+        {
+            var hmacSettings = ReadHmacSettings(settingsPrefix);
 
             var hmacParameters = new Dictionary<string, string>
             {
@@ -53,21 +58,19 @@ namespace Dragon.SecurityServer.GenericSTSClient
             return allParameters;
         }
 
+        public Dictionary<string, string> CreateHmacRequestParametersFromConfig(Dictionary<string, string> parameters)
+        {
+            return CreateHmacRequestParametersFromConfig(new Dictionary<string, string>(), DefaultSettingsPrefix);
+        }
+
         public Dictionary<string, string> CreateHmacRequestParametersFromConfig()
         {
-            var hmacSettings = ReadHmacSettings();
+            return CreateHmacRequestParametersFromConfig(new Dictionary<string, string>());
+        }
 
-            var parameters = new Dictionary<string, string>
-            {
-                { "expiry", DateTime.UtcNow.AddMinutes(+15).Ticks.ToString() },
-                { "serviceid", hmacSettings.ServiceId },
-                { "appid", hmacSettings.AppId },
-                { "userid", hmacSettings.UserId },
-            };
-
-            parameters.Add("signature", CalculateHash(parameters, hmacSettings.Secret));
-
-            return parameters;
+        public Dictionary<string, string> CreateHmacRequestParametersFromConfig(string settingsPrefix)
+        {
+            return CreateHmacRequestParametersFromConfig(new Dictionary<string, string>(), settingsPrefix);
         }
     }
 }
