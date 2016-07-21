@@ -23,14 +23,14 @@ namespace Dragon.SecurityServer.Demo.Controllers
             var accountStsUrl = ConfigurationManager.AppSettings["AccountStsUrl"];
             accountStsUrl = (string.IsNullOrEmpty(accountStsUrl) ? fam.Issuer : accountStsUrl);
             _client = new AccountSTSClient(accountStsUrl + "/Api", accountStsUrl, fam.Realm);
-            _client.SetHmacSettings(HmacHelper.ReadHmacSettings());
+            _client.SetHmacSettings(HmacHelper.ReadHmacSettings(Consts.AccountHmacSettingsPrefix));
             var profileStsUrl = ConfigurationManager.AppSettings["ProfileStsUrl"];
             if (string.IsNullOrEmpty(profileStsUrl))
             {
                 throw new ConfigurationErrorsException("App setting 'ProfileStsUrl' is missing.");
             }
             _profileClient = new ProfileSTSClient(profileStsUrl + "/Api");
-            _profileClient.SetHmacSettings(HmacHelper.ReadHmacSettings());
+            _profileClient.SetHmacSettings(HmacHelper.ReadHmacSettings(Consts.ProfileHmacSettingsPrefix));
         }
 
         protected ControllerBase(IClient client)

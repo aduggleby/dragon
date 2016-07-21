@@ -51,7 +51,7 @@ namespace Dragon.SecurityServer.GenericSTSClient
                 { "userid", hmacSettings.UserId },
             };
 
-            var allParameters = hmacParameters.Concat(parameters).ToDictionary(x => x.Key, x => x.Value);
+            var allParameters = parameters.Concat(hmacParameters.Where(x => !parameters.Keys.Contains(x.Key))).ToDictionary(x => x.Key, x => x.Value);
 
             allParameters.Add("signature", CalculateHash(allParameters, hmacSettings.Secret));
 
@@ -60,7 +60,7 @@ namespace Dragon.SecurityServer.GenericSTSClient
 
         public Dictionary<string, string> CreateHmacRequestParametersFromConfig(Dictionary<string, string> parameters)
         {
-            return CreateHmacRequestParametersFromConfig(new Dictionary<string, string>(), DefaultSettingsPrefix);
+            return CreateHmacRequestParametersFromConfig(parameters, DefaultSettingsPrefix);
         }
 
         public Dictionary<string, string> CreateHmacRequestParametersFromConfig()

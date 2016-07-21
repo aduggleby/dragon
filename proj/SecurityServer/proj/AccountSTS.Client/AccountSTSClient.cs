@@ -85,7 +85,13 @@ namespace Dragon.SecurityServer.AccountSTS.Client
             rst.Context = $"rm=0&id=passive&ru={encodedReplyUrl}";
             rst.CurrentTime = DateTime.Now.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ssK");
             parameters.ToList().ForEach(rst.Parameters.Add);
-            var hmacParameters = HmacHelper.CreateHmacRequestParametersFromConfig();
+            var hmacParameters = new Dictionary<string, string>
+            {
+                {"expiry", DateTime.UtcNow.AddMinutes(+15).Ticks.ToString()},
+                {"serviceid", _client.HmacSettings.ServiceId},
+                {"appid", _client.HmacSettings.AppId},
+                {"userid", _client.HmacSettings.UserId},
+            };
             hmacParameters.ToList().ForEach(rst.Parameters.Add);
             var requestUrl = rst.RequestUrl;
             return requestUrl;

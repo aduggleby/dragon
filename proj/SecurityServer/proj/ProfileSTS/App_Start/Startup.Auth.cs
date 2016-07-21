@@ -84,14 +84,19 @@ namespace Dragon.SecurityServer.ProfileSTS
                                 ctx.HandleResponse();
                             }
                             // forward parameters from the client or previous STS'e
-                            var parameters = new[]{"action", "data"};
-                            var parameterDictionary = new Dictionary<string, string>();
+                            var parameterDictionary = new Dictionary<string, string>
+                            {
+                                {"serviceid", ""},
+                                {"appid", ""},
+                                {"userid", ""},
+                            };
+                            var parameters = new List<string> {"action", "data", "serviceid", "appid", "userid"};
                             foreach (var parameter in parameters)
                             {
                                 var value = ctx.Request.Query[parameter];
                                 if (value == null) continue;
                                 ctx.ProtocolMessage.SetParameter(parameter, value);
-                                parameterDictionary.Add(parameter, value);
+                                parameterDictionary[parameter] = value;
                             }
                             var hmacParameters = HmacHelper.CreateHmacRequestParametersFromConfig(parameterDictionary);
                             foreach (var parameter in hmacParameters)

@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Routing;
 using Dragon.SecurityServer.AccountSTS.Client.Models;
-using Dragon.SecurityServer.Common;
 using Dragon.SecurityServer.Demo.ActionFilters;
 using Dragon.SecurityServer.Demo.Models;
 using Dragon.SecurityServer.GenericSTSClient;
@@ -40,8 +39,8 @@ namespace Dragon.SecurityServer.Demo.Controllers
             var claims = await _profileClient.GetClaims(User.Identity.GetUserId());
             var profile = new UpdateProfileClaimsViewModel
             {
-                Name = claims.FirstOrDefault(x => x.Type == Consts.DefaultClaimNamespace + "name")?.Value ?? "",
-                Address = claims.FirstOrDefault(x => x.Type == Consts.DefaultClaimNamespace + "address")?.Value ?? ""
+                Name = claims.FirstOrDefault(x => x.Type == Common.Consts.DefaultClaimNamespace + "name")?.Value ?? "",
+                Address = claims.FirstOrDefault(x => x.Type == Common.Consts.DefaultClaimNamespace + "address")?.Value ?? ""
             };
             ViewBag.Profile = profile;
         }
@@ -130,8 +129,8 @@ namespace Dragon.SecurityServer.Demo.Controllers
             var userId = User.Identity.GetUserId();
             await _profileClient.AddOrUpdateClaims(userId, new List<Claim>
             {
-                new Claim(Consts.DefaultClaimNamespace + "name", model.Name),
-                new Claim(Consts.DefaultClaimNamespace + "address", model.Address)
+                new Claim(Common.Consts.DefaultClaimNamespace + "name", model.Name),
+                new Claim(Common.Consts.DefaultClaimNamespace + "address", model.Address)
             });
             await RefreshClaims(userId);
             return RedirectToAction("Index");
