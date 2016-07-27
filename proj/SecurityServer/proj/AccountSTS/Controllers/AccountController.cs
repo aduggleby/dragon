@@ -19,6 +19,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using NLog;
+using System.Transactions;
 
 namespace Dragon.SecurityServer.AccountSTS.Controllers
 {
@@ -128,8 +129,17 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
                     if (LegacyPasswordService != null && await LegacyPasswordService.CheckPasswordAsync(user, model.Password))
                     {
                         // set the password
-                        _userManager.RemovePassword(user.Id);
-                        _userManager.AddPassword(user.Id, model.Password);
+                        using (var tx = new TransactionScope())
+                        {
+                            _userManager.RemovePassword(user.Id);
+                            _userManager.AddPassword(user.Id, model.Password);
+                            var updatedUser = await _userStore.FindByIdAsync(user.Id);
+                            if (string.IsNullOrEmpty(updatedUser.PasswordHash))
+                            {
+                                throw new Exception("Unable to set password of user " + user.Id);
+                            }
+                            tx.Complete();
+                        }
                         // and login
                         try
                         {
