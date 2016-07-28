@@ -27,6 +27,7 @@ namespace Dragon.SecurityServer.AccountSTS.WebRequestHandler
         private const string OpenId2IdClaimType = "openid_id";
         private const string LoginProviderName = "Google";
         private const string OpenId2LoginProviderName = "Google-OpenId2";
+        private const string OpenId2ProviderKeyPrefix = "https://www.google.com/accounts/";
         private static readonly Uri GooglePlusMeUri = new Uri("https://www.googleapis.com/plus/v1/people/me");
         private static readonly JwtSecurityTokenHandler TokenHandler = new JwtSecurityTokenHandler();
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
@@ -53,6 +54,7 @@ namespace Dragon.SecurityServer.AccountSTS.WebRequestHandler
             catch (Exception ex)
             {
                 Logger.Error(ex.Message);
+                StackExchange.Exceptional.ErrorStore.LogException(ex, null);
             }
             return httpResponse;
         }
@@ -104,13 +106,22 @@ namespace Dragon.SecurityServer.AccountSTS.WebRequestHandler
                 throw new OpenIdMigrationException("OpenID Connect Id not found: " + emailClaim.Value);
             }
             var logins = await _userStore.GetLoginsAsync(user);
-            var obsoleteLogin = logins.FirstOrDefault(x => x.LoginProvider == LoginProviderName && x.ProviderKey == openId2IdClaim.Value);
-            if (obsoleteLogin != null)
+            if (logins.Any(x => x.LoginProvider == LoginProviderName && x.ProviderKey.StartsWith(OpenId2ProviderKeyPrefix)))
             {
-                await _userStore.AddLoginAsync(user, new UserLoginInfo(LoginProviderName, idClaim.Value));
-                await _userStore.AddLoginAsync(user, new UserLoginInfo(OpenId2LoginProviderName, openId2IdClaim.Value));
-                await _userStore.RemoveLoginAsync(user, obsoleteLogin);
-                Logger.Info("OpenID 2.0 to OpenID Connect: {0} => {1}.", openId2IdClaim.Value, idClaim.Value);
+                Logger.Trace("OpenID 2.0 login found: " + user.Email);
+                var obsoleteLogin = logins.FirstOrDefault(x => x.LoginProvider == LoginProviderName && x.ProviderKey == openId2IdClaim.Value);
+                if (obsoleteLogin != null)
+                {
+                    await _userStore.AddLoginAsync(user, new UserLoginInfo(LoginProviderName, idClaim.Value));
+                    await _userStore.AddLoginAsync(user, new UserLoginInfo(OpenId2LoginProviderName, openId2IdClaim.Value));
+                    await _userStore.RemoveLoginAsync(user, obsoleteLogin);
+                    Logger.Info("OpenID 2.0 to OpenID Connect: {0} => {1}.", openId2IdClaim.Value, idClaim.Value);
+                }
+                else
+                {
+                    Logger.Error($"Google OpenID 2.0 login could not be resolved: {user.Email}");
+                    throw new Exception($"Unable to migrate from OpenID 2.0 to OpenID Connect: {user.Email} ({user.Id})");
+                }
             }
         }
     }

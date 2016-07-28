@@ -661,6 +661,7 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
 
                 if (string.IsNullOrWhiteSpace(user.PasswordHash))
                 {
+                    Logger.Trace("External login confirmation: user {0} ({1}) seems to be connected with another external login provider already ({2})", info.Login.ProviderKey, info.Login.LoginProvider, user.Email);
                     ViewBag.Message = await GenerateLoginSuggestionMessage(user);
                     return View("ExternalLoginInfo");
                 }
