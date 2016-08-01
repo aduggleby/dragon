@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Web.WebPages;
 using Dragon.Security.Hmac.Core.Service;
 using Dragon.Security.Hmac.Module.Configuration;
 using Dragon.Security.Hmac.Module.Models;
@@ -17,27 +16,26 @@ namespace Dragon.Security.Hmac.Module.Services
         public IUserRepository UserRepository { get; set; }
         public IAppRepository AppRepository { get; set; }
 
-        private IEnumerable<PathInfo> PathsRegex { get; set; }
+        private IEnumerable<PathInfo> PathInfos { get; set; }
 
         private readonly string _serviceId;
         private readonly string _signatureParameterKey;
-        private readonly bool _validateSignatureUsingHmacParametersOnly;
 
-        public HmacHttpService(string serviceId, IEnumerable<PathConfig> paths, string signatureParameterKey, bool validateSignatureUsingHmacParametersOnly)
+        public HmacHttpService(string serviceId, IEnumerable<PathConfig> paths, string signatureParameterKey)
         {
             _serviceId = serviceId;
             _signatureParameterKey = signatureParameterKey;
-            _validateSignatureUsingHmacParametersOnly = validateSignatureUsingHmacParametersOnly;
-            PathsRegex = paths.Select(x => new PathInfo
+            PathInfos = paths.Select(x => new PathInfo
                 {
                     Regex = new Regex(x.Path, RegexOptions.Singleline | RegexOptions.Compiled | RegexOptions.IgnoreCase),
-                    Type = x.Type == PathConfig.PathType.Include ? PathInfo.PathType.Include : PathInfo.PathType.Exclude
+                    Type = x.Type == PathConfig.PathType.Include ? PathInfo.PathType.Include : PathInfo.PathType.Exclude,
+                    ExcludeParameters = x.ExcludeParameters.Split(',').ToList().Select(y => y.Trim()).Where(y => !string.IsNullOrWhiteSpace(y)).ToList()
                 });
         }
 
         public StatusCode IsRequestAuthorized(string rawUrl, NameValueCollection queryString)
         {
-            var matchingPath = PathsRegex.FirstOrDefault(x => x.Regex.IsMatch(rawUrl));
+            var matchingPath = PathInfos.FirstOrDefault(x => x.Regex.IsMatch(rawUrl));
             if (matchingPath != null && matchingPath.Type == PathInfo.PathType.Exclude)
             {
                 return StatusCode.Authorized;
@@ -80,10 +78,10 @@ namespace Dragon.Security.Hmac.Module.Services
             }
 
             var filteredQueryString = queryString;
-            if (_validateSignatureUsingHmacParametersOnly)
+            if (matchingPath != null && matchingPath.ExcludeParameters.Any())
             {
                 filteredQueryString = new NameValueCollection();
-                mandatoryParameterNames.ToList().ForEach(x => filteredQueryString.Add(x, queryString.Get(x)));
+                queryString.AllKeys.ToList().Except(matchingPath.ExcludeParameters, StringComparer.OrdinalIgnoreCase).ToList().ForEach(x => filteredQueryString.Add(x, queryString.Get(x)));
             }
             var actual = HmacService.CalculateHash(HmacService.CreateSortedQueryString(filteredQueryString), app.Secret);
             if (actual.ToLower() != signature.ToLower())
@@ -131,7 +129,7 @@ namespace Dragon.Security.Hmac.Module.Services
         private static bool IsMandatoryParameterMissingOrEmpty(string[] requiredKeys, NameValueCollection queryString)
         {
             return requiredKeys.Except(queryString.Keys.Cast<string>()).Any() ||
-                requiredKeys.Select(queryString.Get).Any(x => x == null || x.IsEmpty());
+                requiredKeys.Select(queryString.Get).Any(string.IsNullOrWhiteSpace);
         }
     }
 }

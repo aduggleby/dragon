@@ -25,6 +25,13 @@ namespace Dragon.Security.Hmac.Module.Configuration
             set { this["path"] = value; }
         }
 
+        [ConfigurationProperty("excludeParameters", IsRequired = false)]
+        public string ExcludeParameters
+        {
+            get { return (string)this["excludeParameters"]; }
+            set { this["excludeParameters"] = value; }
+        }
+
         public enum PathType
         {
             Include,

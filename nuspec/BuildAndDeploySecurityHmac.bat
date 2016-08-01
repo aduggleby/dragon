@@ -4,7 +4,7 @@ REM set your api key once: nuget setApiKey Your-API-Key
 
 SET "nuget_basedir="
 
-"%ProgramFiles(x86)%/Microsoft Visual Studio 12.0/Common7/IDE/devenv" /build release ../proj/Security/Hmac/Dragon.Security.Hmac.sln
+"%ProgramFiles(x86)%/Microsoft Visual Studio 14.0/Common7/IDE/devenv" /build release ../proj/Security.Hmac/Dragon.Security.Hmac.sln
 IF %ERRORLEVEL% NEQ 0 (
   echo. && echo. && echo Build failed.
   exit /B 1

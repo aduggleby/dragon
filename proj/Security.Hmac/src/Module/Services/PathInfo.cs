@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace Dragon.Security.Hmac.Module.Services
 {
@@ -11,5 +12,6 @@ namespace Dragon.Security.Hmac.Module.Services
         }
         public PathType Type { get; set; }
         public Regex Regex { get; set; }
+        public IList<string> ExcludeParameters { get; set; }
     }
 }
