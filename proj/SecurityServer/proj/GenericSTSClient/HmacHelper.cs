@@ -11,7 +11,7 @@ namespace Dragon.SecurityServer.GenericSTSClient
     public class HmacHelper : IHmacHelper
     {
         public IHmacService HmacService { get; set; }
-        private const string DefaultSettingsPrefix = "Dragon.Security.Hmac";
+        public const string DefaultSettingsPrefix = "Dragon.Security.Hmac";
 
         public string CalculateHash(Dictionary<string, string> parameters, string secret)
         {
@@ -25,9 +25,14 @@ namespace Dragon.SecurityServer.GenericSTSClient
 
         public static HmacSettings ReadHmacSettings(string settingsPrefix)
         {
+            return ReadHmacSettings(settingsPrefix, null);
+        }
+
+        public static HmacSettings ReadHmacSettings(string settingsPrefix, string userId)
+        {
             return new HmacSettings
             {
-                UserId = ConfigurationManager.AppSettings[settingsPrefix + ".GuestUserId"],
+                UserId = string.IsNullOrWhiteSpace(userId) ? ConfigurationManager.AppSettings[settingsPrefix + ".GuestUserId"] : userId,
                 AppId = ConfigurationManager.AppSettings[settingsPrefix + ".AppId"],
                 ServiceId = ConfigurationManager.AppSettings[settingsPrefix + ".ServiceId"],
                 Secret = ConfigurationManager.AppSettings[settingsPrefix + ".Secret"]
