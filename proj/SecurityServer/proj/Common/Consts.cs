@@ -8,6 +8,7 @@
         public const string RegisteredServiceType = "http://whataventure.com/schemas/identity/claims/account/registeredService";
 
         public const string QueryStringParameterNameServiceId = "serviceid";
+        public const string QueryStringParameterNameAppId = "appid";
         public const string QueryStringParameterNameReturnUrl = "ReturnUrl";
 
         public static string[] QueryStringHmacParameterNames = { "appid", "serviceid", "userid", "expiry", "signature" };

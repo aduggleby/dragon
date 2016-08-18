@@ -2,12 +2,12 @@
 
 namespace Dragon.SecurityServer.Identity.Models
 {
-    [Table("IdentityUserRole")]
-    public class IdentityUserRole
+    [Table("IdentityConsumerUser")]
+    public class IdentityUserApp
     {
         [Key]
         public string UserId { get; set; }
         [Key]
-        public string RoleId { get; set; }
+        public string AppId { get; set; }
     }
 }

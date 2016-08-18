@@ -7,6 +7,7 @@ namespace Dragon.SecurityServer.Identity.Models
     /// <summary>
     /// From <see href="http://www.asp.net/identity/overview/extensibility/overview-of-custom-storage-providers-for-aspnet-identity">asp.net</see>
     /// </summary>
+    [Table("IdentityRole")]
     public class IdentityRole : IRole
     {
         public IdentityRole()

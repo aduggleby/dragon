@@ -20,18 +20,22 @@ namespace Dragon.SecurityServer.Identity.Stores
         private IRepository<IdentityUserRole> UserRoleRepository { get; set; }
         private IRepository<IdentityUserClaim> UserClaimRepository { get; set; }
         private IRepository<IdentityUserLogin> UserLoginRepository { get; set; }
-        private IRepository<IdentityService> UserServiceRepository { get; set; }
+        private IRepository<IdentityUserService> UserServiceRepository { get; set; }
+        private IRepository<IdentityUserApp> UserAppRepository { get; set; }
 
-        public UserStore(IRepository<TUser> userRepository, IRepository<IdentityUserClaim> userClaimRepository, IRepository<IdentityUserLogin> userLoginRepository, IRepository<IdentityService> userServiceRepository)
+        public UserStore(IRepository<TUser> userRepository, IRepository<IdentityUserClaim> userClaimRepository, IRepository<IdentityUserLogin> userLoginRepository,
+            IRepository<IdentityUserService> userServiceRepository, IRepository<IdentityUserApp> userAppRepository)
         {
             UserRepository = userRepository;
             UserLoginRepository = userLoginRepository;
             UserServiceRepository = userServiceRepository;
             UserClaimRepository = userClaimRepository;
+            UserAppRepository = userAppRepository;
         }
 
         public UserStore(IRepository<TUser> userRepository, IRepository<IdentityRole> roleRepository,
-            IRepository<IdentityUserRole> userRoleRepository, IRepository<IdentityUserClaim> userClaimRepository, IRepository<IdentityUserLogin> userLoginRepository, IRepository<IdentityService> userServiceRepository)
+            IRepository<IdentityUserRole> userRoleRepository, IRepository<IdentityUserClaim> userClaimRepository, IRepository<IdentityUserLogin> userLoginRepository,
+            IRepository<IdentityUserService> userServiceRepository, IRepository<IdentityUserApp> userAppRepository)
         {
             UserRepository = userRepository;
             RoleRepository = roleRepository;
@@ -39,6 +43,7 @@ namespace Dragon.SecurityServer.Identity.Stores
             UserClaimRepository = userClaimRepository;
             UserLoginRepository = userLoginRepository;
             UserServiceRepository = userServiceRepository;
+            UserAppRepository = userAppRepository;
         }
 
         public void Dispose()
@@ -452,7 +457,7 @@ namespace Dragon.SecurityServer.Identity.Stores
             {
                 throw new ArgumentException(string.Format("Service {0} already has been added to user {1}", serviceId, user.Id));
             }
-            UserServiceRepository.Insert(new IdentityService {ServiceId = serviceId, UserId = user.Id});
+            UserServiceRepository.Insert(new IdentityUserService {ServiceId = serviceId, UserId = user.Id});
             return Task.FromResult(0); 
         }
 
@@ -460,7 +465,22 @@ namespace Dragon.SecurityServer.Identity.Stores
         {
             return Task.FromResult(IsUserRegisteredForService(user, serviceId));
         }
-        
+
+        public Task AddAppToUserAsync(TUser user, string appId)
+        {
+            if (IsUserRegisteredForApp(user, appId))
+            {
+                throw new ArgumentException(string.Format("App {0} already has been added to user {1}", appId, user.Id));
+            }
+            UserAppRepository.Insert(new IdentityUserApp { AppId = appId, UserId = user.Id });
+            return Task.FromResult(0);
+        }
+
+        public Task<bool> IsUserRegisteredForAppAsync(TUser user, string appId)
+        {
+            return Task.FromResult(IsUserRegisteredForApp(user, appId));
+        }
+
         public Task<IEnumerable<string>> GetServicesAsync(TUser user)
         {
             if (user == null)
@@ -503,6 +523,25 @@ namespace Dragon.SecurityServer.Identity.Stores
                 {"ServiceId", serviceId}
             });
             return userList.Any();
+        }
+
+        public bool IsUserRegisteredForApp(TUser user, string appId)
+        {
+            return GetUserAppList(user, appId).Any();
+        }
+
+        private IEnumerable<IdentityUserApp> GetUserAppList(TUser user, string appId)
+        {
+            if (user == null)
+            {
+                return new List<IdentityUserApp>();
+            }
+            var userList = UserAppRepository.GetByWhere(new Dictionary<string, object>
+            {
+                {"UserId", user.Id},
+                {"AppId", appId}
+            });
+            return userList;
         }
 
         private List<string> FindRolesByUser(TUser user)

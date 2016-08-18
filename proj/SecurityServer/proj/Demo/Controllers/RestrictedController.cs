@@ -36,7 +36,7 @@ namespace Dragon.SecurityServer.Demo.Controllers
         {
             ViewBag.ConnectUrls = GetFederationManagementUrls(ViewBag.Claims, ManagementDisconnectedAccountType, "connect");
             ViewBag.DisconnectUrls = GetFederationManagementUrls(ViewBag.Claims, ManagementConnectedAccountType, "disconnect");
-            var claims = await _profileClient.GetClaims(User.Identity.GetUserId());
+            var claims = await ProfileClient.GetClaims(User.Identity.GetUserId());
             var profile = new UpdateProfileClaimsViewModel
             {
                 Name = claims.FirstOrDefault(x => x.Type == Common.Consts.DefaultClaimNamespace + "name")?.Value ?? "",
@@ -53,7 +53,7 @@ namespace Dragon.SecurityServer.Demo.Controllers
             return types.Any()
                 ? types.ToDictionary(
                     x => x.Value,
-                    x => _client.GetFederationUrl(action, x.Value,
+                    x => Client.GetFederationUrl(action, x.Value,
                         Url.Action("OnExternalFederationChanged", "Federation", new RouteValueDictionary(routeValues), Request.Url.Scheme)))
                 : new Dictionary<string, string>();
         }
@@ -94,7 +94,7 @@ namespace Dragon.SecurityServer.Demo.Controllers
 
             try
             {
-                await _client.Update(updateViewModel);
+                await Client.Update(updateViewModel);
 
                 // update claims to provide the user up-to-date data
                 var identity = (ClaimsIdentity) User.Identity;
@@ -119,7 +119,7 @@ namespace Dragon.SecurityServer.Demo.Controllers
         public async Task<ActionResult> AddProfileClaim(AddProfileClaimViewModel model)
         {
             var userId = User.Identity.GetUserId();
-            await _profileClient.AddClaim(userId, model.Type, model.Value);
+            await ProfileClient.AddClaim(userId, model.Type, model.Value);
             await RefreshClaims(userId);
             return RedirectToAction("Index");
         }
@@ -127,7 +127,7 @@ namespace Dragon.SecurityServer.Demo.Controllers
         public async Task<ActionResult> UpdateProfileClaims(UpdateProfileClaimsViewModel model)
         {
             var userId = User.Identity.GetUserId();
-            await _profileClient.AddOrUpdateClaims(userId, new List<Claim>
+            await ProfileClient.AddOrUpdateClaims(userId, new List<Claim>
             {
                 new Claim(Common.Consts.DefaultClaimNamespace + "name", model.Name),
                 new Claim(Common.Consts.DefaultClaimNamespace + "address", model.Address)
@@ -140,7 +140,7 @@ namespace Dragon.SecurityServer.Demo.Controllers
         {
             var identity = (ClaimsIdentity) User.Identity;
             var context = Request.GetOwinContext();
-            var claims = await _profileClient.GetClaims(userId);
+            var claims = await ProfileClient.GetClaims(userId);
             foreach (var claim in identity.Claims.Where(x => claims.Any(y => y.Type == x.Type)).ToList())
             {
                 identity.RemoveClaim(claim);

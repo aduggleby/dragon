@@ -200,7 +200,7 @@
   <dragon>
     <security>
       <!-- The connection and tables that contain users and apps -->
-      <hmac serviceId="00000001-0001-0003-0003-000000000011" connectionStringName="Dragon" usersTableName="UserModel" appsTableName="AppModel">
+      <hmac serviceId="00000001-0001-0003-0003-000000000011" connectionStringName="Dragon" usersTableName="HmacUser" appsTableName="HmacConsumer">
         <Paths>
           <add name="api" path="^/api/.*$" type="Include" />
           <add name="account-logoff" path="^/Account/LogOff" type="Exclude" />

@@ -2,7 +2,8 @@
 
 namespace Dragon.SecurityServer.Identity.Models
 {
-    public class IdentityService
+    [Table("IdentityServiceUser")]
+    public class IdentityUserService
     {
         [Key]
         public string UserId { get; set; }

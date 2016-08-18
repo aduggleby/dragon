@@ -18,7 +18,7 @@ namespace UserMigrationTest
         public async Task Migrate_validDbs_shouldMigrateUsers()
         {
             ConnectionHelper.ConnectionString = () => ConfigurationManager.ConnectionStrings["AccountSts"].ConnectionString;
-            var userStore = new UserStore<AppMember>(new Repository<AppMember>(), new Repository<IdentityUserClaim>(), new Repository<IdentityUserLogin>(), new Repository<IdentityService>());
+            var userStore = new UserStore<AppMember>(new Repository<AppMember>(), new Repository<IdentityUserClaim>(), new Repository<IdentityUserLogin>(), new Repository<IdentityUserService>(), new Repository<IdentityUserApp>());
             var service = new LegacyWavUserMigration<AppMember>(userStore);
             await service.Migrate(data => new AppMember
             {
