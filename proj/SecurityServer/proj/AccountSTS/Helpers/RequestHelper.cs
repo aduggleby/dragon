@@ -17,6 +17,11 @@ namespace Dragon.SecurityServer.AccountSTS.Helpers
             return HttpContext.Current.Request.QueryString[Consts.QueryStringParameterNameServiceId];
         }
 
+        public static string GetCurrentAppId()
+        {
+            return HttpContext.Current.Request.QueryString[Consts.QueryStringParameterNameAppId];
+        }
+
         public static string GetParameterFromReturnUrl(string parameterName)
         {
             var returnUrl = new Uri(

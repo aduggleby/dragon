@@ -37,7 +37,8 @@
     </assemblyBinding>
   </runtime>
   <connectionStrings>
-    <add name="Dragon" connectionString="Data Source=(LocalDb)\v11.0;AttachDbFilename=|DataDirectory|\aspnet-AccountSTS-Dragon.mdf;Initial Catalog=aspnet-AccountSTS-Dragon;Integrated Security=True" providerName="System.Data.SqlClient" />
+    <add name="ProfileSts" connectionString="Data Source=(LocalDb)\v11.0;AttachDbFilename=|DataDirectory|\aspnet-ProfileSTS-Dragon.mdf;Initial Catalog=aspnet-ProfileSTS-Dragon;Integrated Security=True" providerName="System.Data.SqlClient" />
+    <add name="AccountSts" connectionString="Data Source=(LocalDb)\v11.0;AttachDbFilename=|DataDirectory|\aspnet-AccountSTS-Dragon.mdf;Initial Catalog=aspnet-AccountSTS-Dragon;Integrated Security=True" providerName="System.Data.SqlClient" />
     <add name="WAV" connectionString="Data Source=(LocalDb)\v11.0;AttachDbFilename=|DataDirectory|\wav.mdf;Initial Catalog=wav;Integrated Security=True" providerName="System.Data.SqlClient" />
   </connectionStrings>
   <appSettings>

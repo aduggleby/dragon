@@ -55,6 +55,7 @@ namespace Dragon.SecurityServer.AccountSTS
                 registration = producer.Registration;
                 registration.SuppressDiagnosticWarning(DiagnosticType.DisposableTransientComponent, "Disposed by MVC");
             }
+
             registration = container.GetRegistration(typeof(ApplicationSignInManager)).Registration;
             registration.SuppressDiagnosticWarning(DiagnosticType.DisposableTransientComponent, "Disposed by MVC");
              
@@ -76,6 +77,7 @@ namespace Dragon.SecurityServer.AccountSTS
             container.RegisterSingleton(app);
 
             container.Register<IFederationService, FederationService>(Lifestyle.Singleton);
+            container.Register<IAppService, AppService>(Lifestyle.Transient);
  
             container.RegisterConditional(typeof(IRepository<>), typeof(Repository<>), c => !c.Handled);
 
@@ -86,7 +88,7 @@ namespace Dragon.SecurityServer.AccountSTS
                 var dragonUserStores = new List<IDragonUserStore<AppMember>>
                 {
                     new UserStore<AppMember>(new Repository<AppMember>(), null, new Repository<IdentityUserLogin>(),
-                        new Repository<IdentityService>())
+                        new Repository<IdentityUserService>(), new Repository<IdentityUserApp>())
                 };
                 if (WebConfigurationManager.ConnectionStrings[RedisConnectionStringName] != null)
                 {

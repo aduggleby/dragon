@@ -1,10 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Configuration;
 using System.Diagnostics;
-using System.IdentityModel.Services;
 using System.Security.Claims;
 using System.Web.Mvc;
-using Dragon.SecurityServer.AccountSTS.Client;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -24,41 +21,50 @@ namespace Dragon.SecurityServer.Demo.Controllers
 
         // GET: Restricted
         [ImportModelStateFromTempData]
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
             if (!User.Identity.IsAuthenticated)
             {
                 return new HttpUnauthorizedResult();
                 //CustomSignIn(); // custom signin
             }
-            InitViewBag();
+            await InitViewBag();
             return View();
         }
 
-        private void InitViewBag()
+        private async Task InitViewBag()
         {
             ViewBag.ConnectUrls = GetFederationManagementUrls(ViewBag.Claims, ManagementDisconnectedAccountType, "connect");
             ViewBag.DisconnectUrls = GetFederationManagementUrls(ViewBag.Claims, ManagementConnectedAccountType, "disconnect");
+            var claims = await ProfileClient.GetClaims(User.Identity.GetUserId());
+            var profile = new UpdateProfileClaimsViewModel
+            {
+                Name = claims.FirstOrDefault(x => x.Type == Common.Consts.DefaultClaimNamespace + "name")?.Value ?? "",
+                Address = claims.FirstOrDefault(x => x.Type == Common.Consts.DefaultClaimNamespace + "address")?.Value ?? ""
+            };
+            ViewBag.Profile = profile;
         }
 
         private Dictionary<string, string> GetFederationManagementUrls(IEnumerable<Claim> claims, string accountType, string action)
         {
-            var routeValues = new Dictionary<string, object> { { "returnUrl", System.Web.HttpContext.Current.Request.Url.AbsoluteUri } };
+            var routeValues = new Dictionary<string, object> {{"returnUrl", System.Web.HttpContext.Current.Request.Url.AbsoluteUri}};
             var types = claims.Where(x => x.Type == accountType).ToList();
             Debug.Assert(Request.Url != null, "Request.Url != null");
             return types.Any()
                 ? types.ToDictionary(
                     x => x.Value,
-                    x => _client.GetFederationUrl(action, x.Value,
+                    x => Client.GetFederationUrl(action, x.Value,
                         Url.Action("OnExternalFederationChanged", "Federation", new RouteValueDictionary(routeValues), Request.Url.Scheme)))
                 : new Dictionary<string, string>();
         }
 
+        /*
         private void CustomSignIn()
         {
             System.Web.HttpContext.Current.Response.Redirect(_client.GetFederationUrl("connect", System.Web.HttpContext.Current.Request.Url.AbsoluteUri), false);
             System.Web.HttpContext.Current.Response.End();
         }
+        */
 
         [HttpPost]
         [ExportModelStateToTempData]
@@ -69,7 +75,7 @@ namespace Dragon.SecurityServer.Demo.Controllers
             {
                 return View("Index", model);
             }
-            var id = ((ClaimsIdentity)User.Identity).Claims.ToList().First(x => x.Type == ClaimTypes.NameIdentifier).Value;
+            var id = ((ClaimsIdentity) User.Identity).Claims.ToList().First(x => x.Type == ClaimTypes.NameIdentifier).Value;
             var updateViewModel = new UpdateViewModel
             {
                 Id = id,
@@ -88,10 +94,10 @@ namespace Dragon.SecurityServer.Demo.Controllers
 
             try
             {
-                await _client.Update(updateViewModel);
+                await Client.Update(updateViewModel);
 
                 // update claims to provide the user up-to-date data
-                var identity = (ClaimsIdentity)User.Identity;
+                var identity = (ClaimsIdentity) User.Identity;
                 var context = Request.GetOwinContext();
                 var claim = identity.FindFirst(ClaimTypes.Email);
                 if (!string.IsNullOrWhiteSpace(model.EmailAddress) && claim.Value != model.EmailAddress)
@@ -108,6 +114,40 @@ namespace Dragon.SecurityServer.Demo.Controllers
             }
 
             return RedirectToAction("Index", model);
+        }
+
+        public async Task<ActionResult> AddProfileClaim(AddProfileClaimViewModel model)
+        {
+            var userId = User.Identity.GetUserId();
+            await ProfileClient.AddClaim(userId, model.Type, model.Value);
+            await RefreshClaims(userId);
+            return RedirectToAction("Index");
+        }
+
+        public async Task<ActionResult> UpdateProfileClaims(UpdateProfileClaimsViewModel model)
+        {
+            var userId = User.Identity.GetUserId();
+            await ProfileClient.AddOrUpdateClaims(userId, new List<Claim>
+            {
+                new Claim(Common.Consts.DefaultClaimNamespace + "name", model.Name),
+                new Claim(Common.Consts.DefaultClaimNamespace + "address", model.Address)
+            });
+            await RefreshClaims(userId);
+            return RedirectToAction("Index");
+        }
+
+        private async Task RefreshClaims(string userId)
+        {
+            var identity = (ClaimsIdentity) User.Identity;
+            var context = Request.GetOwinContext();
+            var claims = await ProfileClient.GetClaims(userId);
+            foreach (var claim in identity.Claims.Where(x => claims.Any(y => y.Type == x.Type)).ToList())
+            {
+                identity.RemoveClaim(claim);
+            }
+            identity.AddClaims(claims);
+            context.Authentication.SignOut(DefaultAuthenticationTypes.ExternalCookie);
+            context.Authentication.SignIn(identity);
         }
     }
 }

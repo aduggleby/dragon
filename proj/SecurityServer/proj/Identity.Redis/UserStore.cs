@@ -283,6 +283,16 @@ namespace Dragon.SecurityServer.Identity.Redis
             return isRegistered.HasValue && (bool)isRegistered;
         }
 
+        public Task AddAppToUserAsync(TUser user, string serviceId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> IsUserRegisteredForAppAsync(TUser user, string serviceId)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<IEnumerable<string>> GetServicesAsync(TUser user)
         {
             return await Task.FromResult((await Database.SetMembersAsync(string.Format(UserServiceSetKey, user.Id))).Select(x => x.ToString()));

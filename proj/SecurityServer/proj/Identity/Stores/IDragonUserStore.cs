@@ -24,5 +24,7 @@ namespace Dragon.SecurityServer.Identity.Stores
         Task AddServiceToUserAsync(TUser user, string serviceId);
         Task<bool> IsUserRegisteredForServiceAsync(TUser user, string serviceId);
         Task<IEnumerable<string>> GetServicesAsync(TUser user);
+        Task AddAppToUserAsync(TUser user, string appId);
+        Task<bool> IsUserRegisteredForAppAsync(TUser user, string appId);
     }
 }

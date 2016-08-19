@@ -43,18 +43,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AddClaimModel.cs" />
+    <Compile Include="IClient.cs" />
     <Compile Include="ProfileSTSClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Common\Common.csproj">
-      <Project>{D79ED90B-B8B8-4F01-B9C9-021A8A6163AD}</Project>
-      <Name>Common</Name>
-    </ProjectReference>
     <ProjectReference Include="..\GenericSTSClient\GenericSTSClient.csproj">
       <Project>{E6064E38-13C3-4F5F-8BB5-8C77D61E2AD8}</Project>
       <Name>GenericSTSClient</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ProfileSTS.Shared\ProfileSTS.Shared.csproj">
+      <Project>{484bec9d-e57a-47d2-b016-c16722a23387}</Project>
+      <Name>ProfileSTS.Shared</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

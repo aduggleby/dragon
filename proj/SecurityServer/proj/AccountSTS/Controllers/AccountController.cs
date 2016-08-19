@@ -43,14 +43,16 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
         private ApplicationUserManager _userManager;
         private readonly IFederationService _federationService;
         private MailService _mailService;
+        private readonly IAppService _appService;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager, IDragonUserStore<AppMember> userStore, IFederationService federationService)
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager, IDragonUserStore<AppMember> userStore, IFederationService federationService, IAppService appService)
         {
             _userStore = userStore;
             _federationService = federationService;
             _mailService = new MailService();
+            _appService = appService;
             UserManager = userManager;
             SignInManager = signInManager;
         }
@@ -159,6 +161,10 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
                             HandleUserNotRegisteredForService(model.Email);
                             return View();
                         }
+                        catch (AppNotAllowedException)
+                        {
+                            return await SelectAppOrRedirect(model.Email);
+                        }
                         // or force a password reset
                         //return await RequestPasswordReset(new ForgotPasswordViewModel { Email = user.Email});
                     }
@@ -168,6 +174,10 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
                     // Not a legacy password, so rethrow
                     throw;
                 }
+            }
+            catch (AppNotAllowedException)
+            {
+                return await SelectAppOrRedirect(model.Email);
             }
 
             switch (result)
@@ -185,6 +195,26 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
                     await HandleLoginFailure(model);
                     return View(model);
             }
+        }
+
+        private async Task<ActionResult> SelectAppOrRedirect(string email)
+        {
+            var user = await _userStore.FindByEmailAsync(email);
+            var allowedApps = _appService.GetRegisteredAppsInSameGroup(Guid.Parse(user.Id), Guid.Parse(RequestHelper.GetCurrentAppId()));
+            if (allowedApps.Count == 1)
+            {
+                // no need for the app selection screen, just redirect to the only possible app
+                return Redirect(allowedApps.First().Url);
+            }
+            return RedirectToAction("SelectApp", new {email, appId = RequestHelper.GetCurrentAppId()});
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> SelectApp(string email, string appId)
+        {
+            var user = await _userStore.FindByEmailAsync(email);
+            var allowedApps = _appService.GetRegisteredAppsInSameGroup(Guid.Parse(user.Id), Guid.Parse(appId));
+            return View(allowedApps);
         }
 
         private async Task HandleLoginFailure(LoginViewModel model)
@@ -237,6 +267,7 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> VerifyCode(VerifyCodeViewModel model)
         {
+            throw new NotSupportedException();
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -283,8 +314,6 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    await _userStore.AddServiceToUserAsync(user, RequestHelper.GetCurrentServiceId()); // throws if already registered, but it's a new user
-
                     //  Comment the following line to prevent log in until the user is confirmed.
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
                     
@@ -298,7 +327,8 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
                     var returnUrl = Request.QueryString["ReturnUrl"];
                     return string.IsNullOrEmpty(returnUrl) ? RedirectToAction("Index", "Home") : RedirectToLocal(returnUrl);
                 }
-                Logger.Trace("Register failed: {0}", string.Join("; ", result.Errors));
+                var message = $"Register failed: {string.Join("; ", result.Errors)}";
+                StackExchange.Exceptional.ErrorStore.LogException(new Exception(message), null);
 
                 // avoid Name x is already taken. errors
                 var identityResult = new IdentityResult(result.Errors.Where(x => !x.StartsWith("Name ")));
@@ -548,6 +578,10 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
                 ViewBag.RouteValues["ReturnUrl"] = returnUrl;
                 return RedirectToAction("Login", ViewBag.RouteValues);
             }
+            catch (AppNotAllowedException)
+            {
+                return await SelectAppOrRedirect(loginInfo.Email);
+            }
 
             switch (result)
             {
@@ -582,7 +616,7 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
                     if (user == null)
                     {
                         Logger.Trace("External login: user {0} does not have an account", loginInfo.Email);
-                        user = await CreateUser(loginInfo.Email, loginInfo);
+                        user = await CreateExternalUser(loginInfo.Email, loginInfo);
                         if (user == null)
                         {
                             ModelState.AddModelError("", "Internal error, please try again.");
@@ -699,10 +733,14 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
                     HandleUserNotRegisteredForService(model.Email);
                     return View(model);
                 }
-
+                catch (AppNotAllowedException)
+                {
+                    return await SelectAppOrRedirect(model.Email);
+                }
                 switch (result)
                 {
                     case SignInStatus.Success:
+                        await AddLoginToUser(user, info);
                         break;
                     case SignInStatus.LockedOut:
                         return View("Lockout");
@@ -719,27 +757,27 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
             }
             else
             {
-                user = await CreateUser(model.Email, info);
+                user = await CreateExternalUser(model.Email, info);
                 if (user == null)
                 {
                     ModelState.AddModelError("", "Internal error, please try again.");
                     Logger.Log(LogLevel.Error, "Unable to create the user.");
                     return View(model);
                 }
+                await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
             }
+            return RedirectToLocal(returnUrl);
+        }
+
+        private async Task AddLoginToUser(AppMember user, ExternalLoginInfo info)
+        {
             if (!(await _userStore.GetLoginsAsync(user)).Any(x =>
                             info.Login.LoginProvider == x.LoginProvider &&
                             info.Login.ProviderKey == x.ProviderKey))
             {
                 await _userStore.AddLoginAsync(user, info.Login);
             }
-            if (!(await _userStore.GetServicesAsync(user)).Contains(RequestHelper.GetCurrentServiceId()))
-            {
-                await AddServiceToUser(user, RequestHelper.GetCurrentServiceId());
             }
-            await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-            return RedirectToLocal(returnUrl);
-        }
 
         /// <summary>
         /// Logout user if not registered for current service, adds error.
@@ -753,22 +791,7 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
         }
 
-        private async Task AddServiceToUser(AppMember user, string serviceId)
-        {
-            if (await _userStore.IsUserRegisteredForServiceAsync(user, serviceId))
-            {
-                return;
-            }
-            var result = _userStore.AddServiceToUserAsync(user, serviceId);
-            await result;
-            if (result.IsFaulted)
-            {
-                Logger.Trace("Add service to user failed: user {0}, service {1}", user.Email, serviceId);
-                ModelState.AddModelError("", "Unable to add service.");
-            }
-        }
-
-        private async Task<AppMember> CreateUser(string email, ExternalLoginInfo info)
+        private async Task<AppMember> CreateExternalUser(string email, ExternalLoginInfo info)
         {
             var user = new AppMember {UserName = email, Email = email};
             var result = await UserManager.CreateAsync(user);
@@ -777,8 +800,6 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
                 result = await UserManager.AddLoginAsync(user.Id, info.Login);
                 if (result.Succeeded)
                 {
-                    await _userStore.AddServiceToUserAsync(user, RequestHelper.GetCurrentServiceId());
-
                     return await Task.FromResult(user);
                 }
                 else

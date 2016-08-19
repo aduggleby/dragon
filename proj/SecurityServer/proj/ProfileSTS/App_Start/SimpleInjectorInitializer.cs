@@ -59,7 +59,7 @@ namespace Dragon.SecurityServer.ProfileSTS
  
             container.RegisterPerWebRequest<IDragonUserStore<AppMember>>(() =>
                 new Dragon.SecurityServer.ChainedIdentity.Stores.UserStore<AppMember>(new List<IDragonUserStore<AppMember>>{
-                    new UserStore<AppMember>(new Repository<AppMember>(), new Repository<IdentityUserClaim>(), new Repository<IdentityUserLogin>(), null)
+                    new UserStore<AppMember>(new Repository<AppMember>(), new Repository<IdentityUserClaim>(), new Repository<IdentityUserLogin>(), null, null)
                 }));
  
             container.RegisterPerWebRequest(() => ApplicationUserManager.Create(container));

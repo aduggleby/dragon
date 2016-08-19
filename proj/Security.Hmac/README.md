@@ -6,7 +6,7 @@ for GET requests from client applications (apps) to web services (services).
 
 Following parameter are used:
 
-* appId: A unique id of a client application, each app shares a secret with each service
+* appId: A unique id of a client application which consumes a service, each app shares a secret with each service
 * serviceId: A unique id of a web service, each service shares a secret with each app
 * userId: A unique id of an user of a client application
 * expiry: A timestamp in the future which specifies until when the request is valid, represented as ticks
