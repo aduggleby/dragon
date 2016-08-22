@@ -206,13 +206,14 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
                 // no need for the app selection screen, just redirect to the only possible app
                 return Redirect(allowedApps.First().Url);
             }
-            return RedirectToAction("SelectApp", new {email, appId = RequestHelper.GetCurrentAppId()});
+            return RedirectToAction("SelectApp", ViewBag.RouteValues);
         }
 
         [HttpGet]
-        public async Task<ActionResult> SelectApp(string email, string appId)
+        public async Task<ActionResult> SelectApp(string appId)
         {
-            var user = await _userStore.FindByEmailAsync(email);
+            var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+            if (user == null) return new HttpNotFoundResult();
             var allowedApps = _appService.GetRegisteredAppsInSameGroup(Guid.Parse(user.Id), Guid.Parse(appId));
             return View(allowedApps);
         }
