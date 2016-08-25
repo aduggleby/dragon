@@ -11,5 +11,6 @@ namespace Dragon.SecurityServer.AccountSTS.Models
         public string ServiceId { get; set; }
         public DateTime DateTime { get; set; }
         public string Type { get; set; }
+        public string Details { get; set; }
     }
 }
