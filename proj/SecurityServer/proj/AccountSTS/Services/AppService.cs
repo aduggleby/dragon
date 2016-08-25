@@ -33,7 +33,9 @@ namespace Dragon.SecurityServer.AccountSTS.Services
         private IList<AppInfo> GetRegisteredAppsInSameGroup(Guid userId, Guid appId, bool othersOnly)
         {
             var appInfo = _consumerInfoRepository.Get(appId.ToString());
+            if (appInfo == null) return new List<AppInfo>();
             var appsInUse = _consumerUserRepository.GetByWhere(new Dictionary<string, object> {{"UserId", userId}}).Select(x => x.AppId).ToList();
+            if (!appsInUse.Any()) return new List<AppInfo>();
             IList<AppInfo> consumerInfos = null;
             using (var c = ConnectionHelper.Open())
             {
