@@ -12,7 +12,7 @@
             <hr />
             @foreach (var app in Model)
             {
-                <p><a href="@app.Url">@app.Url</a></p>
+                <p><a href="@app.Url">@( string.IsNullOrWhiteSpace(app.Name) ? app.Url : app.Name )</a></p>
             }
         </section>
     </div>

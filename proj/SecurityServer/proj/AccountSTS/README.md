@@ -22,6 +22,21 @@ Setup
 
         <add key="AuthenticationProviders" value="Microsoft, Facebook, Twitter" />
         <add key="AuthenticationProvider.Microsoft.ClientID" value="0000000000000000" />
-        <add key="AuthenticationProvider.Microsoft.ClientSecret" value="00000000000000000000000000000000" /
+        <add key="AuthenticationProvider.Microsoft.ClientSecret" value="00000000000000000000000000000000" />
+		...
 
     * Microsoft authentication service: use [AccountSTS-BaseURL]/signin-microsoft as Redirect URL
+
+
+Usage
+-----
+
+### App groups
+
+App groups are used to restrict access to specific apps in predefined sets of apps.
+
+Automated registration of users to apps is restricted to one app per group, but via the database (IdentityConsumerUser table) multiple apps of the same group can be assigned to users. In this case a selection screen is shown on login, which uses the Url and Name columns in the ConsumerInfo table. The ConsumerInfo table also allows assigning apps to groups.
+
+### Authentication providers
+
+* Google: https://console.cloud.google.com/apis/credentials/

@@ -135,6 +135,7 @@ namespace Dragon.SecurityServer.AccountSTS
         private async Task PostSignIn(AppMember user)
         {
             var appId = RequestHelper.GetCurrentAppId();
+            await AddLoginActivity(user);
             if (_appService.GetOtherRegisteredAppsInSameGroup(Guid.Parse(user.Id), Guid.Parse(appId)).Any())
             {
                 throw new AppNotAllowedException();
@@ -143,10 +144,15 @@ namespace Dragon.SecurityServer.AccountSTS
             // The service and app ids are validated by Dragon.Security.Hmac
             await AddCurrentServiceIdToUserIfNotAlreadyAdded(user);
             await AddCurrentAppIdToUserIfNotAlreadyAdded(user);
-            AddActivity(user);
         }
 
-        private void AddActivity(AppMember user)
+        private async Task<string> GetLoginProvider()
+        {
+            var loginInfo = await AuthenticationManager.GetExternalLoginInfoAsync();
+            return loginInfo?.Login?.LoginProvider ?? "Local";
+        }
+
+        private async Task AddLoginActivity(AppMember user)
         {
             if (user == null)
             {
@@ -158,7 +164,8 @@ namespace Dragon.SecurityServer.AccountSTS
                 ServiceId = RequestHelper.GetCurrentServiceId(),
                 DateTime = DateTime.UtcNow,
                 Type = "Login",
-                UserId = user.Id
+                UserId = user.Id,
+                Details = "Provider: " + await GetLoginProvider()
             });
         }
 
