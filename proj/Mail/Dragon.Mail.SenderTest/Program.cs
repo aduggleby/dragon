@@ -26,7 +26,7 @@ namespace Dragon.Mail.SenderTest
             var generator = new MailGeneratorService(queue, mailSenderService: senderx, async: false);
 
 
-            var loader = new FileFolderTemplateRepository(@"G:\WhatAVenture\Design\Tool\UX\System Mails\templates");
+            var loader = new FileFolderTemplateRepository(@"..\..\templates");
 
             loader.EnumerateTemplates(generator.Register);
 
@@ -34,26 +34,12 @@ namespace Dragon.Mail.SenderTest
             recipient.email = "bob@example.org";
             recipient.fullname = "Bob";
             recipient.userid = "baxtor";
-
-            dynamic sender = new ExpandoObject();
-            sender.email = "bob@example.org";
-            sender.fullname = "Alice";
-            sender.userid = "alicex";
-
-
-            dynamic conversation = new ExpandoObject();
-            conversation.url = "http://www.google.com";
-            conversation.subject = "My Topic";
-            conversation.message =
-                "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.!";
-            conversation.recipient = recipient;
-            conversation.sender = sender;
-
-
+            
             dynamic data = new ExpandoObject();
-            data.conversation = conversation;
+            data.link = "http://www.google.com";
+            data.name = "Google";
 
-            generator.Send(recipient, "ConversationMessageNotification", data);
+            generator.Send(recipient, "Welcome", data);
 
             //while (senderx.ProcessNext())
             //{
