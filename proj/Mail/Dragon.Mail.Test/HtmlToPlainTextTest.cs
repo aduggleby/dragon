@@ -63,5 +63,21 @@ footer
 
 
         }
+
+        [TestMethod]
+        public void LinkTest()
+        {
+            const string html =
+            @"<b>The Link Test</b>
+<a href=""http://www.google.com"">To Google</a> or to <a href=""http://www.bing.com"">To Bing</a><br/><br/><a href=""http://example.org"">Footer</a>";
+
+            const string plain = @"The Link Test
+To Google (http://www.google.com) or To Bing (http://www.bing.com)
+
+Footer (http://example.org)";
+
+            var actual = HtmlToPlainText.ConvertHtml(html);  
+            Assert.AreEqual(plain, actual);
+        }
     }
 }
