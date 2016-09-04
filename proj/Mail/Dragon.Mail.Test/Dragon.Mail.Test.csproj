@@ -97,7 +97,7 @@
       <Project>{A573CAFD-218A-4D88-BE07-B099D99773BA}</Project>
       <Name>Dragon.Mail</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Dragon.Mail\Dragon.Mail.SqlQueue\Dragon.Mail.SqlQueue.csproj">
+    <ProjectReference Include="..\Dragon.Mail.SqlQueue\Dragon.Mail.SqlQueue.csproj">
       <Project>{254794ef-5ef6-4d16-bac0-62db7201072e}</Project>
       <Name>Dragon.Mail.SqlQueue</Name>
     </ProjectReference>

@@ -1,19 +1,26 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dragon.Mail", "Dragon.Mail.csproj", "{A573CAFD-218A-4D88-BE07-B099D99773BA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dragon.Mail", "Dragon.Mail\Dragon.Mail.csproj", "{A573CAFD-218A-4D88-BE07-B099D99773BA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dragon.Mail.Test", "..\Dragon.Mail.Test\Dragon.Mail.Test.csproj", "{36CA952D-3765-4D90-B415-91CC2E442743}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dragon.Mail.Test", "Dragon.Mail.Test\Dragon.Mail.Test.csproj", "{36CA952D-3765-4D90-B415-91CC2E442743}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dragon.Mail.Service", "..\Dragon.Mail.Service\Dragon.Mail.Service.csproj", "{BD811472-9ECA-45FF-A8CF-FBB09F317125}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dragon.Mail.Service", "Dragon.Mail.Service\Dragon.Mail.Service.csproj", "{BD811472-9ECA-45FF-A8CF-FBB09F317125}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dragon.Mail.SenderTest", "Dragon.Mail.SenderTest\Dragon.Mail.SenderTest.csproj", "{BFD69C59-F7F3-413B-8328-58B86D006B5B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dragon.Mail.SqlQueue", "Dragon.Mail.SqlQueue\Dragon.Mail.SqlQueue.csproj", "{254794EF-5EF6-4D16-BAC0-62DB7201072E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dragon.Mail.IdentityMessageService", "..\Dragon.Mail.IdentityMessageService\Dragon.Mail.IdentityMessageService.csproj", "{59FFA37D-C273-4F59-A2BD-8CE6DDB6D6A9}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Code", "Code", "{A7BFF2F6-E14B-46A7-BD66-5A08EE9E7B99}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{AC1BECF0-6718-4AC6-B685-72F62B51EAF8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{52EA824C-1AA5-47F8-A75A-E8BF2E7920B1}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,12 +48,15 @@ Global
 		{254794EF-5EF6-4D16-BAC0-62DB7201072E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{254794EF-5EF6-4D16-BAC0-62DB7201072E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{254794EF-5EF6-4D16-BAC0-62DB7201072E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{59FFA37D-C273-4F59-A2BD-8CE6DDB6D6A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{59FFA37D-C273-4F59-A2BD-8CE6DDB6D6A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{59FFA37D-C273-4F59-A2BD-8CE6DDB6D6A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{59FFA37D-C273-4F59-A2BD-8CE6DDB6D6A9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A573CAFD-218A-4D88-BE07-B099D99773BA} = {A7BFF2F6-E14B-46A7-BD66-5A08EE9E7B99}
+		{36CA952D-3765-4D90-B415-91CC2E442743} = {AC1BECF0-6718-4AC6-B685-72F62B51EAF8}
+		{BD811472-9ECA-45FF-A8CF-FBB09F317125} = {A7BFF2F6-E14B-46A7-BD66-5A08EE9E7B99}
+		{BFD69C59-F7F3-413B-8328-58B86D006B5B} = {AC1BECF0-6718-4AC6-B685-72F62B51EAF8}
+		{254794EF-5EF6-4D16-BAC0-62DB7201072E} = {A7BFF2F6-E14B-46A7-BD66-5A08EE9E7B99}
 	EndGlobalSection
 EndGlobal

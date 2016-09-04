@@ -195,6 +195,8 @@ namespace Dragon.Mail
                         mail.Body, null, MediaTypeNames.Text.Html);
 
                 mm.AlternateViews.Add(htmlView);
+                
+                // set html as directy body?
             }
 
             // Use a defined text mail if we have one, otherwise use the converted html text
@@ -210,6 +212,8 @@ namespace Dragon.Mail
                     plainTextBody, null, MediaTypeNames.Text.Plain);
 
             mm.AlternateViews.Add(plainTextView);
+
+            
             return mm;
         }
     }

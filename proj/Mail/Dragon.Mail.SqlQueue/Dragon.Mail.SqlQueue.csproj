@@ -63,7 +63,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Dragon.Mail.csproj">
+    <ProjectReference Include="..\Dragon.Mail\Dragon.Mail.csproj">
       <Project>{A573CAFD-218A-4D88-BE07-B099D99773BA}</Project>
       <Name>Dragon.Mail</Name>
     </ProjectReference>

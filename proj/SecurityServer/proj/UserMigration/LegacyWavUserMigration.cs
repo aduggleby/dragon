@@ -35,6 +35,7 @@ namespace UserMigration
                 var usersData = connection.Query(@"
                     SELECT u.UserID, Service, Email, [Key], Secret, Created, Modified
                     FROM [DragonRegistration] dr JOIN [User] u ON dr.UserID = u.UserID
+                    WHERE Email = 'alex@whataventure.com'
                     ").ToList(); // WHERE Email like 'whataventure.test%' -- TODO: test, remove
                 Logger.Info($"Found {usersData.Count} users, migrating...");
                 foreach (var userData in usersData)
