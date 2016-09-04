@@ -25,7 +25,7 @@ namespace Dragon.SecurityServer.AccountSTS.Client.Test
                 conn.CreateTableIfNotExists<AppMember>();
                 conn.CreateTableIfNotExists<IdentityUserClaim>();
                 conn.CreateTableIfNotExists<IdentityUserLogin>();
-                conn.CreateTableIfNotExists<IdentityService>();
+                conn.CreateTableIfNotExists<IdentityUserService>();
             };
             IntegrationTestInitializer.TestDataCallback = (sid, uid, aid, dbn, sec) =>
             {

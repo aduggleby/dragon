@@ -3,6 +3,7 @@ using Dragon.Data.Attributes;
 
 namespace Dragon.SecurityServer.Identity.Models
 {
+    [Table("IdentityUserClaim")]
     public class IdentityUserClaim
     {
         [Key]

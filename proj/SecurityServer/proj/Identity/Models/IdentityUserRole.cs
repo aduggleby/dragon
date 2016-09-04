@@ -2,6 +2,7 @@
 
 namespace Dragon.SecurityServer.Identity.Models
 {
+    [Table("IdentityUserRole")]
     public class IdentityUserRole
     {
         [Key]

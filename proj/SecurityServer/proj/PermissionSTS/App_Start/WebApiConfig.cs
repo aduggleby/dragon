@@ -13,7 +13,7 @@ namespace Dragon.SecurityServer.PermissionSTS
 
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
-                routeTemplate: "api/{controller}/{action}/{id}",
+                routeTemplate: "Api/{controller}/{action}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
         }

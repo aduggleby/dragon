@@ -43,7 +43,7 @@ namespace Dragon.SecurityServer.PermissionSTS
         {
             var manager = new ApplicationUserManager(new UserStore<AppMember>(
                 new Repository<AppMember>(), new Repository<IdentityRole>(), new Repository<IdentityUserRole>(), 
-                new Repository<IdentityUserClaim>(), new Repository<IdentityUserLogin>(), new Repository<IdentityService>()));
+                new Repository<IdentityUserClaim>(), new Repository<IdentityUserLogin>(), new Repository<IdentityUserService>(), new Repository<IdentityUserApp>()));
             // Configure validation logic for usernames
             manager.UserValidator = new UserValidator<AppMember>(manager)
             {

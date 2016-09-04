@@ -1,11 +1,14 @@
 ﻿using System;
+using System.Linq;
 using System.Net.Mail;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web.Configuration;
-using Dragon.SecurityServer.AccountSTS.App_Start;
+using Dragon.Data.Interfaces;
+using Dragon.SecurityServer.AccountSTS.Controllers;
 using Dragon.SecurityServer.AccountSTS.Helpers;
 using Dragon.SecurityServer.AccountSTS.Models;
+using Dragon.SecurityServer.AccountSTS.Services;
 using Dragon.SecurityServer.Identity.Stores;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
@@ -67,11 +70,11 @@ namespace Dragon.SecurityServer.AccountSTS
             // Configure validation logic for passwords
             manager.PasswordValidator = new PasswordValidator
             {
-                RequiredLength = 6,
-                RequireNonLetterOrDigit = true,
-                RequireDigit = true,
-                RequireLowercase = true,
-                RequireUppercase = true,
+                RequiredLength = 8,
+                RequireNonLetterOrDigit = false,
+                RequireDigit = false,
+                RequireLowercase = false,
+                RequireUppercase = false,
             };
 
             // Configure user lockout defaults
@@ -107,11 +110,15 @@ namespace Dragon.SecurityServer.AccountSTS
     public class ApplicationSignInManager : SignInManager<AppMember, string>
     {
         private readonly IDragonUserStore<AppMember> _userStore;
+        private readonly IRepository<UserActivity> _userActivityRepository;
+        private readonly IAppService _appService;
 
-        public ApplicationSignInManager(ApplicationUserManager userManager, IAuthenticationManager authenticationManager, IDragonUserStore<AppMember> userStore)
+        public ApplicationSignInManager(ApplicationUserManager userManager, IAuthenticationManager authenticationManager, IDragonUserStore<AppMember> userStore, IRepository<UserActivity> userActivityRepository, IAppService appService)
             : base(userManager, authenticationManager)
         {
             _userStore = userStore;
+            _userActivityRepository = userActivityRepository;
+            _appService = appService;
         }
 
         public override Task<ClaimsIdentity> CreateUserIdentityAsync(AppMember user)
@@ -119,45 +126,65 @@ namespace Dragon.SecurityServer.AccountSTS
             return user.GenerateUserIdentityAsync((ApplicationUserManager)UserManager);
         }
 
-        // Customized to make the method service aware
-        public new async Task<SignInStatus> ExternalSignInAsync(ExternalLoginInfo loginInfo, bool isPersistent)
+        public override async Task SignInAsync(AppMember user, bool isPersistent, bool rememberBrowser)
         {
-            var user = await UserManager.FindAsync(loginInfo.Login);
-            // This is needed for initial registration, but should not be harmful in consecutive signin requests.
-            await AddCurrentServiceIdToUserIfNotAlreadyAdded(user);
-            return await base.ExternalSignInAsync(loginInfo, isPersistent);
+            await base.SignInAsync(user, isPersistent, rememberBrowser);
+            await PostSignIn(user);
         }
 
-        // Customized to make the method service aware
-        public override async Task<SignInStatus> PasswordSignInAsync(string userName, string password, bool isPersistent, bool shouldLockout)
+        private async Task PostSignIn(AppMember user)
         {
-            var status = await base.PasswordSignInAsync(userName, password, isPersistent, shouldLockout);
-            if (status == SignInStatus.Success)
+            var appId = RequestHelper.GetCurrentAppId();
+            await AddLoginActivity(user);
+            if (_appService.GetOtherRegisteredAppsInSameGroup(Guid.Parse(user.Id), Guid.Parse(appId)).Any())
             {
-                var user = await UserManager.FindAsync(userName, password);
-                await AddCurrentServiceIdToUserIfNotAlreadyAdded(user);
-                // At the moment all requests to all services are allowed
-                /*
-                // throw until using Identity where the status is more flexible, see https://github.com/aspnet/Identity/issues/176
-                throw new NotRegisteredForServiceException();
-                */
+                throw new AppNotAllowedException();
             }
-            return status;
+            // Only multiple apps per user and group are not allowed, automatically connect services and apps to the user otherwise.
+            // The service and app ids are validated by Dragon.Security.Hmac
+            await AddCurrentServiceIdToUserIfNotAlreadyAdded(user);
+            await AddCurrentAppIdToUserIfNotAlreadyAdded(user);
+        }
+
+        private async Task<string> GetLoginProvider()
+        {
+            var loginInfo = await AuthenticationManager.GetExternalLoginInfoAsync();
+            return loginInfo?.Login?.LoginProvider ?? "Local";
+        }
+
+        private async Task AddLoginActivity(AppMember user)
+        {
+            if (user == null)
+            {
+                return;
+            }
+            _userActivityRepository.Insert(new UserActivity
+            {
+                AppId = RequestHelper.GetCurrentAppId(),
+                ServiceId = RequestHelper.GetCurrentServiceId(),
+                DateTime = DateTime.UtcNow,
+                Type = "Login",
+                UserId = user.Id,
+                Details = "Provider: " + await GetLoginProvider()
+            });
         }
 
         private async Task AddCurrentServiceIdToUserIfNotAlreadyAdded(AppMember user)
         {
             var currentServiceId = RequestHelper.GetCurrentServiceId();
-            if (!await IsUserRegisteredForService(user, currentServiceId))
+            if (user != null && !await _userStore.IsUserRegisteredForServiceAsync(user, currentServiceId)) // user == null on registration
             {
-                // the serviceId is validated by Dragon.Security.Hmac
                 await _userStore.AddServiceToUserAsync(user, currentServiceId);
             }
         }
 
-        private async Task<bool> IsUserRegisteredForService(AppMember user, string currentServiceId)
+        private async Task AddCurrentAppIdToUserIfNotAlreadyAdded(AppMember user)
         {
-            return user == null || await _userStore.IsUserRegisteredForServiceAsync(user, currentServiceId); // user == null on regstration
+            var currentAppId = RequestHelper.GetCurrentAppId();
+            if (user != null && !await _userStore.IsUserRegisteredForAppAsync(user, currentAppId)) // user == null on registration
+            {
+                await _userStore.AddAppToUserAsync(user, currentAppId);
+            }
         }
     }
 }

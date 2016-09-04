@@ -10,6 +10,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity", "Identity\Identity.csproj", "{E0666626-EA75-4728-8C76-9AD78DB56D65}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProfileSTS", "ProfileSTS\ProfileSTS.csproj", "{80EC5191-C6AD-46D0-80AB-E53C45C4FC3E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{484BEC9D-E57A-47D2-B016-C16722A23387} = {484BEC9D-E57A-47D2-B016-C16722A23387}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChainedIdentity", "ChainedIdentity\ChainedIdentity.csproj", "{479FB432-D9C9-4F6C-A146-2B8B6E5C089F}"
 EndProject
@@ -57,6 +60,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserMigration", "UserMigration\UserMigration.csproj", "{63AD3570-180A-4B0B-954E-311E471FF474}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserMigrationTest", "UserMigrationTest\UserMigrationTest.csproj", "{D133C138-EA7B-4319-8C30-A18624DB575C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProfileSTS.Shared", "ProfileSTS.Shared\ProfileSTS.Shared.csproj", "{484BEC9D-E57A-47D2-B016-C16722A23387}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -144,6 +149,10 @@ Global
 		{D133C138-EA7B-4319-8C30-A18624DB575C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D133C138-EA7B-4319-8C30-A18624DB575C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D133C138-EA7B-4319-8C30-A18624DB575C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{484BEC9D-E57A-47D2-B016-C16722A23387}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{484BEC9D-E57A-47D2-B016-C16722A23387}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{484BEC9D-E57A-47D2-B016-C16722A23387}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{484BEC9D-E57A-47D2-B016-C16722A23387}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

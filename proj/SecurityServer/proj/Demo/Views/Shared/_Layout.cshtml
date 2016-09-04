@@ -2,7 +2,8 @@
 @using System.Web.Configuration
 @using ClaimTypes = System.IdentityModel.Claims.ClaimTypes
 @{
-    var email = (User.Identity.IsAuthenticated) ? ((ClaimsIdentity) User.Identity).Claims.First(x => x.Type == ClaimTypes.Email).Value : null;
+    var emailClaim = (User.Identity.IsAuthenticated) ? ((ClaimsIdentity) User.Identity).Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email) : null;
+    var email = emailClaim != null ? emailClaim.Value : "-";
 }
 <!DOCTYPE html>
 <html>

@@ -57,6 +57,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="LegacyWavProfileMigration.cs" />
     <Compile Include="LegacyWavUserMigration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -68,6 +69,10 @@
     <ProjectReference Include="..\Identity\Identity.csproj">
       <Project>{E0666626-EA75-4728-8C76-9AD78DB56D65}</Project>
       <Name>Identity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ProfileSTS\ProfileSTS.csproj">
+      <Project>{80ec5191-c6ad-46d0-80ab-e53c45c4fc3e}</Project>
+      <Name>ProfileSTS</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
