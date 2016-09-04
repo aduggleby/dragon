@@ -8,6 +8,8 @@ using System.Web;
 namespace Dragon.Mail.Utils
 {
     // Source: http://www.blackbeltcoder.com/Articles/strings/convert-html-to-text
+    // Adaptations:
+    // - Parsing of links and add them in brackets to the text output
     
     /// <summary>
     /// Converts HTML to plain text.
@@ -83,6 +85,8 @@ namespace Dragon.Mail.Utils
             _html = html;
             _pos = 0;
 
+            var lastLink = string.Empty;
+
             // Process input
             while (!EndOfText)
             {
@@ -90,7 +94,8 @@ namespace Dragon.Mail.Utils
                 {
                     // HTML tag
                     bool selfClosing;
-                    string tag = ParseTag(out selfClosing);
+                    Dictionary<string, string> attributes;
+                    string tag = ParseTag(out selfClosing, out attributes);
 
                     // Handle special tag cases
                     if (tag == "body")
@@ -113,6 +118,23 @@ namespace Dragon.Mail.Utils
                     {
                         // Exit preformatted mode
                         _text.Preformatted = false;
+                    }
+                    else if (tag == "a")
+                    {
+                        // Store link mode
+                        if (attributes.ContainsKey("href"))
+                        {
+                            lastLink = attributes["href"];
+                        }
+                    }
+                    else if (tag == "/a")
+                    {
+                        // Write link 
+                        if (!string.IsNullOrWhiteSpace(lastLink))
+                        {
+                            _text.Write(string.Format(" ({0})", lastLink));
+                            lastLink = string.Empty;
+                        }
                     }
 
                     string value;
@@ -141,8 +163,10 @@ namespace Dragon.Mail.Utils
 
         // Eats all characters that are part of the current tag
         // and returns information about that tag
-        protected string ParseTag(out bool selfClosing)
+        protected string ParseTag(out bool selfClosing, out Dictionary<string, string> attributes)
         {
+            attributes = new Dictionary<string, string>();
+
             string tag = String.Empty;
             selfClosing = false;
 
@@ -160,11 +184,26 @@ namespace Dragon.Mail.Utils
                     MoveAhead();
                 tag = _html.Substring(start, _pos - start).ToLower();
 
+                int startAttr = _pos;
+                string attr = null;
                 // Parse rest of tag
                 while (!EndOfText && Peek() != '>')
                 {
                     if (Peek() == '"' || Peek() == '\'')
-                        EatQuotedValue();
+                    {
+                        var attrValue = EatQuotedValue();
+
+                        if (!string.IsNullOrWhiteSpace(attr))
+                        {
+                            attributes.Add(attr, attrValue);
+                        }
+                    }
+                    else if (Peek() == '=')
+                    {
+                        // tag finished
+                        attr = _html.Substring(startAttr, _pos - startAttr).ToLower().Trim();
+                        MoveAhead();
+                    }
                     else
                     {
                         if (Peek() == '/')
@@ -188,7 +227,9 @@ namespace Dragon.Mail.Utils
                 {
                     // Consume a tag
                     bool selfClosing;
-                    if (ParseTag(out selfClosing) == endTag)
+                    Dictionary<string, string> attributes;
+
+                    if (ParseTag(out selfClosing, out attributes) == endTag)
                         return;
                     // Use recursion to consume nested tags
                     if (!selfClosing && !tag.StartsWith("/"))
@@ -240,8 +281,10 @@ namespace Dragon.Mail.Utils
         }
 
         // Moves the current position past a quoted value
-        protected void EatQuotedValue()
+        protected string EatQuotedValue()
         {
+            string value = string.Empty;
+
             char c = Peek();
             if (c == '"' || c == '\'')
             {
@@ -249,12 +292,16 @@ namespace Dragon.Mail.Utils
                 MoveAhead();
                 // Find end of value
                 int start = _pos;
-                _pos = _html.IndexOfAny(new char[] { c, '\r', '\n' }, _pos);
+                 var _end = _html.IndexOfAny(new char[] { c, '\r', '\n' }, _pos);
+                value = _html.Substring(start, _end - start);
+                _pos = _end;
                 if (_pos < 0)
                     _pos = _html.Length;
                 else
                     MoveAhead();    // Closing quote
             }
+
+            return value;
         }
 
         /// <summary>
@@ -267,6 +314,7 @@ namespace Dragon.Mail.Utils
             private int _emptyLines;
             private bool _preformatted;
 
+
             // Construction
             public TextBuilder()
             {
@@ -275,7 +323,7 @@ namespace Dragon.Mail.Utils
                 _emptyLines = 0;
                 _preformatted = false;
             }
-
+        
             /// <summary>
             /// Normally, extra whitespace characters are discarded.
             /// If this property is set to true, they are passed
