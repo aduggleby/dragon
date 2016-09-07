@@ -17,6 +17,10 @@ namespace Dragon.Mail.Impl
             {
                 displayName = receiver.fullname;
             }
+            if (receiver.GetType().GetProperty("email") == null)
+            {
+                throw new Exception("The receiver object must have an email property denoting who to send the e-mail to.");
+            }
             var email = receiver.email;
 
             mail.Receiver = new System.Net.Mail.MailAddress(email, displayName);
