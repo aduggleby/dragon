@@ -13,17 +13,29 @@ namespace Dragon.Mail.Impl
         public void Map(dynamic receiver, Models.Mail mail)
         {
             var displayName = (string)null;
-            if (receiver.GetType().GetProperty("fullname") != null)
+            if (HasProperty(receiver, "fullname"))
             {
                 displayName = receiver.fullname;
             }
-            if (receiver.GetType().GetProperty("email") == null)
+            if (!HasProperty(receiver, "email"))
             {
                 throw new Exception("The receiver object must have an email property denoting who to send the e-mail to.");
             }
             var email = receiver.email;
 
             mail.Receiver = new System.Net.Mail.MailAddress(email, displayName);
+        }
+
+        private bool HasProperty(dynamic receiver, string name)
+        {
+            if (receiver is ExpandoObject)
+            {
+                return ((IDictionary<String, object>)receiver).ContainsKey(name);
+            }
+            else
+            {
+                return receiver.GetType().GetProperty(name) != null;
+            }
         }
     }
 }
