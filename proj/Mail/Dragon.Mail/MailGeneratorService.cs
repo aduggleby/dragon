@@ -39,9 +39,7 @@ namespace Dragon.Mail
             IMailSenderService mailSenderService = null,
             bool? async = null)
         {
-            if (queue == null) throw new ArgumentException("Queue cannot be null.", "queue");
-
-            m_queue = queue;
+            m_queue = queue ?? new InMemoryMailQueue();
 
             IConfiguration configuration1 = configuration ?? new DefaultConfiguration();
 
@@ -60,10 +58,13 @@ namespace Dragon.Mail
             m_asyncActive = async.HasValue ? async.Value : StringToBoolUtil.Interpret(configuration1.GetValue(APP_KEY_ASYNCACTIVE));
 
             if (!m_asyncActive && mailSenderService == null)
-                throw new ArgumentException("When Async is not active MailSenderService cannot be null.", "mailSenderService");
-
-
-            m_mailSenderService = mailSenderService;
+            {
+                m_mailSenderService = new MailSenderService(m_queue);
+            }
+            else
+            {
+                m_mailSenderService = mailSenderService;
+            }
         }
 
         public void Register(Template template)
