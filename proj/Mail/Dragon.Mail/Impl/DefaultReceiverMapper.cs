@@ -12,7 +12,11 @@ namespace Dragon.Mail.Impl
     {
         public void Map(dynamic receiver, Models.Mail mail)
         {
-            var displayName = receiver.fullname;
+            var displayName = (string)null;
+            if (receiver.GetType().GetProperty("fullname") != null)
+            {
+                displayName = receiver.fullname;
+            }
             var email = receiver.email;
 
             mail.Receiver = new System.Net.Mail.MailAddress(email, displayName);
