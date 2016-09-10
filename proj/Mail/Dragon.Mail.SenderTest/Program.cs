@@ -21,6 +21,7 @@ namespace Dragon.Mail.SenderTest
             //var s = TSQLGenerator.BuildCreate(md);
 
             var queue = new InMemoryMailQueue();
+            
             var senderx = new MailSenderService(queue);
 
             var generator = new MailGeneratorService(queue, mailSenderService: senderx, async: false);
