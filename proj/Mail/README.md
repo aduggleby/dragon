@@ -1,8 +1,22 @@
 # Dragon.Mail
 
-The Mail Templating and Sending Module (part of Dragon Web Framework) for .NET that supports Handlebar Templates (HTML & plain-text), Internationalisation, Summary E-Mails (Batching, i.e. do not send more than 1 email per X hours) and Asynchronous Sending.
+The Mail Templating and Sending Module (part of Dragon Web Framework) for .NET that supports Handlebar Templates (HTML & plain-text), Internationalization, Summary E-Mails (Batching, i.e. do not send more than 1 email per X hours) and Asynchronous Sending.
 
-
+**Table of contents**
+* [Architecture](#architecture)
+* [Downloading](#downloading)
+* [Basic Usage (Synchronous)](#basic-usage--synchronous-)
+  + [Preparing the templates directory](#preparing-the-templates-directory)
+  + [Application Configuration](#application-configuration)
+  + [Basic e-mail sending](#basic-e-mail-sending)
+* [Asynchronous sending and batching](#asynchronous-sending-and-batching)
+  + [Extending templates for batching](#extending-templates-for-batching)
+  + [Client setup](#client-setup)
+  + [Database setup and configuration](#database-setup-and-configuration)
+  + [Service setup](#service-setup)
+  + [Client use](#client-use)
+* [Advanced Use Cases, Extensions and Customization](#advanced-use-cases--extensions-and-customization)
+* [Used By](#used-by)
 
 ## Architecture
 
@@ -10,7 +24,7 @@ The Mail Templating and Sending Module (part of Dragon Web Framework) for .NET t
 
 ## Downloading
 
-Either build from source code using Visual Studio >= 2013 or find everything excep the Windows Service (required only for async sending) in the current NuGet packages at:
+Either build from source code using Visual Studio >= 2013 or find everything except the Windows Service (required only for async sending) in the current NuGet packages at:
 
 http://www.nuget.org/packages/Dragon.Mail/
 
@@ -124,7 +138,7 @@ If you want to send a different language, you can pass in the corresponding `Cul
 
 ## Asynchronous sending and batching
 
-Dragon.Mail can be configured to store mails in a queue and send them asynchronously. This is faster when sending emails, but requires extra infrastracture (a Windows Service for the actual sending).
+Dragon.Mail can be configured to store mails in a queue and send them asynchronously. This is faster when sending emails, but requires extra infrastructure (a Windows Service for the actual sending).
 
 Two queue types are supported out of the box. A file folder queue and a SQL Server based queue.
 
