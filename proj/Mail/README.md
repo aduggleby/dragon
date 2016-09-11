@@ -4,13 +4,15 @@
 
 (part of Dragon Web Framework)
 
+**Table of Contents** 
+
 ### Introduction
 
 Dragon.Mail is a mail generation and sending subsystem for .NET based on Handlebar templates and System.Net libaries.
 
 ### Architecture
 
-![Architecture of Dragon.Mail](/architecture.png)
+![Architecture of Dragon.Mail](/doc/Architecture.png)
 
 ### Downloading
 
@@ -125,7 +127,7 @@ If you want to send a different language, you can pass in the corresponding `Cul
       CultureInfo.GetCultureInfo("de")
     );
 
-#### Asynchronous sending and batching
+### Asynchronous sending and batching
 
 Dragon.Mail can be configured to store mails in a queue and send them asynchronously. This is faster when sending emails, but requires extra infrastracture (a Windows Service for the actual sending).
 
@@ -135,7 +137,7 @@ The latter has the additional benefit is that this use case supports email batch
 
 This requires more setup which we will look at. For simple asynchronous sending simply set up the service and specify one of the queues.
 
-##### Extending templates for batching
+#### Extending templates for batching
 
 In order to support e-mail batching the template are extended to include parts for the summary emails.
 
@@ -155,7 +157,7 @@ In addition to the existing templates, add four templates for html summary email
          \summarybody.txt
          \summaryfooter.txt
 
-##### Client setup
+#### Client setup
 
 The application configuration on the client (the system generating the email) must be altered as follows:
 
@@ -172,7 +174,7 @@ The application configuration on the client (the system generating the email) mu
     
     </appSettings>
 
-##### Database setup and configuration
+#### Database setup and configuration
 
 If you are using SqlMailQueue you must also specify a connection string with key "Dragon" pointing to the database that includes the specified SQL table.
 
@@ -207,7 +209,7 @@ Create the table using the following script:
         CONSTRAINT [PK_Mail] PRIMARY KEY CLUSTERED ( [MailID] ASC )
     )
 
-##### Service setup
+#### Service setup
 
 We recommend using [TopShelf project](http://topshelf-project.com/) for creating the Windows Service, but you can integrate the MailSenderService in any Windows Service (or Console application for that matter). 
 
@@ -231,7 +233,7 @@ Using TopShelf you can set up the service as follows:
         x.SetServiceName("Dragon.Mail.Service");
     });
 
-##### Client use
+#### Client use
 
 Sending to the async queue is done the same as for synchronous sending, but you specify extra parameters for the user.
 
