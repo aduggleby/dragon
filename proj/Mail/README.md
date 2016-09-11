@@ -12,7 +12,7 @@ Dragon.Mail is a mail generation and sending subsystem for .NET based on Handleb
 
 ### Architecture
 
-![Architecture of Dragon.Mail](/doc/Architecture.png)
+![Architecture of Dragon.Mail](doc/Architecture.png)
 
 ### Downloading
 
