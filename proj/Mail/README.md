@@ -1,30 +1,24 @@
 # Dragon.Mail
 
-## Mail Templating and Sending Framework
+The Mail Templating and Sending Module (part of Dragon Web Framework) for .NET that supports Handlebar Templates (HTML & plain-text), Internationalisation, Summary E-Mails (Batching, i.e. do not send more than 1 email per X hours) and Asynchronous Sending.
 
-(part of Dragon Web Framework)
 
-**Table of Contents** 
 
-### Introduction
-
-Dragon.Mail is a mail generation and sending subsystem for .NET based on Handlebar templates and System.Net libaries.
-
-### Architecture
+## Architecture
 
 ![Architecture of Dragon.Mail](doc/Architecture.png)
 
-### Downloading
+## Downloading
 
 Either build from source code using Visual Studio >= 2013 or find everything excep the Windows Service (required only for async sending) in the current NuGet packages at:
 
 http://www.nuget.org/packages/Dragon.Mail/
 
-### Basic Usage (Synchronous)
+## Basic Usage (Synchronous)
 
 Dragon.Mail works in two modes. In simple mode mails are generated and sent immediately. In asynchronous mode mails are stored in a queue and sent from a service worker.
 
-#### Preparing the templates directory
+### Preparing the templates directory
 By default the system loads templates from a folder using the following format:
      \templates 
        \template1	   <-- one folder per template, 
@@ -75,7 +69,7 @@ In order to add another language for the template, simply add a folder
 
 The next best matching template is used. So `de-at` will use the specific template specified here, where as both `de` and `de-ch` will use the `de` template.  If no language match can be found the default is used, so fr will use the root folder template.
 
-#### Application Configuration
+### Application Configuration
 
 By default the configuration is read from the application configuration file (app.config or web.config). You can implement the interface `Dragon.Mail.Interfaces.IConfiguration` and provide the configuration values directly (using the same key values as below). 
 
@@ -91,7 +85,7 @@ By default the configuration is read from the application configuration file (ap
       <add key="Dragon.Mail.Templates.DefaultLanguage" value="en-us" />
     </appSettings>
 
-#### Basic e-mail sending
+### Basic e-mail sending
 
 Add the `Dragon.Mail.Impl` namespace. The following code shows the basic setup. 
 
@@ -128,7 +122,7 @@ If you want to send a different language, you can pass in the corresponding `Cul
       CultureInfo.GetCultureInfo("de")
     );
 
-### Asynchronous sending and batching
+## Asynchronous sending and batching
 
 Dragon.Mail can be configured to store mails in a queue and send them asynchronously. This is faster when sending emails, but requires extra infrastracture (a Windows Service for the actual sending).
 
@@ -138,7 +132,7 @@ The latter has the additional benefit is that this use case supports email batch
 
 This requires more setup which we will look at. For simple asynchronous sending simply set up the service and specify one of the queues.
 
-#### Extending templates for batching
+### Extending templates for batching
 
 In order to support e-mail batching the template are extended to include parts for the summary emails.
 
@@ -158,7 +152,7 @@ In addition to the existing templates, add four templates for html summary email
          \summarybody.txt
          \summaryfooter.txt
 
-#### Client setup
+### Client setup
 
 The application configuration on the client (the system generating the email) must be altered as follows:
 
@@ -175,7 +169,7 @@ The application configuration on the client (the system generating the email) mu
     
     </appSettings>
 
-#### Database setup and configuration
+### Database setup and configuration
 
 If you are using SqlMailQueue you must also specify a connection string with key "Dragon" pointing to the database that includes the specified SQL table.
 
@@ -210,7 +204,7 @@ Create the table using the following script:
         CONSTRAINT [PK_Mail] PRIMARY KEY CLUSTERED ( [MailID] ASC )
     )
 
-#### Service setup
+### Service setup
 
 We recommend using [TopShelf project](http://topshelf-project.com/) for creating the Windows Service, but you can integrate the MailSenderService in any Windows Service (or Console application for that matter). 
 
@@ -234,7 +228,7 @@ Using TopShelf you can set up the service as follows:
         x.SetServiceName("Dragon.Mail.Service");
     });
 
-#### Client use
+### Client use
 
 Sending to the async queue is done the same as for synchronous sending, but you specify extra parameters for the user.
 
@@ -260,7 +254,7 @@ The parameters are:
 
 The values of the last email sent to the queue will be used. So if you want to change the buffer value for a user, simply set it to the new value on the next email and it will be considered immediately.
 
-### Advanced Use Cases, Extensions and Customization
+## Advanced Use Cases, Extensions and Customization
 
 Almost every part of Dragon.Mail is open to customizing. This is best exemplified by the constructor overloads for `MailGeneratorService`.
 
@@ -276,11 +270,11 @@ Almost every part of Dragon.Mail is open to customizing. This is best exemplifie
                 IMailSenderService mailSenderService = null,
                 bool? async = null)
 
-#### IMailQueue
+**IMailQueue**
 
 The queue's responsibility is to enqueue and dequeue mails. 
 
-#### IDataStore and IDataDecorator
+**IDataStore and IDataDecorator**
 
 The data elements (receiver and data) are passed through decorators before handing over to the Handlebars renderer. By default there is a RestResolvingDecorator which allows you to supply an Uri to the receiver or data parameters when sending emails and it will fetch and store the JSON document at that url in that field. If an IDataStore is provided this value will be cached (otherwise it will fetch the data for each email sent). It is wise to use a URL that has the timestamp or versioning parameter included in the URL.
 
@@ -294,34 +288,34 @@ The data elements (receiver and data) are passed through decorators before handi
         },
         CultureInfo.GetCultureInfo("de"));
 
-#### IRenderer
+**IRenderer**
 
 You can implement a different rendering engine for all or some of the templates by implementing IRenderer and passing it in.
 
-#### IReceiverMapper
+**IReceiverMapper**
 
 By default the email is the only required field and mapped to the the receiver's email address. If you want to use a different property or mapping implement this interface.
 
-#### ISenderConfiguration
+**ISenderConfiguration**
 
 By default the value for the sending email address are read from the application configuration via `IConfiguration`. Implement this interface to change that behaviour.
 
-#### IConfiguration
+**IConfiguration**
 
 By default all configuration is read from the application configuration. To change this behaviour and load the configuration from another source implement this interface.
 
-#### IHttpClient
+**IHttpClient**
 
 The RestResolvingDecorator uses this interface to get the data.
 
-#### IMailSenderService
+**IMailSenderService**
 
 If you want to simply use the template generation part you can override the sending behaviour by passing in another implementation of this interface.
 
-### Used By
+## Used By
 
 - [WhatAVenture Innovation Platform](http://www.whataventure.com)
 - [FoundersExperts](http://foundersexperts.com)
 - [DualConsult](http://dualconsult.com)
 - [EasySlides](http://www.easyslides.co)
-
+- [Austrian Energy Agency](http://www.monitoringstelle.at)
