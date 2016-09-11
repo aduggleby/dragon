@@ -48,6 +48,7 @@ The template files are written in [Handlebars syntax](http://handlebarsjs.com/) 
 This will include the footer file found at the relative file folder position.
 
 In order to add another language for the template, simply add a folder 
+
      \templates 
        \template1	   
          \body.html   
