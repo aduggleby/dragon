@@ -1,6 +1,13 @@
 # Dragon.Mail
 
-The Mail Templating and Sending Module (part of Dragon Web Framework) for .NET that supports Handlebar Templates (HTML & plain-text), Internationalization, Summary E-Mails (Batching, i.e. do not send more than 1 email per X hours) and Asynchronous Sending.
+The Mail Templating and Sending Module (part of Dragon Web Framework) for .NET that supports 
+
+- Handlebar Templates (HTML & plain-text), 
+- Internationalization, 
+- Summary E-Mails (Batching, i.e. do not send more than 1 email per X hours) and 
+- Asynchronous Sending.
+
+License: [MIT](https://opensource.org/licenses/MIT)
 
 **Table of contents**
 * [Architecture](#architecture)
@@ -11,10 +18,10 @@ The Mail Templating and Sending Module (part of Dragon Web Framework) for .NET t
   + [Basic e-mail sending](#basic-e-mail-sending)
 * [Asynchronous sending and batching](#asynchronous-sending-and-batching)
   + [Extending templates for batching](#extending-templates-for-batching)
-  + [Client setup](#client-setup)
+  + [Application configuration](#application-configuration)
   + [Database setup and configuration](#database-setup-and-configuration)
   + [Service setup](#service-setup)
-  + [Client use](#client-use)
+  + [Application example](#application-example)
 * [Advanced Use Cases, Extensions and Customization](#advanced-use-cases--extensions-and-customization)
 * [Used By](#used-by)
 
@@ -65,11 +72,11 @@ In order to add another language for the template, simply add a folder
          \de
            \body.html    <-- the html template in German
            \body.txt     <-- the text template (optional) in German
-           \subject.html <-- the subject of the email in German
+           \subject.txt  <-- the subject of the email in German
          \de-at
            \body.html    <-- the html template in Austrian German
            \body.txt     <-- etc
-           \subject.html <-- etc
+           \subject.txt  <-- etc
       \template2 	   
         ...
         ...
@@ -77,7 +84,7 @@ In order to add another language for the template, simply add a folder
       include.txt   
       \de 
         include.html     <-- You need to reference these specifically 
-        include.txt          from your template file. That is use 
+        include.txt          from your template file. So use 
                              ..\..\de\include.html instead of
                              ..\include.html.
 
@@ -93,7 +100,7 @@ By default the configuration is read from the application configuration file (ap
       <add key="Dragon.Mail.Sender.Name" value="Sam Sender" />
     
       <!-- Path to the templates directory  -->
-      <add key="Dragon.Mail.Templates.Folder" value="..\..\templates" />
+      <add key="Dragon.Mail.Templates.Folder" value="..\templates" />
     
       <!-- The language to register the root folder templates with -->
       <add key="Dragon.Mail.Templates.DefaultLanguage" value="en-us" />
@@ -138,7 +145,7 @@ If you want to send a different language, you can pass in the corresponding `Cul
 
 ## Asynchronous sending and batching
 
-Dragon.Mail can be configured to store mails in a queue and send them asynchronously. This is faster when sending emails, but requires extra infrastructure (a Windows Service for the actual sending).
+Dragon.Mail can be configured to store mails in a queue and send them asynchronously. This is faster when sending emails (because the application does not have to wait for the SMTP processing), but requires extra infrastructure (a Windows Service for the actual sending).
 
 Two queue types are supported out of the box. A file folder queue and a SQL Server based queue.
 
@@ -166,9 +173,9 @@ In addition to the existing templates, add four templates for html summary email
          \summarybody.txt
          \summaryfooter.txt
 
-### Client setup
+### Application configuration
 
-The application configuration on the client (the system generating the email) must be altered as follows:
+The application (the system generating the email) configuration must be extended as follows:
 
     <appSettings>
       <!-- Add this key to switch on async mode -->
@@ -242,7 +249,7 @@ Using TopShelf you can set up the service as follows:
         x.SetServiceName("Dragon.Mail.Service");
     });
 
-### Client use
+### Application example
 
 Sending to the async queue is done the same as for synchronous sending, but you specify extra parameters for the user.
 
