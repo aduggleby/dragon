@@ -147,7 +147,6 @@
     <Compile Include="Interfaces\IUseCommand.cs" />
     <Compile Include="MVC\ControllerBase.cs" />
     <Compile Include="MVC\CprControllerBase.cs" />
-    <Compile Include="MVC\CreateUpdateTableControllerBase.cs" />
     <Compile Include="MVC\JsonNetResult.cs" />
     <Compile Include="MVC\TableControllerBase.cs" />
     <Compile Include="PersistableBase.cs" />

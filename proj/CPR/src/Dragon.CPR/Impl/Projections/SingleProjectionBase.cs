@@ -23,6 +23,7 @@ namespace Dragon.CPR.Impl.Projections
 
         static SingleProjectionBase()
         {
+            Mapper.Initialize(cfg => cfg.CreateMap<TSrc, TDest>());
         }
 
         public SingleProjectionBase()
