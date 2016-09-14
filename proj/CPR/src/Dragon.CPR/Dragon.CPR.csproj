@@ -138,7 +138,6 @@
     <Compile Include="Impl\Projections\InterceptingProjectionBase.cs" />
     <Compile Include="Impl\Projections\ProjectionBase.cs" />
     <Compile Include="Impl\Projections\SingleProjectionBase.cs" />
-    <Compile Include="Impl\Projections\TableProjectionBase.cs" />
     <Compile Include="Impl\Projections\TableViewProjection.cs" />
     <Compile Include="Impl\Projections\TargetProjectionBase.cs" />
     <Compile Include="Interfaces\IHandler.cs" />

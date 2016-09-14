@@ -20,10 +20,11 @@ namespace Dragon.CPR.Impl.Projections
         private readonly Func<TDest, Guid> m_destKey;
         private readonly Action<TDest, Guid> m_setDestKey;
 
+        protected static IMapper s_mapper;
 
         static SingleProjectionBase()
         {
-            Mapper.Initialize(cfg => cfg.CreateMap<TSrc, TDest>());
+            s_mapper = new MapperConfiguration(cfg => cfg.CreateMap<TSrc, TDest>()).CreateMapper();
         }
 
         public SingleProjectionBase()
@@ -108,7 +109,7 @@ namespace Dragon.CPR.Impl.Projections
 
         protected virtual void Map(TSrc src, TDest dest)
         {
-            Mapper.Map(src, dest);
+            s_mapper.Map(src, dest);
 
             base.Intercept(dest);
         }
