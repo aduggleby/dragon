@@ -16,7 +16,6 @@ namespace Dragon.CPR.MVC
     {
         static CreateUpdateTableControllerBase()
         {
-            Mapper.CreateMap<TTable, TUpdate>();
         }
 
         public CommandDispatcher<TCreate> CreateCommandDispatcher { get; set; }

@@ -10,7 +10,6 @@ namespace Dragon.CPR.Impl.Projections
     {
         static MappingProjectionBase()
         {
-            Mapper.CreateMap<TSrc, TDest>();
         }
     }
 }
