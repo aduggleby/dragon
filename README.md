@@ -1,11 +1,10 @@
 # Dragon Web Framework
 A compilation of modules for faster web application development for ASP.NET.
 
-## Overview
-
-Many of our modules are developed to test 
+Currently there are modules for E-Mail sending, Data Layer (based on Dapper) and Security Modules (HMAC Authentication for both Client and Server, Security Server).
 
 Modules go through the following cycle:
+
 - **Development**: Use is not recommended, module may not survive. 
 - **Usable**: Used in production. Goal is to stabilize the API. Module may stay in this phase for some time while it starts being used in multiple production projects.
 - **Stable**: No major flaws or API issues found while being used in multiple projects. Except API not to change. Can be used for production systems (via Nuget) but often lack in documentation. 
@@ -28,6 +27,8 @@ The Mail Templating and Sending Module (part of Dragon Web Framework) for .NET t
 - Internationalization, 
 - Summary E-Mails (Batching, i.e. do not send more than 1 email per X hours) and 
 - Asynchronous Sending.
+
+
 
 
 
@@ -58,6 +59,8 @@ Add-on library for [Dapper](https://github.com/StackExchange/dapper-dot-net) imp
 
 
 
+
+
 ## [Dragon.Files](https://github.com/aduggleby/dragon/tree/master/proj/Files)
 
 Comprised of the following releases:
@@ -72,20 +75,40 @@ Abstracts file storage for a number of file storage systems (local filesystem, A
 
 
 
-## Dragon.Data
+## [Dragon.SecurityServer](https://github.com/aduggleby/dragon/tree/master/proj/SecurityServer)
 
-Status: , Version:
+Status: Stable (No NuGet packages)
 
-Description
+A federation identity provider based on ASP.NET Identity/OWIN that uses a chain of Security Token Services:
+
+- AccountSTS: manages external federation information
+- ProfileSTS: manages information about the user
+- PermissionSTS: manages user permissions
+
+Each service offers an API for which a client is offered. The API is secured using HMAC.
 
 
 
-- ​
+
+## [Dragon.Diagnostics](https://github.com/aduggleby/dragon/tree/master/proj/Diagnostics)
+
+Status: Stable (No NuGet packages)
+
+Utility Framework for creating self-service diagnostics tools that run a set of pre-configured tests, create a log for users to send to your support team.
+
+Currently available tests:
+
+- Ping and TraceRoute
+- HTTP and WebSocket Connections
+- Client Network Interfaces
+- Operating System Information
+- Browser Information
+- SSL connection and certificate (possibly MITM intermediate proxies)
+
+Also includes a customizable web page that can server as download location and testing target.
 
 
 
-## Dragon.Data
+## Contributors
 
-Status: , Version:
-
-Description
+[Alex Duggleby](http://dualconsult.com), Joshi
