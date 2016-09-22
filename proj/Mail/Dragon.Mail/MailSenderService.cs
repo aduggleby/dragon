@@ -187,6 +187,23 @@ namespace Dragon.Mail
             {
                 Subject = mail.Subject,
             };
+            
+            // Use a defined text mail if we have one, otherwise use the converted html text
+            string plainTextBody = mail.TextBody;
+
+            if (string.IsNullOrWhiteSpace((plainTextBody ?? string.Empty).Trim()))
+            {
+                plainTextBody = HtmlToPlainText.ConvertHtml(mail.Body);
+            }
+            
+            AlternateView plainTextView =
+                AlternateView.CreateAlternateViewFromString(
+                    plainTextBody, null, MediaTypeNames.Text.Plain);
+
+            mm.AlternateViews.Add(plainTextView);
+
+            mm.Body = plainTextBody;
+            mm.IsBodyHtml = false;
 
             if (!string.IsNullOrWhiteSpace((mail.Body ?? string.Empty).Trim()))
             {
@@ -195,21 +212,11 @@ namespace Dragon.Mail
                         mail.Body, null, MediaTypeNames.Text.Html);
 
                 mm.AlternateViews.Add(htmlView);
+
+                mm.Body = mail.Body;
+                mm.IsBodyHtml = true;
             }
 
-            // Use a defined text mail if we have one, otherwise use the converted html text
-            string plainTextBody = mail.TextBody;
-
-            if (string.IsNullOrWhiteSpace((plainTextBody ?? string.Empty).Trim()))
-            {
-                plainTextBody = HtmlToPlainText.ConvertHtml(mail.Body);
-            }
-
-            AlternateView plainTextView =
-                AlternateView.CreateAlternateViewFromString(
-                    plainTextBody, null, MediaTypeNames.Text.Plain);
-
-            mm.AlternateViews.Add(plainTextView);
             return mm;
         }
     }
