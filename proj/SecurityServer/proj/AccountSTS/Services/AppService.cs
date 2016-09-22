@@ -30,6 +30,11 @@ namespace Dragon.SecurityServer.AccountSTS.Services
             return GetRegisteredAppsInSameGroup(userId, appId, false);
         }
 
+        public bool IsRegisteredForApp(Guid userId, Guid appId)
+        {
+            return _consumerUserRepository.GetByWhere(new Dictionary<string, object> {{"UserId", userId}, {"AppId", appId} }).Any();
+        }
+
         private IList<AppInfo> GetRegisteredAppsInSameGroup(Guid userId, Guid appId, bool othersOnly)
         {
             var appInfo = _consumerInfoRepository.Get(appId.ToString());

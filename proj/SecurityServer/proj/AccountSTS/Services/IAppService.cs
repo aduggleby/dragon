@@ -8,5 +8,6 @@ namespace Dragon.SecurityServer.AccountSTS.Services
     {
         IList<AppInfo> GetOtherRegisteredAppsInSameGroup(Guid userId, Guid appId);
         IList<AppInfo> GetRegisteredAppsInSameGroup(Guid userId, Guid appId);
+        bool IsRegisteredForApp(Guid userId, Guid appId);
     }
 }

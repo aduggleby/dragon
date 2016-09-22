@@ -35,8 +35,11 @@ Usage
 
 App groups are used to restrict access to specific apps in predefined sets of apps.
 
-Automated registration of users to apps is restricted to one app per group, but via the database (IdentityConsumerUser table) multiple apps of the same group can be assigned to users. In this case a selection screen is shown on login, which uses the Url and Name columns in the ConsumerInfo table. The ConsumerInfo table also allows assigning apps to groups.
+Automated registration of users to apps is restricted to one app per group, but via the database (IdentityConsumerUser table) multiple apps of the same group can be assigned to users. In this case a selection screen is shown on login, which uses the Url and Name columns in the ConsumerInfo table. The ConsumerInfo table also allows assigning apps to groups. Be sure to use a return url that is restricted to logged in users, so that the app immediately logs in the user.
 
 ### Authentication providers
 
 * Google: https://console.cloud.google.com/apis/credentials/
+* Microsoft: https://apps.dev.microsoft.com
+* Facebook: https://developers.facebook.com/apps
+* Twitter: https://apps.twitter.com
