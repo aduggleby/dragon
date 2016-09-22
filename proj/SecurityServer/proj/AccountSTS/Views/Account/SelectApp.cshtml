@@ -1,19 +1,77 @@
 ﻿@using Dragon.SecurityServer.AccountSTS.Models
 @model IList<AppInfo>
 @{
-    ViewBag.Title = "Select app";
+    ViewBag.Title = "Choose your destination.";
 }
+<!-- START Template Main -->
+<section id="main" role="main" class="wav-login">
+    <!-- START Template Container -->
+    <section class="container" id="wav-home">
 
-<h2>@ViewBag.Title.</h2>
+
+        <!-- START row -->
+        <div class="row">
+            <div class="wav-login-wrapper">
+
+                <!-- Brand -->
+                <div class="row wav-login-brand">
+                    <img src="//wav-prod-cdn-main.azureedge.net/assets/images/intro/logo-signup-small.png">
+                </div>
+                <div class="row wav-login-notebook">
+                    <img src="//wav-prod-cdn-main.azureedge.net/assets/images/intro/laptop-signup.png">
+                </div>
+
+
+                <div class="flip-container">
+                    <!-- START flipper -->
+                    <div class="flipper">
+                        <!-- START sign in -->
+                        <div class="front wav-login-signin">
+                            <div class="panel">
+                                <div class="panel-heading">
+                                    <h1>@ViewBag.Title</h1>
+
+                                    <p class="subtext">Select the app you want to access.</p>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-sm-12 mt10">
+                                            @foreach (var app in ViewBag.Model)
+                                            {
+                                                <p>
+                                                    <a href="@app.Url">@( string.IsNullOrWhiteSpace(app.Name) ? app.Url : app.Name )</a>
+                                                </p>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <!--/ END flipper  -->
+                </div>
+            </div>
+        </div>
+        <!--/ END row -->
+
+    </section>
+
+    <!-- END Template Container -->
+</section>
+<!--/ END Template Main -->
+
+
+
+<h2>e.</h2>
 <div class="row">
     <div class="col-md-8">
         <section id="loginForm">
-            <h4>Select the app you want to access.</h4>
+            <h4>/h4>
             <hr />
-            @foreach (var app in Model)
-            {
-                <p><a href="@app.Url">@( string.IsNullOrWhiteSpace(app.Name) ? app.Url : app.Name )</a></p>
-            }
+}
         </section>
     </div>
 </div>
