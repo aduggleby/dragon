@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using Dragon.SecurityServer.AccountSTS.Attributes;
 using Dragon.SecurityServer.AccountSTS.Models;
 using Dragon.SecurityServer.AccountSTS.Services;
 using Dragon.SecurityServer.Common;
@@ -37,6 +38,7 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
             _userManager = userManager;
         }
 
+        [AuthorizeForRegisteredApps]
         public async Task<ActionResult> Index()
         {
             Debug.Assert(Request.Url != null, "Request.Url != null");

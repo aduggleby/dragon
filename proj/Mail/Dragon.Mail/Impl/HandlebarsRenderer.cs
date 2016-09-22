@@ -42,7 +42,7 @@ namespace Dragon.Mail.Impl
 
         public void Render(Models.Mail mail, dynamic data)
         {
-            var sanitizedHtml = data;
+            var sanitizedHtml = data; // sanitization taken care of in Handlebars renderer now
 
             mail.Subject = m_compiledTemplateSubject(sanitizedHtml);
             mail.Body = m_compiledTemplateBody(sanitizedHtml);

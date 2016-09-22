@@ -321,6 +321,7 @@
     <Compile Include="Helpers\MailService.cs" />
     <Compile Include="Helpers\NonEmptyValidationSummaryHtmlExtension.cs" />
     <Compile Include="Helpers\UserModel.cs" />
+    <Compile Include="Attributes\AuthorizeForRegisteredAppsAttribute.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\AppNotAllowedException.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
