@@ -51,7 +51,7 @@ namespace Dragon.SecurityServer.AccountSTS.Attributes
 
             if (filterContext.RequestContext.HttpContext.User.Identity.IsAuthenticated)
             {
-                filterContext.Result = new RedirectResult(UnauthorizedUrl);
+                filterContext.Result = new RedirectResult(UnauthorizedUrl + "?" + HttpContext.Current.Request.QueryString);
             }
         }
 
