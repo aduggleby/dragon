@@ -101,6 +101,8 @@ namespace Dragon.SecurityServer.AccountSTS
                 return userStore;
             });
 
+            container.Register<IUserService, UserService>(Lifestyle.Transient);
+
             container.RegisterPerWebRequest(() => ApplicationUserManager.Create(container, Startup.DataProtectionProvider));
 
             container.RegisterPerWebRequest(() => container.GetOwinContext().Authentication);

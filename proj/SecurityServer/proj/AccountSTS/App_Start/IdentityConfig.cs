@@ -109,14 +109,14 @@ namespace Dragon.SecurityServer.AccountSTS
     // Configure the application sign-in manager which is used in this application.
     public class ApplicationSignInManager : SignInManager<AppMember, string>
     {
-        private readonly IDragonUserStore<AppMember> _userStore;
+        private readonly IUserService _userService;
         private readonly IRepository<UserActivity> _userActivityRepository;
         private readonly IAppService _appService;
 
-        public ApplicationSignInManager(ApplicationUserManager userManager, IAuthenticationManager authenticationManager, IDragonUserStore<AppMember> userStore, IRepository<UserActivity> userActivityRepository, IAppService appService)
+        public ApplicationSignInManager(ApplicationUserManager userManager, IAuthenticationManager authenticationManager, IUserService userService, IRepository<UserActivity> userActivityRepository, IAppService appService)
             : base(userManager, authenticationManager)
         {
-            _userStore = userStore;
+            _userService = userService;
             _userActivityRepository = userActivityRepository;
             _appService = appService;
         }
@@ -142,8 +142,8 @@ namespace Dragon.SecurityServer.AccountSTS
             }
             // Only multiple apps per user and group are not allowed, automatically connect services and apps to the user otherwise.
             // The service and app ids are validated by Dragon.Security.Hmac
-            await AddCurrentServiceIdToUserIfNotAlreadyAdded(user);
-            await AddCurrentAppIdToUserIfNotAlreadyAdded(user);
+            await _userService.AddCurrentServiceIdToUserIfNotAlreadyAdded(user, RequestHelper.GetCurrentServiceId());
+            await _userService.AddCurrentAppIdToUserIfNotAlreadyAdded(user, RequestHelper.GetCurrentAppId());
         }
 
         private async Task<string> GetLoginProvider()
@@ -167,24 +167,6 @@ namespace Dragon.SecurityServer.AccountSTS
                 UserId = user.Id,
                 Details = "Provider: " + await GetLoginProvider()
             });
-        }
-
-        private async Task AddCurrentServiceIdToUserIfNotAlreadyAdded(AppMember user)
-        {
-            var currentServiceId = RequestHelper.GetCurrentServiceId();
-            if (user != null && !await _userStore.IsUserRegisteredForServiceAsync(user, currentServiceId)) // user == null on registration
-            {
-                await _userStore.AddServiceToUserAsync(user, currentServiceId);
-            }
-        }
-
-        private async Task AddCurrentAppIdToUserIfNotAlreadyAdded(AppMember user)
-        {
-            var currentAppId = RequestHelper.GetCurrentAppId();
-            if (user != null && !await _userStore.IsUserRegisteredForAppAsync(user, currentAppId)) // user == null on registration
-            {
-                await _userStore.AddAppToUserAsync(user, currentAppId);
-            }
         }
     }
 }

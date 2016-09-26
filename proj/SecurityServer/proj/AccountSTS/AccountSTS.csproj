@@ -328,8 +328,10 @@
     <Compile Include="Models\AdminViewModels.cs" />
     <Compile Include="Models\AppInfo.cs" />
     <Compile Include="Models\UserActivity.cs" />
+    <Compile Include="Services\UserService.cs" />
     <Compile Include="Services\AppService.cs" />
     <Compile Include="Services\FederationService.cs" />
+    <Compile Include="Services\IUserService.cs" />
     <Compile Include="Services\IFederationService.cs" />
     <Compile Include="Services\IAppService.cs" />
     <Compile Include="WebRequestHandler\OpenIdMigrationWebRequestHandler.cs" />

@@ -16,6 +16,14 @@ namespace Dragon.SecurityServer.Common
             return result;
         }
 
+        public static void Run(Task task)
+        {
+            using (var asyncHelper = AsyncHelper.Wait)
+            {
+                asyncHelper.Run(task);
+            }
+        }
+
         public static T RunNoSynchronizationContext<T>(Func<Task<T>> action)
         {
             T result;
