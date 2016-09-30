@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net.Mail;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -135,11 +136,13 @@ namespace Dragon.SecurityServer.AccountSTS
         {
             var appId = RequestHelper.GetCurrentAppId();
             await AddLoginActivity(user);
-            if (!_appService.IsAllowedToAccessApp(Guid.Parse(user.Id), Guid.Parse(appId)))
+            // Multiple apps per user and group are not allowed...
+            if (_appService.GetOtherRegisteredAppsInSameGroup(Guid.Parse(user.Id), Guid.Parse(appId)).Any())
             {
+                // Throw even when the user is already registered for the requested app, so that the app selection view is shown
                 throw new AppNotAllowedException();
             }
-            // Only multiple apps per user and group are not allowed, automatically connect services and apps to the user otherwise.
+            // ...automatically connect services and apps to the user otherwise
             // The service and app ids are validated by Dragon.Security.Hmac
             await _userService.AddCurrentServiceIdToUserIfNotAlreadyAdded(user, RequestHelper.GetCurrentServiceId());
             await _userService.AddCurrentAppIdToUserIfNotAlreadyAdded(user, RequestHelper.GetCurrentAppId());
