@@ -36,7 +36,7 @@
                                 <div class="panel-body">
                                     <div class="row">
                                         <div class="col-sm-12 mt10">
-                                            @foreach (var app in ViewBag.Model)
+                                            @foreach (var app in Model)
                                             {
                                                 <p>
                                                     <a href="@app.Url">@( string.IsNullOrWhiteSpace(app.Name) ? app.Url : app.Name )</a>
