@@ -20,6 +20,11 @@ namespace Dragon.SecurityServer.AccountSTS.Services
             _consumerUserRepository = consumerUserRepository;
         }
 
+        public bool IsAllowedToAccessApp(Guid userId, Guid appId)
+        {
+            return IsRegisteredForApp(userId, appId) || !GetOtherRegisteredAppsInSameGroup(userId, appId).Any();
+        }
+
         public IList<AppInfo> GetOtherRegisteredAppsInSameGroup(Guid userId, Guid appId)
         {
             return GetRegisteredAppsInSameGroup(userId, appId, true);

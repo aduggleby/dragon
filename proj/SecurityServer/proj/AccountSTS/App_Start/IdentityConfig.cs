@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Net.Mail;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -136,7 +135,7 @@ namespace Dragon.SecurityServer.AccountSTS
         {
             var appId = RequestHelper.GetCurrentAppId();
             await AddLoginActivity(user);
-            if (_appService.GetOtherRegisteredAppsInSameGroup(Guid.Parse(user.Id), Guid.Parse(appId)).Any())
+            if (!_appService.IsAllowedToAccessApp(Guid.Parse(user.Id), Guid.Parse(appId)))
             {
                 throw new AppNotAllowedException();
             }
