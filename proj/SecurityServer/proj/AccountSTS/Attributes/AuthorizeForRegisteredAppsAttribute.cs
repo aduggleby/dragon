@@ -48,7 +48,7 @@ namespace Dragon.SecurityServer.AccountSTS.Attributes
             try
             {
                 // Login/signup to apps in different groups is allowed, so do not use _appService.IsRegisteredForApp
-                var isAccessAllowed = !_appService.GetOtherRegisteredAppsInSameGroup(Guid.Parse(userId), Guid.Parse(appId)).Any();
+                var isAccessAllowed = _appService.IsAllowedToAccessApp(Guid.Parse(userId), Guid.Parse(appId));
                 Logger.Trace("Is access allowed? " + isAccessAllowed);
                 if (isAccessAllowed)
                 {
