@@ -47,7 +47,7 @@
     <!-- Certificates -->
     <add key="SigningCertificateName" value="certificates/securityserver.pfx" />
     <add key="SigningCertificatePassword" value="" />
-    <add key="EncryptingCertificateName" value="certificates/demo.cer" />
+    <!-- <add key="EncryptingCertificateName" value="certificates/demo.cer" /> -->
     <!-- Identification of the login provider -->
     <add key="IssuerName" value="http://localhost:51385" />
     <!-- Federation authentication providers -->
@@ -202,7 +202,7 @@
       <!-- The connection and tables that contain users and apps -->
       <hmac serviceId="00000001-0001-0003-0003-000000000011" connectionStringName="Dragon" usersTableName="HmacUser" appsTableName="HmacConsumer">
         <Paths>
-          <add name="api" path="^/api/.*$" type="Include" />
+          <add name="api" path="^/Api/.*$" type="Include" />
           <add name="account-logoff" path="^/Account/LogOff" type="Exclude" />
           <add name="account-resetPassword" path="^/Account/ResetPassword.*" type="Exclude" />
           <add name="account" path="^/Account/.*" type="Include" excludeParameters="returnUrl, wreply" />

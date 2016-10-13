@@ -98,7 +98,7 @@ namespace Dragon.SecurityServer.ProfileSTS
                                 ctx.ProtocolMessage.SetParameter(parameter, value);
                                 parameterDictionary[parameter] = value;
                             }
-                            var hmacParameters = HmacHelper.CreateHmacRequestParametersFromConfig(parameterDictionary);
+                            var hmacParameters = HmacHelper.CreateHmacRequestParametersFromConfig(parameterDictionary, Consts.AccountHmacSettingsPrefix);
                             foreach (var parameter in hmacParameters)
                             {
                                 ctx.ProtocolMessage.SetParameter(parameter.Key, parameter.Value);

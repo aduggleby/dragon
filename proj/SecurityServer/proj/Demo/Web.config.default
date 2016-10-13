@@ -65,10 +65,10 @@
     <add key="owin:AutomaticAppStartup " value="false" />
     <add key="AccountStsUrl" value="http://localhost:51385" />
     <add key="ProfileStsUrl" value="http://localhost:51386" />
-    <add key="Dragon.Security.Hmac.AppId" value="00000001-0001-0003-0003-200000000001" />
-    <add key="Dragon.Security.Hmac.ServiceId" value="00000001-0001-0003-0003-000000000011" />
-    <add key="Dragon.Security.Hmac.GuestUserId" value="00000001-0001-0001-0003-100000000001" />
-    <add key="Dragon.Security.Hmac.Secret" value="secret_accountSTS" />
+    <add key="Dragon.Security.Server.Profile.Hmac.AppId" value="00000001-0001-0003-0003-200000000001" />
+    <add key="Dragon.Security.Server.Profile.Hmac.ServiceId" value="00000001-0001-0003-0003-000000000011" />
+    <add key="Dragon.Security.Server.Profile.Hmac.GuestUserId" value="00000001-0001-0001-0003-100000000001" />
+    <add key="Dragon.Security.Server.Profile.Hmac.Secret" value="secret_profileSTS" />
     <add key="Dragon.SecurityServer.EncryptingCertificateName" value="securityserver.pfx" />
     <add key="Dragon.SecurityServer.EncryptingCertificatePassword" value="" />
     <add key="WtRealm" value="http://WSFedTest/" />
