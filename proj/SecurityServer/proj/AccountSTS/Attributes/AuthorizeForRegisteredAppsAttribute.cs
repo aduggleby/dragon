@@ -37,22 +37,28 @@ namespace Dragon.SecurityServer.AccountSTS.Attributes
 
             if (!httpContext.User.Identity.IsAuthenticated) return true;
 
-            var userId = GetUserId(httpContext);
-            var appId = GetAppId(httpContext);
-            var serviceId = RequestHelper.GetCurrentServiceId();
+            var userIdString = GetUserId(httpContext);
+            var appIdString = GetAppId(httpContext);
+            var serviceIdString = RequestHelper.GetCurrentServiceId();
 
-            Logger.Trace($"App: {appId} / User: {userId} / Service: {serviceId}");
+            Logger.Trace($"App: {appIdString} / User: {userIdString} / Service: {serviceIdString}");
 
-            if (string.IsNullOrWhiteSpace(userId) || string.IsNullOrWhiteSpace(appId)) return false;
+            if (string.IsNullOrWhiteSpace(userIdString) || string.IsNullOrWhiteSpace(appIdString)) return false;
 
             try
             {
                 // Login/signup to apps in different groups is allowed, so do not use _appService.IsRegisteredForApp
-                var isAccessAllowed = _appService.IsAllowedToAccessApp(Guid.Parse(userId), Guid.Parse(appId));
+                var userId = Guid.Parse(userIdString);
+                var appId = Guid.Parse(appIdString);
+                var isAccessAllowed = _appService.IsAllowedToAccessApp(userId, appId);
                 Logger.Trace("Is access allowed? " + isAccessAllowed);
                 if (isAccessAllowed)
                 {
-                    RegisterUserForAppAndService(userId, appId, serviceId);
+                    if (!string.IsNullOrWhiteSpace(HttpContext.Current.Session["ImpersonatingUser"]?.ToString()))
+                    {
+                        return _appService.IsRegisteredForApp(userId, appId);
+                    }
+                    RegisterUserForAppAndService(userIdString, appIdString, serviceIdString);
                 }
                 return isAccessAllowed;
             }

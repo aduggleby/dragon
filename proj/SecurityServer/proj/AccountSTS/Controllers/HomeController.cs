@@ -136,7 +136,8 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
 
         private static void ProcessSignOut()
         {
-            System.Web.HttpContext.Current.GetOwinContext().Authentication.SignOut();
+            System.Web.HttpContext.Current.GetOwinContext().Authentication.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            System.Web.HttpContext.Current.Session.Abandon();
         }
     }
 }
