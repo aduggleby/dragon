@@ -74,6 +74,8 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
                         return RedirectToAction("ForgotPassword", "Account", new RouteValueDictionary(routeValues));
                     case "manage":
                         return RedirectToAction("Index", "Manage");
+                    case "admin-users":
+                        return RedirectToAction("Users", "Admin");
                     default:
                         // nothing to be done
                         break;
