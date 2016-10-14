@@ -43,6 +43,7 @@ namespace Dragon.SecurityServer.Demo.Controllers
             ViewBag.Claims = claims;
             Debug.Assert(Request.Url != null, "Request.Url != null");
             ViewBag.ManageUrl = Client.GetFederationUrl("manage", Request.Url.ToString());
+            ViewBag.AdminUsersUrl = Client.GetFederationUrl("admin-users", Request.Url.ToString());
         }
 
         private void InitClients()

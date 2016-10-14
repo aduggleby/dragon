@@ -10,8 +10,6 @@ namespace Dragon.SecurityServer.Demo
 {
     public class MvcApplication : System.Web.HttpApplication
     {
-        private const string CertificateKey = "Dragon.SecurityServer.EncryptingCertificate";
-
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
@@ -22,11 +20,11 @@ namespace Dragon.SecurityServer.Demo
             AntiForgeryConfig.UniqueClaimTypeIdentifier = ClaimTypes.NameIdentifier;
 
             // TODO: load from pfx for now, use certificateReference (Web.config) later
-            if (!string.IsNullOrWhiteSpace(ConfigurationManager.AppSettings[CertificateKey + "Name"]))
+            if (!string.IsNullOrWhiteSpace(ConfigurationManager.AppSettings[Consts.EncryptionCertificateKey + "Name"]))
             {
                 System.IdentityModel.Services.FederatedAuthentication.FederationConfigurationCreated += (sender, args) =>
                 {
-                    args.FederationConfiguration.IdentityConfiguration.ServiceCertificate = SecurityHelper.CreateCertificateFromConfig(CertificateKey);
+                    args.FederationConfiguration.IdentityConfiguration.ServiceCertificate = SecurityHelper.CreateCertificateFromConfig(Consts.EncryptionCertificateKey);
                 };
             }
         }

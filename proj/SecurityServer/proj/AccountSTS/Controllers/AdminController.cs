@@ -90,6 +90,7 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
             var user = await UserManager.FindByIdAsync(id);
+            Session["ImpersonatingUser"] = HttpContext.User.Identity.GetUserId();
             await SignInManager.SignInAsync(user, false, false);
             return RedirectToAction("Index", "Manage");
         }

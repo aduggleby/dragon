@@ -77,8 +77,9 @@ namespace Dragon.SecurityServer.PermissionSTS.Controllers
         {
             var requestMessage = (SignInRequestMessage)WSFederationMessage.CreateFromUri(url);
             var signingCredentials = SecurityHelper.CreateSignupCredentialsFromConfig();
+            var encryptionCredentials = SecurityHelper.CreateEncryptingCredentialsFromConfig();
             var config = new SecurityTokenServiceConfiguration(ConfigurationManager.AppSettings["SecurityTokenServiceEndpointUrl"], signingCredentials);
-            var sts = new CustomSecurityTokenService<AppMember>(WebConfigurationManager.AppSettings["LoginProviderName"], config, _userStore);
+            var sts = new CustomSecurityTokenService<AppMember>(WebConfigurationManager.AppSettings["LoginProviderName"], config, encryptionCredentials, _userStore);
             var responseMessage = FederatedPassiveSecurityTokenServiceOperations.ProcessSignInRequest(requestMessage, user, sts);
             return responseMessage.WriteFormPost();
         }

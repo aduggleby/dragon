@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net.Mail;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Configuration;
 using Dragon.Data.Interfaces;
 using Dragon.SecurityServer.AccountSTS.Controllers;
@@ -134,6 +135,10 @@ namespace Dragon.SecurityServer.AccountSTS
 
         private async Task PostSignIn(AppMember user)
         {
+            if (!string.IsNullOrWhiteSpace(HttpContext.Current.Session["ImpersonatingUser"]?.ToString()))
+            {
+                return;
+            }
             var appId = RequestHelper.GetCurrentAppId();
             await AddLoginActivity(user);
             // Multiple apps per user and group are not allowed...
