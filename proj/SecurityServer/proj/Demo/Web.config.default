@@ -69,6 +69,10 @@
     <add key="Dragon.Security.Server.Profile.Hmac.ServiceId" value="00000001-0001-0003-0003-000000000011" />
     <add key="Dragon.Security.Server.Profile.Hmac.GuestUserId" value="00000001-0001-0001-0003-100000000001" />
     <add key="Dragon.Security.Server.Profile.Hmac.Secret" value="secret_profileSTS" />
+    <add key="Dragon.Security.Server.Account.Hmac.AppId" value="00000001-0001-0003-0003-200000000001" />
+    <add key="Dragon.Security.Server.Account.Hmac.ServiceId" value="00000001-0001-0003-0003-000000000011" />
+    <add key="Dragon.Security.Server.Account.Hmac.GuestUserId" value="00000001-0001-0001-0003-100000000001" />
+    <add key="Dragon.Security.Server.Account.Hmac.Secret" value="secret_accountSTS" />
     <add key="Dragon.SecurityServer.EncryptingCertificateName" value="securityserver.pfx" />
     <add key="Dragon.SecurityServer.EncryptingCertificatePassword" value="" />
     <add key="WtRealm" value="http://WSFedTest/" />
