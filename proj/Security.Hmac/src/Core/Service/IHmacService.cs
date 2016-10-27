@@ -1,4 +1,5 @@
 using System.Collections.Specialized;
+using System.IO;
 
 namespace Dragon.Security.Hmac.Core.Service
 {
@@ -10,12 +11,20 @@ namespace Dragon.Security.Hmac.Core.Service
     public interface IHmacService
     {
         /// <summary>
-        /// Calculates the hash of a given string using a given secret.
+        /// Calculates the hash of a string using the provided secret.
         /// </summary>
         /// <param name="data">The data for which the hash should be created</param>
         /// <param name="secret">The secret used for hashing the data</param>
         /// <returns>The hash value for the given data/secret combination</returns>
         string CalculateHash(string data, string secret);
+
+        /// <summary>
+        /// Calculates the hash of a stream using the provided secret.
+        /// </summary>
+        /// <param name="data">The stream for which the hash should be created</param>
+        /// <param name="secret">The secret used for hashing the data</param>
+        /// <returns></returns>
+        string CalculateHash(Stream data, string secret);
 
         /// <summary>
         /// Returns a string representation of the query string, sorted by the keys.

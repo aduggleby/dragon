@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Specialized;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -28,6 +29,17 @@ namespace Dragon.Security.Hmac.Core.Service
             }
             var hmac = new HMACSHA256 { Key = Encoding.GetBytes(secret) };
             var hmacSig = hmac.ComputeHash(Encoding.GetBytes(data.ToCharArray()));
+            return ReplaceSpecialCharactersRegex.Replace(UseHexEncoding ? ToHex(hmacSig) : ToBase64(hmacSig), "-");
+        }
+
+        public string CalculateHash(Stream data, string secret)
+        {
+            if (null == data || 0 == data.Length || string.IsNullOrEmpty(secret))
+            {
+                throw new HmacInvalidArgumentException("Please provide valid (neither null nor empty) data and secret.");
+            }
+            var hmac = new HMACSHA256 { Key = Encoding.GetBytes(secret) };
+            var hmacSig = hmac.ComputeHash(data);
             return ReplaceSpecialCharactersRegex.Replace(UseHexEncoding ? ToHex(hmacSig) : ToBase64(hmacSig), "-");
         }
 
