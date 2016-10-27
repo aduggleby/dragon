@@ -29,7 +29,7 @@ namespace Dragon.Security.Hmac.Module.Modules
             var applicationContext = application.Context;
             
             var statusCode = HmacHttpService.IsRequestAuthorized(application.Request.RawUrl,
-                applicationContext.Request.QueryString);
+                applicationContext.Request.QueryString, applicationContext.Request.InputStream);
             if (statusCode == StatusCode.Authorized)
             {
                 return;

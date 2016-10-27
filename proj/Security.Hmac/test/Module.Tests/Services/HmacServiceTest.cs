@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Text;
 using Dragon.Security.Hmac.Core.Service;
 using Dragon.Security.Hmac.Module.Configuration;
 using Dragon.Security.Hmac.Module.Models;
@@ -21,6 +23,7 @@ namespace Dragon.Security.Hmac.Module.Tests.Services
         private static readonly Guid UserId = Guid.NewGuid();
         private const string Secret = "%DF47hf*hdf";
         private const string DefaultSignatureParameterKey = "signature";
+        private const string Content = "There shall be content.";
 
         [TestMethod]
         public void IsRequestAuthorized_rawUrlIsExcluded_shouldAllowAccess()
@@ -34,7 +37,7 @@ namespace Dragon.Security.Hmac.Module.Tests.Services
             };
 
             // Act
-            var actual = service.IsRequestAuthorized(GetValidRawUrl(false), CreateInvalidQueryString());
+            var actual = service.IsRequestAuthorized(GetValidRawUrl(false), CreateInvalidQueryString(), GetContent());
 
             // Assert
             Assert.AreEqual(StatusCode.Authorized, actual);
@@ -57,7 +60,7 @@ namespace Dragon.Security.Hmac.Module.Tests.Services
             };
 
             // Act
-            var actual = service.IsRequestAuthorized(GetValidRawUrl(false), CreateInvalidQueryString());
+            var actual = service.IsRequestAuthorized(GetValidRawUrl(false), CreateInvalidQueryString(), GetContent());
 
             // Assert
             Assert.AreEqual(StatusCode.ParameterMissing, actual);
@@ -75,7 +78,7 @@ namespace Dragon.Security.Hmac.Module.Tests.Services
             };
 
             // Act
-            var actual = service.IsRequestAuthorized(GetValidRawUrl(), CreateInvalidQueryString());
+            var actual = service.IsRequestAuthorized(GetValidRawUrl(), CreateInvalidQueryString(), GetContent());
 
             // Assert
             Assert.AreEqual(StatusCode.ParameterMissing, actual);
@@ -88,7 +91,7 @@ namespace Dragon.Security.Hmac.Module.Tests.Services
             var service = new HmacHttpService(Guid.NewGuid().ToString(), CreatePathCollection(), "signature");
 
             // Act
-            var actual = service.IsRequestAuthorized(GetValidRawUrl(), CreateValidQueryString());
+            var actual = service.IsRequestAuthorized(GetValidRawUrl(), CreateValidQueryString(), GetContent());
 
             // Assert
             Assert.AreEqual(StatusCode.InvalidOrDisabledServiceId, actual);
@@ -101,7 +104,7 @@ namespace Dragon.Security.Hmac.Module.Tests.Services
             var service = CreateHmacService();
 
             // Act
-            var actual = service.IsRequestAuthorized(GetValidRawUrl(), CreateInvalidQueryString());
+            var actual = service.IsRequestAuthorized(GetValidRawUrl(), CreateInvalidQueryString(), GetContent());
 
             // Assert
             Assert.AreEqual(StatusCode.ParameterMissing, actual);
@@ -116,7 +119,7 @@ namespace Dragon.Security.Hmac.Module.Tests.Services
             queryString["appid"] = "23";
 
             // Act
-            var actual = service.IsRequestAuthorized(GetValidRawUrl(), queryString);
+            var actual = service.IsRequestAuthorized(GetValidRawUrl(), queryString, GetContent());
 
             // Assert
             Assert.AreEqual(StatusCode.InvalidParameterFormat, actual);
@@ -131,7 +134,7 @@ namespace Dragon.Security.Hmac.Module.Tests.Services
             queryString["userid"] = "23";
 
             // Act
-            var actual = service.IsRequestAuthorized(GetValidRawUrl(), queryString);
+            var actual = service.IsRequestAuthorized(GetValidRawUrl(), queryString, GetContent());
 
             // Assert
             Assert.AreEqual(StatusCode.InvalidParameterFormat, actual);
@@ -146,7 +149,7 @@ namespace Dragon.Security.Hmac.Module.Tests.Services
             queryString["serviceid"] = "23";
 
             // Act
-            var actual = service.IsRequestAuthorized(GetValidRawUrl(), queryString);
+            var actual = service.IsRequestAuthorized(GetValidRawUrl(), queryString, GetContent());
 
             // Assert
             Assert.AreEqual(StatusCode.InvalidParameterFormat, actual);
@@ -161,7 +164,7 @@ namespace Dragon.Security.Hmac.Module.Tests.Services
             queryString["expiry"] = DateTime.UtcNow.AddDays(-1).Ticks.ToString();
 
             // Act
-            var actual = service.IsRequestAuthorized(GetValidRawUrl(), queryString);
+            var actual = service.IsRequestAuthorized(GetValidRawUrl(), queryString, GetContent());
 
             // Assert
             Assert.AreEqual(StatusCode.InvalidExpiryOrExpired, actual);
@@ -176,7 +179,7 @@ namespace Dragon.Security.Hmac.Module.Tests.Services
             queryString["expiry"] = DateTime.UtcNow.AddDays(-1).ToString(CultureInfo.InvariantCulture);
 
             // Act
-            var actual = service.IsRequestAuthorized(GetValidRawUrl(), queryString);
+            var actual = service.IsRequestAuthorized(GetValidRawUrl(), queryString, GetContent());
 
             // Assert
             Assert.AreEqual(StatusCode.InvalidExpiryOrExpired, actual);
@@ -191,7 +194,7 @@ namespace Dragon.Security.Hmac.Module.Tests.Services
             queryString["signature"] = Guid.NewGuid().ToString();
 
             // Act
-            var actual = service.IsRequestAuthorized(GetValidRawUrl(), queryString);
+            var actual = service.IsRequestAuthorized(GetValidRawUrl(), queryString, GetContent());
 
             // Assert
             Assert.AreEqual(StatusCode.InvalidSignature, actual);
@@ -204,7 +207,7 @@ namespace Dragon.Security.Hmac.Module.Tests.Services
             var service = CreateHmacService();
 
             // Act
-            var actual = service.IsRequestAuthorized(GetValidRawUrl(), CreateValidQueryString());
+            var actual = service.IsRequestAuthorized(GetValidRawUrl(), CreateValidQueryString(), GetContent());
 
             // Assert
             Assert.AreEqual(StatusCode.Authorized, actual);
@@ -217,7 +220,7 @@ namespace Dragon.Security.Hmac.Module.Tests.Services
             var service = CreateHmacService("s");
 
             // Act
-            var actual = service.IsRequestAuthorized(GetValidRawUrl(), CreateValidQueryString("s"));
+            var actual = service.IsRequestAuthorized(GetValidRawUrl(), CreateValidQueryString("s"), GetContent());
 
             // Assert
             Assert.AreEqual(StatusCode.Authorized, actual);
@@ -230,7 +233,7 @@ namespace Dragon.Security.Hmac.Module.Tests.Services
             var service = CreateHmacService("signature", true);
 
             // Act
-            var actual = service.IsRequestAuthorized(GetValidRawUrl(), CreateValidQueryString("signature", true));
+            var actual = service.IsRequestAuthorized(GetValidRawUrl(), CreateValidQueryString("signature", true), GetContent());
 
             // Assert
             Assert.AreEqual(StatusCode.Authorized, actual);
@@ -246,7 +249,7 @@ namespace Dragon.Security.Hmac.Module.Tests.Services
             service.UserRepository = mockUserRepository.Object;
 
             // Act
-            service.IsRequestAuthorized(GetValidRawUrl(), CreateValidQueryString());
+            service.IsRequestAuthorized(GetValidRawUrl(), CreateValidQueryString(), GetContent());
 
             // Assert
             mockUserRepository.Verify(x => x.Insert(It.Is<UserModel>(
@@ -264,7 +267,7 @@ namespace Dragon.Security.Hmac.Module.Tests.Services
             service.UserRepository = mockUserRepository.Object;
 
             // Act
-            service.IsRequestAuthorized(GetValidRawUrl(), CreateInvalidQueryString());
+            service.IsRequestAuthorized(GetValidRawUrl(), CreateInvalidQueryString(), GetContent());
 
             // Assert
             mockUserRepository.Verify(x => x.Insert(It.IsAny<UserModel>()), Times.Never);
@@ -280,7 +283,7 @@ namespace Dragon.Security.Hmac.Module.Tests.Services
             service.UserRepository = mockUserRepository.Object;
 
             // Act
-            var actual = service.IsRequestAuthorized(GetValidRawUrl(), CreateValidQueryString());
+            var actual = service.IsRequestAuthorized(GetValidRawUrl(), CreateValidQueryString(), GetContent());
 
             // Assert
             Assert.AreEqual(StatusCode.InvalidOrDisabledUserId, actual);
@@ -296,7 +299,7 @@ namespace Dragon.Security.Hmac.Module.Tests.Services
             service.UserRepository = mockUserRepository.Object;
 
             // Act
-            service.IsRequestAuthorized(GetValidRawUrl(), CreateValidQueryString());
+            service.IsRequestAuthorized(GetValidRawUrl(), CreateValidQueryString(), GetContent());
 
             // Assert
             mockUserRepository.Verify(x => x.Insert(It.IsAny<UserModel>()), Times.Never);
@@ -312,7 +315,7 @@ namespace Dragon.Security.Hmac.Module.Tests.Services
             service.AppRepository = mockAppRepository.Object;
 
             // Act
-            var actual = service.IsRequestAuthorized(GetValidRawUrl(), CreateValidQueryString());
+            var actual = service.IsRequestAuthorized(GetValidRawUrl(), CreateValidQueryString(), GetContent());
 
             // Assert
             Assert.AreEqual(StatusCode.InvalidOrDisabledAppId, actual);
@@ -329,7 +332,7 @@ namespace Dragon.Security.Hmac.Module.Tests.Services
             service.AppRepository = mockAppRepository.Object;
 
             // Act
-            var actual = service.IsRequestAuthorized(GetValidRawUrl(), CreateValidQueryString());
+            var actual = service.IsRequestAuthorized(GetValidRawUrl(), CreateValidQueryString(), GetContent());
 
             // Assert
             Assert.AreEqual(StatusCode.InvalidSignature, actual);
@@ -345,7 +348,7 @@ namespace Dragon.Security.Hmac.Module.Tests.Services
             service.AppRepository = mockAppRepository.Object;
 
             // Act
-            var actual = service.IsRequestAuthorized(GetValidRawUrl(), CreateValidQueryString());
+            var actual = service.IsRequestAuthorized(GetValidRawUrl(), CreateValidQueryString(), GetContent());
 
             // Assert
             Assert.AreEqual(StatusCode.InvalidOrDisabledAppId, actual);
@@ -360,7 +363,7 @@ namespace Dragon.Security.Hmac.Module.Tests.Services
             // Act
             var queryString = CreateValidQueryString();
             queryString.Add("p1", "v1");
-            var actual = service.IsRequestAuthorized(GetValidRawUrl(), queryString);
+            var actual = service.IsRequestAuthorized(GetValidRawUrl(), queryString, GetContent());
 
             // Assert
             Assert.AreEqual(StatusCode.InvalidSignature, actual);
@@ -381,8 +384,8 @@ namespace Dragon.Security.Hmac.Module.Tests.Services
             var queryString = CreateValidQueryString();
             queryString.Add("p1", "v1");
             queryString.Add("p2", "v2");
-            var actualUrlWithParametersExcluded = service.IsRequestAuthorized(GetValidRawUrl(), queryString);
-            var actualUrlWithParametersNotExcluded = service.IsRequestAuthorized(GetValidRawUrl(false), queryString);
+            var actualUrlWithParametersExcluded = service.IsRequestAuthorized(GetValidRawUrl(), queryString, GetContent());
+            var actualUrlWithParametersNotExcluded = service.IsRequestAuthorized(GetValidRawUrl(false), queryString, GetContent());
 
             // Assert
             Assert.AreEqual(StatusCode.Authorized, actualUrlWithParametersExcluded);
@@ -404,7 +407,63 @@ namespace Dragon.Security.Hmac.Module.Tests.Services
             var queryString = CreateValidQueryString();
             queryString.Add("p1", "v1");
             queryString.Add("p3", "v2");
-            var actual = service.IsRequestAuthorized(GetValidRawUrl(), queryString);
+            var actual = service.IsRequestAuthorized(GetValidRawUrl(), queryString, GetContent());
+
+            // Assert
+            Assert.AreEqual(StatusCode.InvalidSignature, actual);
+        }
+
+        [TestMethod]
+        public void IsRequestAuthorized_mismatchingContentNotIgnoringBody_shouldDisallowRequest()
+        {
+            // Arrange
+            var pathCollection = new PathCollection
+            {
+                new PathConfig {Name = "included-1", Path = "/private/.*", Type = PathConfig.PathType.Include, IgnoreBody = false},
+            };
+            var service = CreateService(DefaultSignatureParameterKey, false, pathCollection);
+
+            // Act
+            var queryString = CreateValidQueryString(content: GetContent(Guid.NewGuid().ToString()));
+            var actual = service.IsRequestAuthorized(GetValidRawUrl(), queryString, GetContent());
+
+            // Assert
+            Assert.AreEqual(StatusCode.InvalidSignature, actual);
+        }
+
+        [TestMethod]
+        public void IsRequestAuthorized_matchingContentNotIgnoringBody_shouldAllowRequest()
+        {
+            // Arrange
+            var pathCollection = new PathCollection
+            {
+                new PathConfig {Name = "included-1", Path = "/private/.*", Type = PathConfig.PathType.Include, IgnoreBody = false},
+            };
+            var service = CreateService(DefaultSignatureParameterKey, false, pathCollection);
+
+            // Act
+            var contentString = Guid.NewGuid().ToString();
+            var queryString = CreateValidQueryString(content: GetContent(contentString));
+            var actual = service.IsRequestAuthorized(GetValidRawUrl(), queryString, GetContent(contentString));
+
+            // Assert
+            Assert.AreEqual(StatusCode.Authorized, actual);
+        }
+
+        [TestMethod]
+        public void IsRequestAuthorized_matchingContentIgnoringBody_shouldDisallowRequest()
+        {
+            // Arrange
+            var pathCollection = new PathCollection
+            {
+                new PathConfig {Name = "included-1", Path = "/private/.*", Type = PathConfig.PathType.Include, IgnoreBody = true},
+            };
+            var service = CreateService(DefaultSignatureParameterKey, false, pathCollection);
+
+            // Act
+            var contentString = Guid.NewGuid().ToString();
+            var queryString = CreateValidQueryString(content: GetContent(contentString));
+            var actual = service.IsRequestAuthorized(GetValidRawUrl(), queryString, GetContent(contentString));
 
             // Assert
             Assert.AreEqual(StatusCode.InvalidSignature, actual);
@@ -441,12 +500,12 @@ namespace Dragon.Security.Hmac.Module.Tests.Services
             };
         }
 
-        private static NameValueCollection CreateValidQueryString(string signatureParameterKey = DefaultSignatureParameterKey, bool useHexEncoding = false)
+        private static NameValueCollection CreateValidQueryString(string signatureParameterKey = DefaultSignatureParameterKey, bool useHexEncoding = false, Stream content = null)
         {
-            return CreateValidQueryString(new Dictionary<string, string>(), signatureParameterKey, useHexEncoding);
+            return CreateValidQueryString(new Dictionary<string, string>(), signatureParameterKey, useHexEncoding, content);
         }
 
-        private static NameValueCollection CreateValidQueryString(Dictionary<string, string> parameters, string signatureParameterKey = DefaultSignatureParameterKey, bool useHexEncoding = false)
+        private static NameValueCollection CreateValidQueryString(Dictionary<string, string> parameters, string signatureParameterKey = DefaultSignatureParameterKey, bool useHexEncoding = false, Stream content = null)
         {
             var queryString = new NameValueCollection
             {
@@ -459,7 +518,8 @@ namespace Dragon.Security.Hmac.Module.Tests.Services
             var hmacService = signatureParameterKey == DefaultSignatureParameterKey ?
                 new HmacSha256Service { UseHexEncoding = useHexEncoding } :
                 new HmacSha256Service { SignatureParameterKey = signatureParameterKey, UseHexEncoding = useHexEncoding };
-            queryString.Add(signatureParameterKey, hmacService.CalculateHash(hmacService.CreateSortedQueryString(queryString), Secret));
+            var sortedQueryString = hmacService.CreateSortedQueryString(queryString);
+            queryString.Add(signatureParameterKey, content != null ? hmacService.CalculateHash(sortedQueryString, content, Secret) : hmacService.CalculateHash(sortedQueryString, Secret));
             return queryString;
         }
 
@@ -472,6 +532,11 @@ namespace Dragon.Security.Hmac.Module.Tests.Services
         {
             var dir = !secret ? "public" : "private";
             return $"http://localhost/{dir}/index.html";
+        }
+
+        private static Stream GetContent(string data = null)
+        {
+            return new MemoryStream(Encoding.UTF8.GetBytes(data ?? Content));
         }
 
         #endregion

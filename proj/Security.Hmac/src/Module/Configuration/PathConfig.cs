@@ -32,6 +32,13 @@ namespace Dragon.Security.Hmac.Module.Configuration
             set { this["excludeParameters"] = value; }
         }
 
+        [ConfigurationProperty("ignoreBody", DefaultValue = true, IsRequired = false)]
+        public bool IgnoreBody
+        {
+            get { return (bool)this["ignoreBody"]; }
+            set { this["ignoreBody"] = value; }
+        }
+
         public enum PathType
         {
             Include,

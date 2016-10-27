@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Dragon.Security.Hmac.Core.Service;
@@ -29,11 +30,12 @@ namespace Dragon.Security.Hmac.Module.Services
                 {
                     Regex = new Regex(x.Path, RegexOptions.Singleline | RegexOptions.Compiled | RegexOptions.IgnoreCase),
                     Type = x.Type == PathConfig.PathType.Include ? PathInfo.PathType.Include : PathInfo.PathType.Exclude,
-                    ExcludeParameters = x.ExcludeParameters.Split(',').ToList().Select(y => y.Trim()).Where(y => !string.IsNullOrWhiteSpace(y)).ToList()
+                    ExcludeParameters = x.ExcludeParameters.Split(',').ToList().Select(y => y.Trim()).Where(y => !string.IsNullOrWhiteSpace(y)).ToList(),
+                    IgnoreBody = x.IgnoreBody,
                 });
         }
 
-        public StatusCode IsRequestAuthorized(string rawUrl, NameValueCollection queryString)
+        public StatusCode IsRequestAuthorized(string rawUrl, NameValueCollection queryString, Stream content)
         {
             var matchingPath = PathInfos.FirstOrDefault(x => x.Regex.IsMatch(rawUrl));
             if (matchingPath != null && matchingPath.Type == PathInfo.PathType.Exclude)
@@ -47,14 +49,14 @@ namespace Dragon.Security.Hmac.Module.Services
                 return StatusCode.ParameterMissing;
             }
 
-            var guidParsingSuceeded = true;
+            var guidParsingSucceeded = true;
             Guid appId;
-            guidParsingSuceeded &= Guid.TryParse(queryString.Get("appid"), out appId);
+            guidParsingSucceeded &= Guid.TryParse(queryString.Get("appid"), out appId);
             Guid userId;
-            guidParsingSuceeded &= Guid.TryParse(queryString.Get("userid"), out userId);
+            guidParsingSucceeded &= Guid.TryParse(queryString.Get("userid"), out userId);
             Guid serviceId;
-            guidParsingSuceeded &= Guid.TryParse(queryString.Get("serviceid"), out serviceId);
-            if (!guidParsingSuceeded)
+            guidParsingSucceeded &= Guid.TryParse(queryString.Get("serviceid"), out serviceId);
+            if (!guidParsingSucceeded)
             {
                 return StatusCode.InvalidParameterFormat;
             }
@@ -83,7 +85,10 @@ namespace Dragon.Security.Hmac.Module.Services
                 filteredQueryString = new NameValueCollection();
                 queryString.AllKeys.ToList().Except(matchingPath.ExcludeParameters, StringComparer.OrdinalIgnoreCase).ToList().ForEach(x => filteredQueryString.Add(x, queryString.Get(x)));
             }
-            var actual = HmacService.CalculateHash(HmacService.CreateSortedQueryString(filteredQueryString), app.Secret);
+            var actual = matchingPath.IgnoreBody
+                ? HmacService.CalculateHash(HmacService.CreateSortedQueryString(filteredQueryString), app.Secret)
+                : HmacService.CalculateHash(HmacService.CreateSortedQueryString(filteredQueryString), content, app.Secret);
+
             if (actual.ToLower() != signature.ToLower())
             {
                 return StatusCode.InvalidSignature;

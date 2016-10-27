@@ -13,5 +13,6 @@ namespace Dragon.Security.Hmac.Module.Services
         public PathType Type { get; set; }
         public Regex Regex { get; set; }
         public IList<string> ExcludeParameters { get; set; }
+        public bool IgnoreBody { get; set; }
     }
 }

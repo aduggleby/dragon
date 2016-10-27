@@ -1,4 +1,5 @@
 ﻿using System.Collections.Specialized;
+using System.IO;
 
 namespace Dragon.Security.Hmac.Module.Services
 {
@@ -16,6 +17,6 @@ namespace Dragon.Security.Hmac.Module.Services
 
     public interface IHmacHttpService
     {
-        StatusCode IsRequestAuthorized(string rawUrl, NameValueCollection queryString);
+        StatusCode IsRequestAuthorized(string rawUrl, NameValueCollection queryString, Stream content);
     }
 }
