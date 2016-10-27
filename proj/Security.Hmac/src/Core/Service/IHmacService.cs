@@ -27,6 +27,15 @@ namespace Dragon.Security.Hmac.Core.Service
         string CalculateHash(Stream data, string secret);
 
         /// <summary>
+        /// Calculates the hash of a mixed input source (string and stream).
+        /// </summary>
+        /// <param name="dataString">The string which should be included as input for creating the hash, e.g. the query string of a HTTP request</param>
+        /// <param name="dataStream">The stream which should be included as input for creating the hash, e.g. the content of a HTTP request</param>
+        /// <param name="secret">The secret used for hashing the data</param>
+        /// <returns></returns>
+        string CalculateHash(string dataString, Stream dataStream, string secret);
+
+        /// <summary>
         /// Returns a string representation of the query string, sorted by the keys.
         /// An optional "signature" parameter is excluded, because this parameter is used to transmit the hash.
         /// </summary>

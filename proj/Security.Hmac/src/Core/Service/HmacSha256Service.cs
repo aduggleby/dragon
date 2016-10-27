@@ -43,6 +43,16 @@ namespace Dragon.Security.Hmac.Core.Service
             return ReplaceSpecialCharactersRegex.Replace(UseHexEncoding ? ToHex(hmacSig) : ToBase64(hmacSig), "-");
         }
 
+        public string CalculateHash(string dataString, Stream dataStream, string secret)
+        {
+            if (string.IsNullOrEmpty(dataString) || null == dataStream || 0 == dataStream.Length || string.IsNullOrEmpty(secret))
+            {
+                throw new HmacInvalidArgumentException("Please provide valid (neither null nor empty) data and secret.");
+            }
+            var hmacSigStream = CalculateHash(dataStream, secret);
+            return CalculateHash(dataString + "&" + hmacSigStream, secret);
+        }
+
         private static string ToBase64(byte[] bytes)
         {
             return Convert.ToBase64String(bytes);

@@ -14,6 +14,7 @@ namespace Dragon.Security.Hmac.Core.Test.Service
         private const string QueryString = "c2=wrgh&b1=yrgh&a1=zrgh";
         private const string SortedQueryString = "a1=zrgh&b1=yrgh&c2=wrgh";
         private const string Secret = "a=42";
+        private const string Content = @"{""key"":""val""}";
 
         [TestClass]
         public class CalculateHashFromString : HmacSha256ServiceTest
@@ -157,7 +158,6 @@ namespace Dragon.Security.Hmac.Core.Test.Service
                 // Assert
                 // see expected exception
             }
-
         }
 
         [TestClass]
@@ -302,7 +302,208 @@ namespace Dragon.Security.Hmac.Core.Test.Service
                 // Assert
                 // see expected exception
             }
+        }
 
+        [TestClass]
+        public class CalculateHashFromStringAndStream : HmacSha256ServiceTest
+        {
+            [TestMethod]
+            public void ReturnsHashForValidInput()
+            {
+                // Arrange
+                IHmacService service = new HmacSha256Service();
+
+                // Act
+                var actual = service.CalculateHash(QueryString, ToStream(Content), Secret);
+
+                // Assert
+                Assert.AreEqual(44, actual.Length);
+            }
+
+            [TestMethod]
+            public void ReturnsHexEncodedHashForValidQueryStringUsingHexEncoding()
+            {
+                // Arrange
+                var service = new HmacSha256Service { UseHexEncoding = true };
+
+                // Act
+                var actual = service.CalculateHash(QueryString, ToStream(Content), Secret);
+
+                // Assert
+                Assert.IsTrue(actual.All(IsHex));
+            }
+
+            [TestMethod]
+            public void ReturnsDifferentHashesForDifferentQueryStrings()
+            {
+                // Arrange
+                var service = new HmacSha256Service();
+
+                // Act
+                var hash1 = service.CalculateHash(QueryString, ToStream(Content), Secret);
+                var hash2 = service.CalculateHash(QueryString + "a", ToStream(Content), Secret);
+
+                // Assert
+                Assert.AreNotEqual(hash1, hash2);
+            }
+
+            [TestMethod]
+            public void ReturnsEqualHashesForEqualQueryStrings()
+            {
+                // Arrange
+                var service = new HmacSha256Service();
+
+                // Act
+                var hash1 = service.CalculateHash(QueryString, ToStream(Content), Secret);
+                var hash2 = service.CalculateHash(QueryString, ToStream(Content), Secret);
+
+                // Assert
+                Assert.AreEqual(hash1, hash2);
+            }
+
+            [TestMethod]
+            public void ReturnsDifferentHashesForDifferentContent()
+            {
+                // Arrange
+                var service = new HmacSha256Service();
+
+                // Act
+                var hash1 = service.CalculateHash(QueryString, ToStream(Content), Secret);
+                var hash2 = service.CalculateHash(QueryString, ToStream(Content + "a"), Secret);
+
+                // Assert
+                Assert.AreNotEqual(hash1, hash2);
+            }
+
+            [TestMethod]
+            public void ReturnsEqualHashesForEqualContent()
+            {
+                // Arrange
+                var service = new HmacSha256Service();
+
+                // Act
+                var hash1 = service.CalculateHash(QueryString, ToStream(Content), Secret);
+                var hash2 = service.CalculateHash(QueryString, ToStream(Content), Secret);
+
+                // Assert
+                Assert.AreEqual(hash1, hash2);
+            }
+
+            [TestMethod]
+            public void ReturnsDifferentHashesForDifferentSecrets()
+            {
+                // Arrange
+                var service = new HmacSha256Service();
+
+                // Act
+                var hash1 = service.CalculateHash(QueryString, ToStream(Content), Secret);
+                var hash2 = service.CalculateHash(QueryString, ToStream(Content), Secret + "1");
+
+                // Assert
+                Assert.AreNotEqual(hash1, hash2);
+            }
+
+            /// <summary>
+            /// Ensure that the hash can be transmitted as query string value.
+            /// </summary>
+            [TestMethod]
+            public void ReturnsNoSpecialCharacters()
+            {
+                // Arrange
+                var service = new HmacSha256Service();
+
+                // Act
+                var actual = service.CalculateHash(QueryString, ToStream(Content), Secret);
+
+                // Assert
+                Assert.AreEqual(Uri.EscapeDataString(actual), actual);
+            }
+
+            [TestMethod]
+            [ExpectedException(typeof(HmacInvalidArgumentException))]
+            public void ThrowsExceptionForEmptyQueryStrings()
+            {
+                // Arrange
+                var service = new HmacSha256Service();
+
+                // Act
+                service.CalculateHash("", ToStream(Content), Secret);
+
+                // Assert
+                // see expected exception
+            }
+
+            [TestMethod]
+            [ExpectedException(typeof(HmacInvalidArgumentException))]
+            public void ThrowsExceptionForEmptyContent()
+            {
+                // Arrange
+                var service = new HmacSha256Service();
+
+                // Act
+                service.CalculateHash(QueryString, ToStream(""), Secret);
+
+                // Assert
+                // see expected exception
+            }
+
+
+            [TestMethod]
+            [ExpectedException(typeof(HmacInvalidArgumentException))]
+            public void ThrowsExceptionForEmptySecrets()
+            {
+                // Arrange
+                var service = new HmacSha256Service();
+
+                // Act
+                service.CalculateHash(QueryString, ToStream(Content), "");
+
+                // Assert
+                // see expected exception
+            }
+
+            [TestMethod]
+            [ExpectedException(typeof(HmacInvalidArgumentException))]
+            public void ThrowExceptionForQueryStringsThatAreNull()
+            {
+                // Arrange
+                var service = new HmacSha256Service();
+
+                // Act
+                service.CalculateHash(null, ToStream(Content), Secret);
+
+                // Assert
+                // see expected exception
+            }
+
+            [TestMethod]
+            [ExpectedException(typeof(HmacInvalidArgumentException))]
+            public void ThrowExceptionForContentThatIsNull()
+            {
+                // Arrange
+                var service = new HmacSha256Service();
+
+                // Act
+                service.CalculateHash(QueryString, null, Secret);
+
+                // Assert
+                // see expected exception
+            }
+
+
+            [TestMethod]
+            [ExpectedException(typeof(HmacInvalidArgumentException))]
+            public void ThrowExceptionForSecretsThatAreNull()
+            {
+                // Arrange
+                var service = new HmacSha256Service();
+
+                // Act
+                service.CalculateHash(QueryString, ToStream(Content), null);
+
+                // Assert
+                // see expected exception
+            }
         }
 
         [TestMethod]
