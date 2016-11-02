@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Configuration;
@@ -37,7 +38,7 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
             if (!_adminUserIds.Contains(HttpContext.User.Identity.GetUserId()))
             {
                 Logger.Warn($"Unauthorized impersonate request from {HttpContext.User.Identity.GetUserId()}");
-                throw new Exception("Unauthorized.");
+                throw new HttpException(401, "Unauthorized");
             }
         }
 
