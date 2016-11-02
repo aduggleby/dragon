@@ -86,6 +86,9 @@
       <HintPath>..\packages\Facebook.7.0.10-beta\lib\net45\Facebook.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Handlebars">
+      <HintPath>..\packages\Handlebars.Net.1.5.3\lib\Handlebars.dll</HintPath>
+    </Reference>
     <Reference Include="Jil, Version=2.14.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Jil.2.14.3\lib\net45\Jil.dll</HintPath>
       <Private>True</Private>
