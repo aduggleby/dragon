@@ -6,7 +6,13 @@
     <title>WhatAVenture - Guiding business ideas to success.</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Turn your business idea into success. You have a business idea? The difference is to know how to turn a business idea into sucess. Our web tool guides you to success, step-by-step.">
-    <meta name="author" content="WhatAVenture Team">
+    <meta name="author" content="WhatAVenture GmbH">
+
+    <!--
+    
+        USES ASSETS FROM THE MAIN PLATFORM - Refreshes every 24h through the cache breaker. If changed faster, clear cache in Azure CDN.    
+    
+    -->
     <link rel="apple-touch-icon" sizes="114&#10006;114" href="//wav-prod-cdn-main.azureedge.net/assets/favicons/apple-touch-icon-114x114.png" />
     <link rel="apple-touch-icon" sizes="72&#10006;72" href="//wav-prod-cdn-main.azureedge.net/assets/favicons/apple-touch-icon-72x72.png" />
     <link rel="apple-touch-icon" href="//wav-prod-cdn-main.azureedge.net/assets/favicons/touch-icon-iphone.png" />
@@ -18,17 +24,13 @@
 
     <meta property="og:description" content="Turn your business idea into success. You have a business idea? The difference is to know how to turn a business idea into sucess. Our web tool guides you to success, step-by-step." />
     <meta property="og:image" content="//wav-prod-cdn-main.azureedge.net/assets/img/ci/logo_191px_90px.png?v=9.0.5996.11673" />
-
-    <!-- BUNDLES -->
+    @{ 
+        var hour = DateTime.UtcNow.Date.Ticks;
+    }
+    <link rel="stylesheet" href="//wav-prod-cdn-main.azureedge.net/assets/css/application.css?v=@hour">
     <!--[if IE]>
-        <link href="/bundles/styles/ie1?v=UT9lW57xZOtYS0InziPHaVhI3jCdX82q2SldREs7t5w1" rel="stylesheet"/>
-        <link href="/bundles/styles/ie2?v=2MWkh24O89KAHpcxyikeNOGB3f802qeHtnCHxsJ47_41" rel="stylesheet"/>
-        <link href="/bundles/styles/ie3?v=6D7iishq7SUrk9NtAtpWK2maBVTP1OYN7NI9D3n_Bo81" rel="stylesheet"/>
-        <link href="/bundles/styles/ie4?v=Uj7WUDR2Vq7KolfGzxewfOK140N2AOzxaUCQWKDh9wo1" rel="stylesheet"/>
+      <link rel="stylesheet" type="text/css" href="//wav-prod-cdn-main.azureedge.net/assets/css/base/ie-only.css?v=@hour" />
     <![endif]-->
-    <!--[if !IE]><!-->
-    <link href="//wav-prod-cdn-main.azureedge.net/bundles/styles?v=9.0.5996.11673?v=dJxvUAFhpVnS20LvlGJ6Q1HtQWB0Vf0kH8S4C9k7eZI1" rel="stylesheet" />
-    <!--<![endif]-->
 
 </head>
 
