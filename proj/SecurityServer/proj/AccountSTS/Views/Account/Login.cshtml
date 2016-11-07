@@ -3,7 +3,7 @@
 @{
     ViewBag.Title = "Log in";
 }
-@{ 
+@{
     var parameters = new RouteValueDictionary(HttpContext.Current.Request.QueryString.Keys.Cast<string>()
                 .ToDictionary(k => k, v => (object)HttpContext.Current.Request.QueryString[v]));
 
@@ -33,7 +33,7 @@
                     <div class="flipper">
                         <!-- START sign in -->
                         <div class="front wav-login-signin">
-                            <div class="panel">
+                            <div class="wav-panel">
                                 <div class="panel-heading">
                                     <h1>Welcome to WhatAVenture</h1>
                                     <p class="subtext">Let‘s turn your business ideas into success.</p>
@@ -62,7 +62,7 @@
                                                     </div>
                                                     <div class="row">
                                                         <div class="col-sm-12 mt10">
-                                                            <input type="submit" class="btn btn-lg btn-block btn-success signup" value="Sign in" />
+                                                            <input type="submit" class="btn btn-lg btn-block mod-wav-btn-primary signup" value="Sign in" />
                                                         </div>
                                                     </div>
 
@@ -78,9 +78,9 @@
                                 <div class="wav-login-or-register">
                                     <p>Don't have an account yet?</p>
                                     @Html.ActionLink("Register here", "Register", null, parameters, new Dictionary<string, object>() {
-                                        { "class" , "btn btn-success btn-outline wav-login-or-register-button toggle-register" } })
+                                        { "class" , "btn btn-success mod-wav-btn-outline wav-login-or-register-button toggle-register" } })
 
-                                    <!--<a class="btn btn-success btn-outline wav-login-or-register-button toggle-register" href="#">Register here</a>-->
+                                    <!--<a class="btn btn-success mod-wav-btn-outline wav-login-or-register-button toggle-register" href="#">Register here</a>-->
                                 </div>
 
 
