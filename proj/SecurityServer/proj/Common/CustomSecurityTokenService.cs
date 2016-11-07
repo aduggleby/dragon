@@ -1,6 +1,7 @@
 ﻿using System.IdentityModel;
 using System.IdentityModel.Configuration;
 using System.IdentityModel.Protocols.WSTrust;
+using System.IdentityModel.Tokens;
 using System.Linq;
 using System.Security.Claims;
 using Dragon.SecurityServer.Identity.Stores;
@@ -14,18 +15,28 @@ namespace Dragon.SecurityServer.Common
     {
         private readonly string _loginProviderName;
         private readonly IDragonUserStore<T> _userStore;
+        private readonly EncryptingCredentials _encryptingCredentials;
 
-        public CustomSecurityTokenService(string loginProviderName, SecurityTokenServiceConfiguration securityTokenServiceConfiguration, IDragonUserStore<T> userStore)
+        public CustomSecurityTokenService(string loginProviderName, SecurityTokenServiceConfiguration securityTokenServiceConfiguration, EncryptingCredentials encryptingCredentials, IDragonUserStore<T> userStore)
             : base(securityTokenServiceConfiguration)
         {
             _loginProviderName = loginProviderName;
+            _encryptingCredentials = encryptingCredentials;
             _userStore = userStore;
         }
 
         protected override Scope GetScope(ClaimsPrincipal principal, RequestSecurityToken request)
         {
-            return new Scope(request.AppliesTo.Uri.OriginalString,
-                SecurityTokenServiceConfiguration.SigningCredentials) {ReplyToAddress = request.ReplyTo, TokenEncryptionRequired = false};
+            var scope = new Scope(request.AppliesTo.Uri.OriginalString, SecurityTokenServiceConfiguration.SigningCredentials)
+            {
+                ReplyToAddress = request.ReplyTo,
+                TokenEncryptionRequired = false,
+            };
+            if (_encryptingCredentials != null)
+            {
+                scope.EncryptingCredentials = _encryptingCredentials;
+            }
+            return scope;
         }
 
         protected override ClaimsIdentity GetOutputClaimsIdentity(ClaimsPrincipal principal, RequestSecurityToken request, Scope scope)

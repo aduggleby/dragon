@@ -74,6 +74,8 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
                         return RedirectToAction("ForgotPassword", "Account", new RouteValueDictionary(routeValues));
                     case "manage":
                         return RedirectToAction("Index", "Manage");
+                    case "admin-users":
+                        return RedirectToAction("Users", "Admin");
                     default:
                         // nothing to be done
                         break;
@@ -136,7 +138,8 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
 
         private static void ProcessSignOut()
         {
-            System.Web.HttpContext.Current.GetOwinContext().Authentication.SignOut();
+            System.Web.HttpContext.Current.GetOwinContext().Authentication.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            System.Web.HttpContext.Current.Session.Abandon();
         }
     }
 }

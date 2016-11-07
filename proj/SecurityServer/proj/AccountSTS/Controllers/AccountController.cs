@@ -222,7 +222,13 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
         {
             Logger.Trace("Login failed: user {0}", model.Email);
             ModelState.AddModelError("", await GenerateTryLoginWithFederationProviderErrorMessage(model.Email));
-            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            SignOut();
+        }
+
+        private static void SignOut()
+        {
+            System.Web.HttpContext.Current.GetOwinContext().Authentication.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            System.Web.HttpContext.Current.Session.Abandon();
         }
 
         private async Task<string> GenerateTryLoginWithFederationProviderErrorMessage(string email)
@@ -789,7 +795,7 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
             ModelState.AddModelError("", "Invalid login attempt. You do not have permissions to access the requested service.");
             // On service id mismatch user might be logged in, but should not
             // Using ApplicationCookie because of https://aspnetidentity.codeplex.com/workitem/2347
-            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            SignOut();
         }
 
         private async Task<AppMember> CreateExternalUser(string email, ExternalLoginInfo info)
@@ -823,7 +829,7 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
         //[ValidateAntiForgeryToken]
         public ActionResult LogOff()
         {
-            AuthenticationManager.SignOut();
+            SignOut();
             var returnUrl = Request.QueryString["returnUrl"];
             return string.IsNullOrEmpty(returnUrl) ? (ActionResult) RedirectToAction("About", "Home") : Redirect(returnUrl);
         }

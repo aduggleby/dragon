@@ -43,6 +43,7 @@ namespace Dragon.SecurityServer.Demo.Controllers
             ViewBag.Claims = claims;
             Debug.Assert(Request.Url != null, "Request.Url != null");
             ViewBag.ManageUrl = Client.GetFederationUrl("manage", Request.Url.ToString());
+            ViewBag.AdminUsersUrl = GetAccountStsUrl() + "/Admin/Users";
         }
 
         private void InitClients()
@@ -70,11 +71,17 @@ namespace Dragon.SecurityServer.Demo.Controllers
 
         private void InitAccountClient()
         {
+            var accountStsUrl = GetAccountStsUrl();
+            Client = new AccountSTSClient(accountStsUrl + "/Api", accountStsUrl, FederatedAuthentication.WSFederationAuthenticationModule.Realm);
+            Client.SetHmacSettings(ReadHmacSettings(Consts.AccountHmacSettingsPrefix));
+        }
+
+        private static string GetAccountStsUrl()
+        {
             var fam = FederatedAuthentication.WSFederationAuthenticationModule;
             var accountStsUrl = ConfigurationManager.AppSettings["AccountStsUrl"];
             accountStsUrl = (string.IsNullOrEmpty(accountStsUrl) ? fam.Issuer : accountStsUrl);
-            Client = new AccountSTSClient(accountStsUrl + "/Api", accountStsUrl, fam.Realm);
-            Client.SetHmacSettings(ReadHmacSettings(Consts.AccountHmacSettingsPrefix));
+            return accountStsUrl;
         }
 
         private HmacSettings ReadHmacSettings(string hmacSettingsPrefix)

@@ -103,15 +103,14 @@ Just specify following connection strings in the App.config:
 Configuration:
 
 * In the AccountSTS specify admin user ids (app settings: AdminUserIds).
-* In the application create a management link to the AccountSTS (using the AccountSTS.Client) which does not return do the application, such as
-
-        _client.GetFederationUrl("manage", Request.Url.ToString())
 
 Usage:
 
-* From the application, use the management link to access the AccountSTS and log in as one of the admins.
-* Open /Admin/Users on the AccountSTS to find users and impersonate them.
-* Finally login in the application.
+* Log in to the AccountSTS as one of the admins
+* Open /Admin/Users on the AccountSTS to find users
+* Click on "impersonate"
+* Log in to the application
+
 
 Tests
 -----
