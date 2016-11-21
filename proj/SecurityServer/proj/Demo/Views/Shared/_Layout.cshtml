@@ -31,16 +31,15 @@
                     <li>@Html.ActionLink("About", "About", "Home")</li>
                     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
                     <li>@Html.ActionLink("Restricted", "Index", "Restricted")</li>
-                    <li>@Html.ActionLink("SignIn", "SignIn", "Federation", new { returnUrl = Request.Url }, null)</li>
-                    <li>@Html.ActionLink("SignOut", "SignOut", "Federation", new { returnUrl = Request.Url }, null)</li>
                     @if (User.Identity.IsAuthenticated)
                     {
+                        <li>@Html.ActionLink("SignOut", "SignOut", "Federation", new { returnUrl = Request.Url }, null)</li>
                         <li><a href="@ViewBag.ManageUrl">Hello @email!</a></li>
                         <li><a href="@ViewBag.AdminUsersUrl">Admin: Users</a></li>
                     }
                     else
                     {
-                        <li><a href="@ViewBag.ManageUrl">Please login.</a></li>
+                        <li>@Html.ActionLink("SignIn", "SignIn", "Federation", new { returnUrl = Request.Url }, null)</li>
                     }
                 </ul>
             </div>

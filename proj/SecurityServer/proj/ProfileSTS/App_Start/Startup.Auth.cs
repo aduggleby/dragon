@@ -31,17 +31,21 @@ namespace Dragon.SecurityServer.ProfileSTS
             DataProtectionProvider = app.GetDataProtectionProvider();
 
             // Configure the db context, user manager and signin manager to use a single instance per request
-//            app.CreatePerOwinContext(ApplicationDbContext.Create);
-           // app.CreatePerOwinContext<ApplicationUserManager>(ApplicationUserManager.Create);
+            //app.CreatePerOwinContext(ApplicationDbContext.Create);
+            //app.CreatePerOwinContext<ApplicationUserManager>(ApplicationUserManager.Create);
             //app.CreatePerOwinContext<ApplicationSignInManager>(ApplicationSignInManager.Create);
 
             // Enable the application to use a cookie to store information for the signed in user
             // and to use a cookie to temporarily store information about a user logging in with a third party login provider
             // Configure the sign in cookie
+
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
+                CookieName = "Dragon.SecurityServer.ProfileSTS",
                 AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
                 LoginPath = new PathString("/Account/Login"),
+                ExpireTimeSpan = TimeSpan.FromMinutes(1),
+                SlidingExpiration = false,
                 Provider = new CookieAuthenticationProvider
                 {
                     // Enables the application to validate the security stamp when the user logs in.
@@ -73,6 +77,7 @@ namespace Dragon.SecurityServer.ProfileSTS
                         ValidAudiences = new[] { ConfigurationManager.AppSettings["WtRealm"], ConfigurationManager.AppSettings["WtRealm"].ToLower() },
                         ValidIssuer = ConfigurationManager.AppSettings["ValidIssuer"]
                     },
+                    UseTokenLifetime = false, // use cookie expiration time
                     Notifications = new WsFederationAuthenticationNotifications()
                     {
                         RedirectToIdentityProvider = (ctx) =>
