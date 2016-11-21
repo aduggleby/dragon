@@ -36,7 +36,7 @@
     <trace autoflush="true" />
   </system.diagnostics>
   <connectionStrings>
-    <add name="Dragon" connectionString="Data Source=CRESCENTIA\SQL01;Initial Catalog=ProfileSTS;Trusted_Connection=Yes;MultipleActiveResultSets=true" providerName="System.Data.SqlClient" />
+    <add name="Dragon" connectionString="Data Source=(LocalDb)\v11.0;AttachDbFilename=|DataDirectory|\aspnet-ProfileSTS-Dragon.mdf;Initial Catalog=aspnet-ProfileSTS-Dragon;Integrated Security=True" providerName="System.Data.SqlClient" />
   </connectionStrings>
   <appSettings>
     <add key="webpages:Version" value="3.0.0.0" />
