@@ -63,6 +63,12 @@
     <add key="FederationNamespace" value="http://docs.oasis-open.org/wsfed/federation/200706" />
     <!-- Federation metadata -->
     <add key="FederationEndpoint" value="http://localhost:51387" />
+
+    <!-- ProfileSTS Hmac settings -->
+    <add key="Dragon.Security.Server.Profile.Hmac.AppId" value="00000001-0001-0003-0003-200000000001" />
+    <add key="Dragon.Security.Server.Profile.Hmac.ServiceId" value="00000001-0001-0003-0003-000000000011" />
+    <add key="Dragon.Security.Server.Profile.Hmac.GuestUserId" value="00000001-0001-0001-0003-100000000001" />
+    <add key="Dragon.Security.Server.Profile.Hmac.Secret" value="secret_profileSTS" />
   </appSettings>
   <system.web>
     <authentication mode="Forms">
@@ -186,10 +192,16 @@
   <dragon>
     <security>
       <!-- The connection and tables that contain users and apps -->
-      <hmac serviceId="00000001-0001-0001-0003-000000000001" connectionStringName="Dragon" usersTableName="UserModel" appsTableName="AppModel">
+      <hmac serviceId="00000001-0001-0003-0003-000000000011" connectionStringName="Dragon" usersTableName="HmacUser" appsTableName="HmacConsumer">
         <Paths>
-          <add name="api" path="^/api/.*$" type="Include" />
-          <add name="default" path="^/.*$" type="Exclude" />
+          <add name="api" path="^/Api/.*$" type="Include" />
+          <add name="account-logoff" path="^/Account/LogOff" type="Exclude" />
+          <add name="account" path="^/Account/.*" type="Include" excludeParameters="returnUrl, wreply" />
+          <add name="manage" path="^/Manage/.*" type="Include" />
+          <add name="home" path="^/$" type="Exclude" />
+          <add name="FederationMetaData" path="^/FederationMetadata/.*" type="Exclude" />
+          <add name="FederationSignin" path="^/signin-.*" type="Exclude" />
+          <add name="default" path="^/.*$" type="Include" excludeParameters="wa, wtrealm, wctx, wct, wreply, returnUrl" />
         </Paths>
       </hmac>
     </security>

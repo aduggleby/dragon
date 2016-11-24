@@ -238,6 +238,7 @@
     <Compile Include="App_Start\SimpleInjectorInitializer.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Consts.cs" />
     <Compile Include="Controllers\PermissionApiController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -342,6 +343,10 @@
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{D79ED90B-B8B8-4F01-B9C9-021A8A6163AD}</Project>
       <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GenericSTSClient\GenericSTSClient.csproj">
+      <Project>{E6064E38-13C3-4F5F-8BB5-8C77D61E2AD8}</Project>
+      <Name>GenericSTSClient</Name>
     </ProjectReference>
     <ProjectReference Include="..\Identity\Identity.csproj">
       <Project>{e0666626-ea75-4728-8c76-9ad78db56d65}</Project>

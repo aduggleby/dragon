@@ -8,6 +8,7 @@ using IUser = Dragon.SecurityServer.Identity.Models.IUser;
 
 namespace Dragon.SecurityServer.PermissionSTS.Models
 {
+    [Table("IdentityUser")]
     public class AppMember : IUser
     {
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<AppMember> manager)

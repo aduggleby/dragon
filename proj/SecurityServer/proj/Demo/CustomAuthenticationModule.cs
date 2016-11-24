@@ -13,7 +13,7 @@ namespace Dragon.SecurityServer.Demo
 
         protected override void OnRedirectingToIdentityProvider(RedirectingToIdentityProviderEventArgs e)
         {
-            var parameters = HmacHelper.CreateHmacRequestParametersFromConfig(Consts.ProfileHmacSettingsPrefix);
+            var parameters = HmacHelper.CreateHmacRequestParametersFromConfig(Consts.PermissionHmacSettingsPrefix);
             parameters.ForEach(e.SignInRequestMessage.Parameters.Add);
             base.OnRedirectingToIdentityProvider(e);
         }
