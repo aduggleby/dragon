@@ -1,15 +1,15 @@
 ﻿@model Dragon.SecurityServer.AccountSTS.Models.VerifyCodeViewModel
 @{
-    ViewBag.Title = "Verify";
+    ViewBag.Title = Resources.Global.VerifyTitle;
 }
 
 <h2>@ViewBag.Title.</h2>
 
 @using (Html.BeginForm("VerifyCode", "Account", (RouteValueDictionary)ViewBag.RouteValues, FormMethod.Post, new Dictionary<string, object> { { "class", "form-horizontal"}, {"role", "form" }})) {
     @Html.AntiForgeryToken()
-    @Html.Hidden("provider", @Model.Provider)
-    @Html.Hidden("rememberMe", @Model.RememberMe)
-    <h4>Enter verification code</h4>
+    @Html.Hidden("provider", Model.Provider)
+    @Html.Hidden("rememberMe", Model.RememberMe)
+    <h4>@Resources.Global.EnterVerificationCode</h4>
     <hr />
     @Html.ValidationSummary("", new { @class = "text-danger" })
     <div class="form-group">
@@ -28,7 +28,7 @@
     </div>
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
-            <input type="submit" class="btn btn-default" value="Submit" />
+            <input type="submit" class="btn btn-default" value="@Resources.Global.Submit" />
         </div>
     </div>
 }

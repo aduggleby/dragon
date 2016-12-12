@@ -2,30 +2,30 @@
 @using Dragon.SecurityServer.AccountSTS.Helpers
 @model Dragon.SecurityServer.AccountSTS.Models.IndexViewModel
 @{
-    ViewBag.Title = "Manage";
+    ViewBag.Title = Resources.Global.ManageTitle;
 }
 
 <h2>@ViewBag.Title.</h2>
 
 <p class="text-success">@ViewBag.StatusMessage</p>
 <div>
-    <h4>Change your account settings</h4>
+    <h4>@Resources.Global.ChangeAccountSettings</h4>
     <hr />
     <dl class="dl-horizontal">
-        <dt>Password:</dt>
+        <dt>@Resources.Global.Password:</dt>
         <dd>
             [
             @if (Model.HasPassword)
             {
-                @Html.ActionLink("Change your password", "ChangePassword", RequestHelper.ReturnUrlToRouteValues(Request.QueryString))
+                @Html.ActionLink(Resources.Global.ChangeYourPassword, "ChangePassword", RequestHelper.ReturnUrlToRouteValues(Request.QueryString))
             }
             else
             {
-                @Html.ActionLink("Create", "SetPassword", RequestHelper.ReturnUrlToRouteValues(Request.QueryString))
+                @Html.ActionLink(Resources.Global.Create, "SetPassword", RequestHelper.ReturnUrlToRouteValues(Request.QueryString))
             }
             ]
         </dd>
-        <dt>External Logins:</dt>
+        <dt>@Resources.Global.ExternalLogins:</dt>
         <dd>
             @Model.Logins.Count [
             @Html.ActionLink("Manage", "ManageLogins", RequestHelper.ReturnUrlToRouteValues(Request.QueryString)) ]

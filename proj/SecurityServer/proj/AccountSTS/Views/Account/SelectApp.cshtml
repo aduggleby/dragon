@@ -1,14 +1,14 @@
 ﻿@using Dragon.SecurityServer.AccountSTS.Models
 @model IList<AppInfo>
 @{
-    ViewBag.Title = "Select app";
+    ViewBag.Title = Resources.Global.SelectAppTitle;
 }
 
 <h2>@ViewBag.Title.</h2>
 <div class="row">
     <div class="col-md-8">
         <section id="loginForm">
-            <h4>Select the app you want to access.</h4>
+            <h4>@Resources.Global.SelectAppMessage</h4>
             <hr />
             @foreach (var app in Model)
             {
