@@ -6,7 +6,6 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Dapper;
-using Dragon.SecurityServer.ProfileSTS.Models;
 using Dragon.SecurityServer.Identity.Stores;
 using NLog;
 using IUser = Dragon.SecurityServer.Identity.Models.IUser;
@@ -18,13 +17,13 @@ namespace UserMigration
         private const string ProfileClaimNamespace = "http://whataventure.com/schemas/identity/claims/profile/";
         private readonly string[] _properties = {"FirstName", "LastName", "Company", "Picture", "Description"};
 
-        private readonly UserStore<AppMember> _userStore;
+        private readonly UserStore<T> _userStore;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public LegacyWavProfileMigration(IDragonUserStore<T> userStore)
+        public LegacyWavProfileMigration(UserStore<T> userStore)
         {
-            _userStore = (UserStore<AppMember>) userStore; // avoid RuntimeBinderException: does not contain a definition, TODO: remove
+            _userStore = userStore;
         }
 
         public async Task Migrate()
@@ -59,7 +58,7 @@ namespace UserMigration
         private async Task MigrateUser(dynamic userData)
         {
             var userId = userData.UserID.ToString();
-            await _userStore.CreateAsync(new AppMember {Id = userId});
+            await _userStore.CreateAsync(new T {Id = userId});
             var user = await _userStore.FindByIdAsync(userId);
             if (user == null)
             {
@@ -69,7 +68,7 @@ namespace UserMigration
             var data = (IDictionary<string, object>)userData;
             foreach (var property in _properties)
             {
-                var value = data[property]?.ToString() ?? ""; // TODO: or just do not set the claim at all?
+                var value = data[property]?.ToString() ?? "";
                 _userStore.AddClaimAsync(user, new Claim(ProfileClaimNamespace + property.ToLower(), value));
             }
         }
