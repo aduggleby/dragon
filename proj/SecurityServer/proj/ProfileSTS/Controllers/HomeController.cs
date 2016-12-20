@@ -29,10 +29,10 @@ namespace Dragon.SecurityServer.ProfileSTS.Controllers
 
         public ActionResult Index()
         {
+            var action = Request.QueryString[Action];
+
             if (User.Identity.IsAuthenticated)
             {
-                var action = Request.QueryString[Action];
-
                 switch (action)
                 {
                     case SignIn:
@@ -49,12 +49,18 @@ namespace Dragon.SecurityServer.ProfileSTS.Controllers
             else
             {
                 // If the user just wants to sign out, do so...
-                if (Request.QueryString[Action] == SignOut)
+                switch (action)
                 {
-                    ProcessSignOut(Request.QueryString[Reply]);
+                    case SignOut:
+                        ProcessSignOut(Request.QueryString[Reply]);
+                        break;
+                    case SignIn:
+                        // ... else show login page
+                        return new HttpUnauthorizedResult();
+                    default:
+                        // nothing to be done
+                        break;
                 }
-                // ... else show login page
-                return new HttpUnauthorizedResult();
             }
             return View();
         }
