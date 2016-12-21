@@ -196,10 +196,6 @@
       <hmac serviceId="00000001-0001-0003-0003-000000000011" connectionStringName="Dragon" usersTableName="HmacUser" appsTableName="HmacConsumer">
         <Paths>
           <add name="api" path="^/Api/.*$" type="Include" />
-          <add name="account-logoff" path="^/Account/LogOff" type="Exclude" />
-          <add name="account" path="^/Account/.*" type="Include" excludeParameters="returnUrl, wreply" />
-          <add name="manage" path="^/Manage/.*" type="Include" />
-          <add name="home" path="^/$" type="Exclude" />
           <add name="FederationMetaData" path="^/FederationMetadata/.*" type="Exclude" />
           <add name="FederationSignin" path="^/signin-.*" type="Exclude" />
           <add name="default" path="^/.*$" type="Include" excludeParameters="wa, wtrealm, wctx, wct, wreply, returnUrl" />
