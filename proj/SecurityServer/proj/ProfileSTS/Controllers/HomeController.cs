@@ -65,20 +65,6 @@ namespace Dragon.SecurityServer.ProfileSTS.Controllers
             return View();
         }
 
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
-        }
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
-        }
-
         private string ProcessSignIn(Uri url, ClaimsPrincipal user)
         {
             var requestMessage = (SignInRequestMessage)WSFederationMessage.CreateFromUri(url);

@@ -35,8 +35,8 @@ namespace UserMigration
                 connection.Open();
                 var usersData = connection.Query(@"
                     SELECT UserID, " + string.Join(", ", _properties) + @"
-                    FROM [User] u WHERE UserID IN (SELECT u.UserID FROM [DragonRegistration] dr JOIN [User] u ON dr.UserID = u.UserID) -- skip invalid entries
-                        AND  Email like 'whataventure.test%' -- TODO: test, remove
+                    FROM [User] u
+                       AND  Email like 'whataventure.test%' -- TODO: test, remove
                     ").ToList();
                 Logger.Info($"Found {usersData.Count} users, migrating...");
                 foreach (var userData in usersData)
