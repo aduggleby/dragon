@@ -12,8 +12,11 @@ IF %ERRORLEVEL% NEQ 0 (
 
 %nuget_basedir%nuget.exe pack Dragon.SecurityServer.AccountSTS.Client.nuspec
 %nuget_basedir%nuget.exe pack Dragon.SecurityServer.ProfileSTS.Client.nuspec
-%nuget_basedir%nuget.exe pack Dragon.SecurityServer.PermissionSTS.Client.nuspec
+REM %nuget_basedir%nuget.exe pack Dragon.SecurityServer.PermissionSTS.Client.nuspec
 
-REM %nuget_basedir%nuget push Dragon.SecurityServer.AccountSTS.Client*.nupkg
-REM %nuget_basedir%nuget push Dragon.SecurityServer.ProfileSTS.Client*.nupkg
+echo.
+echo.
+echo To publish, run:
+echo %nuget_basedir%nuget push Dragon.SecurityServer.AccountSTS.Client*.nupkg
+echo %nuget_basedir%nuget push Dragon.SecurityServer.ProfileSTS.Client*.nupkg
 REM %nuget_basedir%nuget push Dragon.SecurityServer.PermissionSTS.Client*.nupkg
