@@ -277,6 +277,15 @@ The values of the last email sent to the queue will be used. So if you want to c
 
 ## Advanced Use Cases, Extensions and Customization
 
+### Logging
+
+The DefaultSmtpClient has a logging parameter you can pass to do your own logging of outgoing messages. Example:
+
+      var smtpClient = new DefaultSmtpClient((MailMessage mm )=> { /* Do logging */ });
+      m_mailSenderService = new MailSenderService(queue, smtpClient: smtpClient);
+      
+### Extending Dragon.Mail
+
 Almost every part of Dragon.Mail is open to customizing. This is best exemplified by the constructor overloads for `MailGeneratorService`.
 
     public MailGeneratorService(

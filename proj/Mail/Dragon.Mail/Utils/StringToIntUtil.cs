@@ -9,7 +9,7 @@ namespace Dragon.Mail.Utils
 {
     public static class StringToIntUtil
     {
-        private static ILog s_log = LogManager.GetCurrentClassLogger();
+        private static ILog s_log = LogManager.GetLogger("StringToIntUtil");
 
         public static int Interpret(string s, int defaultValue)
         {

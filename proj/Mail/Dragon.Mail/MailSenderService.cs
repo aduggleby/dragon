@@ -31,7 +31,7 @@ namespace Dragon.Mail
 
         private IMailQueue m_queue;
         private IConfiguration m_configuration;
-
+        private ISmtpClient m_smtpClient;
         private static int s_sleepAfterException = 1000;
         private static int s_sleepAfterOnNoWork = 5000;
 
@@ -47,14 +47,15 @@ namespace Dragon.Mail
 
         private static Thread m_thread;
 
-        private static ILog s_log = LogManager.GetCurrentClassLogger();
+        private static ILog s_log = LogManager.GetLogger<MailSenderService>();
 
-        public MailSenderService(IMailQueue queue, IConfiguration configuration = null)
+        public MailSenderService(IMailQueue queue, IConfiguration configuration = null, ISmtpClient smtpClient = null)
         {
             if (queue == null) throw new ArgumentException("Queue cannot be null.", "queue");
 
             m_configuration = configuration ?? new DefaultConfiguration();
             m_queue = queue;
+            m_smtpClient = smtpClient;
 
             s_sleepAfterException = StringToIntUtil.Interpret(m_configuration.GetValue(APP_KEY_WAIT_ERROR), s_sleepAfterException);
             s_sleepAfterOnNoWork = StringToIntUtil.Interpret(m_configuration.GetValue(APP_KEY_WAIT_NOWORK), s_sleepAfterOnNoWork);
@@ -127,7 +128,7 @@ namespace Dragon.Mail
 
         public bool Process(Models.RenderedMail mail)
         {
-            return ProcessInternal(mail, null);
+            return ProcessInternal(mail, m_smtpClient);
         }
 
 
