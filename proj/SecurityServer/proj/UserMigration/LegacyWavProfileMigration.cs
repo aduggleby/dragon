@@ -38,7 +38,6 @@ namespace UserMigration
                 var usersData = connection.Query(@"
                     SELECT UserID, " + string.Join(", ", _properties) + @"
                     FROM [User] u
-                       WHERE Email like 'whataventure.test%' -- TODO: test, remove
                     ").ToList();
                 Logger.Info($"Found {usersData.Count} users, migrating...");
                 foreach (var userData in usersData)
@@ -60,20 +59,32 @@ namespace UserMigration
         private async Task MigrateUser(dynamic userData)
         {
             var userId = userData.UserID.ToString();
-            await _userStore.CreateAsync(new T {Id = userId});
             var user = await _userStore.FindByIdAsync(userId);
             if (user == null)
             {
-                Logger.Error("User not found: " + userId);
-                return;
+                await _userStore.CreateAsync(new T {Id = userId});
+                user = await _userStore.FindByIdAsync(userId);
+                if (user == null)
+                {
+                    Logger.Error("Unable to create user: " + userId);
+                    return;
+                }
+                Logger.Trace("New user, adding login info...");
+                await _userStore.AddLoginAsync(user, new UserLoginInfo(_loginProvider, userId));
             }
+            IList<Claim> existingClaims = await _userStore.GetClaimsAsync(user);
             var data = (IDictionary<string, object>)userData;
             foreach (var property in _properties)
             {
+                var type = ProfileClaimNamespace + property.ToLower();
+                if (existingClaims.Any(x => x.Type == type))
+                {
+                    await _userStore.RemoveClaimAsync(user, existingClaims.First(x => x.Type == type));
+                    Logger.Trace("Existing claim removed: " + type);
+                }
                 var value = data[property]?.ToString() ?? "";
-                _userStore.AddClaimAsync(user, new Claim(ProfileClaimNamespace + property.ToLower(), value));
+                await _userStore.AddClaimAsync(user, new Claim(type, value));
             }
-            _userStore.AddLoginAsync(user, new UserLoginInfo(_loginProvider, userId));
         }
     }
 }
