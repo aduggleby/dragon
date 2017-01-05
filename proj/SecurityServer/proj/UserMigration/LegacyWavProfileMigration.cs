@@ -7,6 +7,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Dapper;
 using Dragon.SecurityServer.Identity.Stores;
+using Microsoft.AspNet.Identity;
 using NLog;
 using IUser = Dragon.SecurityServer.Identity.Models.IUser;
 
@@ -16,6 +17,7 @@ namespace UserMigration
     {
         private const string ProfileClaimNamespace = "http://whataventure.com/schemas/identity/claims/profile/";
         private readonly string[] _properties = {"FirstName", "LastName", "Company", "Picture", "Description"};
+        private readonly string _loginProvider = "Dragon";
 
         private readonly UserStore<T> _userStore;
 
@@ -36,7 +38,7 @@ namespace UserMigration
                 var usersData = connection.Query(@"
                     SELECT UserID, " + string.Join(", ", _properties) + @"
                     FROM [User] u
-                       AND  Email like 'whataventure.test%' -- TODO: test, remove
+                       WHERE Email like 'whataventure.test%' -- TODO: test, remove
                     ").ToList();
                 Logger.Info($"Found {usersData.Count} users, migrating...");
                 foreach (var userData in usersData)
@@ -71,6 +73,7 @@ namespace UserMigration
                 var value = data[property]?.ToString() ?? "";
                 _userStore.AddClaimAsync(user, new Claim(ProfileClaimNamespace + property.ToLower(), value));
             }
+            _userStore.AddLoginAsync(user, new UserLoginInfo(_loginProvider, userId));
         }
     }
 }
