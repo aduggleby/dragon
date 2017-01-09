@@ -22,6 +22,9 @@ namespace Dragon.SecurityServer.ProfileSTS
 {
     public partial class Startup
     {
+        public const string Action = "wa";
+        public const string SignOut = "wsignout1.0";
+
         internal static IDataProtectionProvider DataProtectionProvider { get; private set; }
         private static readonly HmacHelper HmacHelper = new HmacHelper { HmacService = new HmacSha256Service() };
 
@@ -82,8 +85,9 @@ namespace Dragon.SecurityServer.ProfileSTS
                     {
                         RedirectToIdentityProvider = (ctx) =>
                         {
-                            //To avoid a redirect loop to the federation server send 403 when user is authenticated but does not have access
-                            if (ctx.OwinContext.Response.StatusCode == 401 && ctx.OwinContext.Authentication.User.Identity.IsAuthenticated)
+                            // To avoid a redirect loop to the federation server send 403 when user is authenticated but does not have access
+                            var isSigningOut = (ctx.Request.Query.Get(Action) ?? "") == SignOut;
+                            if (!isSigningOut && ctx.OwinContext.Response.StatusCode == 401 && ctx.OwinContext.Authentication.User.Identity.IsAuthenticated)
                             {
                                 ctx.OwinContext.Response.StatusCode = 403;
                                 ctx.HandleResponse();
