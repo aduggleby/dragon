@@ -191,8 +191,12 @@ namespace Dragon.SecurityServer.Identity.Stores
 
         public Task<IList<Claim>> GetClaimsAsync(TUser user)
         {
+            if (user == null) return Task.FromResult<IList<Claim>>(new List<Claim>());
+            var where = new Dictionary<string, object> { { "UserId", user.Id } };
             if (UserClaimRepository == null) return Task.FromResult<IList<Claim>>(new List<Claim>());
-            var claims = UserClaimRepository.GetByWhere(new Dictionary<string, object> { { "UserId", user.Id } }).Select(x => new Claim(x.ClaimType, x.ClaimValue));
+            var userClaims = UserClaimRepository.GetByWhere(where).ToList();
+            if (!userClaims.Any()) return Task.FromResult<IList<Claim>>(new List<Claim>());
+            var claims = userClaims.Select(x => new Claim(x.ClaimType, x.ClaimValue));
             return Task.FromResult<IList<Claim>>(claims.ToList());
         }
 
