@@ -95,6 +95,7 @@
   <ItemGroup>
     <Compile Include="DefaultReceiverMapperTest.cs" />
     <Compile Include="DynamicDictionaryTest.cs" />
+    <Compile Include="ResourceFileTemplateRepository.cs" />
     <Compile Include="FileFolderTemplateRepository.cs" />
     <Compile Include="HandlebarsRendererTests.cs" />
     <Compile Include="FileFolderMailQueueTest.cs" />

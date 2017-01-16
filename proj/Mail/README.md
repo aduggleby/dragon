@@ -39,7 +39,12 @@ http://www.nuget.org/packages/Dragon.Mail/
 
 Dragon.Mail works in two modes. In simple mode mails are generated and sent immediately. In asynchronous mode mails are stored in a queue and sent from a service worker.
 
-### Preparing the templates directory
+### Loading templates
+
+From Version 1.10 onwards there are two options for loading templates. The classic method of using a directory of templates (with subdirectories for language specific overrides) and a new Resource File (RESX) adapter.
+
+#### Templates Directory Method
+
 By default the system loads templates from a folder using the following format:
      \templates 
        \template1	   <-- one folder per template, 
@@ -90,6 +95,20 @@ In order to add another language for the template, simply add a folder
 
 The next best matching template is used. So `de-at` will use the specific template specified here, where as both `de` and `de-ch` will use the `de` template.  If no language match can be found the default is used, so fr will use the root folder template.
 
+#### Resource File Method
+
+Create a resource file (e.g. Templates.resx) for your e-mail templates and add the corresponding language files (Templates.de-AT.resx).
+
+For each template and in each template file* add the following keys to the file:
+
+     templatename_subject_text	<-- 
+     templatename_body_text		<-- the text template for e-mails
+     templatename_body_html		<-- the html template for e-mails
+
+You must specify at least one of the body tempaltes. If you specify the html a plain text rendering will be created automatically. If you specify the text template no html body will be available in e-mails. If you specify both the email will contain alternative views for both versions.
+
+*If you only specify a key in the invariant culture resource file (Templates.resx) but no in the language specific version (Templates.de-AT.resx) the invariant culture template will be used.
+
 ### Application Configuration
 
 By default the configuration is read from the application configuration file (app.config or web.config). You can implement the interface `Dragon.Mail.Interfaces.IConfiguration` and provide the configuration values directly (using the same key values as below). 
@@ -99,7 +118,7 @@ By default the configuration is read from the application configuration file (ap
       <add key="Dragon.Mail.Sender.Address" value="sam@example.org" />
       <add key="Dragon.Mail.Sender.Name" value="Sam Sender" />
     
-      <!-- Path to the templates directory  -->
+      <!-- Path to the templates directory (only required if you are loading your templates from a folder)  -->
       <add key="Dragon.Mail.Templates.Folder" value="..\templates" />
     
       <!-- The language to register the root folder templates with -->
