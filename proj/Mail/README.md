@@ -13,7 +13,7 @@ License: [MIT](https://opensource.org/licenses/MIT)
 * [Architecture](#architecture)
 * [Downloading](#downloading)
 * [Basic Usage (Synchronous)](#basic-usage--synchronous-)
-  + [Preparing the templates directory](#preparing-the-templates-directory)
+  + [Loading templates](#loading-templates)
   + [Application Configuration](#application-configuration)
   + [Basic e-mail sending](#basic-e-mail-sending)
 * [Asynchronous sending and batching](#asynchronous-sending-and-batching)
@@ -101,7 +101,7 @@ Create a resource file (e.g. Templates.resx) for your e-mail templates and add t
 
 For each template and in each template file* add the following keys to the file:
 
-     templatename_subject_text	<-- 
+     templatename_subject_text	<-- text subject template for e-mails
      templatename_body_text		<-- the text template for e-mails
      templatename_body_html		<-- the html template for e-mails
 
@@ -191,6 +191,17 @@ In addition to the existing templates, add four templates for html summary email
          \summaryheader.txt         but in plain text format
          \summarybody.txt
          \summaryfooter.txt
+
+If you are using the Resource file, add appropriate keys as follows:
+
+     templatename_summarysubject_html
+     templatename_summaryheader_html
+	 templatename_summarybody_html
+	 templatename_summaryfooter_html
+	 templatename_summarysubject_text
+     templatename_summaryheader_text
+	 templatename_summarybody_text
+	 templatename_summaryfooter_text
 
 ### Application configuration
 
