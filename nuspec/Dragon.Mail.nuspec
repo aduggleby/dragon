@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
         <id>Dragon.Mail</id>
-        <version>1.10</version>
+        <version>1.10.4</version>
         <title>Dragon.Mail</title>
         <authors>Dragon Project</authors>
         <projectUrl>https://github.com/aduggleby/dragon/tree/master/proj/Mail</projectUrl>
