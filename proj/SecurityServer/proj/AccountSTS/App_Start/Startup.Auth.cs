@@ -45,6 +45,7 @@ namespace Dragon.SecurityServer.AccountSTS
             // Configure the sign in cookie
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
+                CookieName = "Dragon.SecurityServer.AccountSTS",
                 AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
                 LoginPath = new PathString("/Account/Login"),
                 Provider = new CookieAuthenticationProvider

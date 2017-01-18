@@ -6,8 +6,8 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Dapper;
-using Dragon.SecurityServer.ProfileSTS.Models;
 using Dragon.SecurityServer.Identity.Stores;
+using Microsoft.AspNet.Identity;
 using NLog;
 using IUser = Dragon.SecurityServer.Identity.Models.IUser;
 
@@ -17,14 +17,15 @@ namespace UserMigration
     {
         private const string ProfileClaimNamespace = "http://whataventure.com/schemas/identity/claims/profile/";
         private readonly string[] _properties = {"FirstName", "LastName", "Company", "Picture", "Description"};
+        private readonly string _loginProvider = "Dragon";
 
-        private readonly UserStore<AppMember> _userStore;
+        private readonly UserStore<T> _userStore;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public LegacyWavProfileMigration(IDragonUserStore<T> userStore)
+        public LegacyWavProfileMigration(UserStore<T> userStore)
         {
-            _userStore = (UserStore<AppMember>) userStore; // avoid RuntimeBinderException: does not contain a definition, TODO: remove
+            _userStore = userStore;
         }
 
         public async Task Migrate()
@@ -36,8 +37,7 @@ namespace UserMigration
                 connection.Open();
                 var usersData = connection.Query(@"
                     SELECT UserID, " + string.Join(", ", _properties) + @"
-                    FROM [User] u WHERE UserID IN (SELECT u.UserID FROM [DragonRegistration] dr JOIN [User] u ON dr.UserID = u.UserID) -- skip invalid entries
-                        AND  Email like 'whataventure.test%' -- TODO: test, remove
+                    FROM [User] u
                     ").ToList();
                 Logger.Info($"Found {usersData.Count} users, migrating...");
                 foreach (var userData in usersData)
@@ -59,18 +59,31 @@ namespace UserMigration
         private async Task MigrateUser(dynamic userData)
         {
             var userId = userData.UserID.ToString();
-            await _userStore.CreateAsync(new AppMember {Id = userId});
             var user = await _userStore.FindByIdAsync(userId);
             if (user == null)
             {
-                Logger.Error("User not found: " + userId);
-                return;
+                await _userStore.CreateAsync(new T {Id = userId});
+                user = await _userStore.FindByIdAsync(userId);
+                if (user == null)
+                {
+                    Logger.Error("Unable to create user: " + userId);
+                    return;
+                }
+                Logger.Trace("New user, adding login info...");
+                await _userStore.AddLoginAsync(user, new UserLoginInfo(_loginProvider, userId));
             }
+            IList<Claim> existingClaims = await _userStore.GetClaimsAsync(user);
             var data = (IDictionary<string, object>)userData;
             foreach (var property in _properties)
             {
-                var value = data[property]?.ToString() ?? ""; // TODO: or just do not set the claim at all?
-                _userStore.AddClaimAsync(user, new Claim(ProfileClaimNamespace + property.ToLower(), value));
+                var type = ProfileClaimNamespace + property.ToLower();
+                if (existingClaims.Any(x => x.Type == type))
+                {
+                    await _userStore.RemoveClaimAsync(user, existingClaims.First(x => x.Type == type));
+                    Logger.Trace("Existing claim removed: " + type);
+                }
+                var value = data[property]?.ToString() ?? "";
+                await _userStore.AddClaimAsync(user, new Claim(type, value));
             }
         }
     }

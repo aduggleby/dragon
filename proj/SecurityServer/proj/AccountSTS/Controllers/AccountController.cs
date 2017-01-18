@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Threading.Tasks;
@@ -34,6 +35,7 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
     public class AccountController : Controller
     {
         private const string LegacyPasswordPrefix = "OLD_";
+        private const string SignIn = "wsignin1.0";
 
         [Import]
         public ICheckPasswordService<AppMember> LegacyPasswordService { get; set; }
@@ -486,13 +488,20 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ExternalLogin(string provider, string returnUrl)
         {
+            var optimizedReturnUrl = ProcessQueryParams(returnUrl, (queryString) =>
+            {
+                queryString.Remove("appid");
+                queryString.Remove("userid");
+                queryString.Remove("wa");
+                queryString.Remove("wreply");
+            });
+
             var routeValues = new Dictionary<string, object>
             {
                 {"wreply", RequestHelper.GetParameterFromReturnUrl("wreply")},
-                {"ReturnUrl", returnUrl},
+                {"ReturnUrl", optimizedReturnUrl}, // For the MicrosoftAccountAuthentication Provider the ReturnUrl is too long, so use an optimized version
             };
             Consts.QueryStringHmacParameterNames.ForEach(x => routeValues.Add(x, HttpContext.Request.QueryString[x]));
-
             return _federationService.PerformExternalLogin(ControllerContext.HttpContext, provider, Url.Action("ExternalLoginCallback", "Account", new RouteValueDictionary(routeValues)));
         }
 
@@ -565,10 +574,23 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
         [AllowAnonymous, ExportModelStateToTempData]
         public async Task<ActionResult> ExternalLoginCallback(string returnUrl)
         {
+            returnUrl = ProcessQueryParams(returnUrl, (queryString) =>
+            {
+                queryString.Add("wreply", Request.QueryString["wreply"]);
+                queryString.Add("wa", SignIn);
+                queryString.Add("appid", Request.QueryString["appid"]);
+                queryString.Add("userid", Request.QueryString["userid"]);
+            });
+            if (returnUrl == null)
+            {
+                Logger.Trace("External login failed: returnUrl is null");
+            }
             var loginInfo = await AuthenticationManager.GetExternalLoginInfoAsync();
             if (loginInfo == null)
             {
                 Logger.Trace("External login failed: external login info is null");
+            }
+            if (returnUrl == null || loginInfo == null) {
                 ModelState.AddModelError("", "Unable to process login, please try again.");
                 return RedirectToAction("Login");
             }
@@ -881,6 +903,14 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        private static string ProcessQueryParams(string url, Action<NameValueCollection> processor)
+        {
+            var queryStringStartIndex = url.IndexOf("?", StringComparison.Ordinal);
+            var returnUrlPrefix = url.Substring(0, queryStringStartIndex);
+            var queryString = HttpUtility.ParseQueryString(url.Substring(queryStringStartIndex + 1));
+            processor(queryString);
+            return returnUrlPrefix + "?" + queryString;
+        }
 
         #endregion
     }

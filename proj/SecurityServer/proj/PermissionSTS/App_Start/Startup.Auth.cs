@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.IdentityModel.Tokens;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Dragon.Security.Hmac.Core.Service;
+using Dragon.SecurityServer.GenericSTSClient;
 using Dragon.SecurityServer.PermissionSTS.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
@@ -20,6 +23,7 @@ namespace Dragon.SecurityServer.PermissionSTS
     public partial class Startup
     {
         internal static IDataProtectionProvider DataProtectionProvider { get; private set; }
+        private static readonly HmacHelper HmacHelper = new HmacHelper { HmacService = new HmacSha256Service() };
 
         // For more information on configuring authentication, please visit http://go.microsoft.com/fwlink/?LinkId=301864
         public void ConfigureAuth(IAppBuilder app, Container container)
@@ -36,8 +40,11 @@ namespace Dragon.SecurityServer.PermissionSTS
             // Configure the sign in cookie
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
+                CookieName = "Dragon.SecurityServer.PermissionSTS",
                 AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
                 LoginPath = new PathString("/Account/Login"),
+                ExpireTimeSpan = TimeSpan.FromMinutes(1),
+                SlidingExpiration = false,
                 Provider = new CookieAuthenticationProvider
                 {
                     // Enables the application to validate the security stamp when the user logs in.
@@ -69,6 +76,7 @@ namespace Dragon.SecurityServer.PermissionSTS
                         ValidAudiences = new[] { ConfigurationManager.AppSettings["WtRealm"], ConfigurationManager.AppSettings["WtRealm"].ToLower() },
                         ValidIssuer = ConfigurationManager.AppSettings["ValidIssuer"]
                     },
+                    UseTokenLifetime = false, // use cookie expiration time
                     Notifications = new WsFederationAuthenticationNotifications()
                     {
                         RedirectToIdentityProvider = (ctx) =>
@@ -80,10 +88,24 @@ namespace Dragon.SecurityServer.PermissionSTS
                                 ctx.HandleResponse();
                             }
                             // forward parameters from the client or previous STS'e
-                            var parameters = new[]{"action", "data", "serviceid", "signature", "expiry", "userid", "appid"};
+                            var parameterDictionary = new Dictionary<string, string>
+                            {
+                                {"serviceid", ""},
+                                {"appid", ""},
+                                {"userid", ""},
+                            };
+                            var parameters = new List<string> { "action", "data", "serviceid", "appid", "userid" };
                             foreach (var parameter in parameters)
                             {
-                                ctx.ProtocolMessage.SetParameter(parameter, ctx.Request.Query[parameter]);
+                                var value = ctx.Request.Query[parameter];
+                                if (value == null) continue;
+                                ctx.ProtocolMessage.SetParameter(parameter, value);
+                                parameterDictionary[parameter] = value;
+                            }
+                            var hmacParameters = HmacHelper.CreateHmacRequestParametersFromConfig(parameterDictionary, Consts.ProfileHmacSettingsPrefix);
+                            foreach (var parameter in hmacParameters)
+                            {
+                                ctx.ProtocolMessage.SetParameter(parameter.Key, parameter.Value);
                             }
                             return Task.FromResult(0);
                         },

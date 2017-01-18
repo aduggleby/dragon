@@ -20,7 +20,7 @@ namespace Dragon.Data.Repositories
             {
                 if (m_existingTables.Contains(typeof(T))) return;
 
-                using (var c = ConnectionHelper.Open())
+                using (var c = ConnectionHelper.Open<T>())
                 {
                     c.CreateTableIfNotExists<T>();
                     m_existingTables.Add(typeof(T));
@@ -33,7 +33,7 @@ namespace Dragon.Data.Repositories
         {
             lock (m_existingTablesLock)
             {
-                using (var c = ConnectionHelper.Open())
+                using (var c = ConnectionHelper.Open<T>())
                 {
                     c.DropTableIfExists<T>();
                     m_existingTables.Remove(typeof(T));

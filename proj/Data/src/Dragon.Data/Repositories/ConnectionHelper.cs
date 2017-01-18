@@ -14,20 +14,25 @@ namespace Dragon.Data.Repositories
 
         public static Func<string, DbConnection> ConnectionFactory;
         public static Func<string, DbConnection> DefaultConnectionFactory;
-        public static Func<string> DefaultConnectionString = null;
-        public static Func<string> ConnectionString = null;
+        public static Func<Type, string> DefaultConnectionString = null;
+        public static Func<Type, string> ConnectionString = null;
 
         static ConnectionHelper()
         {
             DefaultConnectionFactory = (s) => new SqlConnection(s);
             ConnectionFactory = DefaultConnectionFactory;
-            DefaultConnectionString = () => ConnectionStringManager.Value;
+            DefaultConnectionString = (Type t) => ConnectionStringManager.Value;
             ConnectionString = DefaultConnectionString;
         }
 
         public static DbConnection Open()
         {
-            var conn = ConnectionFactory(ConnectionString());
+            return Open<object>();
+        }
+
+        public static DbConnection Open<T>()
+        {
+            var conn = ConnectionFactory(ConnectionString(typeof(T)));
 
             try
             {

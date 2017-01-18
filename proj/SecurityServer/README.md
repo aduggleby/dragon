@@ -111,6 +111,10 @@ Usage:
 * Click on "impersonate"
 * Log in to the application
 
+Note:
+
+This will not work if the impersonated users never logged in to the application yet.
+
 
 Tests
 -----

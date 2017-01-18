@@ -347,7 +347,7 @@ namespace Dragon.Data.Repositories
 
         protected virtual DbConnection OpenConnection()
         {
-            var c = ConnectionHelper.Open();
+            var c = ConnectionHelper.Open<T>();
             return c;
         }
 

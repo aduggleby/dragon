@@ -7,7 +7,7 @@ using Dragon.Mail.Models;
 
 namespace Dragon.Mail.Interfaces
 {
-    public interface IFileFolderTemplateRepository
+    public interface ITemplateRepository
     {
         void EnumerateTemplates(Action<Template> act);
     }

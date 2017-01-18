@@ -18,6 +18,7 @@ namespace Dragon.SecurityServer.Demo
             app.UseCookieAuthentication(
                 new CookieAuthenticationOptions
                 {
+                    CookieName = "Dragon.SecurityServer.Demo",
                     AuthenticationType = DefaultAuthenticationTypes.ExternalCookie,
                     AuthenticationMode = AuthenticationMode.Passive,
                 });

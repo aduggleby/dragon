@@ -238,6 +238,7 @@
     <Compile Include="App_Start\SimpleInjectorInitializer.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Consts.cs" />
     <Compile Include="Controllers\PermissionApiController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -288,15 +289,16 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Web.config">
+    <None Include="Web.config">
       <SubType>Designer</SubType>
-    </Content>
-    <Content Include="Web.Debug.config">
+    </None>
+    <Content Include="Web.config.default" />
+    <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
-    </Content>
-    <Content Include="Web.Release.config">
+    </None>
+    <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
-    </Content>
+    </None>
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
@@ -342,6 +344,10 @@
       <Project>{D79ED90B-B8B8-4F01-B9C9-021A8A6163AD}</Project>
       <Name>Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\GenericSTSClient\GenericSTSClient.csproj">
+      <Project>{E6064E38-13C3-4F5F-8BB5-8C77D61E2AD8}</Project>
+      <Name>GenericSTSClient</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Identity\Identity.csproj">
       <Project>{e0666626-ea75-4728-8c76-9ad78db56d65}</Project>
       <Name>Identity</Name>
@@ -379,6 +385,9 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
+  <PropertyGroup>
+    <PreBuildEvent>If Not Exist "$(ProjectDir)Web.config" copy "$(ProjectDir)Web.config.default" "$(ProjectDir)Web.config"</PreBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
