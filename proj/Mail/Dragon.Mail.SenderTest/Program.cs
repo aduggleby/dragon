@@ -15,36 +15,84 @@ namespace Dragon.Mail.SenderTest
     {
         static void Main(string[] args)
         {
-            //var md = new TableMetadata();
+            //FolderTest();
+            //ResourceFileTest();
+            ResourceFileTestInGerman();
+            //while (senderx.ProcessNext())
+            //{
+            //}
+        }
 
-            //MetadataHelper.MetadataForClass(typeof(Dragon.Mail.SqlQueue.Mail), ref md);
-            //var s = TSQLGenerator.BuildCreate(md);
+        static void FolderTest()
+        {
 
             var queue = new InMemoryMailQueue();
-            
+
             var senderx = new MailSenderService(queue);
 
             var generator = new MailGeneratorService(queue, mailSenderService: senderx, async: false);
 
 
             var loader = new FileFolderTemplateRepository(@"..\..\templates");
-
             loader.EnumerateTemplates(generator.Register);
 
             dynamic recipient = new ExpandoObject();
             recipient.email = "bob@example.org";
             recipient.fullname = "Bob";
             recipient.userid = "baxtor";
-            
+
             dynamic data = new ExpandoObject();
             data.link = "http://www.google.com";
             data.name = "Google";
 
             generator.Send(recipient, "Welcome", data);
+        }
 
-            //while (senderx.ProcessNext())
-            //{
-            //}
+        static void ResourceFileTest()
+        {
+            var queue = new InMemoryMailQueue();
+
+            var senderx = new MailSenderService(queue);
+
+            var generator = new MailGeneratorService(queue, mailSenderService: senderx, async: false);
+
+            var loader = new ResourceFileTemplateRepository(new DefaultResourceManagerAdapter(Templates.ResourceManager));
+            loader.EnumerateTemplates(generator.Register);
+
+            dynamic recipient = new ExpandoObject();
+            recipient.email = "bob@example.org";
+            recipient.fullname = "Bob";
+            recipient.userid = "baxtor";
+
+            dynamic data = new ExpandoObject();
+            data.link = "http://www.google.com";
+            data.name = "Google";
+
+            generator.Send(recipient, "Welcome", data);
+        }
+
+
+        static void ResourceFileTestInGerman()
+        {
+            var queue = new InMemoryMailQueue();
+
+            var senderx = new MailSenderService(queue);
+
+            var generator = new MailGeneratorService(queue, mailSenderService: senderx, async: false);
+
+            var loader = new ResourceFileTemplateRepository(new DefaultResourceManagerAdapter(Templates.ResourceManager));
+            loader.EnumerateTemplates(generator.Register);
+
+            dynamic recipient = new ExpandoObject();
+            recipient.email = "bob@example.org";
+            recipient.fullname = "Bob";
+            recipient.userid = "baxtor";
+
+            dynamic data = new ExpandoObject();
+            data.link = "http://www.google.com";
+            data.name = "Google";
+
+            generator.Send(recipient, "Welcome", data, language: CultureInfo.CreateSpecificCulture("de-AT"));
         }
     }
 }

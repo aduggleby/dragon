@@ -19,7 +19,7 @@ All modules are licensed under [MIT](https://opensource.org/licenses/MIT) unless
 
 ## [Dragon.Mail](https://github.com/aduggleby/dragon/tree/master/proj/Mail)
 
-Status: Released, Version: [1.8.1](http://www.nuget.org/packages/Dragon.Mail/)
+Status: Stable, Version: [1.10](http://www.nuget.org/packages/Dragon.Mail/)
 
 The Mail Templating and Sending Module (part of Dragon Web Framework) for .NET that supports 
 
@@ -47,7 +47,7 @@ for requests from client applications (apps) to web services (services).
 
 ## [Dragon.Data](https://github.com/aduggleby/dragon/tree/master/proj/Data)
 
-Status: Stable, Version: [1.4.0](http://www.nuget.org/packages/Dragon.Data/)
+Status: Stable, Version: [1.5.0](http://www.nuget.org/packages/Dragon.Data/)
 
 Add-on library for [Dapper](https://github.com/StackExchange/dapper-dot-net) implementing:
 
