@@ -97,6 +97,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to AccountSTS.
+        /// </summary>
+        public static string AppName {
+            get {
+                return ResourceManager.GetString("AppName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Associate your {LoginProvider} account..
         /// </summary>
         public static string AssociateYourXAccount {
@@ -269,6 +278,24 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to An error occurred while processing your request..
+        /// </summary>
+        public static string ErrorText {
+            get {
+                return ResourceManager.GetString("ErrorText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error.
+        /// </summary>
+        public static string ErrorTitle {
+            get {
+                return ResourceManager.GetString("ErrorTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unsuccessful login with service..
         /// </summary>
         public static string ExternalLoginFailed {
@@ -341,6 +368,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Hello {Name}!.
+        /// </summary>
+        public static string HelloX {
+            get {
+                return ResourceManager.GetString("HelloX", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Home Page.
         /// </summary>
         public static string HomepageTitle {
@@ -355,6 +391,33 @@ namespace Resources {
         public static string Impersonate {
             get {
                 return ResourceManager.GetString("Impersonate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This account has been locked out, please try again later..
+        /// </summary>
+        public static string LockedOutText {
+            get {
+                return ResourceManager.GetString("LockedOutText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Locked Out.
+        /// </summary>
+        public static string LockedOutTitle {
+            get {
+                return ResourceManager.GetString("LockedOutTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Log in.
+        /// </summary>
+        public static string LogIn {
+            get {
+                return ResourceManager.GetString("LogIn", resourceCulture);
             }
         }
         
@@ -391,6 +454,15 @@ namespace Resources {
         public static string LoginUsingX {
             get {
                 return ResourceManager.GetString("LoginUsingX", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Log off.
+        /// </summary>
+        public static string LogOff {
+            get {
+                return ResourceManager.GetString("LogOff", resourceCulture);
             }
         }
         
@@ -526,6 +598,15 @@ namespace Resources {
         public static string ResetYourPassword {
             get {
                 return ResourceManager.GetString("ResetYourPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Return.
+        /// </summary>
+        public static string Return {
+            get {
+                return ResourceManager.GetString("Return", resourceCulture);
             }
         }
         

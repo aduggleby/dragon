@@ -320,4 +320,37 @@ Please enter a user name for this site below and click the Register button to fi
   <data name="VerifyTitle" xml:space="preserve">
     <value>Verify</value>
   </data>
+  <data name="AppName" xml:space="preserve">
+    <value>AccountSTS</value>
+  </data>
+  <data name="ErrorText" xml:space="preserve">
+    <value>An error occurred while processing your request.</value>
+  </data>
+  <data name="ErrorTitle" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="HelloX" xml:space="preserve">
+    <value>Hello {Name}!</value>
+  </data>
+  <data name="LockedOutText" xml:space="preserve">
+    <value>This account has been locked out, please try again later.</value>
+  </data>
+  <data name="LockedOutTitle" xml:space="preserve">
+    <value>Locked Out</value>
+  </data>
+  <data name="LogIn" xml:space="preserve">
+    <value>Log in</value>
+  </data>
+  <data name="LogOff" xml:space="preserve">
+    <value>Log off</value>
+  </data>
+  <data name="Return" xml:space="preserve">
+    <value>Return</value>
+  </data>
+  <data name="SetPassword" xml:space="preserve">
+    <value>Set password</value>
+  </data>
+  <data name="VerifyPhoneNumberTitle" xml:space="preserve">
+    <value>Verify Phone Number</value>
+  </data>
 </root>
