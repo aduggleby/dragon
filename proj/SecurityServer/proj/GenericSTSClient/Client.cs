@@ -40,8 +40,16 @@ namespace Dragon.SecurityServer.GenericSTSClient
         {
             using (var client = new HttpClient())
             {
-                InitClient(client);
-                var result = await client.GetAsync(GenerateUrl(action, parameters));
+                HttpResponseMessage result;
+                try
+                {
+                    InitClient(client);
+                    result = await client.GetAsync(GenerateUrl(action, parameters)).ConfigureAwait(false);
+                }
+                catch (Exception e)
+                {
+                    throw new ApiException(e.Message);
+                }
                 if (!result.IsSuccessStatusCode)
                 {
                     throw new ApiException(await result.Content.ReadAsStringAsync());
