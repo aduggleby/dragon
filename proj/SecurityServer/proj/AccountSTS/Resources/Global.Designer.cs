@@ -134,7 +134,7 @@ namespace Resources {
         
         /// <summary>
         ///   Looks up a localized string similar to You&apos;ve successfully authenticated with &lt;strong&gt;{LoginProvider}&lt;/strong&gt;. 
-        ///Please enter a user name for this site below and click the Register button to finish logging in..
+        ///Please enter your email to finish your registration..
         /// </summary>
         public static string AuthenticatedWithX {
             get {
@@ -314,7 +314,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Thank you for confirming your email. Please return to the application to login..
+        ///   Looks up a localized string similar to Thank you for confirming your email..
         /// </summary>
         public static string EmailConfirmed {
             get {
@@ -409,15 +409,6 @@ namespace Resources {
         public static string ForgotPasswordConfirmationTitle {
             get {
                 return ResourceManager.GetString("ForgotPasswordConfirmationTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Forgot your password?.
-        /// </summary>
-        public static string ForgotPasswordTitle {
-            get {
-                return ResourceManager.GetString("ForgotPasswordTitle", resourceCulture);
             }
         }
         
@@ -737,11 +728,11 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your password has been reset. Please return to the application to login..
+        ///   Looks up a localized string similar to Your password has been reset..
         /// </summary>
-        public static string ResetPasswordConfirmationReturnToApp {
+        public static string ResetPasswordConfirmation {
             get {
-                return ResourceManager.GetString("ResetPasswordConfirmationReturnToApp", resourceCulture);
+                return ResourceManager.GetString("ResetPasswordConfirmation", resourceCulture);
             }
         }
         
@@ -796,6 +787,15 @@ namespace Resources {
         public static string Return {
             get {
                 return ResourceManager.GetString("Return", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please return to the application to login..
+        /// </summary>
+        public static string ReturnToLogin {
+            get {
+                return ResourceManager.GetString("ReturnToLogin", resourceCulture);
             }
         }
         
