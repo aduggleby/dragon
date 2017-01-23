@@ -97,6 +97,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You might already have registered using {LoginProviders}. If this is the case, login with one of those to set a password..
+        /// </summary>
+        public static string AlreadyRegisteredUsingXMessage {
+            get {
+                return ResourceManager.GetString("AlreadyRegisteredUsingXMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to AccountSTS.
         /// </summary>
         public static string AppName {
@@ -179,11 +188,38 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Code.
+        /// </summary>
+        public static string Code {
+            get {
+                return ResourceManager.GetString("Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {1} and {0} do not match..
+        /// </summary>
+        public static string CompareAttribute_ValidationError {
+            get {
+                return ResourceManager.GetString("CompareAttribute_ValidationError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Confirm Email.
         /// </summary>
         public static string ConfirmEmailTitle {
             get {
                 return ResourceManager.GetString("ConfirmEmailTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Confirm password.
+        /// </summary>
+        public static string ConfirmPassword {
+            get {
+                return ResourceManager.GetString("ConfirmPassword", resourceCulture);
             }
         }
         
@@ -238,6 +274,24 @@ namespace Resources {
         public static string CreatePasswordTitle {
             get {
                 return ResourceManager.GetString("CreatePasswordTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Email.
+        /// </summary>
+        public static string Email {
+            get {
+                return ResourceManager.GetString("Email", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Email field is not a valid e-mail address..
+        /// </summary>
+        public static string EmailAddressAttribute_ValidationError {
+            get {
+                return ResourceManager.GetString("EmailAddressAttribute_ValidationError", resourceCulture);
             }
         }
         
@@ -386,11 +440,38 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Id.
+        /// </summary>
+        public static string Id {
+            get {
+                return ResourceManager.GetString("Id", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to impersonate.
         /// </summary>
         public static string Impersonate {
             get {
                 return ResourceManager.GetString("Impersonate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Internal error, please try again..
+        /// </summary>
+        public static string InternalErrorMessage {
+            get {
+                return ResourceManager.GetString("InternalErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid login attempt..
+        /// </summary>
+        public static string InvalidLoginAttempt {
+            get {
+                return ResourceManager.GetString("InvalidLoginAttempt", resourceCulture);
             }
         }
         
@@ -422,6 +503,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please log in and try again..
+        /// </summary>
+        public static string LoginAndTryAgainMessage {
+            get {
+                return ResourceManager.GetString("LoginAndTryAgainMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Login Failure.
         /// </summary>
         public static string LoginFailureTitle {
@@ -445,6 +535,24 @@ namespace Resources {
         public static string LoginTitle {
             get {
                 return ResourceManager.GetString("LoginTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please login to link your account with your {LoginProvider} account..
+        /// </summary>
+        public static string LoginToLinkWithX {
+            get {
+                return ResourceManager.GetString("LoginToLinkWithX", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Try logging in using {0}{1}..
+        /// </summary>
+        public static string LoginUsingOneOf {
+            get {
+                return ResourceManager.GetString("LoginUsingOneOf", resourceCulture);
             }
         }
         
@@ -481,6 +589,24 @@ namespace Resources {
         public static string ManageTitle {
             get {
                 return ResourceManager.GetString("ManageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You do not have permissions to access the requested service..
+        /// </summary>
+        public static string NoPermissionsForService {
+            get {
+                return ResourceManager.GetString("NoPermissionsForService", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to one of.
+        /// </summary>
+        public static string OneOf {
+            get {
+                return ResourceManager.GetString("OneOf", resourceCulture);
             }
         }
         
@@ -530,6 +656,24 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remember this browser?.
+        /// </summary>
+        public static string RememberBrowser {
+            get {
+                return ResourceManager.GetString("RememberBrowser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remember me?.
+        /// </summary>
+        public static string RememberMe {
+            get {
+                return ResourceManager.GetString("RememberMe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Remove.
         /// </summary>
         public static string Remove {
@@ -548,7 +692,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The {0} field is required.
+        ///   Looks up a localized string similar to The {0} field is required..
         /// </summary>
         public static string RequiredAttribute_ValidationError {
             get {
@@ -674,6 +818,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The {0} must be at least {2} characters long..
+        /// </summary>
+        public static string StringLengthAttribute_ValidationError {
+            get {
+                return ResourceManager.GetString("StringLengthAttribute_ValidationError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Submit.
         /// </summary>
         public static string Submit {
@@ -688,6 +841,15 @@ namespace Resources {
         public static string TryAgain {
             get {
                 return ResourceManager.GetString("TryAgain", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to process login, please try again..
+        /// </summary>
+        public static string UnableToProcessLoginMessage {
+            get {
+                return ResourceManager.GetString("UnableToProcessLoginMessage", resourceCulture);
             }
         }
         

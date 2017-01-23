@@ -5,12 +5,12 @@ namespace Dragon.SecurityServer.AccountSTS.Models
 {
     public class ExternalLoginConfirmationViewModel
     {
-        [Required]
-        [Display(Name = "Email")]
+        [Required(ErrorMessageResourceType = typeof(Resources.Global), ErrorMessageResourceName = "RequiredAttribute_ValidationError")]
+        [Display(Name = "Email", ResourceType = typeof(Resources.Global))]
         public string Email { get; set; }
 
         [DataType(DataType.Password)]
-        [Display(Name = "Password")]
+        [Display(Name = "Password", ResourceType = typeof(Resources.Global))]
         public string Password { get; set; }
     }
 
@@ -29,15 +29,15 @@ namespace Dragon.SecurityServer.AccountSTS.Models
 
     public class VerifyCodeViewModel
     {
-        [Required]
+        [Required(ErrorMessageResourceType = typeof(Resources.Global), ErrorMessageResourceName = "RequiredAttribute_ValidationError")]
         public string Provider { get; set; }
 
-        [Required]
-        [Display(Name = "Code")]
+        [Required(ErrorMessageResourceType = typeof(Resources.Global), ErrorMessageResourceName = "RequiredAttribute_ValidationError")]
+        [Display(Name = "Code", ResourceType = typeof(Resources.Global))]
         public string Code { get; set; }
         public string ReturnUrl { get; set; }
 
-        [Display(Name = "Remember this browser?")]
+        [Display(Name = "RememberBrowser", ResourceType = typeof(Resources.Global))]
         public bool RememberBrowser { get; set; }
 
         public bool RememberMe { get; set; }
@@ -45,86 +45,86 @@ namespace Dragon.SecurityServer.AccountSTS.Models
 
     public class ForgotViewModel
     {
-        [Required]
-        [Display(Name = "Email")]
+        [Required(ErrorMessageResourceType = typeof(Resources.Global), ErrorMessageResourceName = "RequiredAttribute_ValidationError")]
+        [Display(Name = "Email", ResourceType = typeof(Resources.Global))]
         public string Email { get; set; }
     }
 
     public class LoginViewModel
     {
-        [Required]
-        [Display(Name = "Email")]
-        [EmailAddress]
+        [Required(ErrorMessageResourceType = typeof(Resources.Global), ErrorMessageResourceName = "RequiredAttribute_ValidationError")]
+        [Display(Name = "Email", ResourceType = typeof(Resources.Global))]
+        [EmailAddress(ErrorMessageResourceType = typeof(Resources.Global), ErrorMessageResourceName = "EmailAddressAttribute_ValidationError")]
         public string Email { get; set; }
 
-        [Required]
+        [Required(ErrorMessageResourceType = typeof(Resources.Global), ErrorMessageResourceName = "RequiredAttribute_ValidationError")]
         [DataType(DataType.Password)]
-        [Display(Name = "Password")]
+        [Display(Name = "Password", ResourceType = typeof(Resources.Global))]
         public string Password { get; set; }
 
-        [Display(Name = "Remember me?")]
+        [Display(Name = "RememberMe", ResourceType = typeof(Resources.Global))]
         public bool RememberMe { get; set; }
     }
 
     public class RegisterViewModel
     {
-        [Required]
-        [EmailAddress]
-        [Display(Name = "Email")]
+        [Required(ErrorMessageResourceType = typeof(Resources.Global), ErrorMessageResourceName = "RequiredAttribute_ValidationError")]
+        [EmailAddress(ErrorMessageResourceType = typeof(Resources.Global), ErrorMessageResourceName = "EmailAddressAttribute_ValidationError")]
+        [Display(Name = "Email", ResourceType = typeof(Resources.Global))]
         public string Email { get; set; }
 
-        [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 8)]
+        [Required(ErrorMessageResourceType = typeof(Resources.Global), ErrorMessageResourceName = "RequiredAttribute_ValidationError")]
+        [StringLength(100, ErrorMessageResourceType = typeof(Resources.Global), ErrorMessageResourceName = "StringLengthAttribute_ValidationError", MinimumLength = 8)]
         [DataType(DataType.Password)]
-        [Display(Name = "Password")]
+        [Display(Name = "Password", ResourceType = typeof(Resources.Global))]
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
-        [Display(Name = "Confirm password")]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [Display(Name = "ConfirmPassword", ResourceType = typeof(Resources.Global))]
+        [Compare("Password", ErrorMessageResourceType = typeof(Resources.Global), ErrorMessageResourceName = "CompareAttribute_ValidationError")]
         public string ConfirmPassword { get; set; }
     }
 
     public class UpdateViewModel
     {
-        [Required]
+        [Required(ErrorMessageResourceType = typeof(Resources.Global), ErrorMessageResourceName = "RequiredAttribute_ValidationError")]
         [DataType(DataType.Text)]
-        [Display(Name = "Id")]
+        [Display(Name = "Id", ResourceType = typeof(Resources.Global))]
         public string Id { get; set; }
 
-        [Required]
-        [EmailAddress]
-        [Display(Name = "Email")]
+        [Required(ErrorMessageResourceType = typeof(Resources.Global), ErrorMessageResourceName = "RequiredAttribute_ValidationError")]
+        [EmailAddress(ErrorMessageResourceType = typeof(Resources.Global), ErrorMessageResourceName = "EmailAddressAttribute_ValidationError")]
+        [Display(Name = "Email", ResourceType = typeof(Resources.Global))]
         public string Email { get; set; }
 
-        [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 8)]
+        [Required(ErrorMessageResourceType = typeof(Resources.Global), ErrorMessageResourceName = "RequiredAttribute_ValidationError")]
+        [StringLength(100, ErrorMessageResourceType = typeof(Resources.Global), ErrorMessageResourceName = "StringLengthAttribute_ValidationError", MinimumLength = 8)]
         [DataType(DataType.Password)]
-        [Display(Name = "Password")]
+        [Display(Name = "Password", ResourceType = typeof(Resources.Global))]
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
-        [Display(Name = "Confirm password")]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [Display(Name = "ConfirmPassword", ResourceType = typeof(Resources.Global))]
+        [Compare("Password", ErrorMessageResourceType = typeof(Resources.Global), ErrorMessageResourceName = "CompareAttribute_ValidationError")]
         public string ConfirmPassword { get; set; }
     }
     
     public class ResetPasswordViewModel
     {
-        [Required]
-        [EmailAddress]
-        [Display(Name = "Email")]
+        [Required(ErrorMessageResourceType = typeof(Resources.Global), ErrorMessageResourceName = "RequiredAttribute_ValidationError")]
+        [EmailAddress(ErrorMessageResourceType = typeof(Resources.Global), ErrorMessageResourceName = "EmailAddressAttribute_ValidationError")]
+        [Display(Name = "Email", ResourceType = typeof(Resources.Global))]
         public string Email { get; set; }
 
-        [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 8)]
+        [Required(ErrorMessageResourceType = typeof(Resources.Global), ErrorMessageResourceName = "RequiredAttribute_ValidationError")]
+        [StringLength(100, ErrorMessageResourceType = typeof(Resources.Global), ErrorMessageResourceName = "StringLengthAttribute_ValidationError", MinimumLength = 8)]
         [DataType(DataType.Password)]
-        [Display(Name = "Password")]
+        [Display(Name = "Password", ResourceType = typeof(Resources.Global))]
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
-        [Display(Name = "Confirm password")]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [Display(Name = "ConfirmPassword", ResourceType = typeof(Resources.Global))]
+        [Compare("Password", ErrorMessageResourceType = typeof(Resources.Global), ErrorMessageResourceName = "CompareAttribute_ValidationError")]
         public string ConfirmPassword { get; set; }
 
         public string Code { get; set; }
@@ -132,9 +132,9 @@ namespace Dragon.SecurityServer.AccountSTS.Models
 
     public class ForgotPasswordViewModel
     {
-        [Required]
-        [EmailAddress]
-        [Display(Name = "Email")]
+        [Required(ErrorMessageResourceType = typeof(Resources.Global), ErrorMessageResourceName = "RequiredAttribute_ValidationError")]
+        [EmailAddress(ErrorMessageResourceType = typeof(Resources.Global), ErrorMessageResourceName = "EmailAddressAttribute_ValidationError")]
+        [Display(Name = "Email", ResourceType = typeof(Resources.Global))]
         public string Email { get; set; }
     }
 }
