@@ -206,6 +206,24 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please confirm your account by clicking &lt;a href=&quot;{Url}&quot;&gt;here&lt;/a&gt;.
+        /// </summary>
+        public static string ConfirmAccountMessage {
+            get {
+                return ResourceManager.GetString("ConfirmAccountMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Confirm your account.
+        /// </summary>
+        public static string ConfirmAccountTitle {
+            get {
+                return ResourceManager.GetString("ConfirmAccountTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Confirm Email.
         /// </summary>
         public static string ConfirmEmailTitle {
@@ -715,6 +733,15 @@ namespace Resources {
         public static string ResetPasswordConfirmationTitle {
             get {
                 return ResourceManager.GetString("ResetPasswordConfirmationTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please reset your password by clicking &lt;a href=&quot;{Url}&quot;&gt;here&lt;/a&gt;.
+        /// </summary>
+        public static string ResetPasswordMessage {
+            get {
+                return ResourceManager.GetString("ResetPasswordMessage", resourceCulture);
             }
         }
         

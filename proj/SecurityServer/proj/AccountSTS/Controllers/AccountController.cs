@@ -226,7 +226,7 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
 
         private async Task<string> GenerateTryLoginWithFederationProviderErrorMessage(string email)
         {
-            var message = "Invalid login attempt.";
+            var message = Resources.Global.InvalidLoginAttempt;
             var user = await _userStore.FindByEmailAsync(email);
             if (user != null)
             {
@@ -321,7 +321,10 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
                     // Send an email with this link
                     string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                    await UserManager.SendEmailAsync(
+                        user.Id,
+                        Resources.Global.ConfirmAccountTitle,
+                        Resources.Global.ConfirmAccountMessage.Replace("Url", callbackUrl));
 
                     var returnUrl = Request.QueryString["ReturnUrl"];
                     return string.IsNullOrEmpty(returnUrl) ? RedirectToAction("Index", "Home") : RedirectToLocal(returnUrl);
@@ -401,8 +404,10 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
             var callbackUrl = Url.Action("ResetPassword", "Account", new {userId = user.Id, code = code},
                 protocol: Request.Url.Scheme);
             await
-                UserManager.SendEmailAsync(user.Id, "Reset Password",
-                    "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                UserManager.SendEmailAsync(
+                    user.Id,
+                    Resources.Global.ResetPasswordTitle,
+                    Resources.Global.ResetPasswordMessage.Replace("Url", callbackUrl));
             return RedirectToAction("ForgotPasswordConfirmation", "Account", ViewBag.RouteValues);
         }
 

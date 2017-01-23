@@ -368,6 +368,12 @@ Please enter a user name for this site below and click the Register button to fi
   <data name="CompareAttribute_ValidationError" xml:space="preserve">
     <value>{1} and {0} do not match.</value>
   </data>
+  <data name="ConfirmAccountMessage" xml:space="preserve">
+    <value>Please confirm your account by clicking &lt;a href="{Url}"&gt;here&lt;/a&gt;</value>
+  </data>
+  <data name="ConfirmAccountTitle" xml:space="preserve">
+    <value>Confirm your account</value>
+  </data>
   <data name="ConfirmPassword" xml:space="preserve">
     <value>Confirm password</value>
   </data>
@@ -403,6 +409,9 @@ Please enter a user name for this site below and click the Register button to fi
   </data>
   <data name="RememberMe" xml:space="preserve">
     <value>Remember me?</value>
+  </data>
+  <data name="ResetPasswordMessage" xml:space="preserve">
+    <value>Please reset your password by clicking &lt;a href="{Url}"&gt;here&lt;/a&gt;</value>
   </data>
   <data name="UnableToProcessLoginMessage" xml:space="preserve">
     <value>Unable to process login, please try again.</value>
