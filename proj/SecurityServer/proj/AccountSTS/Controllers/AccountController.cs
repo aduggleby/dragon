@@ -333,12 +333,14 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
                 StackExchange.Exceptional.ErrorStore.LogException(new Exception(message), null);
 
                 // avoid Name x is already taken. errors
-                var identityResult = new IdentityResult(result.Errors.Where(x => !x.StartsWith("Name ")));
+                var identityResult = new IdentityResult(result.Errors.Where(
+                    x => !x.StartsWith(Resources.Global.Name + " ") && !x.Contains(" " + Resources.Global.Name + " ")));
                 AddErrors(identityResult);
 
                 // Show a hint about external providers
                 ModelState.AddModelError("", Resources.Global.AlreadyRegisteredUsingXMessage
-                    .Replace("{LoginProviders}", WebConfigurationManager.AppSettings["AuthenticationProviders"].ReplaceLast(",", " or ")));
+                    .Replace("{LoginProviders}", WebConfigurationManager.AppSettings["AuthenticationProviders"]
+                    .ReplaceLast(",", " " + Resources.Global.Or + " ")));
             }
 
             // If we got this far, something failed, redisplay form

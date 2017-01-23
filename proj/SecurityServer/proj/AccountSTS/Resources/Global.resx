@@ -416,4 +416,10 @@ Please enter a user name for this site below and click the Register button to fi
   <data name="UnableToProcessLoginMessage" xml:space="preserve">
     <value>Unable to process login, please try again.</value>
   </data>
+  <data name="Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="Or" xml:space="preserve">
+    <value>or</value>
+  </data>
 </root>

@@ -611,6 +611,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Name.
+        /// </summary>
+        public static string Name {
+            get {
+                return ResourceManager.GetString("Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You do not have permissions to access the requested service..
         /// </summary>
         public static string NoPermissionsForService {
@@ -625,6 +634,15 @@ namespace Resources {
         public static string OneOf {
             get {
                 return ResourceManager.GetString("OneOf", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to or.
+        /// </summary>
+        public static string Or {
+            get {
+                return ResourceManager.GetString("Or", resourceCulture);
             }
         }
         
