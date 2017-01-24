@@ -136,8 +136,15 @@ The `MailGeneratorService` has optional parameters for all parts of the mail gen
     
     // Use template helper to load templates from folder 
     // and add to generator service
-    var templateFolder = new FileFolderTemplateRepository();
-    templateFolder.EnumerateTemplates(generatorService.Register);
+    
+    // Option 1: Load templates from a folder
+    var fileFolderLoader = new FileFolderTemplateRepository();
+    fileFolderLoader.EnumerateTemplates(generatorService.Register);
+
+    // Option 2: Load templates from a resource file
+    // Pass your resource file's ResourceManager into the adapter which the repository needs (here: Templates.resx).
+    var resourceFileLoader = new ResourceFileTemplateRepository(new DefaultResourceManagerAdapter(Templates.ResourceManager));
+    resourceFileLoader.EnumerateTemplates(generator.Register);
 
 After the service is setup you can send an email providing the recipient, the template name (folder name) and optionally data for the template to use.
 
