@@ -35,7 +35,7 @@ namespace Dragon.SecurityServer.Demo.Controllers
             var fam = FederatedAuthentication.WSFederationAuthenticationModule;
             fam.SignIn(Guid.NewGuid().ToString());
             var signInRequestMessage = new SignInRequestMessage(new Uri(fam.Issuer), fam.Realm, returnUrl);
-            var parameters = HmacHelper.CreateHmacRequestParametersFromConfig(Consts.PermissionHmacSettingsPrefix);
+            var parameters = HmacHelper.CreateHmacRequestParametersFromConfig(Consts.ProfileHmacSettingsPrefix);
             parameters.ForEach(signInRequestMessage.Parameters.Add);
             return new RedirectResult(signInRequestMessage.WriteQueryString());
         }
@@ -47,7 +47,7 @@ namespace Dragon.SecurityServer.Demo.Controllers
             FormsAuthentication.SignOut();
             Debug.Assert(Request.Url != null, "Request.Url != null");
             var signOutRequestMessage = new SignOutRequestMessage(new Uri(fam.Issuer), returnUrl);
-            var parameters = HmacHelper.CreateHmacRequestParametersFromConfig(Consts.PermissionHmacSettingsPrefix);
+            var parameters = HmacHelper.CreateHmacRequestParametersFromConfig(Consts.ProfileHmacSettingsPrefix);
             parameters.ForEach(signOutRequestMessage.Parameters.Add);
             return new RedirectResult(signOutRequestMessage.WriteQueryString());
         }
