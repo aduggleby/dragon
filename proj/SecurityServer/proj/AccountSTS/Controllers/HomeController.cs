@@ -9,7 +9,9 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using Dragon.Data.Interfaces;
 using Dragon.SecurityServer.AccountSTS.Attributes;
+using Dragon.SecurityServer.AccountSTS.Helpers;
 using Dragon.SecurityServer.AccountSTS.Models;
 using Dragon.SecurityServer.AccountSTS.Services;
 using Dragon.SecurityServer.Common;
@@ -29,13 +31,15 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
         private readonly IFederationService _federationService;
         private readonly ApplicationSignInManager _signInManager;
         private readonly ApplicationUserManager _userManager;
+        private readonly IRepository<UserActivity> _userActivityRepository;
 
-        public HomeController(IDragonUserStore<AppMember> userStore, IFederationService federationService, ApplicationSignInManager signInManager, ApplicationUserManager userManager)
+        public HomeController(IDragonUserStore<AppMember> userStore, IFederationService federationService, ApplicationSignInManager signInManager, ApplicationUserManager userManager, IRepository<UserActivity> userActivityRepository)
         {
             _userStore = userStore;
             _federationService = federationService;
             _signInManager = signInManager;
             _userManager = userManager;
+            _userActivityRepository = userActivityRepository;
         }
 
         [AuthorizeForRegisteredApps]
@@ -136,8 +140,17 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
             return responseMessage.WriteFormPost();
         }
 
-        private static void ProcessSignOut()
+        private void ProcessSignOut()
         {
+            _userActivityRepository.Insert(new UserActivity
+            {
+                AppId = RequestHelper.GetCurrentAppId() ?? Guid.Empty.ToString(),
+                ServiceId = RequestHelper.GetCurrentServiceId() ?? Guid.Empty.ToString(),
+                DateTime = DateTime.UtcNow,
+                Type = "Logout",
+                UserId = User.Identity.GetUserId() ?? Guid.Empty.ToString(),
+                Details = ""
+            });
             System.Web.HttpContext.Current.GetOwinContext().Authentication.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
             System.Web.HttpContext.Current.Session.Abandon();
         }

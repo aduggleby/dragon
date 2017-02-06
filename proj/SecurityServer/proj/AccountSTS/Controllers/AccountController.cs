@@ -21,6 +21,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using NLog;
 using System.Transactions;
+using Dragon.Data.Interfaces;
 
 namespace Dragon.SecurityServer.AccountSTS.Controllers
 {
@@ -38,14 +39,16 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
         private ApplicationUserManager _userManager;
         private readonly IFederationService _federationService;
         private readonly IAppService _appService;
+        private readonly IRepository<UserActivity> _userActivityRepository;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager, IDragonUserStore<AppMember> userStore, IFederationService federationService, IAppService appService)
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager, IDragonUserStore<AppMember> userStore, IFederationService federationService, IAppService appService, IRepository<UserActivity> userActivityRepository)
         {
             _userStore = userStore;
             _federationService = federationService;
             _appService = appService;
+            _userActivityRepository = userActivityRepository;
             UserManager = userManager;
             SignInManager = signInManager;
         }
@@ -314,6 +317,7 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    AddRegisterActivity(user, "Local");
                     //  Comment the following line to prevent log in until the user is confirmed.
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
                     
@@ -451,6 +455,7 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
             var result = await UserManager.ResetPasswordAsync(user.Id, model.Code, model.Password);
             if (result.Succeeded)
             {
+                AddUserActvity(user, "PasswordReset", "");
                 return RedirectToAction("ResetPasswordConfirmation", "Account");
             }
             Logger.Trace("Reset password failed: {0}", string.Join("; ", result.Errors));
@@ -545,12 +550,7 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
                 ModelState.AddModelError("", Resources.Global.LoginAndTryAgainMessage);
                 return RedirectToAction("Login");
             }
-            if (!(await _userStore.GetLoginsAsync(user)).Any(x =>
-                    loginInfo.Login.LoginProvider == x.LoginProvider &&
-                    loginInfo.Login.ProviderKey == x.ProviderKey))
-            {
-                await _userStore.AddLoginAsync(user, loginInfo.Login);
-            }
+            await AddLoginToUser(user, loginInfo);
             return Redirect(returnUrl);
         }
 
@@ -789,6 +789,7 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
                 info.Login.LoginProvider == x.LoginProvider &&
                 info.Login.ProviderKey == x.ProviderKey))
             {
+                AddAssignAccountActivity(user, info.Login.LoginProvider);
                 await _userStore.AddLoginAsync(user, info.Login);
             }
         }
@@ -811,6 +812,7 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
             var result = await UserManager.CreateAsync(user);
             if (result.Succeeded)
             {
+                AddRegisterActivity(user, info.Login.LoginProvider);
                 result = await UserManager.AddLoginAsync(user.Id, info.Login);
                 if (result.Succeeded)
                 {
@@ -903,6 +905,33 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
             var queryString = HttpUtility.ParseQueryString(url.Substring(queryStringStartIndex + 1));
             processor(queryString);
             return returnUrlPrefix + "?" + queryString;
+        }
+
+        private void AddRegisterActivity(AppMember user, string provider)
+        {
+            AddUserActvity(user, "Register", "Provider: " + provider);
+        }
+
+        private void AddAssignAccountActivity(AppMember user, string provider)
+        {
+            AddUserActvity(user, "AssignAccount", "Provider: " + provider);
+        }
+
+        private void AddUserActvity(AppMember user, string type, string details)
+        {
+            if (user == null)
+            {
+                return;
+            }
+            _userActivityRepository.Insert(new UserActivity
+            {
+                AppId = RequestHelper.GetCurrentAppId(),
+                ServiceId = RequestHelper.GetCurrentServiceId(),
+                DateTime = DateTime.UtcNow,
+                Type = type,
+                UserId = user.Id,
+                Details = details
+            });
         }
 
         #endregion
