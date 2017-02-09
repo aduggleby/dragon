@@ -9,19 +9,21 @@
     <ul class="nav navbar-nav navbar-right">
         @if (!string.IsNullOrEmpty(Request.Params["returnUrl"]))
         {
-            <li><a href="@Request.Params["returnUrl"]">Return</a></li>
+            <li><a href="@Request.Params["returnUrl"]">@Resources.Global.Return</a></li>
         }
         <li>
-            <a href="#">Hello @User.Identity.GetUserName() !</a><!--@Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })-->
+            <a href="#">@Resources.Global.HelloX.Replace("Name", User.Identity.GetUserName())</a><!--@Html.ActionLink(Resources.Global.HelloX.Replace("Name", User.Identity.GetUserName()), "Index", "Manage", routeValues: null, htmlAttributes: new { title = Resources.Global.ManageTitle })-->
         </li>
-        <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+        <li><a href="javascript:document.getElementById('logoutForm').submit()">@Resources.Global.LogOff</a></li>
     </ul>
     }
 }
 else
 {
     <ul class="nav navbar-nav navbar-right">
-        <li>@Html.ActionLink("Register", "Register", "Account", routeValues: RequestHelper.ToRouteValues(Request.QueryString), htmlAttributes: new Dictionary<string, object>{{ "id", "registerLink" }})</li>
-        <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: RequestHelper.ToRouteValues(Request.QueryString), htmlAttributes: new Dictionary<string, object>{{ "id", "loginLink" }})</li>
+        <li>@Html.ActionLink(Resources.Global.RegisterTitle, "Register", "Account", routeValues: RequestHelper.ToRouteValues(Request.QueryString), htmlAttributes: new Dictionary<string, object> { { "id", "registerLink" } })</li>
+        <li>
+            @Html.ActionLink(Resources.Global.LogIn, "Login", "Account", routeValues: RequestHelper.ToRouteValues(Request.QueryString), htmlAttributes: new Dictionary<string, object> { { "id", "loginLink" } })
+        </li>
     </ul>
 }

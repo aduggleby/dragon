@@ -1,14 +1,14 @@
 ﻿@model Dragon.SecurityServer.AccountSTS.Models.ExternalLoginConfirmationViewModel
 @{
-    ViewBag.Title = "Login";
+    ViewBag.Title = Resources.Global.LoginTitle;
 }
 <h2>@ViewBag.Title.</h2>
-<h3>Already registered.</h3>
+<h3>@Resources.Global.AlreadyRegisteredTitle</h3>
 
 <hr />
 
 <p class="text-info">
-    You seem to have registered using another service.<br />
+    @Resources.Global.AlreadyRegisteredUsingAnotherService<br />
     @ViewBag.Message
     <br />
 </p>
@@ -16,7 +16,7 @@
 <div class="form-group">
     <div class="col-md-offset-2 col-md-10">
         <div class="btn btn-default">
-            @Html.ActionLink("Back to login", "Login", "Account", (RouteValueDictionary) ViewBag.RouteValues, new Dictionary<string, object> {{"class", "form-horizontal"}, {"role", "form"}})
+            @Html.ActionLink(Resources.Global.BackToLogin, "Login", "Account", (RouteValueDictionary) ViewBag.RouteValues, new Dictionary<string, object> {{"class", "form-horizontal"}, {"role", "form"}})
         </div>
     </div>
 </div>
