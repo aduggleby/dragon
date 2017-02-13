@@ -4,6 +4,7 @@ using System.IdentityModel.Protocols.WSTrust;
 using System.IdentityModel.Tokens;
 using System.Linq;
 using System.Security.Claims;
+using System.Web;
 using Dragon.SecurityServer.Identity.Stores;
 using Microsoft.AspNet.Identity;
 using ClaimTypes = System.IdentityModel.Claims.ClaimTypes;
@@ -63,7 +64,7 @@ namespace Dragon.SecurityServer.Common
                 identity.RemoveClaim(claim);
             }
             var claims = AsyncRunner.RunNoSynchronizationContext(() =>(_userStore.GetClaimsAsync(user)));
-            identity.AddClaims(claims);
+            identity.AddClaims(claims.Select(x => new Claim(x.Type, HttpUtility.UrlEncode(x.Value))));
             // Append default namespace to avoid ID4216: The ClaimType '...' must be of format 'namespace'/'name'.
             foreach (var claim in identity.Claims.ToList())
             {
