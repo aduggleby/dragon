@@ -919,14 +919,14 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
 
         private void AddUserActvity(AppMember user, string type, string details)
         {
-            if (user == null)
+            if (string.IsNullOrWhiteSpace(user?.Id))
             {
                 return;
             }
             _userActivityRepository.Insert(new UserActivity
             {
-                AppId = RequestHelper.GetCurrentAppId(),
-                ServiceId = RequestHelper.GetCurrentServiceId(),
+                AppId = RequestHelper.GetCurrentAppId() ?? Guid.Empty.ToString(),
+                ServiceId = RequestHelper.GetCurrentServiceId() ?? Guid.Empty.ToString(),
                 DateTime = DateTime.UtcNow,
                 Type = type,
                 UserId = user.Id,
