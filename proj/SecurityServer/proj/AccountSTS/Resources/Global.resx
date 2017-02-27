@@ -1,0 +1,425 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AboutTitle" xml:space="preserve">
+    <value>About</value>
+  </data>
+  <data name="AddPhoneNumber" xml:space="preserve">
+    <value>Add a phone number</value>
+  </data>
+  <data name="AlreadyRegisteredTitle" xml:space="preserve">
+    <value>Already registered.</value>
+  </data>
+  <data name="AlreadyRegisteredUsingAnotherService" xml:space="preserve">
+    <value>You seem to have registered using another service.</value>
+  </data>
+  <data name="AssociateYourXAccount" xml:space="preserve">
+    <value>Associate your {LoginProvider} account.</value>
+  </data>
+  <data name="AssociationFormTitle" xml:space="preserve">
+    <value>Association Form</value>
+  </data>
+  <data name="AuthenticatedWithX" xml:space="preserve">
+    <value>You've successfully authenticated with &lt;strong&gt;{LoginProvider}&lt;/strong&gt;. 
+Please enter your email to finish your registration.</value>
+  </data>
+  <data name="BackToLogin" xml:space="preserve">
+    <value>Back to login</value>
+  </data>
+  <data name="ChangeAccountSettings" xml:space="preserve">
+    <value>Change your account settings</value>
+  </data>
+  <data name="ChangePasswordText" xml:space="preserve">
+    <value>Change Password Form</value>
+  </data>
+  <data name="ChangePasswordTitle" xml:space="preserve">
+    <value>Change Password</value>
+  </data>
+  <data name="ChangeYourPassword" xml:space="preserve">
+    <value>Change your password</value>
+  </data>
+  <data name="ConfirmEmailTitle" xml:space="preserve">
+    <value>Confirm Email</value>
+  </data>
+  <data name="ContactTitle" xml:space="preserve">
+    <value>Contact</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Create</value>
+  </data>
+  <data name="CreateAccount" xml:space="preserve">
+    <value>Create a new account.</value>
+  </data>
+  <data name="CreateLocalLogin" xml:space="preserve">
+    <value>Create Local Login</value>
+  </data>
+  <data name="CreatePasswordText" xml:space="preserve">
+    <value>You do not have a local username/password for this site. Add a local account so you can log in without an external login.</value>
+  </data>
+  <data name="CreatePasswordTitle" xml:space="preserve">
+    <value>Create Password</value>
+  </data>
+  <data name="EmailConfirmed" xml:space="preserve">
+    <value>Thank you for confirming your email.</value>
+  </data>
+  <data name="EmailLink" xml:space="preserve">
+    <value>Email Link</value>
+  </data>
+  <data name="EnterEmail" xml:space="preserve">
+    <value>Enter your email.</value>
+  </data>
+  <data name="EnterVerificationCode" xml:space="preserve">
+    <value>Enter verification code</value>
+  </data>
+  <data name="ExternalLoginFailed" xml:space="preserve">
+    <value>Unsuccessful login with service.</value>
+  </data>
+  <data name="ExternalLogins" xml:space="preserve">
+    <value>External Logins</value>
+  </data>
+  <data name="FindAUserByMail" xml:space="preserve">
+    <value>Find a user by mail</value>
+  </data>
+  <data name="ForgotPasswordConfirmation" xml:space="preserve">
+    <value>Please check your email to reset your password.</value>
+  </data>
+  <data name="ForgotPasswordConfirmationTitle" xml:space="preserve">
+    <value>Forgot Password Confirmation</value>
+  </data>
+  <data name="ForgotYourPassword" xml:space="preserve">
+    <value>Forgot your password?</value>
+  </data>
+  <data name="FoundXUsers" xml:space="preserve">
+    <value>Found {Count} users</value>
+  </data>
+  <data name="HomepageTitle" xml:space="preserve">
+    <value>Home Page</value>
+  </data>
+  <data name="Impersonate" xml:space="preserve">
+    <value>impersonate</value>
+  </data>
+  <data name="LoginFailureTitle" xml:space="preserve">
+    <value>Login Failure</value>
+  </data>
+  <data name="LoginLocalAccount" xml:space="preserve">
+    <value>Use a local account to log in.</value>
+  </data>
+  <data name="LoginTitle" xml:space="preserve">
+    <value>Login</value>
+  </data>
+  <data name="LoginUsingX" xml:space="preserve">
+    <value>Log in using your {Account} account</value>
+  </data>
+  <data name="ManageExternalLoginsTitle" xml:space="preserve">
+    <value>Manage your external logins</value>
+  </data>
+  <data name="ManageTitle" xml:space="preserve">
+    <value>Manage</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="PhoneNumberTitle" xml:space="preserve">
+    <value>Phone Number</value>
+  </data>
+  <data name="RegisterAsNewUser" xml:space="preserve">
+    <value>Register as a new user</value>
+  </data>
+  <data name="RegisteredLogins" xml:space="preserve">
+    <value>Registered Logins</value>
+  </data>
+  <data name="RegisterTitle" xml:space="preserve">
+    <value>Register</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="RemoveXLoginFromAccount" xml:space="preserve">
+    <value>Remove this {LoginProvider} login from your account</value>
+  </data>
+  <data name="RequiredAttribute_ValidationError" xml:space="preserve">
+    <value>The {0} field is required.</value>
+  </data>
+  <data name="ResetPasswordConfirmation" xml:space="preserve">
+    <value>Your password has been reset.</value>
+  </data>
+  <data name="ResetPasswordConfirmationTitle" xml:space="preserve">
+    <value>Reset Password Confirmation</value>
+  </data>
+  <data name="ResetPasswordTitle" xml:space="preserve">
+    <value>Reset Password</value>
+  </data>
+  <data name="ResetTitle" xml:space="preserve">
+    <value>Reset</value>
+  </data>
+  <data name="ResetYourPassword" xml:space="preserve">
+    <value>Reset your password.</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="SelectAppMessage" xml:space="preserve">
+    <value>Select the app you want to access.</value>
+  </data>
+  <data name="SelectAppTitle" xml:space="preserve">
+    <value>Select App</value>
+  </data>
+  <data name="SelectAuthenticationProvider" xml:space="preserve">
+    <value>Select Two-Factor Authentication Provider:</value>
+  </data>
+  <data name="SendTitle" xml:space="preserve">
+    <value>Send</value>
+  </data>
+  <data name="SendVerification" xml:space="preserve">
+    <value>Send verification code</value>
+  </data>
+  <data name="Submit" xml:space="preserve">
+    <value>Submit</value>
+  </data>
+  <data name="TryAgain" xml:space="preserve">
+    <value>Please return to the previous website and try again.</value>
+  </data>
+  <data name="UnauthorizedInfo" xml:space="preserve">
+    <value>Access to this page has been denied, possible causes include:
+    &lt;ul&gt;
+        &lt;li&gt;You tried to directly access this page, but usage is limited to the context of participating websites&lt;/li&gt;
+        &lt;li&gt;The link you used has expired&lt;/li&gt;
+        &lt;li&gt;You tried to access an app for which you are not registered yet&lt;/li&gt;
+        &lt;li&gt;Hmac parameters are missing or invalid&lt;/li&gt;
+    &lt;/ul&gt;
+    See &lt;a href="https://github.com/aduggleby/dragon/tree/master/proj/Security.Hmac"&gt;Dragon.Security.Hmac&lt;/a&gt; for further information.</value>
+  </data>
+  <data name="UnauthorizedTitle" xml:space="preserve">
+    <value>Unauthorized</value>
+  </data>
+  <data name="UseAnotherServiceToLogIn" xml:space="preserve">
+    <value>Use another service to log in.</value>
+  </data>
+  <data name="UsersTitle" xml:space="preserve">
+    <value>Users</value>
+  </data>
+  <data name="VerifyTitle" xml:space="preserve">
+    <value>Verify</value>
+  </data>
+  <data name="AppName" xml:space="preserve">
+    <value>AccountSTS</value>
+  </data>
+  <data name="ErrorText" xml:space="preserve">
+    <value>An error occurred while processing your request.</value>
+  </data>
+  <data name="ErrorTitle" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="HelloX" xml:space="preserve">
+    <value>Hello {Name}!</value>
+  </data>
+  <data name="LockedOutText" xml:space="preserve">
+    <value>This account has been locked out, please try again later.</value>
+  </data>
+  <data name="LockedOutTitle" xml:space="preserve">
+    <value>Locked Out</value>
+  </data>
+  <data name="LogIn" xml:space="preserve">
+    <value>Log in</value>
+  </data>
+  <data name="LogOff" xml:space="preserve">
+    <value>Log off</value>
+  </data>
+  <data name="Return" xml:space="preserve">
+    <value>Return</value>
+  </data>
+  <data name="SetPassword" xml:space="preserve">
+    <value>Set password</value>
+  </data>
+  <data name="VerifyPhoneNumberTitle" xml:space="preserve">
+    <value>Verify Phone Number</value>
+  </data>
+  <data name="EmailAddressAttribute_ValidationError" xml:space="preserve">
+    <value>The Email field is not a valid e-mail address.</value>
+  </data>
+  <data name="StringLengthAttribute_ValidationError" xml:space="preserve">
+    <value>The {0} must be at least {2} characters long.</value>
+  </data>
+  <data name="AlreadyRegisteredUsingXMessage" xml:space="preserve">
+    <value>You might already have registered using {LoginProviders}. If this is the case, login with one of those to set a password.</value>
+  </data>
+  <data name="Code" xml:space="preserve">
+    <value>Code</value>
+  </data>
+  <data name="CompareAttribute_ValidationError" xml:space="preserve">
+    <value>{1} and {0} do not match.</value>
+  </data>
+  <data name="ConfirmAccountMessage" xml:space="preserve">
+    <value>Please confirm your account by clicking &lt;a href="{Url}"&gt;here&lt;/a&gt;</value>
+  </data>
+  <data name="ConfirmAccountTitle" xml:space="preserve">
+    <value>Confirm your account</value>
+  </data>
+  <data name="ConfirmPassword" xml:space="preserve">
+    <value>Confirm password</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="Id" xml:space="preserve">
+    <value>Id</value>
+  </data>
+  <data name="InternalErrorMessage" xml:space="preserve">
+    <value>Internal error, please try again.</value>
+  </data>
+  <data name="InvalidLoginAttempt" xml:space="preserve">
+    <value>Invalid login attempt.</value>
+  </data>
+  <data name="LoginAndTryAgainMessage" xml:space="preserve">
+    <value>Please log in and try again.</value>
+  </data>
+  <data name="LoginToLinkWithX" xml:space="preserve">
+    <value>Please login to link your account with your {LoginProvider} account.</value>
+  </data>
+  <data name="LoginUsingOneOf" xml:space="preserve">
+    <value>Try logging in using {0}{1}.</value>
+  </data>
+  <data name="NoPermissionsForService" xml:space="preserve">
+    <value>You do not have permissions to access the requested service.</value>
+  </data>
+  <data name="OneOf" xml:space="preserve">
+    <value>one of</value>
+  </data>
+  <data name="RememberBrowser" xml:space="preserve">
+    <value>Remember this browser?</value>
+  </data>
+  <data name="RememberMe" xml:space="preserve">
+    <value>Remember me?</value>
+  </data>
+  <data name="ResetPasswordMessage" xml:space="preserve">
+    <value>Please reset your password by clicking &lt;a href="{Url}"&gt;here&lt;/a&gt;</value>
+  </data>
+  <data name="UnableToProcessLoginMessage" xml:space="preserve">
+    <value>Unable to process login, please try again.</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="Or" xml:space="preserve">
+    <value>or</value>
+  </data>
+  <data name="ReturnToLogin" xml:space="preserve">
+    <value>Please return to the application to login.</value>
+  </data>
+</root>

@@ -1,6 +1,6 @@
 ﻿@model Dragon.SecurityServer.AccountSTS.Models.FindUserViewModel
 @{
-    ViewBag.Title = "Users";
+    ViewBag.Title = Resources.Global.UsersTitle;
 }
 
 <h2>@ViewBag.Title.</h2>
@@ -8,7 +8,7 @@
 @using (Html.BeginForm("Users", "Admin", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
     @Html.AntiForgeryToken()
-    <h4>Find a user by mail</h4>
+    <h4>@Resources.Global.FindAUserByMail</h4>
     <hr />
     @Html.ValidationSummary("", new { @class = "text-danger" })
     <div class="form-group">
@@ -19,19 +19,19 @@
     </div>
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
-            <input type="submit" class="btn btn-default" value="Search" />
+            <input type="submit" class="btn btn-default" value="@Resources.Global.Search" />
         </div>
     </div>
 
     if (ViewBag.Users != null)
     {
         <br/><br/>
-        <h4>Found @ViewBag.Users.Count users</h4>
+        <h4>@Resources.Global.FoundXUsers.Replace("{Count}", ViewBag.Users.Count)</h4>
         <hr/>
         <div>
             @foreach (var user in ViewBag.Users)
             {
-                <p>@user.Email <a href="@Url.Action("Impersonate", "Admin", new {id = user.Id})">[impersonate]</a></p>
+                <p>@user.Email <a href="@Url.Action("Impersonate", "Admin", new {id = user.Id})">[@Resources.Global.Impersonate]</a></p>
             }
         </div>
     }

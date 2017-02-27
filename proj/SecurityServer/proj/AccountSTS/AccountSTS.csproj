@@ -310,6 +310,11 @@
     <Compile Include="Models\AdminViewModels.cs" />
     <Compile Include="Models\AppInfo.cs" />
     <Compile Include="Models\UserActivity.cs" />
+    <Compile Include="Resources\Global.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Global.resx</DependentUpon>
+    </Compile>
     <Compile Include="Services\UserService.cs" />
     <Compile Include="Services\AppService.cs" />
     <Compile Include="Services\FederationService.cs" />
@@ -458,6 +463,14 @@
       <Project>{e0666626-ea75-4728-8c76-9ad78db56d65}</Project>
       <Name>Identity</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Global.de.resx" />
+    <EmbeddedResource Include="Resources\Global.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Global.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources</CustomToolNamespace>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

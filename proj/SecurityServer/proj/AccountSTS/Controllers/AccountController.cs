@@ -21,6 +21,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using NLog;
 using System.Transactions;
+using Dragon.Data.Interfaces;
 
 namespace Dragon.SecurityServer.AccountSTS.Controllers
 {
@@ -38,14 +39,16 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
         private ApplicationUserManager _userManager;
         private readonly IFederationService _federationService;
         private readonly IAppService _appService;
+        private readonly IRepository<UserActivity> _userActivityRepository;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager, IDragonUserStore<AppMember> userStore, IFederationService federationService, IAppService appService)
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager, IDragonUserStore<AppMember> userStore, IFederationService federationService, IAppService appService, IRepository<UserActivity> userActivityRepository)
         {
             _userStore = userStore;
             _federationService = federationService;
             _appService = appService;
+            _userActivityRepository = userActivityRepository;
             UserManager = userManager;
             SignInManager = signInManager;
         }
@@ -226,7 +229,7 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
 
         private async Task<string> GenerateTryLoginWithFederationProviderErrorMessage(string email)
         {
-            var message = "Invalid login attempt.";
+            var message = Resources.Global.InvalidLoginAttempt;
             var user = await _userStore.FindByEmailAsync(email);
             if (user != null)
             {
@@ -243,7 +246,7 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
         {
             var availableLogins = await _userStore.GetLoginsAsync(user);
             if (!availableLogins.Any()) return "";
-            return string.Format("Try logging in using {0}{1}.", availableLogins.Count > 1 ? "one of " : "",
+            return string.Format(Resources.Global.LoginUsingOneOf, availableLogins.Count > 1 ? Resources.Global.OneOf + " " : "",
                     availableLogins.Select(x => x.LoginProvider).Aggregate((x1, x2) => $"{x1}, {x2}"));
         }
 
@@ -314,6 +317,7 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    AddRegisterActivity(user, "Local");
                     //  Comment the following line to prevent log in until the user is confirmed.
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
                     
@@ -321,7 +325,10 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
                     // Send an email with this link
                     string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                    await UserManager.SendEmailAsync(
+                        user.Id,
+                        Resources.Global.ConfirmAccountTitle,
+                        Resources.Global.ConfirmAccountMessage.Replace("Url", callbackUrl));
 
                     var returnUrl = Request.QueryString["ReturnUrl"];
                     return string.IsNullOrEmpty(returnUrl) ? RedirectToAction("Index", "Home") : RedirectToLocal(returnUrl);
@@ -330,13 +337,14 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
                 StackExchange.Exceptional.ErrorStore.LogException(new Exception(message), null);
 
                 // avoid Name x is already taken. errors
-                var identityResult = new IdentityResult(result.Errors.Where(x => !x.StartsWith("Name ")));
+                var identityResult = new IdentityResult(result.Errors.Where(
+                    x => !x.StartsWith(Resources.Global.Name + " ") && !x.Contains(" " + Resources.Global.Name + " ")));
                 AddErrors(identityResult);
 
                 // Show a hint about external providers
-                ModelState.AddModelError("",
-                    "You might already have registered using " + WebConfigurationManager.AppSettings["AuthenticationProviders"].ReplaceLast(",", " or ") +
-                    ". If this is the case, login with one of those to set a password.");
+                ModelState.AddModelError("", Resources.Global.AlreadyRegisteredUsingXMessage
+                    .Replace("{LoginProviders}", WebConfigurationManager.AppSettings["AuthenticationProviders"]
+                    .ReplaceLast(",", " " + Resources.Global.Or + " ")));
             }
 
             // If we got this far, something failed, redisplay form
@@ -402,8 +410,10 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
             var callbackUrl = Url.Action("ResetPassword", "Account", new {userId = user.Id, code = code},
                 protocol: Request.Url.Scheme);
             await
-                UserManager.SendEmailAsync(user.Id, "Reset Password",
-                    "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                UserManager.SendEmailAsync(
+                    user.Id,
+                    Resources.Global.ResetPasswordTitle,
+                    Resources.Global.ResetPasswordMessage.Replace("Url", callbackUrl));
             return RedirectToAction("ForgotPasswordConfirmation", "Account", ViewBag.RouteValues);
         }
 
@@ -445,6 +455,7 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
             var result = await UserManager.ResetPasswordAsync(user.Id, model.Code, model.Password);
             if (result.Succeeded)
             {
+                AddUserActvity(user, "PasswordReset", "");
                 return RedirectToAction("ResetPasswordConfirmation", "Account");
             }
             Logger.Trace("Reset password failed: {0}", string.Join("; ", result.Errors));
@@ -529,22 +540,17 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
             if (loginInfo == null)
             {
                 Logger.Trace("External login failed: external login info is null");
-                ModelState.AddModelError("", "Unable to process login, please try again.");
+                ModelState.AddModelError("", Resources.Global.UnableToProcessLoginMessage);
                 return RedirectToAction("Login");
             }
             var user = await _userStore.FindByEmailAsync(loginInfo.Email);
             if (!User.Identity.IsAuthenticated)
             {
                 Logger.Trace("External add login failed: User is not logged in.");
-                ModelState.AddModelError("", "Please log in and try again.");
+                ModelState.AddModelError("", Resources.Global.LoginAndTryAgainMessage);
                 return RedirectToAction("Login");
             }
-            if (!(await _userStore.GetLoginsAsync(user)).Any(x =>
-                    loginInfo.Login.LoginProvider == x.LoginProvider &&
-                    loginInfo.Login.ProviderKey == x.ProviderKey))
-            {
-                await _userStore.AddLoginAsync(user, loginInfo.Login);
-            }
+            await AddLoginToUser(user, loginInfo);
             return Redirect(returnUrl);
         }
 
@@ -570,7 +576,7 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
                 Logger.Trace("External login failed: external login info is null");
             }
             if (returnUrl == null || loginInfo == null) {
-                ModelState.AddModelError("", "Unable to process login, please try again.");
+                ModelState.AddModelError("", Resources.Global.UnableToProcessLoginMessage);
                 return RedirectToAction("Login");
             }
 
@@ -627,7 +633,7 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
                         user = await CreateExternalUser(loginInfo.Email, loginInfo);
                         if (user == null)
                         {
-                            ModelState.AddModelError("", "Internal error, please try again.");
+                            ModelState.AddModelError("", Resources.Global.InternalErrorMessage);
                             Logger.Log(LogLevel.Error, "Unable to create the user.");
                             return RedirectToAction("Login", ViewBag.RouteValues);
                         }
@@ -717,14 +723,14 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
                 if (model.Password == null)
                 {
                     Logger.Trace("External login confirmation: account {0} exists, link external login {1}", user.Email, info.Login.LoginProvider);
-                    ModelState.AddModelError("", string.Format("Please login to link your account with your {0} account.", info.Login.LoginProvider));
+                    ModelState.AddModelError("", Resources.Global.LoginToLinkWithX.Replace("LoginProvider", info.Login.LoginProvider));
                     return View(model);
                 }
 
                 // Process Login
                 if (string.IsNullOrEmpty(model.Password))
                 {
-                    ModelState.AddModelError("password", "The Password field is required.");
+                    ModelState.AddModelError("password", string.Format(Resources.Global.RequiredAttribute_ValidationError, Resources.Global.Password));
                 }
                 if (!ModelState.IsValid)
                 {
@@ -758,7 +764,7 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
                         return RedirectToAction("SendCode", ViewBag.RouteValues);
                     case SignInStatus.Failure:
                     default:
-                        ModelState.AddModelError("", "Invalid login attempt.");
+                        ModelState.AddModelError("", Resources.Global.InvalidLoginAttempt);
                         Logger.Trace("External login confirmation failed: user {0}, status {1}", model.Email, result);
                         return View(model);
                 }
@@ -768,7 +774,7 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
                 user = await CreateExternalUser(model.Email, info);
                 if (user == null)
                 {
-                    ModelState.AddModelError("", "Internal error, please try again.");
+                    ModelState.AddModelError("", Resources.Global.InternalErrorMessage);
                     Logger.Log(LogLevel.Error, "Unable to create the user.");
                     return View(model);
                 }
@@ -783,6 +789,7 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
                 info.Login.LoginProvider == x.LoginProvider &&
                 info.Login.ProviderKey == x.ProviderKey))
             {
+                AddAssignAccountActivity(user, info.Login.LoginProvider);
                 await _userStore.AddLoginAsync(user, info.Login);
             }
         }
@@ -793,7 +800,7 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
         private void HandleUserNotRegisteredForService(string email)
         {
             Logger.Trace("Login failed: user {0} not registered for service {1}", email, RequestHelper.GetCurrentServiceId());
-            ModelState.AddModelError("", "Invalid login attempt. You do not have permissions to access the requested service.");
+            ModelState.AddModelError("", Resources.Global.InvalidLoginAttempt + " " + Resources.Global.NoPermissionsForService);
             // On service id mismatch user might be logged in, but should not
             // Using ApplicationCookie because of https://aspnetidentity.codeplex.com/workitem/2347
             SignOut();
@@ -805,6 +812,7 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
             var result = await UserManager.CreateAsync(user);
             if (result.Succeeded)
             {
+                AddRegisterActivity(user, info.Login.LoginProvider);
                 result = await UserManager.AddLoginAsync(user.Id, info.Login);
                 if (result.Succeeded)
                 {
@@ -897,6 +905,33 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
             var queryString = HttpUtility.ParseQueryString(url.Substring(queryStringStartIndex + 1));
             processor(queryString);
             return returnUrlPrefix + "?" + queryString;
+        }
+
+        private void AddRegisterActivity(AppMember user, string provider)
+        {
+            AddUserActvity(user, "Register", "Provider: " + provider);
+        }
+
+        private void AddAssignAccountActivity(AppMember user, string provider)
+        {
+            AddUserActvity(user, "AssignAccount", "Provider: " + provider);
+        }
+
+        private void AddUserActvity(AppMember user, string type, string details)
+        {
+            if (string.IsNullOrWhiteSpace(user?.Id))
+            {
+                return;
+            }
+            _userActivityRepository.Insert(new UserActivity
+            {
+                AppId = RequestHelper.GetCurrentAppId() ?? Guid.Empty.ToString(),
+                ServiceId = RequestHelper.GetCurrentServiceId() ?? Guid.Empty.ToString(),
+                DateTime = DateTime.UtcNow,
+                Type = type,
+                UserId = user.Id,
+                Details = details
+            });
         }
 
         #endregion
