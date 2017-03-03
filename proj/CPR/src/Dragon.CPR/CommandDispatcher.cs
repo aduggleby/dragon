@@ -23,8 +23,6 @@ namespace Dragon.CPR
         private readonly IRepository<Command> m_commandRepository;
         private readonly JsonSerializerSettings m_jsonSerializerSettings;
 
-        public DragonContext Ctx { get; set; }
-
         public CommandDispatcher(IRepository<Command> r, IContainer container)
         {
             m_jsonSerializerSettings = new JsonSerializerSettings();
@@ -82,10 +80,7 @@ namespace Dragon.CPR
             var cmd = new Command();
             cmd.CommandID = o.CommandID;
             cmd.Executed = DateTime.UtcNow;
-            if (Ctx != null)
-            {
-                cmd.UserID = o.ExecutingUserID;
-            }
+            cmd.UserID = o.ExecutingUserID;
             cmd.Type = o.GetType().ToString();
             cmd.JSON = JsonConvert.SerializeObject(o, m_jsonSerializerSettings);
 
