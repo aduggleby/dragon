@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp1.1</TargetFramework>
+    <PackageId>Dragon.CPRX.Data</PackageId>
+    <PackageVersion>1.0.0</PackageVersion>
+    <Authors>Dragon Project</Authors>
+    <Description>Extension to bridge Dragon.Data and Dragon.CPRX. Allows auto projection to tables.</Description>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageReleaseNotes>First release for .NET Core 1.1</PackageReleaseNotes>
+    <Copyright>Copyright 2017 (c) Dragon Project</Copyright>
+    <PackageTags>cqrs command projection sql table</PackageTags>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <OutputPath>..\..\..\release-core\</OutputPath>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="5.2.0" />
+    <PackageReference Include="Dragon.Data" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="1.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="1.1.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
+    <PackageReference Include="System.Runtime" Version="4.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Dragon.CPRX\Dragon.CPRX.csproj" />
+  </ItemGroup>
+
+</Project>

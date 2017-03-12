@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp1.1</TargetFramework>
+    <PackageId>Dragon.CPRX</PackageId>
+    <PackageVersion>1.0.0</PackageVersion>
+    <Authors>Dragon Project</Authors>
+    <Description>Command Projection Repository Framework (CQRS lite)</Description>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageReleaseNotes>First release for .NET Core 1.1</PackageReleaseNotes>
+    <Copyright>Copyright 2017 (c) Dragon Project</Copyright>
+    <PackageTags>cqrs command</PackageTags>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <OutputPath>..\..\..\release-core\</OutputPath>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dragon.Data" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="1.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="1.1.1" />
+    <PackageReference Include="System.Runtime" Version="4.3.0" />
+  </ItemGroup>
+
+</Project>

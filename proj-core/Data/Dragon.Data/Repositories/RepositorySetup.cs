@@ -15,9 +15,9 @@ namespace Dragon.Data.Repositories
         protected static List<Type> m_existingTables = new List<Type>();
 
         private readonly ILogger<RepositorySetup> m_logger;
-        private IConnectionInstantiator m_connectionInstantiator;
+        private IDbConnectionContextFactory m_connectionInstantiator;
 
-        public RepositorySetup(IConnectionInstantiator connectionInstantiator, ILoggerFactory loggerFactory, IConfiguration config)
+        public RepositorySetup(IDbConnectionContextFactory connectionInstantiator, IConfiguration config, ILoggerFactory loggerFactory)
         {
             m_connectionInstantiator = connectionInstantiator;
             m_logger = loggerFactory.CreateLogger<RepositorySetup>();
@@ -31,11 +31,11 @@ namespace Dragon.Data.Repositories
             {
                 if (m_existingTables.Contains(typeof(T))) return;
 
-                using (var c = m_connectionInstantiator.Open<T>())
+                m_connectionInstantiator.InDatabase((c,t) =>
                 {
-                    c.CreateTableIfNotExists<T>();
+                    c.CreateTableIfNotExists<T>(transaction: t);
                     m_existingTables.Add(typeof(T));
-                }
+                });
             }
 
         }
@@ -44,20 +44,20 @@ namespace Dragon.Data.Repositories
         {
             lock (m_existingTablesLock)
             {
-                using (var c = m_connectionInstantiator.Open<T>())
+                m_connectionInstantiator.InDatabase((c,t) =>
                 {
-                    c.DropTableIfExists<T>();
+                    c.DropTableIfExists<T>(transaction: t);
                     m_existingTables.Remove(typeof(T));
-                }
+                });
             }
         }
 
         public void DropTableIfExists(string name)
         {
-            using (var c = m_connectionInstantiator.Open())
+            m_connectionInstantiator.InDatabase((c,t) =>
             {
-                c.DropTableIfExists(name);
-            }
+                c.DropTableIfExists(name, transaction: t);
+            });
         }
     }
 }

@@ -18,11 +18,11 @@ namespace Dragon.Data.Repositories
     public class Repository<T> : IRepository<T> where T : class
     {
         private readonly ILogger<Repository<T>> m_logger;
-        private IConnectionInstantiator m_connectionInstantiator;
+        private IDbConnectionContextFactory m_connectionCtxFactory;
 
-        public Repository(IConnectionInstantiator connectionInstantiator, ILoggerFactory loggerFactory, IConfiguration config)
+        public Repository(IDbConnectionContextFactory connectionCtxFactory, ILoggerFactory loggerFactory, IConfiguration config)
         {
-            m_connectionInstantiator = connectionInstantiator;
+            m_connectionCtxFactory = connectionCtxFactory;
             m_logger = loggerFactory.CreateLogger<Repository<T>>();
         }
 
@@ -49,47 +49,47 @@ namespace Dragon.Data.Repositories
 
         public virtual IEnumerable<T> GetAll()
         {
-            using (var c = OpenConnection())
-            {
-                m_logger.LogDebug("Fetching all records for type {0}", typeof(T).Name);
-                return c.GetAll<T>();
-            }
+            return m_connectionCtxFactory.InDatabase<IEnumerable<T>>((c,t) =>
+           {
+               m_logger.LogDebug("Fetching all records for type {0}", typeof(T).Name);
+               return c.GetAll<T>(transaction: t);
+           });
         }
 
         public virtual void InsertWithCompositeKey(T obj)
         {
-            using (var c = OpenConnection())
+            m_connectionCtxFactory.InDatabase((c,t) =>
             {
                 m_logger.LogDebug("Inserted record for type {0} with composite key {1}", typeof(T).Name, KeyStringFor(obj));
-                c.Insert<T>(obj);
-            }
+                c.Insert<T>(obj, transaction: t);
+            });
         }
 
         public virtual T Get(dynamic pk)
         {
             if (!m_hasSinglePK) throw new Exception("Can only be used for objects with single primary key.");
 
-            using (var c = OpenConnection())
+            return m_connectionCtxFactory.InDatabase<T>((c,t) =>
             {
                 m_logger.LogDebug("Fetching record for type {0} with primary key {1}", typeof(T).Name, ((object)pk).ToString());
-                return c.Get<T>((object)pk);
-            }
+                return c.Get<T>((object)pk, transaction: t);
+            });
         }
 
         public virtual IEnumerable<T> Get(IEnumerable<dynamic> pks)
         {
             if (!m_hasSinglePK) throw new Exception("Can only be used for objects with single primary key.");
 
-            using (var c = OpenConnection())
+            return m_connectionCtxFactory.InDatabase<IEnumerable<T>>((c,t) =>
             {
                 m_logger.LogDebug("Fetching records for type {0} with primary keys {1}", typeof(T).Name, string.Join(",", pks.ToArray()));
-                return c.GetList<T>(pks);
-            }
+                return c.GetList<T>(pks, transaction: t);
+            });
         }
 
         public virtual T Get(T keyModel)
         {
-            using (var c = OpenConnection())
+            return m_connectionCtxFactory.InDatabase<T>((c,t) =>
             {
                 m_logger.LogDebug("Fetching records for type {0} with primary keys {1}", typeof(T).Name, KeyStringFor(keyModel));
 
@@ -107,7 +107,7 @@ namespace Dragon.Data.Repositories
                 }
 
                 return GetByWhere(@where).FirstOrDefault();
-            }
+            });
         }
 
         #endregion
@@ -121,13 +121,13 @@ namespace Dragon.Data.Repositories
         /// <returns></returns>
         public IEnumerable<T> GetByWhere(Dictionary<string, object> @where)
         {
-            using (var c = OpenConnection())
+            return m_connectionCtxFactory.InDatabase<IEnumerable<T>>((c,t) =>
             {
                 var param = new Dictionary<string, object>();
                 var sql = TSQLGenerator.BuildSelect(m_metadata, @where, ref param);
 
-                return c.QueryFor<T>(sql, new DynamicParameters(param));
-            }
+                return c.QueryFor<T>(sql, new DynamicParameters(param), transaction: t);
+            });
         }
 
         #endregion
@@ -136,61 +136,61 @@ namespace Dragon.Data.Repositories
 
         public IEnumerable<T> Query(string sql, dynamic param = null)
         {
-            using (var c = OpenConnection())
+            return m_connectionCtxFactory.InDatabase<IEnumerable<T>>((c,t) =>
             {
-                return c.Query<T>(PreprocessSQLString<T>(sql), (object)param);
-            }
+                return c.Query<T>(PreprocessSQLString<T>(sql), (object)param, transaction: t);
+            });
         }
 
         public IEnumerable<T> Query<TObsolete>(string sql, dynamic param = null) where TObsolete : class
         {
-            using (var c = OpenConnection())
+            return m_connectionCtxFactory.InDatabase<IEnumerable<T>>((c, t) =>
             {
-                return c.Query<T>(PreprocessSQLString<T>(sql), (object)param);
-            }
+                return c.Query<T>(PreprocessSQLString<T>(sql), (object)param, transaction: t);
+            });
         }
 
         public IEnumerable<TView> QueryView<TView>(string sql, dynamic param = null) where TView : class
         {
-            using (var c = OpenConnection())
+            return m_connectionCtxFactory.InDatabase<IEnumerable<TView>>((c, t) =>
             {
-                return c.Query<TView>(PreprocessSQLString<T>(sql), (object)param);
-            }
+                return c.Query<TView>(PreprocessSQLString<T>(sql), (object)param, transaction: t);
+            });
         }
 
         public TReturn ExecuteScalar<TReturn>(string sql, dynamic param = null)
         {
-            using (var c = OpenConnection())
+            return m_connectionCtxFactory.InDatabase<TReturn>((c, t) =>
             {
-                return c.Query<TReturn>(PreprocessSQLString<T>(sql), (object)param).First();
-            }
+                return c.Query<TReturn>(PreprocessSQLString<T>(sql), (object)param, transaction: t).First();
+            });
         }
 
         public TReturn ExecuteScalar<TReturn, TDBObject>(string sql, dynamic param = null)
         {
-            using (var c = OpenConnection())
+            return m_connectionCtxFactory.InDatabase<TReturn>((c,t) =>
             {
-                return c.Query<TReturn>(PreprocessSQLString<TDBObject>(sql), (object)param).First();
-            }
+                return c.Query<TReturn>(PreprocessSQLString<TDBObject>(sql), (object)param, transaction: t).First();
+            });
         }
 
         public IEnumerable<TResult> Query<TFirst, TSecond, TResult>(string sql, Func<TFirst, TSecond, TResult> mapping, dynamic param = null) where TResult : class
         {
-            using (var c = OpenConnection())
+            return m_connectionCtxFactory.InDatabase<IEnumerable<TResult>>((c,t) =>
             {
                 var mdSplit = new TableMetadata();
                 MetadataHelper.MetadataForClass(typeof(TSecond), ref mdSplit);
 
                 var pk = mdSplit.Properties.FirstOrDefault(x => x.IsPK);
-                
-                if (pk==null || !pk.IsOnlyPK)
+
+                if (pk == null || !pk.IsOnlyPK)
                 {
                     throw new ArgumentException("You can only use a single key class for TSecond.");
                 }
                 var key = pk.ColumnName;
 
-                return c.Query<TFirst, TSecond, TResult>(PreprocessSQLString<TResult>(sql), mapping, (object)param, splitOn: key);
-            }
+                return c.Query<TFirst, TSecond, TResult>(PreprocessSQLString<TResult>(sql), mapping, (object)param, splitOn: key, transaction: t);
+            });
         }
 
         #endregion
@@ -207,12 +207,12 @@ namespace Dragon.Data.Repositories
         {
             if (!m_hasSinglePK) throw new Exception("Can only be used for objects with single primary key. Use Insert overload instead.");
 
-            using (var c = OpenConnection())
-            {
-                var pk = c.Insert<T, TKey>(obj);
-                m_logger.LogDebug("Inserted record for type {0} with key {1}", typeof(T).Name, KeyStringFor(obj));
-                return pk;
-            }
+            return m_connectionCtxFactory.InDatabase<TKey>((c,t) =>
+             {
+                 var pk = c.Insert<T, TKey>(obj, transaction: t);
+                 m_logger.LogDebug("Inserted record for type {0} with key {1}", typeof(T).Name, KeyStringFor(obj));
+                 return pk;
+             });
         }
 
         /// <summary>
@@ -221,11 +221,11 @@ namespace Dragon.Data.Repositories
         /// <param name="obj"></param>
         public virtual void Insert(T obj)
         {
-            using (var c = OpenConnection())
+            m_connectionCtxFactory.InDatabase((c,t)=>
             {
-                c.Insert<T>(obj);
+                c.Insert<T>(obj, transaction: t);
                 m_logger.LogDebug("Inserted record for type {0} with keys {1}", typeof(T).Name, KeyStringFor(obj));
-            }
+            });
         }
 
         public virtual TKey Save<TKey>(T obj)
@@ -251,20 +251,20 @@ namespace Dragon.Data.Repositories
 
         public virtual void Update(T obj)
         {
-            using (var c = OpenConnection())
+            m_connectionCtxFactory.InDatabase((c,t) =>
             {
-                c.Update(obj);
+                c.Update(obj, transaction: t);
                 m_logger.LogDebug("Updated record for type {0} with key {1}", typeof(T).Name, KeyStringFor(obj));
-            }
+            });
         }
 
         public virtual void Delete(T obj)
         {
-            using (var c = OpenConnection())
+            m_connectionCtxFactory.InDatabase((c, t) =>
             {
-                c.Delete(obj);
+                c.Delete(obj, transaction: t);
                 m_logger.LogDebug("Deleted record for type {0} with key {1}", typeof(T).Name, KeyStringFor(obj));
-            }
+            });
         }
 
         #endregion
@@ -273,18 +273,18 @@ namespace Dragon.Data.Repositories
 
         public void Execute(string sql, dynamic param = null)
         {
-            using (var c = OpenConnection())
+            m_connectionCtxFactory.InDatabase((c,t) =>
             {
-                c.Execute(PreprocessSQLString<T>(sql), (object)param);
-            }
+                c.Execute(PreprocessSQLString<T>(sql), (object)param, transaction: t);
+            });
         }
 
         public void ExecuteSP(string sql, dynamic param = null)
         {
-            using (var c = OpenConnection())
+            m_connectionCtxFactory.InDatabase((c,t) =>
             {
-                c.Execute(PreprocessSQLString<T>(sql), (object)param, commandType: CommandType.StoredProcedure);
-            }
+                c.Execute(PreprocessSQLString<T>(sql), (object)param, commandType: CommandType.StoredProcedure, transaction: t);
+            });
         }
 
         #endregion
@@ -309,12 +309,6 @@ namespace Dragon.Data.Repositories
         protected virtual void SetPrimaryKey(T obj, object value)
         {
             m_keyProperty.PropertyInfo.SetValue(obj, value, null);
-        }
-
-        protected virtual DbConnection OpenConnection()
-        {
-            var c = m_connectionInstantiator.Open<T>();
-            return c;
         }
 
         protected object DefaultFor(Type type)
