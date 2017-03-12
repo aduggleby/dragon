@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Dragon.Common.Util
+namespace Dragon.Context.Util
 {
     public static class RandomUtil
     {

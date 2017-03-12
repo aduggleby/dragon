@@ -39,9 +39,7 @@ namespace Dragon.Mail
             IMailSenderService mailSenderService = null,
             bool? async = null)
         {
-            if (queue == null) throw new ArgumentException("Queue cannot be null.", "queue");
-
-            m_queue = queue;
+            m_queue = queue ?? new InMemoryMailQueue();
 
             IConfiguration configuration1 = configuration ?? new DefaultConfiguration();
 
@@ -60,10 +58,13 @@ namespace Dragon.Mail
             m_asyncActive = async.HasValue ? async.Value : StringToBoolUtil.Interpret(configuration1.GetValue(APP_KEY_ASYNCACTIVE));
 
             if (!m_asyncActive && mailSenderService == null)
-                throw new ArgumentException("When Async is not active MailSenderService cannot be null.", "mailSenderService");
-
-
-            m_mailSenderService = mailSenderService;
+            {
+                m_mailSenderService = new MailSenderService(m_queue);
+            }
+            else
+            {
+                m_mailSenderService = mailSenderService;
+            }
         }
 
         public void Register(Template template)
@@ -75,29 +76,40 @@ namespace Dragon.Mail
             var localizedKey = template.LocalizedKey.ToLower();
             if (m_templates.ContainsKey(localizedKey))
             {
-                throw new Exception("Template with identical key already added.");
+                System.Diagnostics.Trace.TraceWarning($"Template with identical key '{localizedKey}' already added, will override existing template.");
             }
-            else
-            {
-                RegisterWithKey(localizedKey, template);
-            }
+
+            RegisterWithKey(localizedKey, template);
 
             var shorterLocalizedKey = localizedKey.Substring(0, localizedKey.LastIndexOf('-')).ToLower();
-            if (!m_templates.ContainsKey(shorterLocalizedKey))
+            if (m_templates.ContainsKey(shorterLocalizedKey))
             {
-                RegisterWithKey(shorterLocalizedKey, template);
+                System.Diagnostics.Trace.TraceWarning($"Template with identical key '{shorterLocalizedKey}' already added, will override existing template.");
             }
 
+            RegisterWithKey(shorterLocalizedKey, template);
+
             var templateKey = template.Key.ToLower();
-            if (!m_templates.ContainsKey(templateKey))
+            if (m_templates.ContainsKey(templateKey))
             {
-                RegisterWithKey(templateKey, template);
+                System.Diagnostics.Trace.TraceWarning($"Template with identical key '{localizedKey}' already added, will override existing template.");
             }
+
+            RegisterWithKey(templateKey, template);
         }
 
         private void RegisterWithKey(string key, Template template)
         {
+            if (m_templates.ContainsKey(key))
+            {
+                m_templates.Remove(key);
+            }
             m_templates.Add(key, template);
+
+            if (m_renderer.ContainsKey(key))
+            {
+                m_renderer.Remove(key);
+            }
             m_renderer.Add(key, m_rendererFactory(template));
         }
 

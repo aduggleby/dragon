@@ -15,7 +15,7 @@ namespace Dragon.Data.Repositories
 {
     public class Repository<T> : IRepository<T> where T : class
     {
-        protected static readonly ILog s_log = LogManager.GetCurrentClassLogger();
+        protected static readonly ILog s_log = LogManager.GetLogger<T>();
 
         protected static readonly bool m_hasSinglePK;
 
@@ -347,7 +347,7 @@ namespace Dragon.Data.Repositories
 
         protected virtual DbConnection OpenConnection()
         {
-            var c = ConnectionHelper.Open();
+            var c = ConnectionHelper.Open<T>();
             return c;
         }
 

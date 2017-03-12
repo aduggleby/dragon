@@ -30,12 +30,16 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Common.Logging, Version=3.3.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
-      <HintPath>packages\Common.Logging.3.3.0\lib\net40\Common.Logging.dll</HintPath>
+    <Reference Include="AngleSharp, Version=0.9.8.0, Culture=neutral, PublicKeyToken=e83494dcdc6d31ea, processorArchitecture=MSIL">
+      <HintPath>..\packages\AngleSharp.0.9.8\lib\net45\AngleSharp.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Common.Logging.Core, Version=3.3.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
-      <HintPath>packages\Common.Logging.Core.3.3.0\lib\net40\Common.Logging.Core.dll</HintPath>
+    <Reference Include="Common.Logging, Version=3.3.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
+      <HintPath>packages\Common.Logging.3.3.1\lib\net40\Common.Logging.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Common.Logging.Core, Version=3.3.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
+      <HintPath>packages\Common.Logging.Core.3.3.1\lib\net40\Common.Logging.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="CsQuery, Version=1.3.3.249, Culture=neutral, processorArchitecture=MSIL">
@@ -43,15 +47,15 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Handlebars, Version=1.0.0.0, Culture=neutral, PublicKeyToken=22225d0bf33cd661, processorArchitecture=MSIL">
-      <HintPath>packages\Handlebars.Net.1.5.3\lib\Handlebars.dll</HintPath>
+      <HintPath>..\packages\Handlebars.Net.1.7.1\lib\Handlebars.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="HtmlSanitizer, Version=2.0.5735.24296, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\HtmlSanitizer.2.0.5735.24296\lib\net40\HtmlSanitizer.dll</HintPath>
+    <Reference Include="HtmlSanitizer, Version=3.0.0.0, Culture=neutral, PublicKeyToken=61c49a1a9e79cc28, processorArchitecture=MSIL">
+      <HintPath>..\packages\HtmlSanitizer.3.2.105\lib\net45\HtmlSanitizer.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -64,9 +68,7 @@
     </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -74,16 +76,20 @@
     <Compile Include="Impl\DefaultFileSystem.cs" />
     <Compile Include="Impl\DefaultFileSystemEnumerator.cs" />
     <Compile Include="Impl\DefaultReceiverMapper.cs" />
+    <Compile Include="Impl\DefaultResourceManager.cs" />
     <Compile Include="Impl\DefaultSenderConfiguration.cs" />
     <Compile Include="Impl\DefaultSmtpClient.cs" />
     <Compile Include="Impl\DynamicDictionary.cs" />
     <Compile Include="Impl\FastFileSystemEnumerator.cs" />
+    <Compile Include="Impl\TemplateRepositoryBase.cs" />
+    <Compile Include="Impl\ResourceFileTemplateRepository.cs" />
     <Compile Include="Impl\InMemoryMailQueue.cs" />
     <Compile Include="Impl\FileFolderMailQueue.cs" />
     <Compile Include="Impl\FileFolderTemplateRepository.cs" />
     <Compile Include="Impl\HandlebarsRenderer.cs" />
     <Compile Include="Impl\JsonHttpClient.cs" />
-    <Compile Include="Interfaces\IFileFolderTemplateRepository.cs" />
+    <Compile Include="Interfaces\IResourceManager.cs" />
+    <Compile Include="Interfaces\ITemplateRepository.cs" />
     <Compile Include="Interfaces\IFileSystem.cs" />
     <Compile Include="Interfaces\IFileSystemEnumerator.cs" />
     <Compile Include="Interfaces\IMailSenderService.cs" />
@@ -115,9 +121,6 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Todo.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

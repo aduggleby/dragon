@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Dragon.SecurityServer.AccountSTS.Client</id>
+    <version>1.0.1</version>
+    <title>Dragon.SecurityServer.AccountSTS.Client</title>
+    <authors>Dragon Project</authors>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>
+      A client for the Dragon.SecurityServer.AccountSTS, which allows updating user data and generating links to the AccountSTS.
+    </description>
+    <dependencies>
+      <group targetFramework=".NETFramework4.5">
+        <dependency id="Microsoft.AspNet.WebApi" version="5.2.3" />
+        <dependency id="Microsoft.AspNet.WebApi.Client" version="5.2.3" />
+        <dependency id="Microsoft.AspNet.WebApi.Core" version="5.2.3" />
+        <dependency id="Microsoft.AspNet.WebApi.WebHost" version="5.2.3" />
+        <dependency id="Dragon.Security.Hmac.Core" version="1.2.0" />
+        <dependency id="Newtonsoft.Json" version="8.0.3" />
+      </group>
+    </dependencies>
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName="Microsoft.CSharp" targetFramework="" />
+      <frameworkAssembly assemblyName="System" targetFramework="" />
+      <frameworkAssembly assemblyName="System.Core" targetFramework="" />
+      <frameworkAssembly assemblyName="System.ComponentModel.DataAnnotations" targetFramework="" />
+      <frameworkAssembly assemblyName="System.IdentityModel.Services" targetFramework="" />
+      <frameworkAssembly assemblyName="System.Web" targetFramework="" />
+    </frameworkAssemblies>
+  </metadata>
+  <files>
+    <file src="..\proj\SecurityServer\proj\AccountSTS.Client\bin\Release\Dragon.SecurityServer.AccountSTS.Client.dll" target="lib\Dragon.SecurityServer.AccountSTS.Client.dll" />
+    <file src="..\proj\SecurityServer\proj\AccountSTS.Client\bin\Release\Dragon.SecurityServer.GenericSTSClient.dll" target="lib\Dragon.SecurityServer.GenericSTSClient.dll" />
+  </files>
+</package>

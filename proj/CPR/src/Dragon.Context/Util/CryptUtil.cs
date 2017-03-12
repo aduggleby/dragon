@@ -4,7 +4,7 @@ using System.Security.Cryptography;
 using Dragon.Context.Configuration;
 using StructureMap;
 
-namespace Dragon.Common.Util
+namespace Dragon.Context.Util
 {
 
     public class CryptUtil 

@@ -1,0 +1,9 @@
+Example E-Mail
+==============
+Title: {{{title}}}
+
+{{#each links}}
+{{{this.name}}}: {{{this.link}}}
+{{/each}}
+
+@inc(..\_Footer.txt)

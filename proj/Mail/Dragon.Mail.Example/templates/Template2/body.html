@@ -1,0 +1,8 @@
+<h1>Example E-Mail</h1>
+<p><b>Title:</b><span>{{title}}</p>
+<ul>
+  {{#each links}}
+  <li><a href="{{{this.link}}}">{{this.name}}</a></li>
+  {{/each}}
+</ul>
+@inc(..\_Footer.html)

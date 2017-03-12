@@ -1,24 +1,23 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
         <id>Dragon.Mail</id>
-        <version>1.7.1</version>
+        <version>1.10.4</version>
         <title>Dragon.Mail</title>
         <authors>Dragon Project</authors>
+        <projectUrl>https://github.com/aduggleby/dragon/tree/master/proj/Mail</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
-        <description>Dragon Mail Framework</description>
+        <description>The Mail Templating and Sending Module (part of Dragon Web Framework) for .NET that supports Handlebar Templates (HTML &amp; plain-text), Internationalization, Summary E-Mails (Batching, i.e. do not send more than 1 email per X hours) and Asynchronous Sending.</description>
+        <summary>E-Mail Sending Framework with international template support for .NET.</summary>
+        <releaseNotes>Templates can now be loaded from Resource Files (RESX).</releaseNotes>
+        <language>en-US</language>
+        <tags>email,templates,handlebars,mail</tags>
         <dependencies>
-            <dependency id="Common.Logging" version="3.3.0" />
-            <dependency id="Common.Logging.Core" version="3.3.0" />
+            <dependency id="Common.Logging" version="3.3.1" />
             <dependency id="CsQuery" version="1.3.4" />
-            <dependency id="Dapper" version="1.42" />
-            <dependency id="Dragon.Data" version="1.1.0" />
-            <dependency id="HtmlSanitizer" version="2.0.5735.24296" />
+            <dependency id="Handlebars.Net" version="1.7.1" />
+            <dependency id="HtmlSanitizer" version="3.2.105" />
             <dependency id="Microsoft.AspNet.WebApi.Client" version="5.2.3" />
-            <dependency id="Moq" version="4.2.1507.0118" />
-            <dependency id="Handlebars.Net" version="1.5.3" />
-            <dependency id="Topshelf" version="3.3.1" />
-            <dependency id="Newtonsoft.Json" version="8.0.2" />
         </dependencies>
         <frameworkAssemblies>
             <frameworkAssembly assemblyName="Microsoft.CSharp" targetFramework="" />

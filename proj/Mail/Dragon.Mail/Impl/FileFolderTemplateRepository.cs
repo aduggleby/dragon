@@ -12,10 +12,9 @@ using Dragon.Mail.Utils;
 
 namespace Dragon.Mail.Impl
 {
-    public class FileFolderTemplateRepository : IFileFolderTemplateRepository
+    public class FileFolderTemplateRepository : TemplateRepositoryBase, ITemplateRepository
     {
         public const string APP_KEY_FOLDER = "Dragon.Mail.Templates.Folder";
-        public const string APP_KEY_DEFLANG = "Dragon.Mail.Templates.DefaultLanguage";
 
         public const string EXT_TEXT = ".txt";
         public const string EXT_HTML = ".html";
@@ -28,21 +27,17 @@ namespace Dragon.Mail.Impl
         public const string FILE_SUMMARYFOOTER = "summaryfooter";
 
         private readonly IFileSystem m_fileSystem = null;
-        private readonly IConfiguration m_configuration = null;
         private readonly string m_baseFolder;
         private readonly string m_ignorePrefix ;
-
-        private readonly CultureInfo m_cultureInfo = CultureInfo.CurrentCulture;
-
+        
         public FileFolderTemplateRepository(
             string directory = null,
             IConfiguration configuration = null,
             IFileSystem fileSystem = null,
-            string ignorePrefix = "_")
+            string ignorePrefix = "_") :base(configuration)
         {
             m_ignorePrefix = ignorePrefix;
             m_fileSystem = fileSystem ?? new DefaultFileSystem();
-            m_configuration = configuration ?? new DefaultConfiguration();
             m_baseFolder = (directory ?? string.Empty).Trim();
 
             if (string.IsNullOrWhiteSpace(m_baseFolder))
@@ -54,30 +49,14 @@ namespace Dragon.Mail.Impl
             {
                 throw new ConfigurationMissingException(APP_KEY_FOLDER);
             }
-
-            var culture = m_configuration.GetValue(APP_KEY_DEFLANG);
-            if (!string.IsNullOrWhiteSpace(culture))
-            {
-                try
-                {
-                    m_cultureInfo = CultureInfo.CreateSpecificCulture(culture);
-                }
-                catch (CultureNotFoundException)
-                {
-                    throw new Exception(string.Format("The specified default culture is " +
-                                                      "{0} is invalid. Use format such as " +
-                                                      "en and en-us.",
-                        culture));
-                }
-            }
-
+            
             if (!m_fileSystem.ExistDir(m_baseFolder))
             {
                 throw new Exception(string.Format("Template directory {0} does not exist.", m_baseFolder));
             }
         }
 
-        public void EnumerateTemplates(Action<Template> act)
+        public override void EnumerateTemplates(Action<Template> act)
         {
             m_fileSystem.EnumerateDirectory(m_baseFolder, sub =>
             {

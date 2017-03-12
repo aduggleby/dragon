@@ -1,26 +1,145 @@
 ﻿@{
-    ViewBag.Title = "Dragon.Diagnostics - Home";
+    ViewBag.Title = "WhatAVenture - Diagnostics";
 }
 
-<div class="jumbotron">
-    <h1>Dragon.Diagnostics</h1>
-    <p class="lead">Dragon.Diagnostics is a Windows tool which helps us to identify connectivity issues by collecting network related information about your system. No personal information is collected. You will be prompted to review the collected information before sending it to us.</p>
-    <p><a href="/Dragon.Diagnostics.zip" class="btn btn-primary btn-lg">Download &raquo;</a></p>
+<div class="">
+    <img class="img-responsive center" style="padding-bottom: 100px; padding-top: 50px" src="~/Content/wav_logo_final_200w.jpg" />
+    <p class="lead">On this page you can download the WhatAVenture Diagnostics Tool which will help us diagnose connectivity issues from your client network.</p>
+    <p><a href="~/Content/WhatAVenture-Diagnostics-Tool.zip" class="btn btn-primary btn-lg">Download Diagnostics Tool &raquo;</a></p>
+    
+    <h4 style="padding-top: 30px;">How does it work?</h4>
+        <ul>
+            <li>Download the ZIP and open by double-clicking (or extract it)</li>
+            <li>Start the contained EXE file (the .NET Framework 4.5 is required)</li>
+            <li>The tool runs the diagnostics tests (may take up to 5 minutes)</li>
+            <li>Once finished a text file opens.</li>
+            <li>This information should then be sent to your account manager at WhatAVenture.</li>
+
+    </ul>
+
+    <h4 style="padding-top: 30px;">What information is collected?</h4>
+    <p>The tools run basic network checks, such as</p>
+    <ul>
+        <li>a trace route, </li>
+        <li>ping, </li>
+        <li>websocket connection test and </li>
+        <li>HTTP GET tests.</li>
+    </ul>
+    <p>Also information on operating system version, browser version and network interfaces (including proxy) are collected.</p>
+    <p>The source code (C#) is open source and can be provided if required and can be compiled on your systems if you wish.</p>
+    <h4 style="padding-top: 30px;">Example Log File</h4>
+    <p>An example output from running the client side in our network can be seen below. Any information collected can be edited before sending to us. No data is transmitted automatically.</p>
+
+    <pre style="max-height: 300px; overflow: scroll">
+Dragon.Diagnostics 1.0.5865.26257
+==================================================
+01/22/2016 13:46:54 - TraceRoute starting...
+--------------------------------------------------
+Hop IP Address       Response Host
+--- ---------------- -------- ---------------------------------------
+  1 192.168.100.1         4ms 192.168.100.1
+  2 192.168.0.254         1ms 192.168.0.254
+  3 1.2.3.4              14ms a.b.c.d
+Trace complete.
+--------------------------------------------------
+01/22/2016 13:49:32 - TraceRoute done.
+==================================================
+01/22/2016 13:49:32 - NetworkInterface starting...
+--------------------------------------------------
+Available network interfaces:
+- Local Area Connection* 2: Down
+- Ethernet: Up
+- Wi-Fi: Down
+- Loopback Pseudo-Interface 1: Up
+- Teredo Tunneling Pseudo-Interface: Up
+Configured proxy:
+none.
+--------------------------------------------------
+01/22/2016 13:49:32 - NetworkInterface done.
+==================================================
+01/22/2016 13:49:32 - Browser starting...
+--------------------------------------------------
+FIREFOX.EXE
+    43.0.4 (x86 en-US)
+Google Chrome
+    47.0.2526.111
+IEXPLORE.EXE
+    9.11.10586.0
+    11.63.10586.0
+--------------------------------------------------
+01/22/2016 13:49:33 - Browser done.
+==================================================
+01/22/2016 13:49:33 - OperatingSystem starting...
+--------------------------------------------------
+Microsoft Windows NT 6.2.9200.0 64bit
+--------------------------------------------------
+01/22/2016 13:49:33 - OperatingSystem done.
+==================================================
+01/22/2016 13:49:33 - Ping starting...
+--------------------------------------------------
+Pinging 8.8.8.8...
+Success!
+Pinging example.org...
+Success!
+--------------------------------------------------
+01/22/2016 13:49:33 - Ping done.
+==================================================
+01/22/2016 13:49:33 - SslCertificate starting...
+--------------------------------------------------
+Connecting to: https://diagnostics.whataventure.com
+[Subject]
+  CN=*.whataventure.com, OU=PositiveSSL Wildcard, OU=Domain Control Validated
+[Issuer]
+  CN=COMODO RSA Domain Validation Secure Server CA, O=COMODO CA Limited, L=Salford, S=Greater Manchester, C=GB
+[Serial Number]
+  00CE8A2B8501F11D284366DF9CCEFC0205
+[Not Before]
+  19.03.2015 01:00:00
+[Not After]
+  19.03.2016 00:59:59
+[Thumbprint]
+  06B2CF964ACAB93F8549272FE87514F2C5604CC4
+--------------------------------------------------
+01/22/2016 13:49:33 - SslCertificate done.
+==================================================
+01/22/2016 13:49:33 - WebSocket starting...
+--------------------------------------------------
+01/22/2016 13:49:33 - Connecting to: ws://diagnostics.whataventure.com/api/test/websocket?message=short
+Waiting for 2 seconds...
+01/22/2016 13:49:34 - received: short
+01/22/2016 13:49:35 - received: test
+01/22/2016 13:49:36 - Done
+Server responses received.
+01/22/2016 13:49:36 - Connecting to: ws://diagnostics.whataventure.com/api/test/websocket?message=medium
+Waiting for 20 seconds...
+01/22/2016 13:49:46 - received: medium
+01/22/2016 13:49:56 - received: test
+01/22/2016 13:49:57 - Done
+Server responses received.
+01/22/2016 13:49:57 - Connecting to: ws://diagnostics.whataventure.com/api/test/websocket?message=long
+Waiting for 60 seconds...
+01/22/2016 13:50:27 - received: long
+01/22/2016 13:50:57 - received: test
+01/22/2016 13:50:57 - Done
+Server responses received.
+--------------------------------------------------
+01/22/2016 13:50:57 - WebSocket done.
+==================================================
+01/22/2016 13:50:57 - HTTP starting...
+--------------------------------------------------
+01/22/2016 13:50:57 - Connecting to: http://diagnostics.whataventure.com/api/test/fastget
+Waiting for 1 seconds...
+01/22/2016 13:50:58 - success.
+01/22/2016 13:50:58 - Connecting to: http://diagnostics.whataventure.com/api/test/mediumget
+Waiting for 10 seconds...
+01/22/2016 13:51:08 - success.
+01/22/2016 13:51:08 - Connecting to: http://diagnostics.whataventure.com/api/test/slowget
+Waiting for 30 seconds...
+01/22/2016 13:51:38 - success.
+--------------------------------------------------
+01/22/2016 13:51:38 - HTTP done.
+
+</pre>
+
 </div>
 
-<div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            Simply download, extract, and run Dragon.Diagnostics.exe. A log file will be created which we kindly ask you to send back to us.
-        </p>
-    </div>
-    <div class="col-md-4">
-        <h2>Requirements</h2>
-        <p>The tool runs on Windows machines that have the .NET Framework 4.5 installed.</p>
-    </div>
-    <div class="col-md-4">
-        <h2>Contact</h2>
-        <p>If you experience any issues, drop us a line.</p>
-    </div>
-</div>

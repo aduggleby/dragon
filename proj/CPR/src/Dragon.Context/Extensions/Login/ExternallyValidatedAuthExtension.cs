@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Dragon.Common.Util;
+using Dragon.Context.Util;
 using Dragon.Context.Exceptions;
 
 namespace Dragon.Context.Extensions.Login

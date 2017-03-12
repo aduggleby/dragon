@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace Dragon.Common.Util
+namespace Dragon.Context.Util
 {
     public class EmbeddedUtil
     {

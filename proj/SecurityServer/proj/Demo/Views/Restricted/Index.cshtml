@@ -1,0 +1,62 @@
+﻿@using Dragon.SecurityServer.Demo.Models
+@model ChangeAccountDataViewModel
+@{
+    ViewBag.Title = "Restricted";
+}
+
+<h2>Restricted area</h2>
+<h3>General</h3>
+<p>Name: @ViewBag.Name</p>
+<p>AuthenticationType: @ViewBag.AuthenticationType</p>
+<h3>Claims</h3>
+@foreach (var claim in ViewBag.Claims)
+{
+    <p>@claim.Type: @claim.Value</p>
+}
+<h3>Connect</h3>
+@foreach (var connect in ViewBag.ConnectUrls)
+{
+    <p><a href="@connect.Value">@connect.Key</a></p>
+}
+<h3>Disconnect</h3>
+@foreach (var disconnect in ViewBag.DisconnectUrls)
+{
+    <p><a href="@disconnect.Value">@disconnect.Key</a></p>
+}
+<h3>Settings</h3>
+
+@using (Html.BeginForm("ChangeAccountData", "Restricted"))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(m => m.EmailAddress, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.EmailAddress, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.NewPassword, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.PasswordFor(m => m.NewPassword, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Update" class="btn btn-default" />
+        </div>
+    </div>
+}
+
+@Html.Partial("AddProfileClaim")
+@Html.Partial("UpdateProfileClaims", (UpdateProfileClaimsViewModel)ViewBag.Profile)
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -1,5 +1,5 @@
 ﻿using System;
-using Dragon.Common.Util;
+using Dragon.Context.Util;
 using Dragon.Context.Exceptions;
 
 namespace Dragon.Context.Extensions.Login

@@ -6,7 +6,7 @@ using System.Resources;
 using System.Text;
 using System.Web.Mvc;
 
-namespace Dragon.Common.Util
+namespace Dragon.Context.Util
 {
     public static class ResourceUtil
     {

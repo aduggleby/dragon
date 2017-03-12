@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
     <metadata>
         <id>Dragon.Data</id>
-        <version>1.1.0</version>
+        <version>1.4.0</version>
         <title>Dragon.Data</title>
         <authors>Dragon Project</authors>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -11,6 +11,9 @@
             <group targetFramework=".NETFramework4.5">
                 <dependency id="Common.Logging" version="3.0.0" />
                 <dependency id="Dapper" version="1.38" />
+                <dependency id="ObjectDumper" version="1.0.0.12" />
+                <dependency id="Sigil" version="4.7.0" />
+                <dependency id="Jil" version="2.14.3" />
             </group>
         </dependencies>
         <frameworkAssemblies>

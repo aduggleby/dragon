@@ -1,0 +1,224 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+  For more information on how to configure your ASP.NET application, please visit
+  http://go.microsoft.com/fwlink/?LinkId=301880
+  -->
+<configuration>
+  <configSections>
+    <sectionGroup name="common">
+      <section name="logging" type="Common.Logging.ConfigurationSectionHandler, Common.Logging" />
+    </sectionGroup>
+    <sectionGroup name="dragon">
+      <sectionGroup name="security">
+        <section name="hmac" type="Dragon.Security.Hmac.Module.Configuration.DragonSecurityHmacSection, Dragon.Security.Hmac.Module" />
+      </sectionGroup>
+    </sectionGroup>
+    <section name="Exceptional" type="StackExchange.Exceptional.Settings, StackExchange.Exceptional" />
+  </configSections>
+  <common>
+    <logging>
+      <factoryAdapter type="Common.Logging.Simple.ConsoleOutLoggerFactoryAdapter, Common.Logging">
+        <arg key="level" value="ALL" />
+        <arg key="showLogName" value="true" />
+        <arg key="showDataTime" value="true" />
+        <arg key="dateTimeFormat" value="yyyy/MM/dd HH:mm:ss:fff" />
+      </factoryAdapter>
+    </logging>
+  </common>
+  <system.diagnostics>
+    <sources>
+      <source name="System.IdentityModel" switchValue="Verbose">
+        <listeners>
+          <add name="xml" type="System.Diagnostics.XmlWriterTraceListener" initializeData="C:\tmp\WIF-s.xml" />
+        </listeners>
+      </source>
+    </sources>
+    <trace autoflush="true" />
+  </system.diagnostics>
+  <connectionStrings>
+    <add name="Dragon" connectionString="Data Source=(LocalDb)\v11.0;AttachDbFilename=|DataDirectory|\aspnet-AccountSTS-Dragon.mdf;Initial Catalog=aspnet-AccountSTS-Dragon;Integrated Security=True" providerName="System.Data.SqlClient" />
+    <add name="RedisTODO" connectionString="localhost" />
+  </connectionStrings>
+  <appSettings>
+    <add key="webpages:Version" value="3.0.0.0" />
+    <add key="webpages:Enabled" value="false" />
+    <add key="ClientValidationEnabled" value="true" />
+    <add key="UnobtrusiveJavaScriptEnabled" value="true" />
+    <!-- Certificates -->
+    <add key="SigningCertificateName" value="certificates/securityserver.pfx" />
+    <add key="SigningCertificatePassword" value="" />
+    <!-- <add key="EncryptingCertificateName" value="certificates/demo.cer" /> -->
+    <!-- Identification of the login provider -->
+    <add key="IssuerName" value="http://localhost:51385" />
+    <!-- Federation authentication providers -->
+    <add key="AuthenticationProviders" value="Microsoft, Google" />
+    <add key="AuthenticationProvider.Microsoft.ClientID" value="0000000000000000" />
+    <add key="AuthenticationProvider.Microsoft.ClientSecret" value="00000000000000000000000000000000" />
+    <add key="AuthenticationProvider.Google.ClientID" value="000000000000000000000000000000000000000000000000000000000000000000000000" />
+    <add key="AuthenticationProvider.Google.ClientSecret" value="000000000000000000000000" />
+    <!-- Migration from OpenID 2.0 to OpenID Connect -->
+    <add key="AuthenticationProvider.Google.OpenId2.ValidAudience" value="000000000000000000000000000000000000000000000000000000000000000000000000" />
+    <add key="AuthenticationProvider.Google.OpenId2.ValidIssuer" value="accounts.google.com" />
+    <add key="AuthenticationProvider.Google.OpenId2.Realm" value="http://localhost:51385" />
+    <!-- Account management address -->
+    <add key="MailSenderEmail" value="noreply@thispc.com" />
+    <!-- Account management name -->
+    <add key="MailSenderName" value="ThisPC" />
+    <!-- Federation metadata -->
+    <add key="FederationHost" value="http://localhost:51385" />
+    <!-- Federation metadata -->
+    <add key="FederationNamespace" value="http://docs.oasis-open.org/wsfed/federation/200706" />
+    <!-- Federation metadata -->
+    <add key="FederationEndpoint" value="http://localhost:51385" /> 
+    <!-- Admin user id list -->
+    <add key="AdminUserIds" value="" />
+
+    <add key="aspNet:identity:redis:db" value="3" />
+    <add key="aspNet:identity:redis:userIdKey" value="stackredis:identity:user:id" />
+    <add key="aspNet:identity:redis:userHashByIdKey" value="stackredis:identity:users:byid" />
+    <add key="aspNet:identity:redis:userHashByNameKey" value="stackredis:identity:users:byname" />
+    <add key="aspNet:identity:redis:userLoginHashKey" value="stackredis:identity:users:logins" />
+    <add key="aspNet:identity:redis:userLoginFailCountHashKey" value="stackredis:identity:logins:fails" />
+    <add key="aspNet:identity:redis:userLockSetKey" value="stackredis:identity:users:logins:locks" />
+    <add key="aspNet:identity:redis:userLockDateHashKey" value="stackredis:identity:users:logins:locks:dates" />
+    <add key="aspNet:identity:redis:userConfirmedEmailSetKey" value="stackredis:identity:users:confirmedmails" />
+    <add key="aspNet:identity:redis:userConfirmedPhoneNumberSetKey" value="stackredis:identity:users:confirmedphonenumbers" />
+    <add key="aspNet:identity:redis:userRoleSetKey" value="stackredis:identity:users:{0}:roles" />
+    <add key="aspNet:identity:redis:userLoginSetKey" value="stackredis:identity:users:{0}:logins" />
+    <add key="aspNet:identity:redis:userClaimSetKey" value="stackredis:identity:users:{0}:claims" />
+    <add key="aspNet:identity:redis:twoFactorEnabledSetKey" value="stackredis:identity:users:twofactorauthenabled" />
+    <add key="aspNet:identity:redis:userServiceSetKey" value="stackredis:identity:users:{0}:services" />
+    <add key="aspNet:identity:redis:userServiceHashKey" value="stackredis:identity:users:services" />
+  </appSettings>
+  <system.web>
+    <authentication mode="Forms">
+      <forms loginUrl="~/Account/Login" timeout="2880" />
+    </authentication>
+    <compilation debug="true" targetFramework="4.5" />
+    <httpRuntime targetFramework="4.5" maxQueryStringLength="32768" maxUrlLength="65536" />
+    <customErrors mode="Off" />
+  </system.web>
+  <system.webServer>
+    <modules>
+      <remove name="FormsAuthentication" />
+      <add name="ErrorStore" type="StackExchange.Exceptional.ExceptionalModule, StackExchange.Exceptional" />
+    </modules>
+    <security>
+      <requestFiltering>
+        <requestLimits maxQueryString="32768" />
+      </requestFiltering>
+    </security>
+    <handlers>
+      <remove name="ExtensionlessUrlHandler-Integrated-4.0" />
+      <remove name="OPTIONSVerbHandler" />
+      <remove name="TRACEVerbHandler" />
+      <add name="ExtensionlessUrlHandler-Integrated-4.0" path="*." verb="*" type="System.Web.Handlers.TransferRequestHandler" preCondition="integratedMode,runtimeVersionv4.0" />
+    </handlers>
+  </system.webServer>
+  <!-- ReSharper disable once WebConfig.RedundantLocationTag -->
+  <!-- ReSharper disable once WebConfig.WebConfigPathWarning -->
+  <location path="FederationMetadata/2007-06">
+    <system.webServer>
+      <handlers>
+        <add name="MetadataGenerator" path="FederationMetadata.xml" verb="GET" type="Dragon.SecurityServer.Common.Handlers.FederationMetadataHandler" />
+      </handlers>
+    </system.webServer>
+    <system.web>
+      <authorization>
+        <allow users="*" />
+      </authorization>
+       <customErrors mode="Off" />
+    </system.web>
+  </location>
+  <Exceptional applicationName="AccountSTS">
+    <ErrorStore type="SQL" connectionStringName="Dragon" />
+  </Exceptional>
+  <runtime>
+    <assemblyBinding xmlns="urn:schemas-microsoft-com:asm.v1">
+      <dependentAssembly>
+        <assemblyIdentity name="Microsoft.Owin" publicKeyToken="31bf3856ad364e35" />
+        <bindingRedirect oldVersion="0.0.0.0-3.0.1.0" newVersion="3.0.1.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="Microsoft.Owin.Security.OAuth" publicKeyToken="31bf3856ad364e35" />
+        <bindingRedirect oldVersion="0.0.0.0-3.0.1.0" newVersion="3.0.1.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="Microsoft.Owin.Security.Cookies" publicKeyToken="31bf3856ad364e35" />
+        <bindingRedirect oldVersion="0.0.0.0-3.0.1.0" newVersion="3.0.1.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="Microsoft.Owin.Security" publicKeyToken="31bf3856ad364e35" />
+        <bindingRedirect oldVersion="0.0.0.0-3.0.1.0" newVersion="3.0.1.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="Newtonsoft.Json" culture="neutral" publicKeyToken="30ad4fe6b2a6aeed" />
+        <bindingRedirect oldVersion="0.0.0.0-8.0.0.0" newVersion="8.0.0.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="System.Web.Optimization" publicKeyToken="31bf3856ad364e35" />
+        <bindingRedirect oldVersion="1.0.0.0-1.1.0.0" newVersion="1.1.0.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="WebGrease" publicKeyToken="31bf3856ad364e35" />
+        <bindingRedirect oldVersion="0.0.0.0-1.6.5135.21930" newVersion="1.6.5135.21930" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="System.Web.Http" publicKeyToken="31bf3856ad364e35" culture="neutral" />
+        <bindingRedirect oldVersion="0.0.0.0-5.2.3.0" newVersion="5.2.3.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="System.Web.Helpers" publicKeyToken="31bf3856ad364e35" />
+        <bindingRedirect oldVersion="1.0.0.0-3.0.0.0" newVersion="3.0.0.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="System.Web.WebPages" publicKeyToken="31bf3856ad364e35" />
+        <bindingRedirect oldVersion="1.0.0.0-3.0.0.0" newVersion="3.0.0.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="System.Web.Mvc" publicKeyToken="31bf3856ad364e35" />
+        <bindingRedirect oldVersion="0.0.0.0-5.2.3.0" newVersion="5.2.3.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="Common.Logging.Core" publicKeyToken="af08829b84f0328e" culture="neutral" />
+        <bindingRedirect oldVersion="0.0.0.0-3.3.1.0" newVersion="3.3.1.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="Common.Logging" publicKeyToken="af08829b84f0328e" culture="neutral" />
+        <bindingRedirect oldVersion="0.0.0.0-3.3.1.0" newVersion="3.3.1.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="Sigil" publicKeyToken="2d06c3494341c8ab" culture="neutral" />
+        <bindingRedirect oldVersion="0.0.0.0-4.7.0.0" newVersion="4.7.0.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="Antlr3.Runtime" publicKeyToken="eb42632606e9261f" culture="neutral" />
+        <bindingRedirect oldVersion="0.0.0.0-3.5.0.2" newVersion="3.5.0.2" />
+      </dependentAssembly>
+    </assemblyBinding>
+  </runtime>
+  <dragon>
+    <security>
+      <!-- The connection and tables that contain users and apps -->
+      <hmac serviceId="00000001-0001-0003-0003-000000000011" connectionStringName="Dragon" usersTableName="HmacUser" appsTableName="HmacConsumer">
+        <Paths>
+          <add name="api" path="^/Api/.*$" type="Include" />
+          <add name="account-logoff" path="^/Account/LogOff" type="Exclude" />
+          <add name="account-resetPassword" path="^/Account/ResetPassword.*" type="Exclude" />
+          <add name="account" path="^/Account/.*" type="Include" excludeParameters="returnUrl, wreply" />
+          <add name="manage" path="^/Manage/.*" type="Include" />
+          <add name="FederationMetaData" path="^/FederationMetadata/.*" type="Exclude" />
+          <add name="FederationSignin" path="^/signin-.*" type="Exclude" />
+          <add name="default" path="^/.*$" type="Exclude" />
+        </Paths>
+      </hmac>
+    </security>
+  </dragon>
+  <system.net>
+    <mailSettings>
+      <smtp>
+        <network host="localhost" port="25" />
+      </smtp>
+    </mailSettings>
+  </system.net>
+</configuration>

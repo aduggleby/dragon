@@ -1,0 +1,6 @@
+Beispiel E-Mail
+==============
+Überschrift: {{{title}}}
+
+Verknüpfung: {{{link}}}
+@inc(..\..\de\_Footer.txt)

@@ -31,7 +31,7 @@ namespace Dragon.Mail.Test
         }
 
         [TestMethod]
-        [ExpectedException(typeof(RuntimeBinderException))]
+        [ExpectedException(typeof(Exception))]
         public void DifferentCase_ThrowsException()
         {
             // ARRANGE
