@@ -9,7 +9,7 @@ namespace Dragon.CPRX
         public Guid ID { get; set; }
     }
 
-    public abstract class CPRCommand<T>: CPRCommand
+    public abstract class CPRCommand<T> : CPRCommand
         where T : CPRCommand
     {
         public virtual IEnumerable<ICPRInterceptor<T>> Interceptors
@@ -30,6 +30,12 @@ namespace Dragon.CPRX
             }
         }
 
-        public abstract IEnumerable<ICPRProjection<T>> Projections { get; }
+        public virtual IEnumerable<ICPRProjectionBase<T>> Projections
+        {
+            get
+            {
+                yield break;
+            }
+        }
     }
 }

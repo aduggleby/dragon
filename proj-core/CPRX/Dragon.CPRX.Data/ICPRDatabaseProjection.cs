@@ -5,7 +5,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace Dragon.CPRX
 {
-    public interface ICPRDatabaseProjection<T> : ICPRProjection<T>
+    public interface ICPRDatabaseProjection<T> : ICPRProjectionBase<T>
         where T: CPRCommand
     {
         void Project(IDbConnectionContextFactory connectionCtxFactory, ICPRContext ctx, T cmd, ILoggerFactory loggerFactory, IConfiguration config);

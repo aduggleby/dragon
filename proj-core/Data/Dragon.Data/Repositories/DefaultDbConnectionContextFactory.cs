@@ -44,11 +44,12 @@ namespace Dragon.Data.Repositories
                 try
                 {
                     conn.Open();
-                    m_logger.LogTrace("Database connection successfull");
+                    m_logger.LogDebug("Database connection successfull");
                 }
                 catch (Exception exInner)
                 {
-                    m_logger.LogTrace("Database connection failed", exInner);
+                    m_logger.LogWarning("Database connection failed", exInner);
+                    if (conn != null) conn.Dispose();
                     throw;
                 }
 
@@ -61,8 +62,13 @@ namespace Dragon.Data.Repositories
             }
             catch (Exception ex)
             {
-                m_logger.LogTrace("InDatabase execution failed");
+                m_logger.LogWarning("InDatabase execution failed");
                 throw new Exception("InDatabase execution fail.", ex);
+            }
+            finally
+            {
+                conn.Close();
+                m_logger.LogDebug("Database connection closed.");
             }
         }
 

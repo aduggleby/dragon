@@ -1,6 +1,10 @@
 ﻿namespace Dragon.CPRX
 {
-    public interface ICPRProjection<in T>
+    public interface ICPRProjectionBase<in T>
+    {
+
+    }
+    public interface ICPRProjection<in T> : ICPRProjectionBase<T>
         where T : CPRCommand
     {
         void Project(ICPRContext ctx, T cmd);

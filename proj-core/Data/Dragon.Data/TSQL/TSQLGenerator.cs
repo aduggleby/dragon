@@ -262,9 +262,16 @@ namespace Dragon.Data
 
                 if (!first) sb.Append(" AND ");
 
+                
+
                 var propertyName = FindUniqueNameInDictionary(GetVariableName(propMetadata), parameters);
 
-                if (!(where.Value is string) && where.Value is IEnumerable)
+                if (propMetadata.Nullable && where.Value == null)
+                {
+                    sb.AppendFormat("[{0}] IS NULL", propMetadata.ColumnName, propertyName);
+                    // parameters.Add(propertyName, where.Value);
+                }
+                else if (!(where.Value is string) && where.Value is IEnumerable)
                 {
                     sb.AppendFormat("[{0}] IN {1}", propMetadata.ColumnName, propertyName);
                     parameters.Add(propertyName, where.Value);

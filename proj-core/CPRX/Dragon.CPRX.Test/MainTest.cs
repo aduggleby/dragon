@@ -245,7 +245,7 @@ namespace Dragon.CPRX.Test
 
         public override IEnumerable<ICPRSecurityValidator<TestCommand>> SecurityValidators => m_securityValidators;
 
-        public override IEnumerable<ICPRProjection<TestCommand>> Projections => m_projections;
+        public override IEnumerable<ICPRProjectionBase<TestCommand>> Projections => m_projections;
     }
 
 
@@ -275,7 +275,7 @@ namespace Dragon.CPRX.Test
 
     public class ThrowsExceptionValidator : ICPRValidator<TestCommand>
     {
-        public IEnumerable<CPRError> Validate(ICPRContext ctx, CPRCommand cmd)
+        public IEnumerable<CPRError> Validate(ICPRContext ctx, TestCommand cmd)
         {
             throw new Exception("Test");
         }
@@ -295,7 +295,7 @@ namespace Dragon.CPRX.Test
             m_a = a;
         }
 
-        public IEnumerable<CPRError> Validate(ICPRContext ctx, CPRCommand cmd)
+        public IEnumerable<CPRError> Validate(ICPRContext ctx, TestCommand cmd)
         {
             if (m_a != null) m_a();
             yield break;
@@ -304,7 +304,7 @@ namespace Dragon.CPRX.Test
 
     public class FailValidator : ICPRValidator<TestCommand>
     {
-        public IEnumerable<CPRError> Validate(ICPRContext ctx, CPRCommand cmd)
+        public IEnumerable<CPRError> Validate(ICPRContext ctx, TestCommand cmd)
         {
             yield return new CPRError() { Message = "Test" };
         }

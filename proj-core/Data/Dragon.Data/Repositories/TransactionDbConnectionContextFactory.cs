@@ -18,6 +18,8 @@ namespace Dragon.Data.Repositories
         // Instantiate a SafeHandle instance.
         SafeHandle handle = new SafeFileHandle(IntPtr.Zero, true);
 
+        public static volatile int OpenCount = 0;
+
         bool m_transactionAborted = false;
         DbConnection m_connection;
         DbTransaction m_transaction;
@@ -29,17 +31,28 @@ namespace Dragon.Data.Repositories
 
             try
             {
+                OpenCount++;
                 m_connection.Open();
-                m_logger.LogTrace("Database connection successfull");
+                m_logger.LogDebug($"Database connection successfull. OpenCount: {OpenCount}");
 
             }
             catch (Exception exInner)
             {
-                m_logger.LogTrace($"Database connection failed: {exInner.Message}", exInner);
+                OpenCount--;
+                m_logger.LogWarning($"Database connection failed: {exInner.Message}", exInner);
+                if (m_connection != null)
+                {
+                    m_connection.Dispose();
+                }
                 throw;
             }
 
             m_transaction = m_connection.BeginTransaction();
+        }
+
+        ~TransactionDbConnectionContextFactory()
+        {
+            Dispose(false);
         }
 
         // Public implementation of Dispose pattern callable by consumers.
@@ -57,14 +70,19 @@ namespace Dragon.Data.Repositories
 
             if (disposing)
             {
+                m_logger.LogDebug($"Disposing any open transaction and connection. OpenCount: {OpenCount}");
+
                 handle.Dispose();
                 // Free any other managed objects here.
                 if (!m_transactionAborted)
                 {
                     m_transaction.Commit();
                 }
+                OpenCount--;
                 m_transaction.Dispose();
                 m_connection.Dispose();
+                m_transaction = null;
+                m_connection = null;
             }
 
             // Free any unmanaged objects here.
@@ -87,7 +105,7 @@ namespace Dragon.Data.Repositories
             {
                 m_transaction.Rollback();
                 m_transactionAborted = true;
-                m_logger.LogTrace("InDatabase execution failed", ex.ToString());
+                m_logger.LogWarning("InDatabase execution failed", ex.ToString());
                 throw;
             }
         }
