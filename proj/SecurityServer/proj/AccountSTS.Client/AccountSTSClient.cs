@@ -92,6 +92,7 @@ namespace Dragon.SecurityServer.AccountSTS.Client
                 {"appid", _client.HmacSettings.AppId},
                 {"userid", _client.HmacSettings.UserId},
             };
+            hmacParameters.Add("signature", HmacHelper.CalculateHash(hmacParameters, _client.HmacSettings.Secret));
             hmacParameters.ToList().ForEach(rst.Parameters.Add);
             var requestUrl = rst.RequestUrl;
             return requestUrl;

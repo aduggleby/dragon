@@ -102,6 +102,11 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
             }
             else
             {
+                switch (Request.QueryString["action"])
+                {
+                    case "register":
+                        return RedirectToAction("Register", "Account", new RouteValueDictionary(routeValues));
+                }
                 // If the user just wants to sign out, do so...
                 if (Request.QueryString[Action] == SignOut)
                 {

@@ -25,8 +25,9 @@ namespace Dragon.SecurityServer.Demo.Controllers
         {
             if (!User.Identity.IsAuthenticated)
             {
-                return new HttpUnauthorizedResult();
-                //CustomSignIn(); // custom signin
+                //return new HttpUnauthorizedResult();
+                CustomSignIn(); // custom signin
+                return new EmptyResult();
             }
             await InitViewBag();
             return View();
@@ -36,13 +37,20 @@ namespace Dragon.SecurityServer.Demo.Controllers
         {
             ViewBag.ConnectUrls = GetFederationManagementUrls(ViewBag.Claims, ManagementDisconnectedAccountType, "connect");
             ViewBag.DisconnectUrls = GetFederationManagementUrls(ViewBag.Claims, ManagementConnectedAccountType, "disconnect");
-            var claims = await ProfileClient.GetClaims(User.Identity.GetUserId());
-            var profile = new UpdateProfileClaimsViewModel
+            try
             {
-                Name = claims.FirstOrDefault(x => x.Type == Common.Consts.DefaultClaimNamespace + "name")?.Value ?? "",
-                Address = claims.FirstOrDefault(x => x.Type == Common.Consts.DefaultClaimNamespace + "address")?.Value ?? ""
-            };
-            ViewBag.Profile = profile;
+                var claims = await ProfileClient.GetClaims(User.Identity.GetUserId());
+                var profile = new UpdateProfileClaimsViewModel
+                {
+                    Name = claims.FirstOrDefault(x => x.Type == Common.Consts.DefaultClaimNamespace + "name")?.Value ?? "",
+                    Address = claims.FirstOrDefault(x => x.Type == Common.Consts.DefaultClaimNamespace + "address")?.Value ?? ""
+                };
+                ViewBag.Profile = profile;
+            }
+            catch (ApiException)
+            {
+                ViewBag.Profile = new UpdateProfileClaimsViewModel {Address = "", Name = ""};
+            }
         }
 
         private Dictionary<string, string> GetFederationManagementUrls(IEnumerable<Claim> claims, string accountType, string action)
@@ -58,13 +66,12 @@ namespace Dragon.SecurityServer.Demo.Controllers
                 : new Dictionary<string, string>();
         }
 
-        /*
+        // show the registration form on the AccountSTS instead the login form
         private void CustomSignIn()
         {
-            System.Web.HttpContext.Current.Response.Redirect(_client.GetFederationUrl("connect", System.Web.HttpContext.Current.Request.Url.AbsoluteUri), false);
+            System.Web.HttpContext.Current.Response.Redirect(Client.GetFederationUrl("register", System.Web.HttpContext.Current.Request.Url.AbsoluteUri), false);
             System.Web.HttpContext.Current.Response.End();
         }
-        */
 
         [HttpPost]
         [ExportModelStateToTempData]
