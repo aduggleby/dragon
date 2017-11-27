@@ -227,6 +227,8 @@ The application (the system generating the email) configuration must be extended
     
     </appSettings>
 
+When using the SQL queue, the Dragon.Mail.SqlQueue dependency (NuGet package or DLL file) needs to be added to the project.
+
 ### Database setup and configuration
 
 If you are using SqlMailQueue you must also specify a connection string with key "Dragon" pointing to the database that includes the specified SQL table.

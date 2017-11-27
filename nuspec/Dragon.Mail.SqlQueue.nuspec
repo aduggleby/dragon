@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+    <metadata>
+        <id>Dragon.Mail.SqlQueue</id>
+        <version>1.0.0</version>
+        <title>Dragon.Mail.SqlQueue</title>
+        <authors>Dragon Project</authors>
+        <projectUrl>https://github.com/aduggleby/dragon/tree/master/proj/Mail</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>The SQL Server based queue for Dragon.Mail to support asynchronous sending/batching of E-Mails.</description>
+        <summary>SQL queue for asynchronous E-Mail sending using Dragon.Mail.</summary>
+        <releaseNotes>Initial release</releaseNotes>
+        <language>en-US</language>
+        <tags>email,mail,batch,database</tags>
+        <dependencies>
+            <dependency id="Common.Logging" version="3.3.1" />
+            <dependency id="Dragon.Data" version="[1.50.2,2.0)" />
+            <dependency id="Jil" version="2.14.5" />
+            <dependency id="ObjectDumper" version="1.0.0.12" />
+        </dependencies>
+        <frameworkAssemblies>
+            <frameworkAssembly assemblyName="Microsoft.CSharp" targetFramework="" />
+            <frameworkAssembly assemblyName="System" targetFramework="" />
+            <frameworkAssembly assemblyName="System.Configuration" targetFramework="" />
+            <frameworkAssembly assemblyName="System.Core" targetFramework="" />
+            <frameworkAssembly assemblyName="System.Data" targetFramework="" />
+            <frameworkAssembly assemblyName="System.Data.DataSetExtensions" targetFramework="" />
+            <frameworkAssembly assemblyName="System.Runtime.Serialization" targetFramework="" />
+            <frameworkAssembly assemblyName="System.Transactions" targetFramework="" />
+            <frameworkAssembly assemblyName="System.Xml" targetFramework="" />
+            <frameworkAssembly assemblyName="System.Xml.Linq" targetFramework="" />
+        </frameworkAssemblies>
+    </metadata>
+    <files>
+        <file src="..\release\Dragon.Mail.SqlQueue.dll" target="lib\Dragon.Mail.SqlQueue.dll" />
+    </files>
+</package>
