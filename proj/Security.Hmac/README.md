@@ -30,7 +30,7 @@ Requirements
 ------------
 
 * Visual Studio 2013
-* SQL Server 2014
+* SQL Server 2014 (SQL Server 2012 Express LocalDB for development)
 
 
 Setup
@@ -41,38 +41,51 @@ For the web application that exposes the service:
 * Install the Dragon.Security.Hmac.Module package or build the Module project and copy the resulting binaries to the bin directory of the service.
 * Configure the module (Web.config, it is assumed a connection string exists), e.g.:
 
-    <configuration>
-      <configSections>
-        ...
-        <sectionGroup name="dragon">
-          <sectionGroup name="security">
-            <section name="hmac" type="Dragon.Security.Hmac.Module.Configuration.DragonSecurityHmacSection, Dragon.Security.Hmac.Module" />
-          </sectionGroup>
-        </sectionGroup>
-        ...
-      </configSections>
-      ...
-      <dragon>
-        <security>
-          <hmac
-            serviceId="00000001-0001-0001-0001-000000000001"
-            connectionStringName="DefaultConnection"
-            usersTableName="Users"
-            appsTableName="Apps">
-            <Paths>
-              <add name="allowed" path="^/Home/Public/.*$" type="Exclude" />
-              <add name="default" path=".*" type="Include" />
-            </Paths>
-          </hmac>
-        </security>
-      </dragon>
-      ...
-    <configuration>
+        <configuration>
+          <configSections>
+            ...
+            <sectionGroup name="dragon">
+              <sectionGroup name="security">
+                <section name="hmac" type="Dragon.Security.Hmac.Module.Configuration.DragonSecurityHmacSection, Dragon.Security.Hmac.Module" />
+              </sectionGroup>
+            </sectionGroup>
+            ...
+          </configSections>
+          ...
+          <dragon>
+            <security>
+              <hmac
+                serviceId="00000001-0001-0001-0001-000000000001"
+                connectionStringName="DefaultConnection"
+                usersTableName="Users"
+                appsTableName="Apps">
+                <Paths>
+                  <add name="allowed" path="^/Home/Public/.*$" type="Exclude" />
+                  <add name="default" path=".*" type="Include" />
+                </Paths>
+              </hmac>
+            </security>
+          </dragon>
+          ...
+        <configuration>
 
     where 
     connectionStringName refers to a name of an existing connection string, 
     Paths specifies a lists of regular expressions which define for which paths the authorization is skipped/necessary (type Exclude/Include respectively), defaults to necessary authorization
     The first matching path will be applied.
+
+    As alternative to the config section, app settings can be used, e.g.:
+
+
+        <add key="Dragon.Security.Hmac.ServiceId" value="00000001-0001-0001-0001-000000000001"/>
+        <add key="Dragon.Security.Hmac.ConnectionStringName" value="DefaultConnection"/>
+        <add key="Dragon.Security.Hmac.UsersTableName" value="Users"/>
+        <add key="Dragon.Security.Hmac.AppsTableName" value="Apps"/>
+        <add key="Dragon.Security.Hmac.SignatureParameterKey" value="signature"/>
+        <add key="Dragon.Security.Hmac.UseHexEncoding" value="false"/>
+        <add key="Dragon.Security.Hmac.PathNames" value="allowed;default"/>
+        <add key="Dragon.Security.Hmac.PathTypes" value="Exclude;Include"/>
+        <add key="Dragon.Security.Hmac.PathRegexes" value="^/Home/Public/.*$;.*"/>
 
 
 * Prepare the database, i.e. import the sql/migration scripts.

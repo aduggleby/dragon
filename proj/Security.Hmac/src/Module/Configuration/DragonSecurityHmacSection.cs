@@ -93,6 +93,10 @@ namespace Dragon.Security.Hmac.Module.Configuration
             {
                 return (PathCollection)base["Paths"];
             }
+            set
+            {
+                this["Paths"] = value;
+            }
         }
     }
 }
