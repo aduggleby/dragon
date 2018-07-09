@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Specialized;
 using System.Globalization;
 using Dragon.Security.Hmac.Core.Service;
 using Dragon.Security.Hmac.Module.Configuration;
@@ -400,6 +401,42 @@ namespace Dragon.Security.Hmac.Module.Tests.Services
 
             // Assert
             Assert.AreEqual(StatusCode.InvalidSignature, actual);
+        }
+
+        [TestMethod]
+        public void IsRequestAuthorized_includeInvalidParamterToBypassUnspecificParameterUsingUnsafePathRegex_shouldAllowRequest()
+        {
+            // Arrange
+            var pathCollection = new PathCollection
+            {
+                new PathConfig {Name = "excluded", Path = "/public/.*", Type = PathConfig.PathType.Exclude},
+                new PathConfig {Name = "included", Path = ".*", Type = PathConfig.PathType.Include}
+            };
+            var service = CreateService(DefaultSignatureParameterKey, false, pathCollection);
+
+            // Act
+            var actual = service.IsRequestAuthorized("http://localhost/restricted?/public/", new NameValueCollection());
+
+            // Assert
+            Assert.AreEqual(StatusCode.Authorized, actual);
+        }
+
+        [TestMethod]
+        public void IsRequestAuthorized_includeInvalidParamterToBypassUnspecificParameter_shouldDisallowRequest()
+        {
+            // Arrange
+            var pathCollection = new PathCollection
+            {
+                new PathConfig {Name = "excluded", Path = "^/public/.*", Type = PathConfig.PathType.Exclude},
+                new PathConfig {Name = "included", Path = ".*", Type = PathConfig.PathType.Include}
+            };
+            var service = CreateService(DefaultSignatureParameterKey, false, pathCollection);
+
+            // Act
+            var actual = service.IsRequestAuthorized("http://localhost/restricted?/public/", new NameValueCollection());
+
+            // Assert
+            Assert.AreNotEqual(StatusCode.Authorized, actual);
         }
 
         #region helper
