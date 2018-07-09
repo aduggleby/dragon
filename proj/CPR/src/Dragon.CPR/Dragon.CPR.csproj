@@ -142,8 +142,10 @@
     <Compile Include="Impl\Projections\TargetProjectionBase.cs" />
     <Compile Include="Interfaces\IHandler.cs" />
     <Compile Include="Interfaces\IInterceptor.cs" />
+    <Compile Include="Interfaces\ICommandSerializer.cs" />
     <Compile Include="Interfaces\IProjection.cs" />
     <Compile Include="Interfaces\IUseCommand.cs" />
+    <Compile Include="JsonCommandSerializer.cs" />
     <Compile Include="MVC\ControllerBase.cs" />
     <Compile Include="MVC\CprControllerBase.cs" />
     <Compile Include="MVC\JsonNetResult.cs" />
