@@ -21,10 +21,11 @@ namespace Dragon.CPR
 
         private readonly IHandler<TCommand>[] m_handlers;
         private readonly IRepository<Command> m_commandRepository;
-        private readonly ICommandSerializer m_serializer;
         private readonly JsonSerializerSettings m_jsonSerializerSettings;
 
-        public CommandDispatcher(IRepository<Command> r, IContainer container, ICommandSerializer serializer)
+        public ICommandSerializer CommandSerializer { get; set; }
+
+        public CommandDispatcher(IRepository<Command> r, IContainer container)
         {
             m_projections = container.GetAllInstances<IProjection<TCommand>>().ToArray();
             m_genericprojections = container.GetAllInstances<IProjection<object>>().ToArray();
@@ -32,7 +33,7 @@ namespace Dragon.CPR
             m_handlers = container.GetAllInstances<IHandler<TCommand>>().OrderBy(x => x.Order).ToArray();
 
             m_commandRepository = r;
-            m_serializer = serializer;
+            CommandSerializer = new JsonCommandSerializer();
         }
 
         public override IEnumerable<ErrorBase> Dispatch(TCommand o)
@@ -79,7 +80,7 @@ namespace Dragon.CPR
             cmd.Executed = DateTime.UtcNow;
             cmd.UserID = o.ExecutingUserID;
             cmd.Type = o.GetType().ToString();
-            cmd.JSON = m_serializer.Serialize(o);
+            cmd.JSON = CommandSerializer.Serialize(o);
 
             m_commandRepository.Insert(cmd);
         }
