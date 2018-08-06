@@ -23,7 +23,7 @@ Setup
         <add key="AuthenticationProviders" value="Microsoft, Facebook, Twitter" />
         <add key="AuthenticationProvider.Microsoft.ClientID" value="0000000000000000" />
         <add key="AuthenticationProvider.Microsoft.ClientSecret" value="00000000000000000000000000000000" />
-		...
+        ...
 
     * Microsoft authentication service: use [AccountSTS-BaseURL]/signin-microsoft as Redirect URL
 
@@ -43,3 +43,9 @@ Automated registration of users to apps is restricted to one app per group, but 
 * Microsoft: https://apps.dev.microsoft.com
 * Facebook: https://developers.facebook.com/apps
 * Twitter: https://apps.twitter.com
+* WsFederation
+
+#### WsFederation
+
+All providers prefixed with "WsFederation-" will be added as WS-Federation provider, and as such require Wtrealm and MetadataAddress configuration.
+For an example, see [Web.config.default](Web.config.default).

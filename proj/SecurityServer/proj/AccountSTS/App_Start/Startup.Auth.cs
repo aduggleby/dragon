@@ -18,6 +18,7 @@ using Microsoft.Owin.Security.Facebook;
 using Microsoft.Owin.Security.Google;
 using Microsoft.Owin.Security.MicrosoftAccount;
 using Microsoft.Owin.Security.Twitter;
+using Microsoft.Owin.Security.WsFederation;
 using Owin;
 using SimpleInjector;
 using Tweetinvi;
@@ -96,6 +97,21 @@ namespace Dragon.SecurityServer.AccountSTS
             {
                 app.UseGoogleAuthentication(GetGoogleAuthenticationOptions());
             }
+
+            foreach (var provider in enabledProviders.Where(x => x.StartsWith("WsFederation")))
+            {
+                app.UseWsFederationAuthentication(GetWsFederationOptions(provider));
+            }
+        }
+
+        private static WsFederationAuthenticationOptions GetWsFederationOptions(string provider)
+        {
+            return new WsFederationAuthenticationOptions
+            {
+                AuthenticationType = provider,
+                Wtrealm = GetWsFederationWtrealm(provider),
+                MetadataAddress = GetWsFederationMetadataAddress(provider),
+            };
         }
 
         private static GoogleOAuth2AuthenticationOptions GetGoogleAuthenticationOptions()
@@ -221,12 +237,27 @@ namespace Dragon.SecurityServer.AccountSTS
 
         private static string GetClientSecret(string providerName)
         {
-            return WebConfigurationManager.AppSettings["AuthenticationProvider." + providerName + ".ClientSecret"];
+            return GetProviderConfig(providerName, "ClientSecret");
         }
 
         private static string GetClientID(string providerName)
         {
-            return WebConfigurationManager.AppSettings["AuthenticationProvider." + providerName + ".ClientID"];
+            return GetProviderConfig(providerName, "ClientID");
+        }
+
+        private static string GetWsFederationWtrealm(string providerName)
+        {
+            return GetProviderConfig(providerName, "Wtrealm");
+        }
+
+        private static string GetWsFederationMetadataAddress(string providerName)
+        {
+            return GetProviderConfig(providerName, "MetadataAddress");
+        }
+
+        private static string GetProviderConfig(string providerName, string configuration)
+        {
+            return WebConfigurationManager.AppSettings[$"AuthenticationProvider.{providerName}.{configuration}"];
         }
 
         private static bool IsEnabled(string providerName, IEnumerable<string> enabledProviders)

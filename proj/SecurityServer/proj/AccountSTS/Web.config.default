@@ -51,11 +51,13 @@
     <!-- Identification of the login provider -->
     <add key="IssuerName" value="http://localhost:51385" />
     <!-- Federation authentication providers -->
-    <add key="AuthenticationProviders" value="Microsoft, Google" />
+    <add key="AuthenticationProviders" value="Microsoft, Google, WsFederation-Test" />
     <add key="AuthenticationProvider.Microsoft.ClientID" value="0000000000000000" />
     <add key="AuthenticationProvider.Microsoft.ClientSecret" value="00000000000000000000000000000000" />
     <add key="AuthenticationProvider.Google.ClientID" value="000000000000000000000000000000000000000000000000000000000000000000000000" />
     <add key="AuthenticationProvider.Google.ClientSecret" value="000000000000000000000000" />
+    <add key="AuthenticationProvider.WsFederation-Test.Wtrealm" value="http://localhost:51385/1234" />
+    <add key="AuthenticationProvider.WsFederation-Test.MetadataAddress" value="https://wsfederationtest/federationmetadata/2007-06/federationmetadata.xml" />
     <!-- Migration from OpenID 2.0 to OpenID Connect -->
     <add key="AuthenticationProvider.Google.OpenId2.ValidAudience" value="000000000000000000000000000000000000000000000000000000000000000000000000" />
     <add key="AuthenticationProvider.Google.OpenId2.ValidIssuer" value="accounts.google.com" />
