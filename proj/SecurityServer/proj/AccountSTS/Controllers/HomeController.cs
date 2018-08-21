@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Configuration;
 using System.Diagnostics;
 using System.IdentityModel.Configuration;
 using System.IdentityModel.Services;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
@@ -32,21 +34,24 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
         private readonly ApplicationSignInManager _signInManager;
         private readonly ApplicationUserManager _userManager;
         private readonly IRepository<UserActivity> _userActivityRepository;
+        private readonly IProviderLimiterService _providerLimiterService;
 
-        public HomeController(IDragonUserStore<AppMember> userStore, IFederationService federationService, ApplicationSignInManager signInManager, ApplicationUserManager userManager, IRepository<UserActivity> userActivityRepository)
+        public HomeController(IDragonUserStore<AppMember> userStore, IFederationService federationService, ApplicationSignInManager signInManager, ApplicationUserManager userManager, IRepository<UserActivity> userActivityRepository, IProviderLimiterService providerLimiterService)
         {
             _userStore = userStore;
             _federationService = federationService;
             _signInManager = signInManager;
             _userManager = userManager;
             _userActivityRepository = userActivityRepository;
+            _providerLimiterService = providerLimiterService;
         }
 
         [AuthorizeForRegisteredApps]
+        [ProviderAware]
         public async Task<ActionResult> Index()
         {
             Debug.Assert(Request.Url != null, "Request.Url != null");
-            var routeValues = new Dictionary<string, object>
+            var routeValues = new Dictionary<string, object> // Use <string, object> to call the correct RedirectToAction overload
             {
                 {"returnUrl", Request.Url.GetComponents(UriComponents.PathAndQuery, UriFormat.SafeUnescaped)},
             };
@@ -116,11 +121,36 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
                 // ... else show login page
                 // return new HttpUnauthorizedResult(); // we need the hmac parameters, so use a custom redirect
                 Debug.Assert(HttpContext.Request.Url != null, "HttpContext.Request.Url != null");
+                
+                var routeValuesDictionary = routeValues.ToDictionary(k => k.Key, k => k.Value.ToString());
+                var providerToUse = _providerLimiterService.Select(routeValuesDictionary);
+                if (!string.IsNullOrWhiteSpace(providerToUse))
+                {
+                    var routeValueDictionary = new RouteValueDictionary(_federationService.CreateRouteValues(
+                        routeValuesDictionary["returnUrl"],
+                        DictionaryToNameValueCollection(routeValuesDictionary),
+                        HttpContext.Request.QueryString["wreply"]));
+                    return _federationService.PerformExternalLogin(ControllerContext.HttpContext, providerToUse,
+                        Url.Action("ExternalLoginCallback", "Account", routeValueDictionary));
+                }
+
                 return RedirectToAction("Login", "Account", new RouteValueDictionary(routeValues));
             }
             return View();
         }
 
+        private static NameValueCollection DictionaryToNameValueCollection(Dictionary<string, string> routeValues)
+        {
+            var routeValuesCollection = routeValues.Aggregate(new NameValueCollection(),
+                (seed, current) =>
+                {
+                    seed.Add(current.Key, (string) current.Value);
+                    return seed;
+                });
+            return routeValuesCollection;
+        }
+
+        [ProviderRestriction]
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
@@ -128,6 +158,7 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
             return View();
         }
 
+        [ProviderRestriction]
         public ActionResult Contact()
         {
             ViewBag.Message = "Your contact page.";

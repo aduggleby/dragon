@@ -1,11 +1,12 @@
 ﻿using System.Threading.Tasks;
 using System.Web.Http;
-using System.Web.WebPages;
+using Dragon.SecurityServer.AccountSTS.Attributes;
 using Dragon.SecurityServer.AccountSTS.Models;
 using Dragon.SecurityServer.Identity.Stores;
 
 namespace Dragon.SecurityServer.AccountSTS.Controllers
 {
+    [ProviderRestriction]
     public class AccountApiController : ApiController
     {
         private readonly IDragonUserStore<AppMember> _userStore;

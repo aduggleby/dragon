@@ -43,9 +43,26 @@ Automated registration of users to apps is restricted to one app per group, but 
 * Microsoft: https://apps.dev.microsoft.com
 * Facebook: https://developers.facebook.com/apps
 * Twitter: https://apps.twitter.com
-* WsFederation
+* WS-Federation
 
 #### WsFederation
 
 All providers prefixed with "WsFederation-" will be added as WS-Federation provider, and as such require Wtrealm and MetadataAddress configuration.
 For an example, see [Web.config.default](Web.config.default).
+
+### Provider limitation
+
+Based on a specified query parameter, it is possible to limit login/registration to a predefined provider.
+
+Configuration:
+
+* Set the "ProviderLimitation.QueryParameterName" app setting to the name of the parameter that should be assigned to a provider.
+* Set the "ProviderLimitation.Selectors" app setting to a list of coma separated [query value]=[provider name] pairs.
+
+As an example, the following configuration limits the provider to WsFederation-Team1 if the appid query parameter is set to 'T01',
+and to WsFederation-Team2 if the appid query parameter is set to 'T02':
+
+      <add key="ProviderLimitation.QueryParameterName" value="appid"/>
+      <add key="ProviderLimitation.Selectors" value="T01=WsFederation-Team1, T02=WsFederation-Team2"/>
+
+Note: It is still possible to connect to additional providers AccountSTS.Client, i.e. using the 'connect' action.

@@ -1,7 +1,11 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using Dragon.SecurityServer.AccountSTS.Helpers;
+using Dragon.SecurityServer.Common;
 using Microsoft.Owin.Security;
 using NLog;
 
@@ -44,6 +48,27 @@ namespace Dragon.SecurityServer.AccountSTS.Services
                 Logger.Error($"Unable to disconnect {provider} from user {userId}");
             }
             return new RedirectResult(redirectUri);
+        }
+
+        public Dictionary<string, object> CreateRouteValues(string returnUrl, NameValueCollection queryStringCollection, string wreply)
+        {
+            var optimizedReturnUrl = RequestHelper.ProcessQueryParams(returnUrl, (queryString) =>
+            {
+                queryString.Remove("appid");
+                queryString.Remove("userid");
+                queryString.Remove("wa");
+                queryString.Remove("wreply");
+            });
+
+            var routeValues = new Dictionary<string, object>
+            {
+                {"wreply", wreply},
+                {
+                    "ReturnUrl", optimizedReturnUrl
+                }, // For the MicrosoftAccountAuthentication Provider the ReturnUrl is too long, so use an optimized version
+            };
+            Consts.QueryStringHmacParameterNames.ForEach(x => routeValues.Add(x, queryStringCollection[x]));
+            return routeValues;
         }
 
         /// <summary>

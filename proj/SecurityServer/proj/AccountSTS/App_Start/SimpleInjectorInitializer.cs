@@ -78,6 +78,12 @@ namespace Dragon.SecurityServer.AccountSTS
 
             container.Register<IFederationService, FederationService>(Lifestyle.Singleton);
             container.Register<IAppService, AppService>(Lifestyle.Transient);
+            container.Register<IProviderLimiterService>(() =>
+            {
+                var service = new QueryParameterProviderLimiterService();
+                service.Init(WebConfigurationManager.AppSettings);
+                return service;
+            });
  
             container.RegisterConditional(typeof(IRepository<>), typeof(Repository<>), c => !c.Handled);
 

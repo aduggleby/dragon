@@ -22,11 +22,11 @@ namespace Dragon.SecurityServer.AccountSTS.Helpers
             return HttpContext.Current.Request.QueryString[Consts.QueryStringParameterNameAppId];
         }
 
-        public static string GetParameterFromReturnUrl(string parameterName)
+        public static string GetParameterFromReturnUrl(string parameterName, string requestUrl = null)
         {
             var returnUrl = new Uri(
                 HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority) +
-                HttpContext.Current.GetOwinContext().Request.Query[Consts.QueryStringParameterNameReturnUrl]);
+                (requestUrl != null ? requestUrl : HttpContext.Current.GetOwinContext().Request.Query[Consts.QueryStringParameterNameReturnUrl]));
             var parameterValue = HttpUtility.ParseQueryString(returnUrl.Query).Get(parameterName);
             if (string.IsNullOrEmpty(parameterValue)) throw new InvalidParameterException();
             return parameterValue;
@@ -68,6 +68,15 @@ namespace Dragon.SecurityServer.AccountSTS.Helpers
                 routeValues.Add(key, source[key]);
             }
             return routeValues;
+        }
+
+        public static string ProcessQueryParams(string url, Action<NameValueCollection> processor)
+        {
+            var queryStringStartIndex = url.IndexOf("?", StringComparison.Ordinal);
+            var returnUrlPrefix = url.Substring(0, queryStringStartIndex);
+            var queryString = HttpUtility.ParseQueryString(url.Substring(queryStringStartIndex + 1));
+            processor(queryString);
+            return returnUrlPrefix + "?" + queryString;
         }
     }
 }

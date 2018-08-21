@@ -298,6 +298,8 @@
     <Compile Include="ActionFilters\ModelStateTempDataTransfer.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\NotRegisteredForServiceException.cs" />
+    <Compile Include="Attributes\ProviderAwareAttribute.cs" />
+    <Compile Include="Attributes\ProviderRestrictionAttribute.cs" />
     <Compile Include="Attributes\AuthorizeForRegisteredAppsAttribute.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\AppNotAllowedException.cs" />
@@ -310,6 +312,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Global.resx</DependentUpon>
     </Compile>
+    <Compile Include="Services\IProviderLimiterService.cs" />
+    <Compile Include="Services\QueryParameterProviderLimiterService.cs" />
     <Compile Include="Services\UserService.cs" />
     <Compile Include="Services\AppService.cs" />
     <Compile Include="Services\FederationService.cs" />

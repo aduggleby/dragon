@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Configuration;
 using System.Web.Mvc;
 using System.Web.Routing;
+using Dragon.SecurityServer.AccountSTS.Attributes;
 using Dragon.SecurityServer.AccountSTS.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
@@ -16,6 +17,7 @@ using NLog;
 namespace Dragon.SecurityServer.AccountSTS.Controllers
 {
     [Authorize]
+    [ProviderRestriction]
     public class AdminController : Controller
     {
         private ApplicationSignInManager _signInManager;

@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using Dragon.SecurityServer.AccountSTS.Attributes;
 using Dragon.SecurityServer.AccountSTS.Helpers;
 using Dragon.SecurityServer.AccountSTS.Models;
 using Dragon.SecurityServer.AccountSTS.Services;
@@ -12,6 +13,7 @@ using Microsoft.Owin.Security;
 namespace Dragon.SecurityServer.AccountSTS.Controllers
 {
     [Authorize]
+    [ProviderRestriction]
     public class ManageController : Controller
     {
         private ApplicationSignInManager _signInManager;
