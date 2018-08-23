@@ -1,10 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Configuration;
-using System.Web.Mvc;
 using System.Web.Routing;
 using Dragon.SecurityServer.AccountSTS.ActionFilters;
 using Dragon.SecurityServer.AccountSTS.App_Start;
@@ -19,12 +19,12 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using NLog;
 using System.Transactions;
+using System.Web.Mvc;
 using Dragon.Data.Interfaces;
 using Dragon.SecurityServer.AccountSTS.Attributes;
 
 namespace Dragon.SecurityServer.AccountSTS.Controllers
 {
-    [Authorize]
     public class AccountController : Controller
     {
         private const string LegacyPasswordPrefix = "OLD_";
@@ -95,21 +95,33 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
 
         //
         // GET: /Account/Login
-        [AllowAnonymous, ImportModelStateFromTempData]
         [ProviderRestriction]
+        [AllowAnonymous, ImportModelStateFromTempData]
         public ActionResult Login(string returnUrl)
         {
-            return View();
+            return View(CreateLoginViewModel());
+        }
+
+        private LoginViewModel CreateLoginViewModel()
+        {
+            return new LoginViewModel {AvailableProviders = GetAvailableProviders()};
+        }
+
+        private List<AuthenticationDescription> GetAvailableProviders()
+        {
+            return HttpContext.GetOwinContext().Authentication.GetExternalAuthenticationTypes()
+                .Where(x => !_providerLimiterService.GetBoundProviders().Contains(x.AuthenticationType)).ToList();
         }
 
         //
         // POST: /Account/Login
         [HttpPost]
+        [ProviderRestriction]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        [ProviderRestriction]
         public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
         {
+            model.AvailableProviders = GetAvailableProviders();
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -125,7 +137,7 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
             catch (NotRegisteredForServiceException)
             {
                 HandleUserNotRegisteredForService(model.Email);
-                return View();
+                return View(CreateLoginViewModel());
             }
             catch (FormatException)
             {
@@ -158,7 +170,7 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
                         catch (NotRegisteredForServiceException)
                         {
                             HandleUserNotRegisteredForService(model.Email);
-                            return View();
+                            return View(CreateLoginViewModel());
                         }
                         catch (AppNotAllowedException)
                         {
@@ -210,6 +222,7 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
 
         [HttpGet]
         [ProviderRestriction]
+        [Authorize]
         public async Task<ActionResult> SelectApp(string appId)
         {
             var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
@@ -256,8 +269,8 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
 
         //
         // GET: /Account/VerifyCode
-        [AllowAnonymous]
         [ProviderRestriction]
+        [AllowAnonymous]
         public async Task<ActionResult> VerifyCode(string provider, string returnUrl, bool rememberMe)
         {
             // Require that the user has already logged in via username/password or external login
@@ -271,9 +284,9 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
         //
         // POST: /Account/VerifyCode
         [HttpPost]
+        [ProviderRestriction]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        [ProviderRestriction]
         public async Task<ActionResult> VerifyCode(VerifyCodeViewModel model)
         {
             throw new NotSupportedException();
@@ -304,19 +317,20 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
 
         //
         // GET: /Account/Register
-        [AllowAnonymous]
         [ProviderRestriction]
+        [AllowAnonymous]
         public ActionResult Register()
         {
+            // TODO: property does not work in allowanonymous
             return View();
         }
 
         //
         // POST: /Account/Register
         [HttpPost]
+        [ProviderRestriction]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        [ProviderRestriction]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
@@ -361,8 +375,8 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
 
         //
         // GET: /Account/ConfirmEmail
-        [AllowAnonymous]
         [ProviderRestriction]
+        [AllowAnonymous]
         public async Task<ActionResult> ConfirmEmail(string userId, string code)
         {
             if (userId == null || code == null)
@@ -380,8 +394,8 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
 
         //
         // GET: /Account/ForgotPassword
-        [AllowAnonymous]
         [ProviderRestriction]
+        [AllowAnonymous]
         public ActionResult ForgotPassword()
         {
             return View();
@@ -390,9 +404,9 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
         //
         // POST: /Account/ForgotPassword
         [HttpPost]
+        [ProviderRestriction]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        [ProviderRestriction]
         public async Task<ActionResult> ForgotPassword(ForgotPasswordViewModel model)
         {
             if (ModelState.IsValid)
@@ -430,8 +444,8 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
 
         //
         // GET: /Account/ForgotPasswordConfirmation
-        [AllowAnonymous]
         [ProviderRestriction]
+        [AllowAnonymous]
         public ActionResult ForgotPasswordConfirmation()
         {
             return View();
@@ -439,8 +453,8 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
 
         //
         // GET: /Account/ResetPassword
-        [AllowAnonymous]
         [ProviderRestriction]
+        [AllowAnonymous]
         public ActionResult ResetPassword(string code)
         {
             return code == null ? View("Error") : View();
@@ -449,9 +463,9 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
         //
         // POST: /Account/ResetPassword
         [HttpPost]
+        [ProviderRestriction]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        [ProviderRestriction]
         public async Task<ActionResult> ResetPassword(ResetPasswordViewModel model)
         {
             if (!ModelState.IsValid)
@@ -479,8 +493,8 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
 
         //
         // GET: /Account/ResetPasswordConfirmation
-        [AllowAnonymous]
         [ProviderRestriction]
+        [AllowAnonymous]
         public ActionResult ResetPasswordConfirmation()
         {
             return View();
@@ -489,9 +503,9 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
         //
         // POST: /Account/ExternalLogin
         [HttpPost]
+        [ProviderRestriction]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        [ProviderRestriction]
         public ActionResult ExternalLogin(string provider, string returnUrl)
         {
             var routeValues = _federationService.CreateRouteValues(returnUrl, HttpContext.Request.QueryString, RequestHelper.GetParameterFromReturnUrl("wreply"));
@@ -500,8 +514,8 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
 
         //
         // GET: /Account/SendCode
-        [AllowAnonymous]
         [ProviderRestriction]
+        [AllowAnonymous]
         public async Task<ActionResult> SendCode(string returnUrl, bool rememberMe)
         {
             var userId = await SignInManager.GetVerifiedUserIdAsync();
@@ -518,9 +532,9 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
         //
         // POST: /Account/SendCode
         [HttpPost]
+        [ProviderRestriction]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        [ProviderRestriction]
         public async Task<ActionResult> SendCode(SendCodeViewModel model)
         {
             if (!ModelState.IsValid)
@@ -539,7 +553,7 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
         }
 
         [ExportModelStateToTempData]
-        [ProviderRestriction]
+        [Authorize]
         public async Task<ActionResult> ExternalLoginCallbackAddLogin(string returnUrl)
         {
             var loginInfo = await AuthenticationManager.GetExternalLoginInfoAsync();
@@ -563,7 +577,6 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
         //
         // GET: /Account/ExternalLoginCallback
         [AllowAnonymous, ExportModelStateToTempData]
-        [ProviderRestriction]
         public async Task<ActionResult> ExternalLoginCallback(string returnUrl)
         {
             returnUrl = RequestHelper.ProcessQueryParams(returnUrl, (queryString) =>
@@ -684,7 +697,6 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        [ProviderRestriction]
         public async Task<ActionResult> ExternalLoginConfirmation(ExternalLoginConfirmationViewModel model, string returnUrl)
         {
             if (User.Identity.IsAuthenticated)
@@ -844,6 +856,7 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
         // POST: /Account/LogOff
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult LogOff()
         {
             SignOut();

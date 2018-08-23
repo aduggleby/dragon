@@ -78,7 +78,7 @@ namespace Dragon.SecurityServer.AccountSTS.Services
 
         private static bool SessionContainsProvider(HttpContextBase httpContext)
         {
-            return httpContext.Session[ProviderRestrictionSessionName] is string;
+            return !string.IsNullOrWhiteSpace(httpContext.Session[ProviderRestrictionSessionName] as string);
         }
 
         private bool QueryContainsProvider(HttpContextBase httpContext)

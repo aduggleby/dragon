@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.Owin.Security;
 
 namespace Dragon.SecurityServer.AccountSTS.Models
 {
@@ -17,6 +18,7 @@ namespace Dragon.SecurityServer.AccountSTS.Models
     public class ExternalLoginListViewModel
     {
         public string ReturnUrl { get; set; }
+        public List<AuthenticationDescription> AvailableProviders { get; set; }
     }
 
     public class SendCodeViewModel
@@ -64,6 +66,8 @@ namespace Dragon.SecurityServer.AccountSTS.Models
 
         [Display(Name = "RememberMe", ResourceType = typeof(Resources.Global))]
         public bool RememberMe { get; set; }
+
+        public List<AuthenticationDescription> AvailableProviders { get; set; }
     }
 
     public class RegisterViewModel

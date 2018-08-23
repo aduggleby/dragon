@@ -299,6 +299,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\NotRegisteredForServiceException.cs" />
     <Compile Include="Attributes\ProviderAwareAttribute.cs" />
+    <Compile Include="Attributes\ProviderAttributesBase.cs" />
     <Compile Include="Attributes\ProviderRestrictionAttribute.cs" />
     <Compile Include="Attributes\AuthorizeForRegisteredAppsAttribute.cs" />
     <Compile Include="Controllers\AdminController.cs" />
