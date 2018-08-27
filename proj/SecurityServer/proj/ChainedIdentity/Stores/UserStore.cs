@@ -66,6 +66,18 @@ namespace Dragon.SecurityServer.ChainedIdentity.Stores
             return _userStores.First().IsUserRegisteredForAppAsync(user, appId);
         }
 
+        public Task RemoveServiceRegistrations(TUser user)
+        {
+            _userStores.ForEach(x => x.RemoveServiceRegistrations(user));
+            return Task.FromResult<object>(null);
+        }
+
+        public Task RemoveAppRegistrations(TUser user)
+        {
+            _userStores.ForEach(x => x.RemoveAppRegistrations(user));
+            return Task.FromResult<object>(null);
+        }
+
         public Task<IEnumerable<string>> GetServicesAsync(TUser user)
         {
             return _userStores.First().GetServicesAsync(user);

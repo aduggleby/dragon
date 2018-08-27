@@ -26,5 +26,7 @@ namespace Dragon.SecurityServer.Identity.Stores
         Task<IEnumerable<string>> GetServicesAsync(TUser user);
         Task AddAppToUserAsync(TUser user, string appId);
         Task<bool> IsUserRegisteredForAppAsync(TUser user, string appId);
+        Task RemoveServiceRegistrations(TUser user);
+        Task RemoveAppRegistrations(TUser user);
     }
 }

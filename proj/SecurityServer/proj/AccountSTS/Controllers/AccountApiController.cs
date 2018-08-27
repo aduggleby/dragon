@@ -1,6 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Web.Http;
-using System.Web.WebPages;
+using Dragon.Data.Interfaces;
 using Dragon.SecurityServer.AccountSTS.Models;
 using Dragon.SecurityServer.Identity.Stores;
 
@@ -10,11 +11,13 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
     {
         private readonly IDragonUserStore<AppMember> _userStore;
         private readonly ApplicationUserManager _userManager;
+        private readonly IRepository<UserActivity> _userActivityRepository;
 
-        public AccountApiController(IDragonUserStore<AppMember> userStore, ApplicationUserManager userManager)
+        public AccountApiController(IDragonUserStore<AppMember> userStore, ApplicationUserManager userManager, IRepository<UserActivity> userActivityRepository)
         {
             _userStore = userStore;
             _userManager = userManager;
+            _userActivityRepository = userActivityRepository;
         }
 
         [HttpGet]
@@ -60,6 +63,26 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
             // Note: This fails if no security stamp is set!
             var result = await _userManager.ResetPasswordAsync(user.Id, code, model.Password);
             return result.Succeeded ? (IHttpActionResult) Ok() : InternalServerError();
+        }
+
+        [HttpPost]
+        public async Task<IHttpActionResult> Delete(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+
+            var logins = await _userStore.GetLoginsAsync(user);
+            logins.ForEach(async x => await _userManager.RemoveLoginAsync(id, x));
+            var rolesForUser = await _userManager.GetRolesAsync(id);
+            rolesForUser.ForEach(async x => await _userManager.RemoveFromRoleAsync(id, x));
+            var activities = _userActivityRepository.GetByWhere(new Dictionary<string, object> {{"UserID", id}});
+            activities.ForEach(_userActivityRepository.Delete);
+
+            await _userStore.RemoveServiceRegistrations(user);
+            await _userStore.RemoveAppRegistrations(user);
+
+            await _userManager.DeleteAsync(user);
+
+            return Ok();
         }
     }
 }
