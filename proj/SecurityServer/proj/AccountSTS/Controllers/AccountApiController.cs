@@ -66,7 +66,7 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
         }
 
         [HttpPost]
-        public async Task<IHttpActionResult> Delete(string id)
+        public async Task<IHttpActionResult> Delete([FromBody] string id)
         {
             var user = await _userManager.FindByIdAsync(id);
 
@@ -74,7 +74,7 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
             logins.ForEach(async x => await _userManager.RemoveLoginAsync(id, x));
             var rolesForUser = await _userManager.GetRolesAsync(id);
             rolesForUser.ForEach(async x => await _userManager.RemoveFromRoleAsync(id, x));
-            var activities = _userActivityRepository.GetByWhere(new Dictionary<string, object> {{"UserID", id}});
+            var activities = _userActivityRepository.GetByWhere(new Dictionary<string, object> {{"UserId", id}});
             activities.ForEach(_userActivityRepository.Delete);
 
             await _userStore.RemoveServiceRegistrations(user);

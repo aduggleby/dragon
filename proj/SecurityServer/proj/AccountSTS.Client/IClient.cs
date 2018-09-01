@@ -12,5 +12,6 @@ namespace Dragon.SecurityServer.AccountSTS.Client
         string GetApiUrl(string action, string replyUrl);
         string GetApiUrl(string action, string data, string replyUrl);
         Task Update<T>(T model);
+        Task Delete(string userId);
     }
 }
