@@ -14,5 +14,6 @@ namespace Dragon.SecurityServer.ProfileSTS.Client
         Task UpdateClaim(string userId, string type, string value);
         Task AddOrUpdateClaims(string userId, IList<Claim> claims);
         Task<IList<Claim>> GetClaims(string userId);
+        Task Delete(string userId);
     }
 }

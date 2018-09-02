@@ -55,6 +55,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "migrations", "migrations", 
 		..\sql\migrations\accountsts-v1.0.0.0.sql = ..\sql\migrations\accountsts-v1.0.0.0.sql
 		..\sql\migrations\accountsts-v1.1.0.0-v1.3.0.0.sql = ..\sql\migrations\accountsts-v1.1.0.0-v1.3.0.0.sql
 		..\sql\migrations\permissionsts-v1.0.0.0.sql = ..\sql\migrations\permissionsts-v1.0.0.0.sql
+		..\sql\migrations\profilests-v1.0.0.0-v1.3.0.0.sql = ..\sql\migrations\profilests-v1.0.0.0-v1.3.0.0.sql
 		..\sql\migrations\profilests-v1.0.0.0.sql = ..\sql\migrations\profilests-v1.0.0.0.sql
 	EndProjectSection
 EndProject

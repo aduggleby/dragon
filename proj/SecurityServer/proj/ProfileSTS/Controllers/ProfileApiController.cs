@@ -96,5 +96,21 @@ namespace Dragon.SecurityServer.ProfileSTS.Controllers
             if (user == null) throw new HttpResponseException(HttpStatusCode.NotFound);
             return await _userStore.GetClaimsAsync(user);
         }
+
+        [HttpPost]
+        public async Task<IHttpActionResult> Delete([FromBody] string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+
+            var logins = await _userStore.GetLoginsAsync(user);
+            logins.ForEach(async x => await _userManager.RemoveLoginAsync(id, x));
+
+            var claims = await _userStore.GetClaimsAsync(user);
+            claims.ForEach(async x => await _userManager.RemoveClaimAsync(id, x));
+
+            await _userManager.DeleteAsync(user);
+
+            return Ok();
+        }
     }
 }
