@@ -79,6 +79,13 @@ namespace Dragon.SecurityServer.ProfileSTS.Client.Test
             }
         }
 
+        [TestMethod]
+        public async Task Delete_validId_shouldDeleteAccount()
+        {
+            var client = CreateClient();
+            await client.Delete(IntegrationTestHelper.ReadHmacSettings().UserId);
+        }
+
         #region helper
 
         private static ProfileSTSClient CreateClient()

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2003
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccountSTS", "AccountSTS\AccountSTS.csproj", "{B9111BFA-8989-4770-A219-481DDAF94A1C}"
 EndProject
@@ -53,7 +53,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "migrations", "migrations", 
 	ProjectSection(SolutionItems) = preProject
 		..\sql\migrations\accountsts-v1.0.0.0-v1.1.0.0.sql = ..\sql\migrations\accountsts-v1.0.0.0-v1.1.0.0.sql
 		..\sql\migrations\accountsts-v1.0.0.0.sql = ..\sql\migrations\accountsts-v1.0.0.0.sql
+		..\sql\migrations\accountsts-v1.1.0.0-v1.3.0.0.sql = ..\sql\migrations\accountsts-v1.1.0.0-v1.3.0.0.sql
 		..\sql\migrations\permissionsts-v1.0.0.0.sql = ..\sql\migrations\permissionsts-v1.0.0.0.sql
+		..\sql\migrations\profilests-v1.0.0.0-v1.3.0.0.sql = ..\sql\migrations\profilests-v1.0.0.0-v1.3.0.0.sql
 		..\sql\migrations\profilests-v1.0.0.0.sql = ..\sql\migrations\profilests-v1.0.0.0.sql
 	EndProjectSection
 EndProject
@@ -160,5 +162,8 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{429D6B2B-2EC4-4677-B7FE-80CBB82157A4} = {76B0BE6B-799B-45C3-8C24-283E0326A0FF}
 		{57315154-BBD4-4C05-B64C-B2279C6D4181} = {429D6B2B-2EC4-4677-B7FE-80CBB82157A4}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {75B6605E-6CB4-4188-AE83-8997C604C6D2}
 	EndGlobalSection
 EndGlobal

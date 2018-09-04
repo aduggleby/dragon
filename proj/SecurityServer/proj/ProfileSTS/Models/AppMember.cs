@@ -37,7 +37,8 @@ namespace Dragon.SecurityServer.ProfileSTS.Models
         public DateTime? LockoutEndDateUtc { get; set; }
         [NoColumn]
         public DateTime? Created { get; set; }
-        [NoColumn]
+        // [NoColumn]
+        // Workaround: Does not need to be persisted, but at least one property is currently required by Dragon.Data to be able to perform updates.
         public DateTime? Modified { get; set; }
         [NoColumn]
         public int AccessFailedCount { get; set; }

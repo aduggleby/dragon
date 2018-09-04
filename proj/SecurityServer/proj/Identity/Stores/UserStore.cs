@@ -487,22 +487,46 @@ namespace Dragon.SecurityServer.Identity.Stores
 
         public Task<IEnumerable<string>> GetServicesAsync(TUser user)
         {
-            if (user == null)
-            {
-                throw new ArgumentNullException("user");
-            }
-
-            var services = UserServiceRepository.GetByWhere(new Dictionary<string, object>
-            {
-                {
-                    "UserId", user.Id
-                }
-            }).Select(x => x.ServiceId).ToList();
+            var services = GetUserServices(user).Select(x => x.ServiceId).ToList();
 
             return Task.FromResult<IEnumerable<string>>(services);
         }
 
+        public Task RemoveServiceRegistrations(TUser user)
+        {
+            GetUserServices(user).ToList().ForEach(UserServiceRepository.Delete);
+            return Task.FromResult(0);
+        }
+
+        public Task RemoveAppRegistrations(TUser user)
+        {
+            GetUserApps(user).ToList().ForEach(UserAppRepository.Delete);
+            return Task.FromResult(0);
+        }
+
         #region helper
+
+        private IEnumerable<IdentityUserApp> GetUserApps(TUser user)
+        {
+            if (user == null)
+            {
+                throw new ArgumentNullException(nameof(user));
+            }
+
+            var apps = UserAppRepository.GetByWhere(new Dictionary<string, object> {{"UserId", user.Id}});
+            return apps;
+        }
+
+        private IEnumerable<IdentityUserService> GetUserServices(TUser user)
+        {
+            if (user == null)
+            {
+                throw new ArgumentNullException(nameof(user));
+            }
+
+            var services = UserServiceRepository.GetByWhere(new Dictionary<string, object> {{"UserId", user.Id}});
+            return services;
+        }
 
         private void CreateUser(TUser user)
         {

@@ -293,6 +293,16 @@ namespace Dragon.SecurityServer.Identity.Redis
             throw new NotImplementedException();
         }
 
+        public Task RemoveServiceRegistrations(TUser user)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task RemoveAppRegistrations(TUser user)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<IEnumerable<string>> GetServicesAsync(TUser user)
         {
             return await Task.FromResult((await Database.SetMembersAsync(string.Format(UserServiceSetKey, user.Id))).Select(x => x.ToString()));

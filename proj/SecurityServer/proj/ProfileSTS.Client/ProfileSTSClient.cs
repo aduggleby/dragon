@@ -15,6 +15,7 @@ namespace Dragon.SecurityServer.ProfileSTS.Client
         private const string UpdateClaimAction = "UpdateClaim";
         private const string AddOrUpdateClaimsAction = "AddOrUpdateClaims";
         private const string GetClaimsAction = "GetClaims";
+        private const string DeleteAction = "Delete";
 
         public ProfileSTSClient(string serviceUrl)
         {
@@ -54,6 +55,11 @@ namespace Dragon.SecurityServer.ProfileSTS.Client
         public async Task<IList<Claim>> GetClaims(string userId)
         {
             return await _client.GetRequest<IList<Claim>>(GetClaimsAction, new Dictionary<string, string> {{"id", userId}});
+        }
+
+        public async Task Delete(string userId)
+        {
+            await _client.PostRequest(DeleteAction, userId);
         }
     }
 }

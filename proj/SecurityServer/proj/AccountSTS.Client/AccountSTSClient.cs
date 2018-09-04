@@ -20,6 +20,7 @@ namespace Dragon.SecurityServer.AccountSTS.Client
         private const string ClearCacheAction = "ClearCache";
         private const string UpdateAction = "Update";
         private const string ResetPasswordAction = "ResetPassword";
+        private const string DeleteAction = "Delete";
         private static readonly HmacHelper HmacHelper = new HmacHelper { HmacService = new HmacSha256Service() };
 
         public AccountSTSClient(string apiUrl, string federationUrl, string realm)
@@ -101,6 +102,11 @@ namespace Dragon.SecurityServer.AccountSTS.Client
         public async Task Update<T>(T model)
         {
             await _client.PostRequest(UpdateAction, model);
+        }
+
+        public async Task Delete(string userId)
+        {
+            await _client.PostRequest(DeleteAction, userId);
         }
 
         public async Task ResetPassword<T>(T model)

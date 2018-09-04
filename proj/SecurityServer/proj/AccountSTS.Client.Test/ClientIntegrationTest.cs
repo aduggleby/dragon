@@ -56,6 +56,13 @@ namespace Dragon.SecurityServer.AccountSTS.Client.Test
             });
         }
 
+        [TestMethod]
+        public async Task Delete_validId_shouldDeleteAccount()
+        {
+            var client = CreateClient();
+            await client.Delete(IntegrationTestHelper.ReadHmacSettings().UserId);
+        }
+
         #region helper
 
         private static AccountSTSClient CreateClient()
