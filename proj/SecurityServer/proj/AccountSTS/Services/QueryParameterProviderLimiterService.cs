@@ -19,7 +19,7 @@ namespace Dragon.SecurityServer.AccountSTS.Services
         public void Init(NameValueCollection appSettings)
         {
             _queryParameterName = appSettings["ProviderLimitation.QueryParameterName"];
-            appSettings["ProviderLimitation.Selectors"].Split(",").Select(x => x.Split("=")).ToList().ForEach(x =>
+            appSettings["ProviderLimitation.Selectors"]?.Split(",").Select(x => x.Split("=")).ToList().ForEach(x =>
             {
                 if (x.Length != 2)
                 {

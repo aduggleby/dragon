@@ -50,6 +50,11 @@ Automated registration of users to apps is restricted to one app per group, but 
 All providers prefixed with "WsFederation-" will be added as WS-Federation provider, and as such require Wtrealm and MetadataAddress configuration.
 For an example, see [Web.config.default](Web.config.default).
 
+For Azure AD, the settings are:
+* Wtrealm: App ID URI
+* MetadataAddress:
+  https://login.microsoftonline.com/[tenant-name]/federationmetadata/2007-06/federationmetadata.xml
+
 ### Provider limitation
 
 Based on a specified query parameter, it is possible to limit login/registration to a predefined provider.
