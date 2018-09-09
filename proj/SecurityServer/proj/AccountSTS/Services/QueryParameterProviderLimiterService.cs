@@ -31,6 +31,10 @@ namespace Dragon.SecurityServer.AccountSTS.Services
 
         public string Select(Dictionary<string, string> queryParameter)
         {
+            if (string.IsNullOrWhiteSpace(_queryParameterName))
+            {
+                return null;
+            }
             var key = queryParameter[_queryParameterName];
             return _mapping.ContainsKey(key) ? _mapping[key] : null;
         }

@@ -122,7 +122,7 @@ namespace Dragon.SecurityServer.AccountSTS.Controllers
                 // return new HttpUnauthorizedResult(); // we need the hmac parameters, so use a custom redirect
                 Debug.Assert(HttpContext.Request.Url != null, "HttpContext.Request.Url != null");
                 
-                var routeValuesDictionary = routeValues.ToDictionary(k => k.Key, k => k.Value.ToString());
+                var routeValuesDictionary = routeValues.Where(x => x.Value != null).ToDictionary(k => k.Key, k => k.Value.ToString());
                 var providerToUse = _providerLimiterService.Select(routeValuesDictionary);
                 if (!string.IsNullOrWhiteSpace(providerToUse))
                 {
