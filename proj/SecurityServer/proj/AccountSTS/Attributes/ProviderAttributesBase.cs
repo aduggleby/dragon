@@ -19,6 +19,11 @@ namespace Dragon.SecurityServer.AccountSTS.Attributes
 
         protected bool Authorize(HttpContextBase httpContext, bool isAllowAnonymousAttributeDefined)
         {
+            if (!ProviderLimiterService.IsEnabled())
+            {
+                return AuthorizeCore(httpContext);
+            }
+
             Logger.Trace("Checking if access is allowed...");
 
             if (!ProviderLimiterService.HasProviderRestriction(httpContext))
@@ -35,7 +40,7 @@ namespace Dragon.SecurityServer.AccountSTS.Attributes
             var provider = ProviderLimiterService.GetProviderRestriction(httpContext);
             var isAccessAllowed = string.IsNullOrWhiteSpace(provider);
             Logger.Trace((isAccessAllowed ? "Access is allowed." : "Access is not allowed. ") + " Provider: " + provider);
-            return isAccessAllowed && (isAllowAnonymousAttributeDefined || base.AuthorizeCore(httpContext));
+            return isAccessAllowed && (isAllowAnonymousAttributeDefined || AuthorizeCore(httpContext));
         }
 
         protected override void HandleUnauthorizedRequest(AuthorizationContext filterContext)

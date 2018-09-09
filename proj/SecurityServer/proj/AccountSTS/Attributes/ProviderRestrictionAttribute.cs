@@ -21,6 +21,12 @@ namespace Dragon.SecurityServer.AccountSTS.Attributes
         /// </summary>
         public override void OnAuthorization(AuthorizationContext filterContext)
         {
+            if (!ProviderLimiterService.IsEnabled())
+            {
+                base.OnAuthorization(filterContext);
+                return;
+            }
+
             var isAllowAnonymousAttributeDefined = IsAttributeDefined<AllowAnonymousAttribute>(filterContext);
             var isProviderRestrictionAttributeDefined = IsAttributeDefined<ProviderRestrictionAttribute>(filterContext);
             if (!(isAllowAnonymousAttributeDefined && isProviderRestrictionAttributeDefined))

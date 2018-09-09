@@ -19,6 +19,12 @@ namespace Dragon.SecurityServer.AccountSTS.Attributes
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             base.OnActionExecuting(filterContext);
+
+            if (!_providerLimiterService.IsEnabled())
+            {
+                return;
+            }
+
             var httpContext = filterContext.HttpContext;
             if (_providerLimiterService.DoesAnUnregisteredProviderExist(httpContext))
             {

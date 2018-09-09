@@ -29,9 +29,14 @@ namespace Dragon.SecurityServer.AccountSTS.Services
             });
         }
 
+        public bool IsEnabled()
+        {
+            return !string.IsNullOrWhiteSpace(_queryParameterName);
+        }
+
         public string Select(Dictionary<string, string> queryParameter)
         {
-            if (string.IsNullOrWhiteSpace(_queryParameterName))
+            if (!IsEnabled())
             {
                 return null;
             }

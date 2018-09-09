@@ -10,6 +10,7 @@ namespace Dragon.SecurityServer.AccountSTS.Services
     public interface IProviderLimiterService
     {
         void Init(NameValueCollection appSettings);
+        bool IsEnabled();
         string Select(Dictionary<string, string> input);
         List<string> GetBoundProviders();
         bool HasProviderRestriction(HttpContextBase httpContext);
