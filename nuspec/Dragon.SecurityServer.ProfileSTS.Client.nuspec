@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Dragon.SecurityServer.ProfileSTS.Client</id>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
     <title>Dragon.SecurityServer.ProfileSTS.Client</title>
     <authors>Dragon Project</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>

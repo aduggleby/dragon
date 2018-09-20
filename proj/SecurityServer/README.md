@@ -7,7 +7,7 @@ A federation identity provider based on ASP.NET Identity/OWIN that uses a chain 
 * ProfileSTS: manages information about the user
 * PermissionSTS: manages user permissions
 
-Each service offers an API for which a client is offered. The API is secured using HMAC.
+Each service offers an API for which a client is provided. The API is secured using HMAC.
 
 
 Requirements

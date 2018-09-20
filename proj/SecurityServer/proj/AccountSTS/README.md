@@ -71,3 +71,8 @@ and to WsFederation-Team2 if the appid query parameter is set to 'T02':
       <add key="ProviderLimitation.Selectors" value="T01=WsFederation-Team1, T02=WsFederation-Team2"/>
 
 Note: It is still possible to connect to additional providers AccountSTS.Client, i.e. using the 'connect' action.
+
+#### Client compatibility
+
+* SecurityServer v1.1-v1.2: AccountSTS.Client v1.0
+* SecurityServer v1.3: AccountSTS.Client v1.1
