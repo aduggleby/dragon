@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dragon.Data.Test", "test\Dragon.Data.Test\Dragon.Data.Test.csproj", "{DED59E5E-9384-4353-AB39-101EF408BF97}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dragon.Data", "src\Dragon.Data\Dragon.Data.csproj", "{E64A4B83-2596-493D-BC53-A896D9B7E241}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DED59E5E-9384-4353-AB39-101EF408BF97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DED59E5E-9384-4353-AB39-101EF408BF97}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DED59E5E-9384-4353-AB39-101EF408BF97}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DED59E5E-9384-4353-AB39-101EF408BF97}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E64A4B83-2596-493D-BC53-A896D9B7E241}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E64A4B83-2596-493D-BC53-A896D9B7E241}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E64A4B83-2596-493D-BC53-A896D9B7E241}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E64A4B83-2596-493D-BC53-A896D9B7E241}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
