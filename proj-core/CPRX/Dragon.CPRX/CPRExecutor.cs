@@ -99,6 +99,7 @@ namespace Dragon.CPRX
                 }
                 catch(CPRValidationException cprEx)
                 {
+                    m_logger.LogWarning(cprEx.ToString() + " - " + cprEx.StackTrace);
                     result.Success = false;
                     foreach (var err in cprEx.Errors)
                     {
@@ -107,10 +108,12 @@ namespace Dragon.CPRX
                 }
                 catch (Exception ex)
                 {
+                    m_logger.LogError(ex.ToString() + " - " + ex.StackTrace);
                     result.Success = false;
                     result.AddError(new CPRError()
                     {
-                        Message = "Exception during execution: " + ex.Message
+                        Message = "Exception during execution: " + ex.Message,
+                        
                     });
                 }
 
