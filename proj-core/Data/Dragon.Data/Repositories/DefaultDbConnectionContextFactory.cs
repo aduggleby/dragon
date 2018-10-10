@@ -14,10 +14,15 @@ namespace Dragon.Data.Repositories
         protected readonly ILogger m_logger;
         protected IConfiguration m_config;
 
+        protected bool m_verboseLoggingEnabled = false;
+
         public DefaultDbConnectionContextFactory(IConfiguration config, ILoggerFactory loggerFactory)
             : this(config, loggerFactory.CreateLogger<DefaultDbConnectionContextFactory>())
         {
-
+            if (Environment.GetEnvironmentVariable("Dragon.Data.Verbose") == "1")
+            {
+                m_verboseLoggingEnabled = true;
+            }
         }
 
         protected DefaultDbConnectionContextFactory(IConfiguration config, ILogger logger)
@@ -44,7 +49,7 @@ namespace Dragon.Data.Repositories
                 try
                 {
                     conn.Open();
-                    m_logger.LogDebug("Database connection successfull");
+                    if(m_verboseLoggingEnabled) m_logger.LogDebug("Database connection successfull");
                 }
                 catch (Exception exInner)
                 {
@@ -53,38 +58,48 @@ namespace Dragon.Data.Repositories
                     throw;
                 }
 
-                m_logger.LogTrace("Database connection successfull");
+                if (m_verboseLoggingEnabled) m_logger.LogTrace("Database connection successfull");
 
                 var res = db(conn, null);
-                m_logger.LogTrace("InDatabase executed successfully");
+                if (m_verboseLoggingEnabled) m_logger.LogTrace("InDatabase executed successfully");
 
                 return res;
             }
             catch (Exception ex)
             {
                 m_logger.LogWarning("InDatabase execution failed");
+                m_logger.LogError(ex.ToString());
+                m_logger.LogError(ex.StackTrace);
                 throw new Exception("InDatabase execution fail.", ex);
             }
             finally
             {
                 conn.Close();
-                m_logger.LogDebug("Database connection closed.");
+                if (m_verboseLoggingEnabled) m_logger.LogDebug("Database connection closed.");
             }
         }
 
-        protected DbConnection CreateConnection()
+        protected virtual DbConnection CreateConnection()
         {
-            var connectionString = m_config.GetConnectionString("Dragon") ?? m_config["Dragon:Data:ConnectionString"];
+            string connectionString = ConnectionString;
 
             if (string.IsNullOrWhiteSpace(connectionString))
             {
                 throw new Exception("ConnectionString 'Dragon' of app settings 'Dragon:Data:ConnectionString' not set.");
             }
 
-            m_logger.LogTrace("Dragon.Data ready with connection string: " + connectionString);
+            if (m_verboseLoggingEnabled) m_logger.LogTrace("Dragon.Data ready with connection string: " + connectionString);
 
             var conn = new SqlConnection(connectionString);
             return conn;
+        }
+
+        protected virtual string ConnectionString
+        {
+            get
+            {
+                return m_config.GetConnectionString("Dragon") ?? m_config["Dragon:Data:ConnectionString"];
+            }
         }
     }
 }

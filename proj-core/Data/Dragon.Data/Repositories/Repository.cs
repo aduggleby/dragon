@@ -49,7 +49,7 @@ namespace Dragon.Data.Repositories
 
         public virtual IEnumerable<T> GetAll()
         {
-            return m_connectionCtxFactory.InDatabase<IEnumerable<T>>((c,t) =>
+            return m_connectionCtxFactory.InDatabase<IEnumerable<T>>((c, t) =>
            {
                m_logger.LogDebug("Fetching all records for type {0}", typeof(T).Name);
                return c.GetAll<T>(transaction: t);
@@ -58,7 +58,7 @@ namespace Dragon.Data.Repositories
 
         public virtual void InsertWithCompositeKey(T obj)
         {
-            m_connectionCtxFactory.InDatabase((c,t) =>
+            m_connectionCtxFactory.InDatabase((c, t) =>
             {
                 m_logger.LogDebug("Inserted record for type {0} with composite key {1}", typeof(T).Name, KeyStringFor(obj));
                 c.Insert<T>(obj, transaction: t);
@@ -69,7 +69,7 @@ namespace Dragon.Data.Repositories
         {
             if (!m_hasSinglePK) throw new Exception("Can only be used for objects with single primary key.");
 
-            return m_connectionCtxFactory.InDatabase<T>((c,t) =>
+            return m_connectionCtxFactory.InDatabase<T>((c, t) =>
             {
                 m_logger.LogDebug("Fetching record for type {0} with primary key {1}", typeof(T).Name, ((object)pk).ToString());
                 return c.Get<T>((object)pk, transaction: t);
@@ -80,7 +80,7 @@ namespace Dragon.Data.Repositories
         {
             if (!m_hasSinglePK) throw new Exception("Can only be used for objects with single primary key.");
 
-            return m_connectionCtxFactory.InDatabase<IEnumerable<T>>((c,t) =>
+            return m_connectionCtxFactory.InDatabase<IEnumerable<T>>((c, t) =>
             {
                 m_logger.LogDebug("Fetching records for type {0} with primary keys {1}", typeof(T).Name, string.Join(",", pks.ToArray()));
                 return c.GetList<T>(pks, transaction: t);
@@ -89,7 +89,7 @@ namespace Dragon.Data.Repositories
 
         public virtual T Get(T keyModel)
         {
-            return m_connectionCtxFactory.InDatabase<T>((c,t) =>
+            return m_connectionCtxFactory.InDatabase<T>((c, t) =>
             {
                 m_logger.LogDebug("Fetching records for type {0} with primary keys {1}", typeof(T).Name, KeyStringFor(keyModel));
 
@@ -121,7 +121,7 @@ namespace Dragon.Data.Repositories
         /// <returns></returns>
         public IEnumerable<T> GetByWhere(Dictionary<string, object> @where)
         {
-            return m_connectionCtxFactory.InDatabase<IEnumerable<T>>((c,t) =>
+            return m_connectionCtxFactory.InDatabase<IEnumerable<T>>((c, t) =>
             {
                 var param = new Dictionary<string, object>();
                 var sql = TSQLGenerator.BuildSelect(m_metadata, @where, ref param);
@@ -136,7 +136,7 @@ namespace Dragon.Data.Repositories
 
         public IEnumerable<T> Query(string sql, dynamic param = null)
         {
-            return m_connectionCtxFactory.InDatabase<IEnumerable<T>>((c,t) =>
+            return m_connectionCtxFactory.InDatabase<IEnumerable<T>>((c, t) =>
             {
                 return c.Query<T>(PreprocessSQLString<T>(sql), (object)param, transaction: t);
             });
@@ -168,7 +168,7 @@ namespace Dragon.Data.Repositories
 
         public TReturn ExecuteScalar<TReturn, TDBObject>(string sql, dynamic param = null)
         {
-            return m_connectionCtxFactory.InDatabase<TReturn>((c,t) =>
+            return m_connectionCtxFactory.InDatabase<TReturn>((c, t) =>
             {
                 return c.Query<TReturn>(PreprocessSQLString<TDBObject>(sql), (object)param, transaction: t).First();
             });
@@ -176,7 +176,7 @@ namespace Dragon.Data.Repositories
 
         public IEnumerable<TResult> Query<TFirst, TSecond, TResult>(string sql, Func<TFirst, TSecond, TResult> mapping, dynamic param = null) where TResult : class
         {
-            return m_connectionCtxFactory.InDatabase<IEnumerable<TResult>>((c,t) =>
+            return m_connectionCtxFactory.InDatabase<IEnumerable<TResult>>((c, t) =>
             {
                 var mdSplit = new TableMetadata();
                 MetadataHelper.MetadataForClass(typeof(TSecond), ref mdSplit);
@@ -207,7 +207,7 @@ namespace Dragon.Data.Repositories
         {
             if (!m_hasSinglePK) throw new Exception("Can only be used for objects with single primary key. Use Insert overload instead.");
 
-            return m_connectionCtxFactory.InDatabase<TKey>((c,t) =>
+            return m_connectionCtxFactory.InDatabase<TKey>((c, t) =>
              {
                  var pk = c.Insert<T, TKey>(obj, transaction: t);
                  m_logger.LogDebug("Inserted record for type {0} with key {1}", typeof(T).Name, KeyStringFor(obj));
@@ -221,7 +221,7 @@ namespace Dragon.Data.Repositories
         /// <param name="obj"></param>
         public virtual void Insert(T obj)
         {
-            m_connectionCtxFactory.InDatabase((c,t)=>
+            m_connectionCtxFactory.InDatabase((c, t) =>
             {
                 c.Insert<T>(obj, transaction: t);
                 m_logger.LogDebug("Inserted record for type {0} with keys {1}", typeof(T).Name, KeyStringFor(obj));
@@ -251,7 +251,7 @@ namespace Dragon.Data.Repositories
 
         public virtual void Update(T obj)
         {
-            m_connectionCtxFactory.InDatabase((c,t) =>
+            m_connectionCtxFactory.InDatabase((c, t) =>
             {
                 c.Update(obj, transaction: t);
                 m_logger.LogDebug("Updated record for type {0} with key {1}", typeof(T).Name, KeyStringFor(obj));
@@ -273,7 +273,7 @@ namespace Dragon.Data.Repositories
 
         public void Execute(string sql, dynamic param = null)
         {
-            m_connectionCtxFactory.InDatabase((c,t) =>
+            m_connectionCtxFactory.InDatabase((c, t) =>
             {
                 c.Execute(PreprocessSQLString<T>(sql), (object)param, transaction: t);
             });
@@ -281,7 +281,7 @@ namespace Dragon.Data.Repositories
 
         public void ExecuteSP(string sql, dynamic param = null)
         {
-            m_connectionCtxFactory.InDatabase((c,t) =>
+            m_connectionCtxFactory.InDatabase((c, t) =>
             {
                 c.Execute(PreprocessSQLString<T>(sql), (object)param, commandType: CommandType.StoredProcedure, transaction: t);
             });
@@ -341,7 +341,7 @@ namespace Dragon.Data.Repositories
                         throw;
                     }
 
-                    System.Threading.Thread.Sleep(100);
+                    Task.Delay(100).Wait();
 
                     m_logger.LogDebug("Deadlock encoutnered. Retryiny {0} more times.", maxRetries);
                     maxRetries--;

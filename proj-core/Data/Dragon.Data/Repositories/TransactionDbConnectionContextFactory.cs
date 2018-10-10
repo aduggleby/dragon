@@ -33,7 +33,7 @@ namespace Dragon.Data.Repositories
             {
                 OpenCount++;
                 m_connection.Open();
-                m_logger.LogDebug($"Database connection successfull. OpenCount: {OpenCount}");
+                if (m_verboseLoggingEnabled) m_logger.LogDebug($"Database connection successfull. OpenCount: {OpenCount}");
 
             }
             catch (Exception exInner)
@@ -70,10 +70,10 @@ namespace Dragon.Data.Repositories
 
             if (disposing)
             {
-                m_logger.LogDebug($"Disposing any open transaction and connection. OpenCount: {OpenCount}");
+                if (m_verboseLoggingEnabled) m_logger.LogDebug($"Disposing any open transaction and connection. OpenCount: {OpenCount}");
 
                 handle.Dispose();
-                // Free any other managed objects here.
+                // Free any other managed objects
                 if (!m_transactionAborted)
                 {
                     m_transaction.Commit();
@@ -85,8 +85,7 @@ namespace Dragon.Data.Repositories
                 m_connection = null;
             }
 
-            // Free any unmanaged objects here.
-            //
+            // Free any unmanaged objects
             m_disposed = true;
         }
 
@@ -97,7 +96,7 @@ namespace Dragon.Data.Repositories
             try
             {
                 var res = db(m_connection, m_transaction);
-                m_logger.LogTrace("InDatabase execution successful");
+                if (m_verboseLoggingEnabled) m_logger.LogTrace("InDatabase execution successful");
 
                 return res;
             }
