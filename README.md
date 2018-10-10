@@ -1,3 +1,4 @@
+
 # Dragon Web Framework
 A compilation of modules for faster web application development for ASP.NET.
 
@@ -47,7 +48,7 @@ for requests from client applications (apps) to web services (services).
 
 ## [Dragon.Data](https://github.com/aduggleby/dragon/tree/master/proj/Data)
 
-Status: Stable, Version: [1.5.0](http://www.nuget.org/packages/Dragon.Data/)
+Status: Stable, Version: [2.0.6](http://www.nuget.org/packages/Dragon.Data/) .NETStandard 1.6 and .NETStandard 2.0 (Version: [1.5.0](http://www.nuget.org/packages/Dragon.Data/) available for .NET 4.6)
 
 Add-on library for [Dapper](https://github.com/StackExchange/dapper-dot-net) implementing:
 
